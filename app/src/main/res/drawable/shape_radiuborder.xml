@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 透明背景色 -->
+    <solid android:color="@color/translucent" />
+
+    <!-- 邊框 -->
+    <stroke
+        android:width="2px"
+        android:color="@color/black" />
+
+    <!-- 四個圓角的半徑 -->
+    <corners
+        android:bottomLeftRadius="10px"
+        android:bottomRightRadius="10px"
+        android:topLeftRadius="10px"
+        android:topRightRadius="10px" />
+
+    <!-- 邊距 -->
+    <padding
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="5dp" />
+</shape>

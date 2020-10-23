@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="select_function">
+        <item>排卵紀錄</item>
+        <item>藍芽體溫</item>
+        <item>懷孕紀錄</item>
+        <item>呼吸監測</item>
+<!--        <item>排骨便當</item>-->
+<!--        <item>雞腿便當</item>-->
+<!--        <item>豬排便當</item>-->
+<!--        <item>牛肉便當</item>-->
+    </string-array>
+</resources>

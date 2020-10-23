@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background"
+    tools:context=".RecordFragment">
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="22dp"
+        android:text="歷史紀錄" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="250dp"
+        android:text="紀錄下載"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginLeft="315dp"
+        android:src="@drawable/ic_cloud_download_black_24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp">
+
+        <!-- 選擇功能 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/relative_shape"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_select_fun"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:drawableLeft="@drawable/ic_dashboard_black_24dp"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="選擇功能"
+                android:textSize="16dp"/>
+        </LinearLayout>
+        <!-- 選擇日期 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/relative_shape"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_select_date"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                android:gravity="center"
+                android:layout_marginLeft="30dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="選擇日期"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- 功能顯示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="150dp">
+        <TextView
+            android:id="@+id/tv_select_function"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="16dp"
+            android:text=""/>
+    </LinearLayout>
+    <!-- 日期顯示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="200dp">
+        <TextView
+            android:id="@+id/tv_date_range"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="16dp"
+            android:text=""/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_select_fun_date"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22dp"
+        android:text="@string/please_select_fun_and_date" />
+    <Button
+        android:id="@+id/bt_result_start"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:text="@string/select_done"/>
+    <!-- 查詢結果顯示 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_record"
+        android:layout_marginTop="400dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

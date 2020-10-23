@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background"
+    tools:context=".MeasureFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="22dp"
+        android:text="YHY Healthy" />
+
+    <Button
+        android:id="@+id/announcement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_oval"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:text="公告"
+        android:drawableTop="@drawable/ic_notifications_black_68dp"/>
+
+    <Button
+        android:id="@+id/store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_oval"
+        android:layout_toRightOf="@+id/announcement"
+        android:layout_alignTop="@+id/announcement"
+        android:layout_marginLeft="10dp"
+        android:text="購物"
+        android:drawableTop="@drawable/ic_add_shopping_cart_black_68dp"/>
+
+    <Button
+        android:id="@+id/guid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_oval"
+        android:layout_toRightOf="@+id/store"
+        android:layout_alignTop="@+id/store"
+        android:layout_marginLeft="10dp"
+        android:text="教學"
+        android:drawableTop="@drawable/ic_live_help_black_68dp"/>
+
+    <Button
+        android:id="@+id/bt_ovulation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="22dp"
+        android:textColor="#FFF"
+        android:background="@drawable/bg_round_button"
+        android:text="@string/ovulation" />
+
+    <Button
+        android:id="@+id/bt_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bt_ovulation"
+        android:layout_alignTop="@+id/bt_ovulation"
+        android:layout_marginLeft="10dp"
+        android:textSize="22dp"
+        android:textColor="#FFF"
+        android:background="@drawable/bg_round_button"
+        android:text="@string/temperature" />
+
+    <Button
+        android:id="@+id/bt_pregnancy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/bt_temperature"
+        android:layout_toRightOf="@+id/bt_temperature"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_round_button"
+        android:text="@string/pregnancy"
+        android:textColor="#FFF"
+        android:textSize="22dp" />
+
+    <Button
+        android:id="@+id/bt_monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bt_ovulation"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="22dp"
+        android:textColor="#FFF"
+        android:text="@string/monitor"
+        android:background="@drawable/bg_round_button"/>
+
+</RelativeLayout>
