@@ -55,8 +55,10 @@
                 android:layout_toRightOf="@+id/ig_photo"
                 android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
                 android:gravity="center"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
+                android:paddingLeft="70dp"
+                android:paddingRight="60dp"
+                android:background="@drawable/shape_268e9f"
+                android:textColor="@color/white"
                 android:text="拍照"/>
         </RelativeLayout>
         <LinearLayout
@@ -124,9 +126,11 @@
                 android:layout_toRightOf="@+id/tv_body_temp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:drawableLeft="@mipmap/thermometer_128"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:drawableLeft="@drawable/ic_thermometer_24"
+                android:paddingLeft="70dp"
+                android:paddingRight="35dp"
+                android:background="@drawable/shape_268e9f"
+                android:textColor="@color/white"
                 android:text="開始測量"/>
         </LinearLayout>
     </LinearLayout>

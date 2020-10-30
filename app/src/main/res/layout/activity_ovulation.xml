@@ -8,10 +8,11 @@
     android:orientation="vertical"
     tools:context=".OvulationActivity">
 
+    <include layout="@layout/app_bar"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:textSize="22dp"
         android:text="排卵紀錄"/>
@@ -20,8 +21,9 @@
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:tabTextColor="@color/white"
+        app:tabBackground="@drawable/tab_background_color_selector"
         app:tabIndicatorColor="@color/colorAccent"
         android:animateLayoutChanges="true"/>
 

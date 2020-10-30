@@ -10,20 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private View view;
 
     private Button ovulation, temperature, pregnancy,monitor;
-
-    public MeasureFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

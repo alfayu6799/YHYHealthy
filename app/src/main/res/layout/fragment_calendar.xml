@@ -9,25 +9,36 @@
     <LinearLayout
         android:id="@+id/ly_calender"
         android:layout_width="match_parent"
-        android:layout_height="280dp">
-<!--        <sun.bob.mcalendarview.MCalendarView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:id="@+id/calendar"/>-->
-        <com.skyhope.eventcalenderlibrary.CalenderEvent
-            android:id="@+id/calender_event"
+        android:layout_height="350dp"
+        android:orientation="vertical">
+        <!-- 月曆元件 第三方庫 -->
+        <TextView
+            android:id="@+id/main_YYMM_Tv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:selector_color="@color/colorPrimaryDark"
-            app:month_color="@color/white"
-            app:week_name_color="@color/white"
-            app:calender_background="@color/translucent"/>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18dp"
+            android:background="@color/translucent"
+            android:text="----年-月" />
+
+        <com.example.yhyhealthydemo.tools.WeekColumnView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp" />
+
+        <sun.bob.mcalendarview.views.ExpCalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
     </LinearLayout>
     <ScrollView
         android:id="@+id/ly_scroll_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="300dp">
+        android:layout_marginTop="355dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -203,6 +214,7 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/corners_bg">
                 <LinearLayout
+                    android:id="@+id/ly_color"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -230,6 +242,38 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:src="@drawable/ic_brightness_4_24dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ly_color_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ly_color"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                <TextView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="月經"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="排卵期"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="非排卵期"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="濾泡/黃體期"/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

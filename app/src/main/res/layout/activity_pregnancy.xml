@@ -40,18 +40,4 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-    <!-- 月曆元件 第三方庫 -->
-    <sun.bob.mcalendarview.MCalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="150dp"/>
-
-    <TextView
-        android:id="@+id/tv_pregnancy_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:text="AAA"/>
-
 </RelativeLayout>

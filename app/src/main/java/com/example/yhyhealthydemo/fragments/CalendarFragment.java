@@ -5,12 +5,9 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +16,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.R;
-import com.skyhope.eventcalenderlibrary.CalenderEvent;
-import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
-import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
-import com.skyhope.eventcalenderlibrary.model.Event;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
+import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
+import sun.bob.mcalendarview.views.ExpCalendarView;
+import sun.bob.mcalendarview.vo.DateData;
 
 public class CalendarFragment extends Fragment implements View.OnClickListener {
 
@@ -37,8 +33,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     private View view;
 
-    private CalenderEvent calenderEvent;
-    private Event event;
+    //月曆
+    private ExpCalendarView calendarView;
+    private TextView YearMonthTv;
 
     private TextView oveuSetting; //經期設定click
 
@@ -57,22 +54,62 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         temperature = view.findViewById(R.id.tv_ovul_temp_1);
         temperature.setText("基礎體溫 : 36.55" + "\u2103 ");
 
+        calendarView = ((ExpCalendarView) view.findViewById(R.id.calendar));
+        YearMonthTv = (TextView) view.findViewById(R.id.main_YYMM_Tv);
+        //set 月曆月份Title
+        YearMonthTv.setText(Calendar.getInstance().get(Calendar.YEAR) + "年" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "月");
+        //監聽日期
+        calendarView.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+                Toast.makeText(getActivity(), "您選擇的日期為 : "+String.format("%d/%d", date.getMonth(), date.getDay()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //監聽月曆
+        calendarView.setOnMonthChangeListener(new OnMonthChangeListener(){
+
+            @Override
+            public void onMonthChange(int year, int month) {
+                YearMonthTv.setText(String.format("%d年%d月", year, month));
+            }
+        });
+
+        //監聽日期
+        calendarView.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+                Toast.makeText(getActivity(), "您選擇的日期為 : "+String.format("%d/%d", date.getMonth(), date.getDay()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //監聽月曆
+        calendarView.setOnMonthChangeListener(new OnMonthChangeListener(){
+
+            @Override
+            public void onMonthChange(int year, int month) {
+                YearMonthTv.setText(String.format("%d年%d月", year, month));
+            }
+        });
+
+        Calendar calendar = Calendar.getInstance();
+        //今天的背景顏色
+        calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
+                .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.RED)));
+
+        //mark special day
+        ArrayList<DateData> dates = new ArrayList<>();
+        dates.add(new DateData(2020,10,21).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.BLUE)));
+        dates.add(new DateData(2020,10,22).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.BLUE)));
+        dates.add(new DateData(2020,10,23).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.BLUE)));
+        dates.add(new DateData(2020,10,24).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.BLUE)));
+        for(int i = 0; i < dates.size(); i++) {
+            calendarView.markDate(dates.get(i).getYear(),dates.get(i).getMonth(),dates.get(i).getDay());//mark multiple dates with this code.
+        }
+
         //經期設定init
         oveuSetting = view.findViewById(R.id.tv_ovul_setting);
         oveuSetting.setOnClickListener(this);
-
-        //月曆套件採用第三方庫
-        calenderEvent = view.findViewById(R.id.calender_event);
-        Calendar mCalendar = Calendar.getInstance();
-        mCalendar.add(Calendar.DAY_OF_MONTH,1);
-//        Event event = new Event(mCalendar.getTimeInMillis(), null, Color.RED);
-//        calenderEvent.addEvent(event);
-//        calenderEvent.initCalderItemClickCallback(new CalenderDayClickListener() {
-//            @Override
-//            public void onGetDay(DayContainerModel dayContainerModel) {
-//                Log.d(TAG, "onGetDay: " + dayContainerModel.getDate());
-//            }
-//        });
 
         return view;
     }
@@ -98,9 +135,9 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         EditText toDate = view.findViewById(R.id.et_to_date);     //起始日期
         EditText fromDate = view.findViewById(R.id.et_from_date); //結束日期
         Button sendDate = view.findViewById(R.id.bt_send_date);
-        toDate.setInputType(InputType.TYPE_NULL);               //防止軟鍵開啟
-        fromDate.setInputType(InputType.TYPE_NULL);             //防止軟鍵開啟
-        toDate.requestFocus();
+//        toDate.setInputType(InputType.TYPE_NULL);               //防止軟鍵開啟
+//        fromDate.setInputType(InputType.TYPE_NULL);             //防止軟鍵開啟
+//        toDate.requestFocus();
 
         AlertDialog dialog = builder.create();
 

@@ -27,8 +27,10 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/shape_editbox"
-            android:hint="Select  date "
-            android:inputType="text"/>
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:cursorVisible="false"
+            android:hint="Select  date"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +48,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:cursorVisible="false"
             android:background="@drawable/shape_editbox"
             android:hint="Select date "
             android:inputType="text"/>

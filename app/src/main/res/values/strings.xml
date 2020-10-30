@@ -22,14 +22,10 @@
     <string name="timeFormat" translatable="false">MM/dd/yyyy</string>
     <string name="period" translatable="false">%1$s – %2$s</string>
 
-    <!-- 第三方庫 : EventCalender 專用 -->
-    <string name="sun">日</string>
-    <string name="mon">一</string>
-    <string name="tue">二</string>
-    <string name="wed">三</string>
-    <string name="thu">四</string>
-    <string name="fri">五</string>
-    <string name="sat">六</string>
+    <!-- tab -->
+    <string name="tab_cal">月曆</string>
+    <string name="tab_rec">紀錄</string>
+    <string name="tab_chart">圖表</string>
 
     <!-- 登入 -->
     <string name="account">帳號</string>
@@ -37,7 +33,7 @@
     <string name="login">登入</string>
     <string name="register">註冊帳號</string>
     <string name="forget">忘記密碼</string>
-    <string name="account_register">帳號註冊</string>
+    <string name="account_register">註冊帳號</string>
     <string name="confirm_password">再次確認密碼</string>
     <string name="email_account">eMail</string>
     <string name="please_input_account">請輸入帳號</string>

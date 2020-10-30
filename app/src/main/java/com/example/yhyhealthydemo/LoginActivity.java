@@ -2,8 +2,6 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,17 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button loginButton;
     EditText account, password;
     TextView register, forget;
 
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getSupportActionBar().hide(); //hide ActionBar
         setContentView(R.layout.activity_login);
 
         initView();
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-                //要判斷account & password是否正確(還沒寫)
+//                userLoginApi(); //將使用者的資料傳給後台
                 Intent intent = new Intent(this,MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -67,7 +67,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View registerView = inflater.inflate(R.layout.dialog_register, null);
         alertDialogRegister.setView(registerView);
 
-        alertDialogRegister.setCancelable(false)
+        //init editText
+        EditText account = registerView.findViewById(R.id.edtAccountInput);
+        EditText password = registerView.findViewById(R.id.edtPasswordInput);
+        EditText email = registerView.findViewById(R.id.edtEmailInput);
+        EditText confirm = registerView.findViewById(R.id.edtPasswordConfirm);
+
+        alertDialogRegister.setCancelable(false) //disable touch other screen will close dialog
                 .setPositiveButton("確定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
@@ -82,6 +88,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         AlertDialog dialogRegister = alertDialogRegister.create();
         dialogRegister.show();
+
+        dialogRegister.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Account = Objects.requireNonNull(account.getEditableText().toString().trim());
+                String Password = Objects.requireNonNull(password.getEditableText().toString().trim());
+                String Email = Objects.requireNonNull(email.getEditableText().toString().trim());
+                String Confirm = Objects.requireNonNull(confirm.getEditableText().toString().trim());
+                // Check for empty data in the form
+                if (!Account.isEmpty() && !Password.isEmpty() && !Email.isEmpty()){
+                    if (!Password.equals(Confirm)){
+                        Toast.makeText(getApplicationContext(), "密碼不一致", Toast.LENGTH_LONG).show();
+                    }else if (isValidEmailAddress(Email)){
+//                                registerUserApi(Account, Password, Email); //將使用者註冊後拿到的資料傳到後台去
+                        Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_LONG).show();
+                        dialogRegister.dismiss();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "信箱無效", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), "請補齊資料", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
     //忘記密碼fxn
@@ -116,10 +147,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (wantToCloseDialog){
                     Toast.makeText(LoginActivity.this, "信箱帳號不得為空", Toast.LENGTH_SHORT).show();
                 }else{
-                    dialog.dismiss();
+//                    forgetPasswordApi(); //傳給後台去做發送確認信函給使用者
                     Toast.makeText(LoginActivity.this, "確認函已經發送至信箱 : " + emailStr, Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 }
             }
         });
+    }
+
+    //check email is Valid
+    public static boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 }

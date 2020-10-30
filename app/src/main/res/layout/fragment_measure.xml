@@ -6,7 +6,7 @@
     android:background="@mipmap/yhy_background"
     tools:context=".MeasureFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+<!--    <include layout="@layout/app_bar"/>-->
 
     <TextView
         android:layout_centerHorizontal="true"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_oval"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:layout_marginLeft="20dp"
         android:text="公告"
         android:drawableTop="@drawable/ic_notifications_black_68dp"/>
