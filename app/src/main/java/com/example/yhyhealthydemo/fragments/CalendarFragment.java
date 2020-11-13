@@ -134,10 +134,7 @@ public class CalendarFragment extends Fragment implements View.OnClickListener {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         EditText toDate = view.findViewById(R.id.et_to_date);     //起始日期
         EditText fromDate = view.findViewById(R.id.et_from_date); //結束日期
-        Button sendDate = view.findViewById(R.id.bt_send_date);
-//        toDate.setInputType(InputType.TYPE_NULL);               //防止軟鍵開啟
-//        fromDate.setInputType(InputType.TYPE_NULL);             //防止軟鍵開啟
-//        toDate.requestFocus();
+        Button sendDate = view.findViewById(R.id.bt_send_date);   //儲存
 
         AlertDialog dialog = builder.create();
 

@@ -52,7 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.tv_register: //註冊
-                dialogRegister();
+                startActivity(new Intent(getBaseContext(), PrivacyActivity.class)); //隱私權page
+//                dialogRegister();
                 break;
             case R.id.tv_forget:  //忘記密碼
                 dialigForget();
@@ -153,6 +154,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
+    }
+
+    public static boolean isValidAccount(String account){
+        String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regEx);
+        java.util.regex.Matcher matcher = pattern.matcher(account);
+        return  matcher.matches();
     }
 
     //check email is Valid

@@ -275,6 +275,71 @@
                         android:gravity="center"
                         android:text="濾泡/黃體期"/>
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ly_color2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ly_color_sub"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:src="@drawable/ic_brightness_5_24dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:src="@drawable/ic_brightness_6_24dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:src="@drawable/ic_brightness_7_24dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:src="@drawable/ic_brightness_4_24dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ly_color_sub2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ly_color2"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="預計經期"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="預計排卵"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="預計排卵"/>
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:text="濾泡/黃體期"/>
+                </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

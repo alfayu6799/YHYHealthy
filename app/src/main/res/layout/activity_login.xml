@@ -85,12 +85,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_facebook_32dp"/>
                 <ImageView
                     android:id="@+id/ig_google"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_google_32dp"/>
             </LinearLayout>
 

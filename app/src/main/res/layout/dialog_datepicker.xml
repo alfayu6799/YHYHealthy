@@ -30,6 +30,8 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:cursorVisible="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             android:hint="Select  date"/>
         <TextView
             android:layout_width="wrap_content"
@@ -51,6 +53,8 @@
             android:cursorVisible="false"
             android:background="@drawable/shape_editbox"
             android:hint="Select date "
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             android:inputType="text"/>
 
     </LinearLayout>

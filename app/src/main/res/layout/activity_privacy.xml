@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background"
+    tools:context=".PrivacyActivity">
+
+    <TextView
+        android:id="@+id/textPrivacy1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:text="服務條款"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="隱私權政策聲明"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/textPrivacy1"
+        app:layout_constraintTop_toBottomOf="@+id/textPrivacy1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textCb1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+        <TextView
+            android:id="@+id/privacy_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/privacy_contrnt"/>
+    </ScrollView>
+
+    <CheckBox
+        android:id="@+id/chkPrivacy1"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="同意"
+        android:buttonTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/btnPrivacy"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textCb1"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="條款服務"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/btnPrivacy"
+        app:layout_constraintStart_toEndOf="@+id/chkPrivacy1" />
+
+    <CheckBox
+        android:id="@+id/chkPrivacy2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:text="同意"
+        android:buttonTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/btnPrivacy"
+        app:layout_constraintEnd_toStartOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="隱私權聲明"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/btnPrivacy"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnPrivacy"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="32dp"
+        android:text="確認"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_btn_temp_pressed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

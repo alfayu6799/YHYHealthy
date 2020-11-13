@@ -50,6 +50,20 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="8dp"
-        android:text="新增使用者"/>
+        android:visibility="visible"
+        android:text="新增觀測者"/>
+    <Button
+        android:id="@+id/bt_add_remote"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:gravity="center"
+        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:visibility="gone"
+        android:text="新增監看者"/>
 
 </RelativeLayout>

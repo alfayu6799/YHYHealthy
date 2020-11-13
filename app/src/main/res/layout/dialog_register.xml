@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:padding="10dp"
+        android:digits="@string/register_name_digits"
         android:background="@drawable/shape_edit_background"
         android:hint="@string/please_input_account"
         android:inputType="textEmailAddress"/>

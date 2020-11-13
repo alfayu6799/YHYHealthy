@@ -24,6 +24,7 @@
                 android:gravity="center"
                 android:text="排卵辨識"/>
             <TextView
+                android:id="@+id/textRecordDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -40,23 +41,23 @@
             android:layout_width="wrap_content"
             android:layout_height="120dp">
             <ImageView
-                android:id="@+id/ig_photo"
+                android:id="@+id/imgPhoto"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="5dp"
                 android:src="@mipmap/ovul"/>
             <Button
-                android:id="@+id/bt_take_photo"
+                android:id="@+id/btnPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="35dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/ig_photo"
+                android:layout_toRightOf="@+id/imgPhoto"
                 android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
                 android:gravity="center"
-                android:paddingLeft="70dp"
-                android:paddingRight="60dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
                 android:background="@drawable/shape_268e9f"
                 android:textColor="@color/white"
                 android:text="拍照"/>
@@ -99,6 +100,7 @@
                 android:layout_marginLeft="55dp"
                 android:text="基礎體溫"/>
             <ImageView
+                android:id="@+id/imgBLESearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="55dp"
@@ -127,8 +129,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:drawableLeft="@drawable/ic_thermometer_24"
-                android:paddingLeft="70dp"
-                android:paddingRight="35dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
                 android:background="@drawable/shape_268e9f"
                 android:textColor="@color/white"
                 android:text="開始測量"/>
@@ -166,7 +168,422 @@
                     android:layout_marginRight="10dp"
                     android:text="---(kg)"/>
             </LinearLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="22sp"
+                    android:textColor="@color/black"
+                    android:text="非經期出血"/>
+                <Switch
+                    android:id="@+id/swBleeding"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp"
+                    android:track="@drawable/sw_track"/>
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:text="乳房脹痛"/>
+                <Switch
+                    android:id="@+id/swPain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp"
+                    android:track="@drawable/sw_track"/>
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:text="同房"/>
+                <Switch
+                    android:id="@+id/swSleepTo"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp"
+                    android:track="@drawable/sw_track"/>
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="22dp"
+                android:textColor="@color/black"
+                android:text="分泌物"/>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/font_18"
+                android:textColor="@color/black"
+                android:text="顏色"/>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="無"/>
+                <CheckBox
+                    android:id="@+id/chkNormalColor"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="褐色"/>
+                <CheckBox
+                    android:id="@+id/chkBrown"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="黃"/>
+                <CheckBox
+                    android:id="@+id/chkYellow"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="乳白色"/>
+                <CheckBox
+                    android:id="@+id/chkWhite"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="蛋清"/>
+                <CheckBox
+                    android:id="@+id/chkLight"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="黃綠色"/>
+                <CheckBox
+                    android:id="@+id/chkYellowGreen"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/font_18"
+                android:textColor="@color/black"
+                android:text="味道"/>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="無"/>
+                <CheckBox
+                    android:id="@+id/chkNormalTaste"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="魚腥味"/>
+                <CheckBox
+                    android:id="@+id/chkFishy"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="惡臭味"/>
+                <CheckBox
+                    android:id="@+id/chkStink"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/font_18"
+                android:textColor="@color/black"
+                android:text="型態"/>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="無"/>
+                <CheckBox
+                    android:id="@+id/chkNormalType"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="水樣"/>
+                <CheckBox
+                    android:id="@+id/chkLiquid"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="濃稠狀"/>
+                <CheckBox
+                    android:id="@+id/chkDense"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="乳酪狀"/>
+                <CheckBox
+                    android:id="@+id/chkThick"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/font_18"
+                android:textColor="@color/black"
+                android:text="症狀"/>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="無"/>
+                <CheckBox
+                    android:id="@+id/chkNormalSign"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="癢"/>
+                <CheckBox
+                    android:id="@+id/chkAllergy"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:text="灼熱感"/>
+                <CheckBox
+                    android:id="@+id/chkFervor"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="100dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="200dp"
+                    android:layout_marginTop="3dp"
+                    android:textSize="16sp"
+                    android:text="痛"/>
+                <CheckBox
+                    android:id="@+id/chkPain"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="300dp" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
+                android:layout_width="wrap_content"/>
+            <Button
+                android:id="@+id/btnSaveSetting"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="@dimen/font_18"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_btn_pressed"
+                android:textColor="@color/black"
+                android:text="儲存"/>
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>
