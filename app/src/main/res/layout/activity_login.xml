@@ -22,12 +22,11 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="55dp"
+                android:layout_height="200dp"
                 android:gravity="center"
-                android:text="YHY Healthy"/>
+                android:src="@mipmap/yhy_logo_300"/>
             <EditText
                 android:id="@+id/et_account"
                 android:layout_width="match_parent"

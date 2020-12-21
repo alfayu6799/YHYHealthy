@@ -41,10 +41,15 @@ dependencies {
 
     //https://github.com/psinetron/slycalendarview 第三方套件lib
     implementation 'com.github.psinetron:slycalendarview:0.0.9'
-    //第三方月曆庫
+    //第三方月曆庫https://github.com/SpongeBobSun/mCalendarView
     implementation 'sun.bob:mcalendarview:1.0.0'
 
-    //強大的ImageLoader第三方庫
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //imageView 圓角第三方庫
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //MPAndroidChart 折線圖表庫
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

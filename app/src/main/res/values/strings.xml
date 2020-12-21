@@ -4,10 +4,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="ovulation">排卵\n紀錄</string>
-    <string name="temperature">藍芽\n體溫</string>
-    <string name="pregnancy">懷孕\n紀錄</string>
-    <string name="monitor">呼吸\n監測</string>
+    <string name="ovulation">排卵紀錄</string>
+    <string name="temperature">藍芽體溫</string>
+    <string name="pregnancy">懷孕紀錄</string>
+    <string name="monitor">呼吸監測</string>
+    <string name="update_success">資料上傳成功</string>
 
     <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
     <string name="select_function">功能 : </string>
@@ -45,11 +46,58 @@
     <string name="privacy_contrnt">本App所取得的個人資料，都僅供本司於其內部、依照原來所說明的使用目的和範圍，除非事先說明、或依照相關法律規定，否則我司不會將資料提供給第三人、或移作其他目的使用。</string>
 
     <!-- 權限 messages-->
-    <string name="permission_required">Permission Required</string>
-    <string name="permission_message">您必須授予相關的權限才能運行此應用程序</string>
-    <string name="permission_warning">All permissions are required.</string>
+    <string name="permission_required">權限需求</string>
+    <string name="permission_message">您必須授予相關的權限才能運行相機辨識程序</string>
+    <string name="permission_warning">所有的權限都是必須的,拒絕的話將無法使用相機辨識服務</string>
 
     <string name="female">女性</string>
     <string name="male">男性</string>
 
+    <!-- 圖表 -->
+    <string name="chart_remind">提醒:\n 女性正常基礎體溫為低溫和高溫期兩個階段:\n 從月經開始到排卵前是低溫期\n 排卵後會持續12-14天高溫期\n 直到下次月經來的第一天為止</string>
+
+    <!-- -->
+    <string name="normal">無</string>
+    <string name="brown">褐色</string>
+    <string name="yellow">黃色</string>
+    <string name="milky">乳白色</string>
+    <string name="white">蛋清色</string>
+    <string name="greenish_yellow">黃綠色</string>
+    <string name="fishy">魚腥味</string>
+    <string name="stink">惡臭味</string>
+    <string name="liquid">水樣</string>
+    <string name="thick">濃稠狀</string>
+    <string name="liquid_milky">乳酪狀</string>
+    <string name="allergy">癢</string>
+    <string name="hot">灼熱感</string>
+    <string name="pain">痛</string>
+
+    <string name="email">信箱</string>
+    <string name="phone">簡訊</string>
+    <string name="privacy_confirm">確認</string>
+    <string name="password_confirm_error">密碼不一致</string>
+    <string name="phone_verification">目前簡訊功能尚未啟用</string>
+    <string name="email_is_vaild">信箱無效</string>
+    <string name="plase_fill_info">請補齊資料</string>
+
+    <string name="chart_no_data">沒有數據可制圖</string>
+    <string name="No_sup_Bluetooth">沒有藍芽裝置</string>
+    <string name="ble_start_scanner">藍芽開始搜尋</string>
+    <string name="ble_stop_scanner">藍芽停止搜尋</string>
+    <string name="ble_stop_in_10">超時10秒停止掃描</string>
+    <string name="not_connect_yet">尚未連接</string>
+    <string name="ble_connect_status">設備已連線</string>
+    <string name="ble_is_not_connect">藍芽設備已斷開</string>
+    <string name="no_suo_bluetooth">設備不支援低功率藍芽</string>
+    <string name="ble_rssi">訊號強度</string>
+    <string name="ble_stop_in_5secs">五秒時間到停止搜尋</string>
+    <string name="please_input_name">請輸入名稱</string>
+    <string name="please_input_birthday">請輸入出生年月日</string>
+    <string name="please_input_height">請輸入身高</string>
+    <string name="please_input_weight">請輸入體重</string>
+    <string name="remote_new_user">新增監控者</string>
+    <string name="observation_new_user">新增觀測者</string>
+    <string name="please_input_other_account">請輸入對方的帳號</string>
+    <string name="please_input_authorization">請輸入對方的授權碼</string>
+    <string name="add_new_remote_account">新增監控帳號</string>
 </resources>

@@ -15,14 +15,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.example.yhyhealthydemo.R;
-import com.zm.library.CircularImageView;
-
 import java.util.Calendar;
 
+/****************************
+ * 藍芽體溫 - 新增觀測者 Dialog
+ * 照片,名稱,性別,生日,身高,體重
+ *
+******************************/
 public class AddTemperatureDialog extends Dialog {
 
     private final static String TAG = "AddTemperatureDialog";
@@ -30,8 +32,8 @@ public class AddTemperatureDialog extends Dialog {
     private Button save;
     private ImageView cancel;
     private EditText userName , userBirthday;
+    private EditText userHeight, userWeight;
     private ImageView takePhoto;
-    private CircularImageView photoShow;
 
     private RadioGroup rdGroup;
     private String Gender = "F";
@@ -40,7 +42,7 @@ public class AddTemperatureDialog extends Dialog {
     * 自定義 Dialog listener
     * **/
     public interface PriorityListener{
-        void setActivity(String name, String gender, String birthday);
+        void setActivity(String name, String gender, String birthday, String weight, String height);
     }
 
     private PriorityListener listener;
@@ -67,7 +69,6 @@ public class AddTemperatureDialog extends Dialog {
         window.setAttributes(layoutParams);
 
         takePhoto = view.findViewById(R.id.ivTakePhoto);
-        photoShow = view.findViewById(R.id.circularImageView);
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +99,9 @@ public class AddTemperatureDialog extends Dialog {
             }
         });
 
+        userHeight = view.findViewById(R.id.edtInputHeight);
+        userWeight = view.findViewById(R.id.edtInputWeight);
+
         cancel = view.findViewById(R.id.imageCancel);
         save = view.findViewById(R.id.bt_add_user_sure);
 
@@ -111,18 +115,23 @@ public class AddTemperatureDialog extends Dialog {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Name = userName.getText().toString().trim();
-                String Birthday = userBirthday.getText().toString();
+                String Name = userName.getText().toString().trim();  //名稱
+                String Birthday = userBirthday.getText().toString(); //生日
+                String Height = userHeight.getText().toString();     //身高
+                String Weight = userWeight.getText().toString();     //體重
 
                 if(TextUtils.isEmpty(Name)){
-                    Toast.makeText(getContext(), "請填寫名稱", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.please_input_name, Toast.LENGTH_SHORT).show();
                 }else if(TextUtils.isEmpty(Birthday)){
-                    Toast.makeText(getContext(), "請填寫出生", Toast.LENGTH_SHORT).show();
-                }else {
-                    listener.setActivity(Name, Gender, Birthday);
+                    Toast.makeText(getContext(), R.string.please_input_birthday, Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(Height)) {
+                    Toast.makeText(getContext(), R.string.please_input_height, Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(Weight)) {
+                    Toast.makeText(getContext(), R.string.please_input_weight, Toast.LENGTH_SHORT).show();
+                }else{
+                    listener.setActivity(Name, Gender, Birthday, Weight, Height);
                     dismiss();
                 }
-
             }
         });
     }

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background">
+
+    <ImageView
+        android:id="@+id/imgCloseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_highlight_off_black_48dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgBleUserShot"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"
+        android:src="@mipmap/imageview" />
+    <TextView
+        android:id="@+id/tvBleUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgBleUserShot"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignBaseline="@+id/imgBleUserShot"
+        android:text="Matt Bomer"/>
+    <ImageView
+        android:id="@+id/imgBleTempIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_temper_24dp"
+        android:layout_toRightOf="@id/imgBleUserShot"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/tvUserDegree"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_toRightOf="@id/imgBleUserShot"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/red"
+        android:textSize="22sp"
+        android:layout_marginLeft="40dp"
+        android:text="00.00"/>
+    <TextView
+        android:id="@+id/tvLabelStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUserDegree"
+        android:layout_toRightOf="@id/imgBleUserShot"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@id/imgBleTempIcon"
+        android:text="開始"/>
+    <TextView
+        android:id="@+id/tvStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tvLabelStartTime"
+        android:layout_below="@+id/tvUserDegree"
+        android:layout_alignTop="@id/tvLabelStartTime"
+        android:layout_marginLeft="10dp"
+        android:text="12/14 09:00"/>
+    <TextView
+        android:id="@+id/tvLabelEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUserDegree"
+        android:layout_toRightOf="@id/imgBleUserShot"
+        android:layout_marginTop="40dp"
+        android:layout_alignLeft="@id/imgBleTempIcon"
+        android:text="結束"/>
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvLabelEndTime"
+        android:layout_below="@id/tvUserDegree"
+        android:layout_toRightOf="@+id/tvLabelEndTime"
+        android:layout_marginLeft="10dp"
+        android:text="12/14 12:05"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="8dp"
+        android:background="#000000"
+        android:layout_below="@+id/tvBleUserName"/>
+
+    <com.example.yhyhealthydemo.tools.TargetZoneLineChart
+        android:id="@+id/lineChartBle"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/tvUserDegree"
+        android:layout_height="300dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="10dp" />
+
+</RelativeLayout>

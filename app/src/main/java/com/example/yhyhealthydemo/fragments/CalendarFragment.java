@@ -27,6 +27,11 @@ import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
 
+/***********************************
+ * 排卵月曆Page
+ * 月曆引用第三方庫 : mCalendarView
+* *********************************/
+
 public class CalendarFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = CalendarFragment.class.getSimpleName();

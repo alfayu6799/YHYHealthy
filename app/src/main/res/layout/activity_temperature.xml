@@ -15,6 +15,7 @@
         android:textSize="22dp"
         android:text="藍芽體溫"/>
     <LinearLayout
+        android:id="@+id/lybleScan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
@@ -51,7 +52,7 @@
         android:paddingRight="16dp"
         android:paddingTop="8dp"
         android:visibility="visible"
-        android:text="新增觀測者"/>
+        android:text="@string/observation_new_user"/>
     <Button
         android:id="@+id/bt_add_remote"
         android:layout_width="150dp"
@@ -64,6 +65,44 @@
         android:paddingRight="16dp"
         android:paddingTop="8dp"
         android:visibility="gone"
-        android:text="新增監看者"/>
+        android:text="@string/remote_new_user"/>
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_toRightOf="@+id/bt_add_temp"
+        android:layout_marginLeft="50dp"
+        android:visibility="invisible"
+        android:text="開始測量(@5min)"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTempUser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bt_add_temp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSignUser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lybleScan"
+        android:background="@drawable/shape_ble"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRomoteUser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lybleScan"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

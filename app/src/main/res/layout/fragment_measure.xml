@@ -53,6 +53,10 @@
         android:layout_marginLeft="40dp"
         android:textSize="22dp"
         android:textColor="#FFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:drawableTop="@mipmap/ovul_icon"
         android:background="@drawable/bg_round_button"
         android:text="@string/ovulation" />
 
@@ -65,6 +69,10 @@
         android:layout_marginLeft="20dp"
         android:textSize="22dp"
         android:textColor="#FFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:drawableTop="@mipmap/temper_icon"
         android:background="@drawable/bg_round_button"
         android:text="@string/temperature" />
 
@@ -78,6 +86,10 @@
         android:background="@drawable/bg_round_button"
         android:text="@string/pregnancy"
         android:textColor="#FFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:drawableTop="@mipmap/preg_icon"
         android:textSize="22dp" />
 
     <Button
@@ -90,6 +102,10 @@
         android:layout_marginLeft="20dp"
         android:textSize="22dp"
         android:textColor="#FFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:drawableTop="@mipmap/breath_icon"
         android:text="@string/monitor"
         android:background="@drawable/bg_round_button"/>
 

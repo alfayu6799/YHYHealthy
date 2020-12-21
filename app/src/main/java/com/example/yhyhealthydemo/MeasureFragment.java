@@ -26,9 +26,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         ovulation = view.findViewById(R.id.bt_ovulation);
         temperature = view.findViewById(R.id.bt_temperature);
         pregnancy = view.findViewById(R.id.bt_pregnancy);
-        pregnancy.setVisibility(View.INVISIBLE);
+//        pregnancy.setVisibility(View.INVISIBLE);
         monitor = view.findViewById(R.id.bt_monitor);
-        monitor.setVisibility(View.INVISIBLE);
+//        monitor.setVisibility(View.INVISIBLE);
 
         ovulation.setOnClickListener(this);
         temperature.setOnClickListener(this);

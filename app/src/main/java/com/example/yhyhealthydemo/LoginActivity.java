@@ -53,71 +53,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.tv_register: //註冊
                 startActivity(new Intent(getBaseContext(), PrivacyActivity.class)); //隱私權page
-//                dialogRegister();
                 break;
             case R.id.tv_forget:  //忘記密碼
-                dialigForget();
+                dialogForget();
                 break;
         }
     }
 
-    //帳號註冊fxn
-    private void dialogRegister() {
-        AlertDialog.Builder alertDialogRegister = new AlertDialog.Builder(this);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View registerView = inflater.inflate(R.layout.dialog_register, null);
-        alertDialogRegister.setView(registerView);
-
-        //init editText
-        EditText account = registerView.findViewById(R.id.edtAccountInput);
-        EditText password = registerView.findViewById(R.id.edtPasswordInput);
-        EditText email = registerView.findViewById(R.id.edtEmailInput);
-        EditText confirm = registerView.findViewById(R.id.edtPasswordConfirm);
-
-        alertDialogRegister.setCancelable(false) //disable touch other screen will close dialog
-                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-        AlertDialog dialogRegister = alertDialogRegister.create();
-        dialogRegister.show();
-
-        dialogRegister.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Account = Objects.requireNonNull(account.getEditableText().toString().trim());
-                String Password = Objects.requireNonNull(password.getEditableText().toString().trim());
-                String Email = Objects.requireNonNull(email.getEditableText().toString().trim());
-                String Confirm = Objects.requireNonNull(confirm.getEditableText().toString().trim());
-                // Check for empty data in the form
-                if (!Account.isEmpty() && !Password.isEmpty() && !Email.isEmpty()){
-                    if (!Password.equals(Confirm)){
-                        Toast.makeText(getApplicationContext(), "密碼不一致", Toast.LENGTH_LONG).show();
-                    }else if (isValidEmailAddress(Email)){
-//                                registerUserApi(Account, Password, Email); //將使用者註冊後拿到的資料傳到後台去
-                        Toast.makeText(getApplicationContext(), "註冊成功", Toast.LENGTH_LONG).show();
-                        dialogRegister.dismiss();
-                    }else {
-                        Toast.makeText(getApplicationContext(), "信箱無效", Toast.LENGTH_LONG).show();
-                    }
-                }else {
-                    Toast.makeText(getApplicationContext(), "請補齊資料", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-    }
-
     //忘記密碼fxn
-    private void dialigForget() {
+    private void dialogForget() {
         AlertDialog.Builder alertDialogForget = new AlertDialog.Builder(this);
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View mView = layoutInflater.inflate(R.layout.dialog_forget_password, null);

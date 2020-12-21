@@ -5,17 +5,13 @@ package com.example.yhyhealthydemo.fragments;
 * 照相Fxn
 * ***************************/
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -34,10 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.CameraActivity;
-import com.example.yhyhealthydemo.PreviewActivity;
 import com.example.yhyhealthydemo.R;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,7 +81,7 @@ public class DocumentaryFragment extends Fragment implements View.OnClickListene
         recordDay = view.findViewById(R.id.textRecordDate);
         recordDay.setText(today);
 
-        photo = view.findViewById(R.id.imgPhoto);
+        photo = view.findViewById(R.id.ivPhoto);
         takePhoto = view.findViewById(R.id.btnPhoto);
         bleSearch = view.findViewById(R.id.imgBLESearch);
         takePhoto.setOnClickListener(this);
@@ -104,7 +98,7 @@ public class DocumentaryFragment extends Fragment implements View.OnClickListene
             case R.id.btnPhoto:
                 result = checkPermission(); //要求權限
                 if (result) {
-                    Intent camera = new Intent(getActivity(), CameraActivity.class); //有bug
+                    Intent camera = new Intent(getActivity(), CameraActivity.class);
                     startActivity(camera);
                 }
                 break;
@@ -126,7 +120,7 @@ public class DocumentaryFragment extends Fragment implements View.OnClickListene
             //直接開啟藍芽
             bluetoothAdapter.enable();
         }
-        //dialog
+        //dialog or Activity for ble search
         
     }
 

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/corners_bg"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivRemoteShot"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"
+        android:src="@mipmap/imageview" />
+
+    <TextView
+        android:id="@+id/tvRemoteUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivRemoteShot"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignBaseline="@+id/ivRemoteShot"
+        android:text="Matt Bomer"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_temper_24dp"
+        android:layout_toRightOf="@id/ivRemoteShot"
+        android:layout_marginTop="50dp"/>
+    <TextView
+        android:id="@+id/tvRemoteUserDegree"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/ivRemoteShot"
+        android:layout_marginTop="55dp"
+        android:textColor="@color/red"
+        android:textSize="28sp"
+        android:layout_marginLeft="53dp"
+        android:text="38.50"/>
+</RelativeLayout>
