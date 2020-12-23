@@ -100,4 +100,10 @@
     <string name="please_input_other_account">請輸入對方的帳號</string>
     <string name="please_input_authorization">請輸入對方的授權碼</string>
     <string name="add_new_remote_account">新增監控帳號</string>
+    <string name="system_setting">系統設定</string>
+    <string name="system_user_setting">使用者設定</string>
+    <string name="system_vedio">教學影片</string>
+    <string name="system_provision">使用條款</string>
+    <string name="system_version">APP Version</string>
+    <string name="system_logout">登出</string>
 </resources>

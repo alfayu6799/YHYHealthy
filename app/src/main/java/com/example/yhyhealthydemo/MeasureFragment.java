@@ -5,16 +5,40 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.yhyhealthydemo.tools.ApiUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+
 public class MeasureFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "MeasureFragment";
 
     private View view;
 
     private Button ovulation, temperature, pregnancy,monitor;
+
+    private ApiUtil apiUtil;
+
+    private boolean isMenstrualExists = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,6 +54,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         monitor = view.findViewById(R.id.bt_monitor);
 //        monitor.setVisibility(View.INVISIBLE);
 
+        apiUtil = new ApiUtil();
+
+        checkMenstrualExists();  //經期是否有設定
+
         ovulation.setOnClickListener(this);
         temperature.setOnClickListener(this);
         pregnancy.setOnClickListener(this);
@@ -43,8 +71,11 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
             case R.id.bt_ovulation:
-                Intent intent_o = new Intent(getActivity(), OvulationActivity.class);
-                startActivity(intent_o);
+                if(isMenstrualExists) {
+                    startActivity(new Intent(getActivity(), OvulationActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(), SystemUserActivity.class));
+                }
                 break;
             case R.id.bt_temperature:
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
@@ -59,4 +90,48 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    /***  後台Api要求經期是否有設定
+    *    http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists
+    ***/
+    private void checkMenstrualExists() {
+        new Thread() {
+            @Override
+            public void run() {
+                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("type", "3");
+                    json.put("userId", "H5E3q5MjA=");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+
+                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+                Request request = new Request.Builder()
+                        .url("http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists")
+                        .addHeader("Authorization","xxx")
+                        .post(requestBody)
+                        .build();
+
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.i("onFailure", e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String string = response.body().string();
+                        isMenstrualExists = true;
+                        Log.d(TAG, "onResponse: " + string);
+                    }
+                });
+            }
+        }.start();
+    }
+
 }

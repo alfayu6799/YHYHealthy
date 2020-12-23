@@ -1,0 +1,910 @@
+{
+  "status": "Success",
+  "data": [
+    {
+      "testDate": "2020/08/01",
+      "temperature": 37.82542905043851,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/02",
+      "temperature": 35.709200955976286,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/03",
+      "temperature": 40.831955349010485,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/08/04",
+      "temperature": 39.74226950284669,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/05",
+      "temperature": 38.74941097608553,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/06",
+      "temperature": 39.5976059838322,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/08/07",
+      "temperature": 40.127726170312926,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/08",
+      "temperature": 39.17167203567093,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/09",
+      "temperature": 40.975078435472525,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/10",
+      "temperature": 36.06032720623003,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/11",
+      "temperature": 39.21011797211899,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/12",
+      "temperature": 41.200742787536655,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/13",
+      "temperature": 41.92914173393444,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/14",
+      "temperature": 40.44294728937807,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/15",
+      "temperature": 40.54242611534227,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/16",
+      "temperature": 38.7505931790342,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/17",
+      "temperature": 35.54886979487621,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/18",
+      "temperature": 36.623286164555175,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/08/19",
+      "temperature": 36.313548725330996,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/08/20",
+      "temperature": 36.63269141573741,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/21",
+      "temperature": 38.79070632483129,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/22",
+      "temperature": 41.19088047563946,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/23",
+      "temperature": 39.8858951792212,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/24",
+      "temperature": 40.493972758322506,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/25",
+      "temperature": 38.811495205259085,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/26",
+      "temperature": 38.37555761642213,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/27",
+      "temperature": 39.3966100070747,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/08/28",
+      "temperature": 40.77319356079167,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/29",
+      "temperature": 35.890052162749804,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/30",
+      "temperature": 40.08059245514383,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/08/31",
+      "temperature": 37.91226190838522,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/09/01",
+      "temperature": 36.5168614436269,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/09/02",
+      "temperature": 40.93074702567575,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/03",
+      "temperature": 38.11073060007748,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/04",
+      "temperature": 36.001247058056464,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/05",
+      "temperature": 40.58541694646408,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/06",
+      "temperature": 36.29631374805448,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/07",
+      "temperature": 37.418348104754934,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/08",
+      "temperature": 41.6464842671214,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/09/09",
+      "temperature": 35.68167771845268,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/09/10",
+      "temperature": 38.1823618151738,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/09/11",
+      "temperature": 41.83345371574043,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/09/12",
+      "temperature": 36.26162529591896,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/09/13",
+      "temperature": 41.91859290570666,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/09/14",
+      "temperature": 38.63847037300539,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/09/15",
+      "temperature": 37.956602612991404,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/16",
+      "temperature": 36.417236627652215,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/17",
+      "temperature": 40.61811047325975,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/18",
+      "temperature": 36.539727373697396,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/19",
+      "temperature": 40.01635727674648,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/20",
+      "temperature": 36.9693506857437,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/21",
+      "temperature": 40.10991055305529,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/22",
+      "temperature": 40.55333129881571,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/23",
+      "temperature": 40.847386187442964,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/24",
+      "temperature": 39.69266748534292,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/09/25",
+      "temperature": 35.82841779261207,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/09/26",
+      "temperature": 36.57368427645038,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/09/27",
+      "temperature": 36.10951956905655,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/09/28",
+      "temperature": 41.43320426359752,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/09/29",
+      "temperature": 36.784506179214446,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/09/30",
+      "temperature": 35.69596124965916,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/01",
+      "temperature": 41.64512297345462,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/02",
+      "temperature": 39.387836272973004,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/03",
+      "temperature": 40.586366684901606,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/04",
+      "temperature": 39.358488910095424,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/05",
+      "temperature": 39.09405798008193,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/06",
+      "temperature": 41.671126460779234,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/10/07",
+      "temperature": 36.96924712784919,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/10/08",
+      "temperature": 39.5457939413631,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/10/09",
+      "temperature": 37.64141558217288,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/10/10",
+      "temperature": 35.66211026349231,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/10/11",
+      "temperature": 38.660713326437964,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/10/12",
+      "temperature": 36.26190218695315,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/10/13",
+      "temperature": 40.538686355975955,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/14",
+      "temperature": 40.46595284005557,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/15",
+      "temperature": 40.67985667406028,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/16",
+      "temperature": 38.20411699538579,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/17",
+      "temperature": 39.987070670813786,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/18",
+      "temperature": 41.70337437005203,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/19",
+      "temperature": 36.99277176439233,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/20",
+      "temperature": 35.9806091262266,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/21",
+      "temperature": 40.083807613291306,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/22",
+      "temperature": 38.709655822386395,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/23",
+      "temperature": 36.144522237967365,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/24",
+      "temperature": 39.59431740368014,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/10/25",
+      "temperature": 36.975084014647166,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/10/26",
+      "temperature": 38.54693348559064,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/10/27",
+      "temperature": 38.768740783346686,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/10/28",
+      "temperature": 38.08426149004276,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/10/29",
+      "temperature": 41.57217733766158,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/30",
+      "temperature": 41.845225444957066,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/10/31",
+      "temperature": 38.20809503960099,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/01",
+      "temperature": 36.21665968886037,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/02",
+      "temperature": 39.819585808099106,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/03",
+      "temperature": 36.00246246359324,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/04",
+      "temperature": 37.94950498642725,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/11/05",
+      "temperature": 37.74919314119049,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/11/06",
+      "temperature": 36.54993207349878,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/11/07",
+      "temperature": 36.33108063412832,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/11/08",
+      "temperature": 38.03260226855791,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/11/09",
+      "temperature": 36.510321369456605,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/11/10",
+      "temperature": 41.640701926245235,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/11/11",
+      "temperature": 36.328444581376,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/12",
+      "temperature": 41.64361475479288,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/13",
+      "temperature": 35.974508110161864,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/14",
+      "temperature": 41.02902489631594,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/15",
+      "temperature": 39.15263440783328,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/16",
+      "temperature": 38.690443168214756,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/17",
+      "temperature": 39.0865381081863,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/18",
+      "temperature": 40.04947861772055,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/19",
+      "temperature": 39.484682829727774,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/20",
+      "temperature": 39.262760440553706,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/11/21",
+      "temperature": 35.80236404327843,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/11/22",
+      "temperature": 40.9116814129989,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/11/23",
+      "temperature": 37.050034179663854,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/11/24",
+      "temperature": 35.53007883504677,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/11/25",
+      "temperature": 40.413029597557596,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/26",
+      "temperature": 37.46064604786179,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/27",
+      "temperature": 38.49836293820295,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/28",
+      "temperature": 36.55156633690786,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/29",
+      "temperature": 37.28918231416173,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/11/30",
+      "temperature": 39.62922844933385,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/01",
+      "temperature": 35.52259920226508,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/12/02",
+      "temperature": 35.83202560429789,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/12/03",
+      "temperature": 39.315017582744986,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/12/04",
+      "temperature": 36.95285380791065,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/12/05",
+      "temperature": 39.68464785099832,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/12/06",
+      "temperature": 39.138180125045366,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/12/07",
+      "temperature": 38.042256329337405,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/12/08",
+      "temperature": 41.913416347611296,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/09",
+      "temperature": 40.89670390835785,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/10",
+      "temperature": 39.687252814645774,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/11",
+      "temperature": 38.43086443341726,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/12",
+      "temperature": 38.986803874381565,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/13",
+      "temperature": 39.5137756767332,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/14",
+      "temperature": 35.56954125850769,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/15",
+      "temperature": 41.31862731002669,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/16",
+      "temperature": 39.478589264870536,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/17",
+      "temperature": 36.39504075624996,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/18",
+      "temperature": 39.765723571290906,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/12/19",
+      "temperature": 36.395167667866616,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/12/20",
+      "temperature": 36.82397297424211,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/12/21",
+      "temperature": 37.45471084730265,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/12/22",
+      "temperature": 36.53335231154945,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2020/12/23",
+      "temperature": 36.713459853454935,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/12/24",
+      "temperature": 36.58123956841149,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/12/25",
+      "temperature": 40.714689240330806,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/12/26",
+      "temperature": 38.984907468126366,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2020/12/27",
+      "temperature": 39.00038690446533,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/28",
+      "temperature": 40.689740037208715,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2020/12/29",
+      "temperature": 40.90202359326472,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2020/12/30",
+      "temperature": 41.21777886531692,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2020/12/31",
+      "temperature": 39.89065495362654,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2021/01/01",
+      "temperature": 35.56053473485438,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/02",
+      "temperature": 38.391242397153256,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/03",
+      "temperature": 38.10083517822231,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/04",
+      "temperature": 39.8123312894992,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/05",
+      "temperature": 39.00209045017074,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/06",
+      "temperature": 39.053140732546964,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/07",
+      "temperature": 36.85582148701501,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/08",
+      "temperature": 39.747408834620344,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/09",
+      "temperature": 36.95028315925559,
+      "cycleStatus": 2
+    },
+    {
+      "testDate": "2021/01/10",
+      "temperature": 39.49903116167388,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/11",
+      "temperature": 41.463724061476405,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/12",
+      "temperature": 37.21431520808585,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/13",
+      "temperature": 35.751016303893145,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/14",
+      "temperature": 39.16821375986024,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/15",
+      "temperature": 37.768022140941376,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/16",
+      "temperature": 39.159010859000354,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/17",
+      "temperature": 40.13982755885215,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2021/01/18",
+      "temperature": 38.77185014654025,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/19",
+      "temperature": 41.68263007696147,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021/01/20",
+      "temperature": 37.64375692574775,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/21",
+      "temperature": 40.25645577734361,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/22",
+      "temperature": 36.77756276450512,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/23",
+      "temperature": 41.33209996666218,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/24",
+      "temperature": 36.96897321842093,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/25",
+      "temperature": 41.6450931231234,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021/01/26",
+      "temperature": 38.83825441173088,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/27",
+      "temperature": 39.59622065513436,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021/01/28",
+      "temperature": 38.67244770766416,
+      "cycleStatus": [7]
+    }
+  ]
+}

@@ -40,7 +40,7 @@
     <LinearLayout
         android:id="@+id/ly_calender"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="360dp"
         android:orientation="vertical"
         android:visibility="gone">
         <!-- 月曆元件 第三方庫 -->
@@ -220,7 +220,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_toRightOf="@+id/tv_ovul_period"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="55dp"
                     android:layout_marginTop="5dp"
                     android:textSize="22sp"
                     android:gravity="center"
@@ -232,7 +232,7 @@
                     android:layout_height="80dp"
                     android:layout_toRightOf="@+id/tv_ovul_period"
                     android:layout_below="@+id/tv_ovul_setting"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="55dp"
                     android:layout_marginTop="5dp"
                     android:textSize="22sp"
                     android:gravity="center"
@@ -319,26 +319,26 @@
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:src="@drawable/ic_brightness_5_24dp"/>
+                        android:src="@drawable/shape_dash_5"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:src="@drawable/ic_brightness_6_24dp"/>
+                        android:src="@drawable/shape_dash_6"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:src="@drawable/ic_brightness_7_24dp"/>
+                        android:src="@drawable/shape_dash_7"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:visibility="invisible"
-                        android:src="@drawable/ic_brightness_4_24dp"/>
+                        android:src="@drawable/shape_dash_7"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/ly_color_sub2"
@@ -358,13 +358,13 @@
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="預計排卵"/>
+                        android:text="預計排卵期"/>
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="預計排卵"/>
+                        android:text="預計排卵日"/>
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -382,13 +382,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvMMDD"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="22dp"
-            android:text="11月16日 - 11月30日"/>
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imgPreMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_skip_previous_24dp"/>
+            <TextView
+                android:id="@+id/tvMMDD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="22dp"
+                android:text="11/01 ~ 11/30"/>
+            <ImageView
+                android:id="@+id/imgNextMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_skip_next_24dp"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

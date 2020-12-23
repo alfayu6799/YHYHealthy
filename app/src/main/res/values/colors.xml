@@ -17,6 +17,9 @@
     <color name="colorPrimary">#00bcd4</color>
     <color name="colorPrimaryDark">#0097a7</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="color_period_5">#CF6194</color>
+    <color name="color_period_6">#D5AD45</color>
+    <color name="color_period_7">#7793DD</color>
 
     <color name="translucent">#00000000</color>
 
