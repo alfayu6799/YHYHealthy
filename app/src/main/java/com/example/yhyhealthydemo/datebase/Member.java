@@ -22,9 +22,15 @@ public class Member {
 
     private List<Degree> degreeList = new ArrayList<>();
 
-    public Member(int image, String name) {
+//    public Member(int image, String name) {
+//        this.image = image;
+//        this.name = name;
+//    }
+
+    public Member(int image, String name, String status) {
         this.image = image;
         this.name = name;
+        Status = status;
     }
 
     public void setDegree(double degree , String date){

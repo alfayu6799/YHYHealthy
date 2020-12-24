@@ -421,10 +421,10 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
 
     private void setMemberDate() {  //日後要從api拉回照片跟姓名等資料
 
-        user1 = new Member(R.mipmap.imageview, "Matt Bomer");
-        user2 = new Member(R.mipmap.imageview2, "Brad Pitt");
-        user3 = new Member(R.mipmap.imageview3, "Anne Hathaway");
-        user4 = new Member(R.mipmap.image4, "Emma Watson");
+        user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
+        user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
+        user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
+        user4 = new Member(R.mipmap.image4, "Emma Watson", "未連線");
 
         members.add(user1);
         members.add(user2);

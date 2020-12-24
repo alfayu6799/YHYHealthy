@@ -91,10 +91,11 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /***  後台Api要求經期是否有設定
+    /***  後台Api要求經期是否有設定 (POST)
     *    http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists
     ***/
     private void checkMenstrualExists() {
+
         new Thread() {
             @Override
             public void run() {
@@ -107,27 +108,33 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
+                // 建立OkHttpClient
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
 
+                // 建立Request，設置連線資訊
                 Request request = new Request.Builder()
                         .url("http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists")
                         .addHeader("Authorization","xxx")
                         .post(requestBody)
                         .build();
 
+                // 執行Call連線到網址
                 okHttpClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        // 連線失敗
                         Log.i("onFailure", e.toString());
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String string = response.body().string();
+                        // 連線成功，自response取得連線結果
+                        String string = response.body().string();  //字串
+                        
                         isMenstrualExists = true;
-                        Log.d(TAG, "onResponse: " + string);
+                        Log.d(TAG, "onResponse: 連線結果 : " + string);
                     }
                 });
             }

@@ -72,6 +72,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textBleStatus.setText(member.getStatus());
         holder.textBleBattery.setText(member.getBattery());
 
+//        holder.textBleStatus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                listener.onBleConnect(member);
+//            }
+//        });
+
         holder.bleConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
