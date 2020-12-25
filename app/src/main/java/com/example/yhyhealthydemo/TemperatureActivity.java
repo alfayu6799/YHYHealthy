@@ -362,7 +362,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
            super.onCharacteristicChanged(gatt, characteristic);
            if (characteristic.getValue() != null){
                String result = new String(characteristic.getValue());
-               String[] str = result.split(",");
+               String[] str = result.split(","); //以","切割
                String temp = str[2];
                degree = Double.parseDouble(temp)/100;  //25.0
                Log.d(TAG, "onCharacteristicChanged: Characteristic get value : " + degree);  //result : AIDO,0,2500,100

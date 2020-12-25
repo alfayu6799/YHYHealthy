@@ -104,6 +104,11 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
         initView();
 
+        //取的來自OvulationActivity的資料
+        Intent intent = this.getIntent();
+        String strDay = intent.getStringExtra("DAY");
+        textRecordDate.setText(strDay);
+
         checkPermission(); //權限check
 
     }

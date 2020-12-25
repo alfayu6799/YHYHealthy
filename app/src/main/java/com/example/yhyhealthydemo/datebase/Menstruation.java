@@ -5,36 +5,38 @@ package com.example.yhyhealthydemo.datebase;
  * 日期,體溫,經期狀態
  ******************************/
 public class Menstruation {
-    String periodDate;
-    String periodDegree;
-    String periodStatus;
 
-    public Menstruation(String periodDate, String periodDegree) {
-        this.periodDate = periodDate;
-        this.periodDegree = periodDegree;
+    /**
+     * testDate : 2020/08/01
+     * temperature : 37.82542905043851
+     * cycleStatus : 1
+     */
+
+    private String testDate;
+    private double temperature;
+    private int cycleStatus;
+
+    public String getTestDate() {
+        return testDate;
     }
 
-    public String getPeriodDate() {
-        return periodDate;
+    public void setTestDate(String testDate) {
+        this.testDate = testDate;
     }
 
-    public void setPeriodDate(String periodDate) {
-        this.periodDate = periodDate;
+    public double getTemperature() {
+        return temperature;
     }
 
-    public String getPeriodDegree() {
-        return periodDegree;
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 
-    public void setPeriodDegree(String periodDegree) {
-        this.periodDegree = periodDegree;
+    public int getCycleStatus() {
+        return cycleStatus;
     }
 
-    public String getPeriodStatus() {
-        return periodStatus;
-    }
-
-    public void setPeriodStatus(String periodStatus) {
-        this.periodStatus = periodStatus;
+    public void setCycleStatus(int cycleStatus) {
+        this.cycleStatus = cycleStatus;
     }
 }

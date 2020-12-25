@@ -684,17 +684,17 @@
     {
       "testDate": "2020/12/15",
       "temperature": 41.31862731002669,
-      "cycleStatus": 0
+      "cycleStatus": 2
     },
     {
       "testDate": "2020/12/16",
       "temperature": 39.478589264870536,
-      "cycleStatus": 0
+      "cycleStatus": 2
     },
     {
       "testDate": "2020/12/17",
       "temperature": 36.39504075624996,
-      "cycleStatus": 0
+      "cycleStatus": 2
     },
     {
       "testDate": "2020/12/18",
@@ -714,7 +714,7 @@
     {
       "testDate": "2020/12/21",
       "temperature": 37.45471084730265,
-      "cycleStatus": 1
+      "cycleStatus": 5
     },
     {
       "testDate": "2020/12/22",
@@ -744,12 +744,12 @@
     {
       "testDate": "2020/12/27",
       "temperature": 39.00038690446533,
-      "cycleStatus": 0
+      "cycleStatus": 1
     },
     {
       "testDate": "2020/12/28",
       "temperature": 40.689740037208715,
-      "cycleStatus": 0
+      "cycleStatus": 2
     },
     {
       "testDate": "2020/12/29",

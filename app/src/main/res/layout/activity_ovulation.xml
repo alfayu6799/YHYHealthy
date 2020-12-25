@@ -86,12 +86,14 @@
                     android:id="@+id/tv_ovul_period"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:textSize="22sp"
                     android:text="今天是週期第N天"/>
                 <TextView
                     android:id="@+id/tv_ovul_result_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_below="@+id/tv_ovul_period"
                     android:textSize="@dimen/font_18"
                     android:text="唾液辨識 :"/>
@@ -101,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_ovul_result_1"
                     android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
                     android:textSize="@dimen/font_18"
                     android:text="排卵機率 :"/>
                 <ImageView
@@ -159,6 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_ovul_probability_1"
                     android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
                     android:textSize="@dimen/font_18"
                     android:text="基礎體溫 :"/>
                 <TextView
@@ -167,6 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_ovul_temp_1"
                     android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
                     android:textSize="@dimen/font_18"
                     android:text="排卵機率 :"/>
                 <ImageView
@@ -234,6 +239,7 @@
                     android:layout_below="@+id/tv_ovul_setting"
                     android:layout_marginLeft="55dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:textSize="22sp"
                     android:gravity="center"
                     android:background="@drawable/shape_for_ovulation"

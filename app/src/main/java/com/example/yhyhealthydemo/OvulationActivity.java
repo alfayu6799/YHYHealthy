@@ -48,6 +48,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
@@ -64,8 +66,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //月曆
     private ExpCalendarView calendarView;
-//    private MCalendarView calendarView;
     private TextView YearMonthTv;
+    private TextView menstruationPeriodDay; //週期顯示
+    private String choseDay;
+    private String periodDate = "";    //從api獲取日期
+    private String periodStatus = "";   //從api獲取狀態
+    private String periodDegree = ""; //從api獲取體溫
+
+    private String firstday = "";   //這個月第一天
+    private String lastday = "";    //這個月最後一天
+    private String firstMonth= "";  //這個月份
 
     private TextView oveuSetting; //經期設定click
     private TextView oveuEdit;    //經期編輯click
@@ -96,6 +106,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarLayout = findViewById(R.id.ly_calender);
         scrollViewLayout = findViewById(R.id.ly_scroll_comment);
         chartLayout = findViewById(R.id.lychart);
+
+        menstruationPeriodDay = findViewById(R.id.tv_ovul_period); //今天是週期的第?天
 
         ovulResult = findViewById(R.id.tv_ovul_result_1);
         ovulResult.setText("唾液辨識 : 濾泡/黃體期");
@@ -135,7 +147,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //圖表資料顯示
     private void initChartData() {
 
-        setThisMonth();
+        getThisMonth();
+
+        periodRangDate.setText(firstday + " ~ " + lastday); //經期顯示期間
 
         menstruationArray = new ArrayList<>();
 
@@ -147,21 +161,24 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 JSONArray array = obj.getJSONArray("data");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject objdata = array.getJSONObject(i);
-                    String periodDate = objdata.getString("testDate");      //日期(X軸)
-                    String periodStatus = objdata.getString("cycleStatus"); //狀態
-                    String periodDegree = objdata.getString("temperature"); //體溫(y軸)
+                    periodDate = objdata.getString("testDate");      //日期(X軸)
+                    periodDegree = objdata.getString("temperature"); //體溫(y軸)
+
+                    Menstruation menstruation = new Menstruation(); //實體化
 
                     //時間:年月日
                     String[] str = periodDate.split("/");
                     String day = str[2];  //只需日期當X軸
-                    menstruationArray.add(new Menstruation(day,periodDegree));
+                    menstruation.setTestDate(day);
+                    menstruation.setTemperature(Double.parseDouble(periodDegree));
+                    menstruationArray.add(menstruation);
 
                     ArrayList<String> label = new ArrayList<>();    //X軸(時間)
                     ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
 
                     for (int j = 0; j < menstruationArray.size(); j++ ) {
-                        String xValues = menstruationArray.get(j).getPeriodDate();
-                        double yValues = Double.parseDouble(menstruationArray.get(j).getPeriodDegree());
+                        String xValues = menstruationArray.get(j).getTestDate();
+                        double yValues = menstruationArray.get(j).getTemperature();
                         entries.add(new Entry(j, (float) yValues));
                         label.add(xValues);
 
@@ -200,16 +217,17 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
     //圖表日期顯示範圍(一整個月)
-    private void setThisMonth() {
+    private void getThisMonth() {
         Calendar cale = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MM/dd" );
-        String firstday, lastday; //第一天跟最後一天
+        SimpleDateFormat format1 = new SimpleDateFormat("MM");
 
         // 獲取前月的第一天
         cale = Calendar.getInstance();
         cale.add(Calendar.MONTH, 0);
         cale.set(Calendar.DAY_OF_MONTH, 1);
         firstday = format.format(cale.getTime());
+        firstMonth = format1.format(cale.getTime());
 
         // 獲取前月的最後一天
         cale = Calendar.getInstance();
@@ -217,12 +235,20 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         cale.set(Calendar.DAY_OF_MONTH, 0);
         lastday = format.format(cale.getTime());
 
-        String thisMonth = firstday + " ~ " + lastday;
-        periodRangDate.setText(thisMonth);
     }
 
     //月曆init
     private void setCalendar() {
+
+        //取得這個月的第一天與最後一天
+        getThisMonth();
+
+        //從json讀取資料
+        gatDataFromJson();
+
+        //計算週期
+//        calculationPeriod();
+
         //set 月曆月份Title
         YearMonthTv.setText(Calendar.getInstance().get(Calendar.YEAR) + "年" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "月");
 
@@ -230,7 +256,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-                Toast.makeText(OvulationActivity.this, "您選擇的日期為 : "+String.format("%d/%d", date.getMonth(), date.getDay()), Toast.LENGTH_SHORT).show();
+                choseDay = String.format("%d/%d/%d", date.getYear(), date.getMonth(), date.getDay());
+                Toast.makeText(OvulationActivity.this, "您選擇的日期為 : " + choseDay, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -248,14 +275,31 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
                 .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
 
-        //從json讀取資料
-        gatDataFromJson();
-
     }
+
+//    //計算週期
+//    private void calculationPeriod() {
+//        String calculationStr = loadJSONFromAsset("menstruation.json");
+//        try {
+//            JSONObject jsonObject = new JSONObject(calculationStr);
+//            String status = jsonObject.getString("status");
+//            if (status.equals("Success")) {
+//                JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject objdata = jsonArray.getJSONObject(i);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     //從Api or Local取得需要的資料集
     private void gatDataFromJson() {
+
         String calendStr = loadJSONFromAsset("menstruation.json");
+
         try {
             JSONObject obj = new JSONObject(calendStr);
             String status = obj.getString("status");
@@ -263,25 +307,36 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 JSONArray array = obj.getJSONArray("data");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject objdata = array.getJSONObject(i);
-                    String periodDate = objdata.getString("testDate");      //日期
-                    String periodStatus = objdata.getString("cycleStatus"); //狀態
+                    periodDate = objdata.getString("testDate");      //日期
+                    periodStatus = objdata.getString("cycleStatus"); //狀態
+                    periodDegree = objdata.getString("temperature"); //體溫
 
                     //時間:年月日
                     String[] str = periodDate.split("/");
-                    int yaer = Integer.parseInt(str[0]);
-                    int month = Integer.parseInt(str[1]);
-                    int day = Integer.parseInt(str[2]);
+                    int yaer = Integer.parseInt(str[0]);    //ex:2020
+                    int month = Integer.parseInt(str[1]);   //ex:12
+                    int day = Integer.parseInt(str[2]);     //ex:25
+
+                    String s = String.valueOf(month);
 
                     if (periodStatus.equals("1")){ //月經日
                         calendarView.markDate(
                                 new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(207,97,148))));
                     }
 
+                    if (periodStatus.equals("2")){  //非排卵日
+                        calendarView.markDate(
+                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.parseColor("#D5AD45"))));
+                    }
+
                     if(periodStatus.equals("5")){  //預計經期
                         calendarView.markDate(
-                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GRAY)));
+                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.MENSTRUAL, Color.rgb(207,97,148))));
                     }
+
                 }
+
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -337,7 +392,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 dialogPickDate();
                 break;
             case R.id.tv_ovul_edit:     //經期編輯
-                startActivity(new Intent(OvulationActivity.this, PeriodActivity.class));
+                periodEdit(choseDay);
                 break;
             case R.id.imgPreMonth:    //上一個月
                 Toast.makeText(this, "還沒寫好", Toast.LENGTH_SHORT).show();
@@ -346,6 +401,21 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(this, "沒有資料", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void periodEdit(String strDay) {
+        //今天日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+
+        if (strDay == null){
+            strDay = sdf.format(new Date());
+        }
+
+
+        Intent intent = new Intent();
+        intent.setClass(OvulationActivity.this, PeriodActivity.class);
+        intent.putExtra("DAY", strDay);
+        startActivity(intent);
     }
 
     //經期設定對話框
