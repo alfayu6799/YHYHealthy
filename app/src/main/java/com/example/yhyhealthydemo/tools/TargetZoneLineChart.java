@@ -31,7 +31,6 @@ public class TargetZoneLineChart extends LineChart {
         super.init();
         mYAxisSafeZonePaint = new Paint();
         mYAxisSafeZonePaint.setStyle(Paint.Style.FILL);
-        // mGridBackgroundPaint.setColor(Color.rgb(240, 240, 240));
         mTargetZones = new ArrayList<>();
     }
 

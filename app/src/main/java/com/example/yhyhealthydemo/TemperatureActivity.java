@@ -63,7 +63,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
     private Member user2; //假資料
     private Member user3; //假資料
     private Member user4; //假資料
-//    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); //日期格式
+
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm"); //日期格式
 
     //遠端
@@ -387,21 +387,6 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
            super.onDescriptorWrite(gatt, descriptor, status);
            Log.d(TAG, "onDescriptorWrite: success");
        }
-
-       @Override
-       public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
-           super.onReliableWriteCompleted(gatt, status);
-       }
-
-       @Override
-       public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-           super.onReadRemoteRssi(gatt, rssi, status);
-       }
-
-       @Override
-       public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-           super.onMtuChanged(gatt, mtu, status);
-       }
    };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,37 +454,6 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
     }
-
-    //遠端帳號新增彈跳視窗
-    private void dialogRemote() {
-        AlertDialog remoteDialog = new AlertDialog.Builder(this).create();
-        LayoutInflater remotelayout = LayoutInflater.from(this);
-        View remoteView = remotelayout.inflate(R.layout.dialog_remote_add, null);
-        remoteDialog.setView(remoteView);
-        remoteDialog.setCancelable(false); //禁用非視窗區
-
-        Button cancel = remoteView.findViewById(R.id.btnRemoteCancel);
-        Button submit = remoteView.findViewById(R.id.btnRemoteSend);
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                remoteDialog.dismiss();
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //送資料到後台
-                //RemoteApi();
-                remoteDialog.dismiss();
-            }
-        });
-
-        remoteDialog.show();
-    }
-
 
     private void updateStatus(String name){
         //使用者手動按下啟用5分鐘讀取一次藍芽體溫資料
@@ -631,6 +585,8 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         Toast.makeText(TemperatureActivity.this, getString(R.string.ble_is_not_connect), Toast.LENGTH_SHORT).show();
     }
 
+    ////////////////////////////////////////////// Dialog fxn ////////////////////////////////////////////////////
+
     //新增觀測者Dioalog
     private void dialogTemperature() {
         //自定義 一個TemperatureDialog繼承dialog
@@ -645,6 +601,37 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         addTemperatureDialog.setCancelable(false);
         addTemperatureDialog.show();
     }
+
+    //遠端帳號新增彈跳視窗
+    private void dialogRemote() {
+        AlertDialog remoteDialog = new AlertDialog.Builder(this).create();
+        LayoutInflater remotelayout = LayoutInflater.from(this);
+        View remoteView = remotelayout.inflate(R.layout.dialog_remote_add, null);
+        remoteDialog.setView(remoteView);
+        remoteDialog.setCancelable(false); //禁用非視窗區
+
+        Button cancel = remoteView.findViewById(R.id.btnRemoteCancel);
+        Button submit = remoteView.findViewById(R.id.btnRemoteSend);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                remoteDialog.dismiss();
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //送資料到後台
+                //RemoteApi();
+                remoteDialog.dismiss();
+            }
+        });
+
+        remoteDialog.show();
+    }
+
 
     ///////////////////////////來自Adapter的callBack////////////////////////////////////
 
@@ -676,6 +663,11 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         chartDialog = new ChartDialog(this, member);
         chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
         chartDialog.show();
+    }
+
+    @Override
+    public void onBleMeasuring(Member member) { //啟動ble量測
+        sendCommand();
     }
 }
 

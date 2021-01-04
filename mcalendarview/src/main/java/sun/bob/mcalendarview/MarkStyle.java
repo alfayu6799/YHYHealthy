@@ -15,6 +15,7 @@ public class MarkStyle {
     public static final int LEFTSIDEBAR = 3;
     public static final int RIGHTSIDEBAR = 4;
     public static final int TEXT = 5;
+    public static final int PREIOD = 6;
     public static final int MENSTRUAL = 7;
     public static final int DEFAULT = 10;
 

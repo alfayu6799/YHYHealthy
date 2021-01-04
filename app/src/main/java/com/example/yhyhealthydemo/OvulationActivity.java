@@ -89,6 +89,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ImageView preMonth, nextMonth;
 
     private ArrayList<Menstruation> menstruationArray;
+    private Menstruation menstruation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +165,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     periodDate = objdata.getString("testDate");      //日期(X軸)
                     periodDegree = objdata.getString("temperature"); //體溫(y軸)
 
-                    Menstruation menstruation = new Menstruation(); //實體化
+                    menstruation = new Menstruation(); //實體化
 
                     //時間:年月日
                     String[] str = periodDate.split("/");
@@ -277,28 +278,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-//    //計算週期
-//    private void calculationPeriod() {
-//        String calculationStr = loadJSONFromAsset("menstruation.json");
-//        try {
-//            JSONObject jsonObject = new JSONObject(calculationStr);
-//            String status = jsonObject.getString("status");
-//            if (status.equals("Success")) {
-//                JSONArray jsonArray = jsonObject.getJSONArray("data");
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    JSONObject objdata = jsonArray.getJSONObject(i);
-//                }
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
     //從Api or Local取得需要的資料集
     private void gatDataFromJson() {
 
         String calendStr = loadJSONFromAsset("menstruation.json");
+
+//        menstruation = Menstruation.newInstance(calendStr);
+//        menstruationArray.add(menstruation);
 
         try {
             JSONObject obj = new JSONObject(calendStr);
@@ -317,26 +303,21 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     int month = Integer.parseInt(str[1]);   //ex:12
                     int day = Integer.parseInt(str[2]);     //ex:25
 
-                    String s = String.valueOf(month);
-
                     if (periodStatus.equals("1")){ //月經日
                         calendarView.markDate(
                                 new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(207,97,148))));
                     }
 
-                    if (periodStatus.equals("2")){  //非排卵日
+                    if (periodStatus.equals("2")){  //排卵日
                         calendarView.markDate(
                                 new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.parseColor("#D5AD45"))));
                     }
 
                     if(periodStatus.equals("5")){  //預計經期
                         calendarView.markDate(
-                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.MENSTRUAL, Color.rgb(207,97,148))));
+                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.PREIOD, Color.rgb(207,97,148))));
                     }
-
                 }
-
-
             }
         } catch (JSONException e) {
             e.printStackTrace();

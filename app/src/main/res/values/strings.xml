@@ -106,4 +106,8 @@
     <string name="system_provision">使用條款</string>
     <string name="system_version">APP Version</string>
     <string name="system_logout">登出</string>
+    
+    <string name="announcement">公告</string>
+    <string name="shopping">購物</string>
+    <string name="traning">教學</string>
 </resources>

@@ -25,6 +25,7 @@
         android:layout_alignBaseline="@+id/ivUserShot"
         android:text="Matt Bomer"/>
     <ImageView
+        android:id="@+id/ivBleMeasuring"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_temper_24dp"

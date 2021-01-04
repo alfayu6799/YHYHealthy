@@ -3,8 +3,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <!-- 實心顏色 -->
-    <solid
-        android:color="#3fccb3" />
+<!--    <solid-->
+<!--        android:color="#3fccb3" />-->
 
     <!-- 文字與邊框的間距 -->
     <padding
@@ -17,9 +17,9 @@
         android:width="100dp"
         android:height="100dp" />
     <!-- 邊框線 -->
-    <stroke
-        android:width="2dp"
-        android:color="@color/white"
-        android:dashGap="0dp"
-        android:dashWidth="0dp" />
+<!--    <stroke-->
+<!--        android:width="2dp"-->
+<!--        android:color="@color/white"-->
+<!--        android:dashGap="0dp"-->
+<!--        android:dashWidth="0dp" />-->
 </shape>

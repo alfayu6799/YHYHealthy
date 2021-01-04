@@ -1,5 +1,11 @@
 package com.example.yhyhealthydemo.datebase;
 
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+
+import static android.content.ContentValues.TAG;
+
 /*********************************
  * 經期資料結構DataBean
  * 日期,體溫,經期狀態
@@ -38,5 +44,30 @@ public class Menstruation {
 
     public void setCycleStatus(int cycleStatus) {
         this.cycleStatus = cycleStatus;
+    }
+
+    /**
+     * JSON 字串轉 Menstruation 物件
+     *
+     * @param jsonString json 格式的資料
+     * @return TemperatureReceives 物件
+     */
+    public static Menstruation newInstance(String jsonString) {
+
+        if (TextUtils.isEmpty(jsonString)) {
+            return new Menstruation();
+        }
+
+        Gson gson = new Gson();
+        Menstruation temperatureReceives;
+
+        try {
+            temperatureReceives = gson.fromJson(jsonString, Menstruation.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Menstruation();
+        }
+
+        return temperatureReceives;
     }
 }

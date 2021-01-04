@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -66,6 +67,20 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setTextColor(Color.WHITE);
                 circleDrawable = new ShapeDrawable(new OvalShape());
                 circleDrawable.getPaint().setColor(style.getColor());
+                this.setPadding(20, 20, 20, 20);
+                textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
+                textView.setBackground(circleDrawable);
+                this.addView(textView);
+                return;
+            case MarkStyle.PREIOD:
+                this.setLayoutParams(matchParentParams);
+                this.setOrientation(HORIZONTAL);
+                textView.setTextColor(Color.BLACK);
+                circleDrawable = new ShapeDrawable(new OvalShape());
+                circleDrawable.getPaint().setColor(style.getColor());
+                circleDrawable.getPaint().setStyle(Paint.Style.STROKE); //空心效果
+                circleDrawable.getPaint().setPathEffect(new DashPathEffect(new float[]{30f,20f}, 1f));
+                circleDrawable.getPaint().setStrokeWidth(4);  //筆畫的寬度
                 this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
                 textView.setBackground(circleDrawable);

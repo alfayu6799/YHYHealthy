@@ -72,12 +72,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textBleStatus.setText(member.getStatus());
         holder.textBleBattery.setText(member.getBattery());
 
-//        holder.textBleStatus.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                listener.onBleConnect(member);
-//            }
-//        });
+        holder.bleMeasuring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onBleMeasuring(member);
+            }
+        });
 
         holder.bleConnect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +115,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textBleStatus;
         TextView textBleBattery;
         ImageView bleConnect, delUser, bleChart;
+        ImageView bleMeasuring;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,6 +129,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             bleConnect = itemView.findViewById(R.id.imgBleConnect);
             delUser = itemView.findViewById(R.id.imgDeleteUser);
             bleChart = itemView.findViewById(R.id.imgBleChart);
+            bleMeasuring = itemView.findViewById(R.id.ivBleMeasuring);
         }
     }
 }
