@@ -59,15 +59,25 @@ public class Menstruation {
         }
 
         Gson gson = new Gson();
-        Menstruation temperatureReceives;
+        Menstruation item;
 
         try {
-            temperatureReceives = gson.fromJson(jsonString, Menstruation.class);
+            item = gson.fromJson(jsonString, Menstruation.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Menstruation();
+            item = new Menstruation();
         }
 
-        return temperatureReceives;
+        return item;
+    }
+
+    /**
+     * SignInAPI 物件轉 JSON字串
+     *
+     * @return json 格式的資料
+     */
+    public String toJSONString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

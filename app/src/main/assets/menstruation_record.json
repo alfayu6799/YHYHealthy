@@ -1,0 +1,4052 @@
+[
+    {
+        "testDate": "2020/08/01",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.78560403234207,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/03",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.99272209564263,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/04",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.34570689710493,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/08/06",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.15008931288176,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/08/07",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.53007977736615,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/08/08",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.902554546247636,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/09",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.617141096711265,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/10",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.965140822802695,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/11",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.42538657339631,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/12",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.447162570552976,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/08/13",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.63246555343726,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/14",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.57899270365068,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/15",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.85859136382844,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/08/16",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.66662628679486,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/17",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.89932081003714,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/18",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.822973168252084,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/19",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.941956450089215,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/08/20",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.189778669719374,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/08/21",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.17313944517513,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/08/22",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.623260236325876,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/08/23",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.48635169113528,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/24",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.60267036951655,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/25",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.624683906941726,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/08/26",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.211959100265034,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/27",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.72068652370526,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/08/28",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.695449855396106,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/08/29",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.23171056957298,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/08/30",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.82021429932965,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/08/31",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.96854699147109,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/09/01",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.01779362719579,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/09/02",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.945159259663406,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/03",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.88123915280641,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/04",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.67474542886827,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/09/05",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.65543352675755,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/06",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.41983143023215,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/07",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.0287105386854,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/08",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.31576418381367,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/09/09",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.74013407045305,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/10",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.70744995450625,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/11",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.05936430557663,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/14",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.62904021851878,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/15",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.2338159160465,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/16",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.60221682877444,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/17",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.77628275076387,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/18",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.501618516251774,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/19",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.546555797845286,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/09/20",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.36078202471666,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/09/21",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.511659831386865,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/23",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.98639482224314,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/24",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.27732540313937,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/09/25",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.223596636790695,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/09/26",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.58173853040513,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/27",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.55949973314894,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/09/29",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.3613086772692,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/09/30",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.365358011760875,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/10/01",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.08190371234397,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/02",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.92331292868097,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/03",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.12811380961744,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/04",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.2971582651698,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/10/05",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.19327387943522,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/10/06",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.03658869128098,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/10/08",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.55305053174976,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/09",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.98999939312964,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/10/10",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.604866078737395,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/10/11",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.65702187138848,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/10/12",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.87787151700462,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/13",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.312090408803634,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/14",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.39525655866299,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/10/15",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.61744287214933,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/17",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.69475525538668,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/10/18",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.06036074232433,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/19",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.48913495614968,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/20",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.209413494053976,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/21",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.18180628637452,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/22",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.58047540562146,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/23",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.875711120412255,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/10/24",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.687468144459324,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/26",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.68152154791522,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/10/27",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.017228225872245,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/28",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.74933721928788,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/10/29",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.56566346458228,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/10/30",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.095087807765154,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/10/31",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.7458319019907,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/01",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.43171776268244,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/02",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.36482842569586,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/03",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.33920900543773,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/04",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.40072867514281,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/05",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.106450778315576,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/06",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.878671241830894,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/07",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.57588609448991,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/08",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.110893604376,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/09",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.783515622794184,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/11/10",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.43514350722869,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/11",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.52485936335171,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/12",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.81555328231606,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/11/13",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.7302551614727,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/11/14",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.46243448507807,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/15",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.961574662967706,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/16",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.28309693058725,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/17",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.8996771075863,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/11/18",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.321303138053445,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/19",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.71033049523621,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/20",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.7077107725654,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/21",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.701126384571694,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/11/22",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.82952095499099,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/23",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.84157251380204,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/24",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.89566354636725,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/11/25",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.254919152179454,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/11/26",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.611889922785515,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/11/27",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.099629085367816,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/11/28",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.07114282186044,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/11/29",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.20615261890369,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/11/30",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.938801276217234,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/01",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.47464124346409,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/12/02",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.07898207353583,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/03",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.31673770986351,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/04",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.3515605299079,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/05",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.43268977000387,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/06",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.548488117184185,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/07",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.500647409323705,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/08",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.51546382212477,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/12/10",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.521655595702306,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/11",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.958482796801775,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/12/12",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.63806185389775,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2020/12/13",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.20914693025651,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/12/15",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.38658386961853,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/12/16",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.87643111842657,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/17",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.86877602996483,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/18",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.75288709319162,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/19",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.00651871679757,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/12/20",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.3305918110957,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/22",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.972604661927456,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/12/23",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.924475217440104,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "cheesy",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/24",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.677398695276054,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/25",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.623692608466506,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2020/12/26",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.48152182741015,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/27",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.59026315545439,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/12/28",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.38379842382413,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2020/12/29",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.58732893793655,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "none",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2020/12/30",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.383189469175996,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2020/12/31",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.42059476347291,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2021/01/01",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.81772774974471,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2021/01/03",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.40001036763133,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/04",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.06843605594216,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2021/01/05",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.21253353301071,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/06",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.57946429823288,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2021/01/09",
+        "menstruation": "S",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.15378119281698,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2021/01/10",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.26355179968676,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "egg-white",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 5
+        }
+	},
+    {
+        "testDate": "2021/01/11",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.554839969734765,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2021/01/12",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.00830296708608,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "viscous",
+            "smell": "none",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 1,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2021/01/13",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.66345083794504,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "none",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/14",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 38.90152651650664,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2021/01/15",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.147190361844864,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "viscous",
+            "smell": "malodorous",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/16",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 41.91326673163633,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/18",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.066268911438115,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "none",
+            "smell": "malodorous",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 2
+        }
+	},
+    {
+        "testDate": "2021/01/19",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.399469067923285,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2021/01/20",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 36.757531677367766,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/21",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.09082101777256,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "watery",
+            "smell": "malodorous",
+            "symptom": "painful"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/22",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 35.846787867323535,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": false,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "cheesy",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 3
+        }
+	},
+    {
+        "testDate": "2021/01/23",
+        "menstruation": "",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 37.42716693889389,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "none",
+            "secretionType": "watery",
+            "smell": "fishy-smell",
+            "symptom": "none"
+        },
+        "ovuRate": {
+             "salivaRate": 4,
+             "btRate": 4
+        }
+	},
+    {
+        "testDate": "2021/01/24",
+        "menstruation": "E",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 40.37724867596025,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": true,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "brown",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 5,
+             "btRate": 1
+        }
+	},
+    {
+        "testDate": "2021/01/27",
+        "menstruation": "Y",
+        "measure": {
+            "param": "0.87",
+            "paramName": "ABC",
+            "temperature": 39.52124735821232,
+            "weight": 87
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": true
+        },
+        "secretions": {
+            "color": "yellow-green",
+            "secretionType": "none",
+            "smell": "none",
+            "symptom": "itchy"
+        },
+        "ovuRate": {
+             "salivaRate": 3,
+             "btRate": 3
+        }
+	}
+]

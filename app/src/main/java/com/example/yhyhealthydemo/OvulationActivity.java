@@ -20,12 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.yhyhealthydemo.data.IncomeBean;
-import com.example.yhyhealthydemo.data.LineChartBean;
-import com.example.yhyhealthydemo.data.LineChartManager;
+
 import com.example.yhyhealthydemo.datebase.Menstruation;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -40,15 +37,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
@@ -82,6 +77,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private TextView temperature;
     private TextView ovulResult;
+
+    private SimpleDateFormat sdf;
 
     //圖表
     LineChart lineChart;
@@ -257,8 +254,24 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
+
                 choseDay = String.format("%d/%d/%d", date.getYear(), date.getMonth(), date.getDay());
-                Toast.makeText(OvulationActivity.this, "您選擇的日期為 : " + choseDay, Toast.LENGTH_SHORT).show();
+
+//                calendarView.markDate(
+//                        new DateData(date.getYear(), date.getMonth(), date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(255,0,0))));
+
+//                try {
+//                    Date date1 = dft.parse(choseDay);
+//                    String correctDay = dft.format(date1);
+//                    Log.d(TAG, "onDateClick: " + correctDay);
+//                    checkDayData(correctDay);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.d(TAG, "onDateClick: " + temp_day);
+                //跟api檢查是否有資料:isComplete
+                checkInfoFromApi(choseDay);
+//                Toast.makeText(OvulationActivity.this, "您選擇的日期為 : " + year +"/" + month + "/" + day, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -277,6 +290,34 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
 
     }
+
+    private void checkInfoFromApi(String selectDay) {
+
+        SimpleDateFormat dft = new SimpleDateFormat("yyyy/MM/dd");
+        DecimalFormat df = new DecimalFormat("##0.00");   //保留小數點後兩位小數
+        String correctDay = "";
+        try {
+            Date date1 = dft.parse(selectDay);
+            correctDay = dft.format(date1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String recordStr = loadJSONFromAsset("menstruation_record.json");
+        try {
+            JSONArray jsonArray = new JSONArray(recordStr);
+            for (int i=0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String menstruationDay = jsonObject.getString("testDate");
+                JSONObject menstruationBean = jsonObject.getJSONObject("measure");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     //從Api or Local取得需要的資料集
     private void gatDataFromJson() {
@@ -385,17 +426,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void periodEdit(String strDay) {
-        //今天日期
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        //日期格式
+        sdf = new SimpleDateFormat("yyyy/MM/dd");
 
-        if (strDay == null){
+        if (strDay == null){  //如果使用者沒有選擇任何一天就點擊編輯經期按鈕,其日期則以今天為主
             strDay = sdf.format(new Date());
         }
 
-
         Intent intent = new Intent();
         intent.setClass(OvulationActivity.this, PeriodActivity.class);
-        intent.putExtra("DAY", strDay);
+        intent.putExtra("DAY", strDay); //將所選擇的日期帶到PeriodActivity頁面
         startActivity(intent);
     }
 
