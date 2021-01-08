@@ -1,4 +1,4 @@
-package com.example.yhyhealthydemo.datebase;
+package com.example.yhyhealthydemo.module;
 
 import android.text.TextUtils;
 
@@ -16,22 +16,20 @@ import com.google.gson.Gson;
 public class MenstruationRecord {
 
     /**
-     * type :
-     * userId :
-     * testDate : 2021-01-06
+     * testDate : 2021-01-08
      * menstruation :
      * measure : {"param":"","paramName":"","temperature":0,"weight":0}
-     * status : {"bleeding":"N","beastPain":"N","intercourse":"N"}
-     * secretions : {"color":"none","secretionType":"none","smell":"none","symptom":"none"}
-     * ovuRate : {"salivaRate":1,"btRate":1}
+     * status : {"bleeding":true,"breastPain":false,"intercourse":false}
+     * secretions : {"color":"milky","secretionType":"viscous","smell":"fishy-smell","symptom":"burning"}
+     * ovuRate : {"salivaRate":2,"btRate":1}
      */
 
     private String testDate;
     private String menstruation;
     private MeasureBean measure;
-    private StatusBean status;
+    private StatusBean status;               //狀態
     private SecretionsBean secretions;
-    private OvuRateBean ovuRate;
+    private OvuRateBean ovuRate;            //機率
 
     public String getTestDate() {
         return testDate;
@@ -88,54 +86,87 @@ public class MenstruationRecord {
          * temperature : 0.0
          * weight : 0.0
          */
+
         private String param;
         private String paramName;
         private double temperature;
         private double weight;
+
+        public String getParam() {
+            return param;
+        }
+
+        public void setParam(String param) {
+            this.param = param;
+        }
+
+        public String getParamName() {
+            return paramName;
+        }
+
+        public void setParamName(String paramName) {
+            this.paramName = paramName;
+        }
+
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(double temperature) {
+            this.temperature = temperature;
+        }
+
+        public double getWeight() {
+            return weight;
+        }
+
+        public void setWeight(double weight) {
+            this.weight = weight;
+        }
     }
 
     public static class StatusBean {
         /**
-         * bleeding : N
-         * beastPain : N
-         * intercourse : N
+         * bleeding : true
+         * breastPain : false
+         * intercourse : false
          */
 
-        private String bleeding;
-        private String beastPain;
-        private String intercourse;
+        private boolean bleeding;
+        private boolean breastPain;
+        private boolean intercourse;
 
-        public String getBleeding() {
+        public boolean isBleeding() {
             return bleeding;
         }
 
-        public void setBleeding(String bleeding) {
+        public void setBleeding(boolean bleeding) {
             this.bleeding = bleeding;
         }
 
-        public String getBeastPain() {
-            return beastPain;
+        public boolean isBreastPain() {
+            return breastPain;
         }
 
-        public void setBeastPain(String beastPain) {
-            this.beastPain = beastPain;
+        public void setBreastPain(boolean breastPain) {
+            this.breastPain = breastPain;
         }
 
-        public String getIntercourse() {
+        public boolean isIntercourse() {
             return intercourse;
         }
 
-        public void setIntercourse(String intercourse) {
+        public void setIntercourse(boolean intercourse) {
             this.intercourse = intercourse;
         }
     }
 
     public static class SecretionsBean {
         /**
-         * color : none
-         * secretionType : none
-         * smell : none
-         * symptom : none
+         * color : milky
+         * secretionType : viscous
+         * smell : fishy-smell
+         * symptom : burning
          */
 
         private String color;
@@ -178,12 +209,28 @@ public class MenstruationRecord {
 
     public static class OvuRateBean {
         /**
-         * salivaRate : 1
+         * salivaRate : 2
          * btRate : 1
          */
 
         private int salivaRate;
         private int btRate;
+
+        public int getSalivaRate() {
+            return salivaRate;
+        }
+
+        public void setSalivaRate(int salivaRate) {
+            this.salivaRate = salivaRate;
+        }
+
+        public int getBtRate() {
+            return btRate;
+        }
+
+        public void setBtRate(int btRate) {
+            this.btRate = btRate;
+        }
     }
 
     /**

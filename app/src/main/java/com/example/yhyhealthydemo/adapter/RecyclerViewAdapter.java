@@ -25,9 +25,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private Context context;
     private List<Member> memberList;
-//    private Activity activity;
-
-//    private Handler handler = new Handler();
 
     private RecyclerViewListener listener;
 

@@ -13,9 +13,9 @@
             "intercourse": false
         },
         "secretions": {
-            "color": "milky",
+            "color": "brown",
             "secretionType": "viscous",
-            "smell": "fishy-smell",
+            "smell": "none",
             "symptom": "burning"
         },
         "ovuRate": {

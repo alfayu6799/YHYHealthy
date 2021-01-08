@@ -40,35 +40,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.adapter.ColorAdapter;
-import com.example.yhyhealthydemo.adapter.GridViewAdapter;
 import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
 import com.example.yhyhealthydemo.adapter.SymptomAdapter;
 import com.example.yhyhealthydemo.adapter.TasteAdapter;
-import com.example.yhyhealthydemo.datebase.MenstruationRecord;
+import com.example.yhyhealthydemo.module.MenstruationRecord;
+import com.example.yhyhealthydemo.module.RecordSymptom;
+import com.example.yhyhealthydemo.module.RecordTaste;
+import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.tools.MyGridView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.yhyhealthydemo.module.RecordColor;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -125,28 +114,25 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
     EditText   weight;    //體重
-    String ColorId = "0";
-    String TasteId = "0";
-    String TypeId  = "0";
-    String SympId  = "0";
+
 
     private Switch bleeding, breastPain, intercourse;
 
     //Api
     private MenstruationRecord record;
 
-    //時間
+    //日期格式
     SimpleDateFormat sdf;
 
-    //
+    //顏色,氣味,症狀,型態 Adapter
     private SymptomAdapter sAdapter;
     private SecretionTypeAdapter tAdapter;
     private TasteAdapter aAdapter;
     private ColorAdapter cAdapter;
-    private String[] types;
-    private String[] symps;
-    private String[] taste;
-    private String[] colors;
+    private String[] types;  //型態
+    private String[] symps;  //症狀
+    private String[] taste;  //氣味
+    private String[] colors; //顏色
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +141,10 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
         path = getIntent().getStringExtra("path");
 
+        //日期格式
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+        //init
         initView();
 
         //取的來自OvulationActivity的資料
@@ -220,7 +208,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //症狀
     private void setSymptomData() {
-        symps = new String[]{ getString(R.string.normal), getString(R.string.allergy), getString(R.string.hot),
+        symps = new String[]{ getString(R.string.normal), getString(R.string.hot),getString(R.string.allergy),
                 getString(R.string.pain)};
 
         sAdapter = new SymptomAdapter(this);
@@ -232,16 +220,14 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 sAdapter.setSelection(position);   //傳直更新
                 sAdapter.notifyDataSetChanged();
-                Log.d(TAG, "onItemClick: setSymptomData = " + position);
-                SympId = "4" + position;
             }
         });
     }
 
     //型態
     private void setTypeData() {
-        types = new String[]{ getString(R.string.normal), getString(R.string.liquid), getString(R.string.thick),
-                        getString(R.string.liquid_milky)};
+        types = new String[]{ getString(R.string.normal), getString(R.string.thick),
+                        getString(R.string.liquid_milky), getString(R.string.liquid)};
 
         tAdapter = new SecretionTypeAdapter(this);
 
@@ -252,8 +238,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 tAdapter.setSelection(position);   //傳值更新
                 tAdapter.notifyDataSetChanged();
-                Log.d(TAG, "onItemClick: setTypeData = " + position);
-                TypeId = "3" + position;
             }
         });
     }
@@ -270,15 +254,13 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 aAdapter.setSelection(position);   //傳直更新
                 aAdapter.notifyDataSetChanged();
-                Log.d(TAG, "onItemClick: setTasteDate = " + position);
-                TasteId = "2" + position;
             }
         });
     }
 
     private void setColorData() {
-        colors = new String[]{ getString(R.string.normal), getString(R.string.brown), getString(R.string.yellow),
-                getString(R.string.milky), getString(R.string.white), getString(R.string.greenish_yellow)};
+        colors = new String[]{ getString(R.string.normal), getString(R.string.white), getString(R.string.yellow),
+                               getString(R.string.milky), getString(R.string.brown), getString(R.string.greenish_yellow)};
 
         cAdapter = new ColorAdapter(this);
 
@@ -290,8 +272,14 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 cAdapter.setSelection(position);   //傳直更新
                 cAdapter.notifyDataSetChanged();
-                Log.d(TAG, "onItemClick: setColorData = " + position);
-                ColorId = "1" + position;
+//                switch (position){
+//                    case 0:
+//                        Log.d(TAG, "onItemClick: "+ colors[0]);
+//                        break;
+//                    case 1:
+//                        Log.d(TAG, "onItemClick: "+ colors[1]);
+//                        break;
+//                }
             }
         });
     }
@@ -328,9 +316,10 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                     gatt.writeCharacteristic(characteristic);
                 }
                 break;
-            case R.id.btnSaveSetting: //將資料上傳至後台
+            case R.id.btnSaveSetting: //將資料收集完後上傳至後台
                 Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "上傳的資料 = " + ColorId + "," + TasteId + "," + TypeId + "," + SympId);
+
+
                 finish();
                 break;
         }
@@ -687,6 +676,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
         String myJSONStr = loadJSONFromAsset("menstruation_record_0108.json");
+        parserJson(myJSONStr);
         /*
         new Thread() {
             @Override
@@ -738,34 +728,44 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             }
         }.start();
         */
-
-        parserJson(myJSONStr);
     }
 
     //解析後台資料
     private void parserJson(String JsonResult) {
         record = MenstruationRecord.newInstance(JsonResult);
-//        String BeastPain = record.getStatus().getBeastPain();        //脹痛
-//        String Bleeding = record.getStatus().getBleeding();          //出血
-//        String Intercourse = record.getStatus().getIntercourse();    //行房
+
+        //脹痛,出血,行房
+        boolean BeastPain = record.getStatus().isBreastPain();
+        breastPain.setChecked(BeastPain);
+        boolean Bleeding = record.getStatus().isBleeding();
+        bleeding.setChecked(Bleeding);
+        boolean Intercourse = record.getStatus().isIntercourse();
+        intercourse.setChecked(Intercourse);
+
+       //顏色
         String secretionsColor = record.getSecretions().getColor();
-        Log.d(TAG, "parserJson: " + secretionsColor);
+        RecordColor recordColor = RecordColor.getColor(secretionsColor);
+        //String ColorTwName = recordColor.getTwName();
+        int pos_color = recordColor.getIndex();
+        cAdapter.setData(colors, pos_color);
 
-//        if(BeastPain.equals("Y")){
-//            breastPain.setChecked(true);
-//        }
-//
-//        if (Bleeding.equals("Y")){
-//            bleeding.setChecked(true);
-//        }
-//
-//        if (Intercourse.equals("Y")){
-//            intercourse.setChecked(true);
-//        }
+        //味道
+        String secretionsTaste = record.getSecretions().getSmell();
+        RecordTaste recordTaste = RecordTaste.getTaste(secretionsTaste);
+        int pos_taste = recordTaste.getIndex();
+        aAdapter.setData(types, pos_taste);
 
-        if (secretionsColor.equals("milky")){
-            cAdapter.setData(colors,3);
-        }
+        //型態
+        String secretionsType = record.getSecretions().getSecretionType();
+        RecordType recordType = RecordType.getType(secretionsType);
+        int pos_type = recordType.getIndex();
+        tAdapter.setData(types, pos_type);
+
+        //症狀
+        String secretionsSymptom = record.getSecretions().getSymptom();
+        RecordSymptom recordSymptom = RecordSymptom.getSymptom(secretionsSymptom);
+        int pos_symptom = recordSymptom.getIndex();
+        sAdapter.setData(symps,pos_symptom);
     }
 
     //讀取local json file

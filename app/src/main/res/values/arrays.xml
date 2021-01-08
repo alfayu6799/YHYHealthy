@@ -5,9 +5,35 @@
         <item>藍芽體溫</item>
         <item>懷孕紀錄</item>
         <item>呼吸監測</item>
-<!--        <item>排骨便當</item>-->
-<!--        <item>雞腿便當</item>-->
-<!--        <item>豬排便當</item>-->
-<!--        <item>牛肉便當</item>-->
     </string-array>
+    
+    <string-array name="secretions_colors">
+        <item>none</item>
+        <item>egg-white</item>
+        <item>yellow</item>
+        <item>milky</item>
+        <item>brown</item>
+        <item>yellow-green</item>
+    </string-array>
+
+    <string-array name="secretions_type">
+        <item>none</item>
+        <item>viscous</item>
+        <item>cheesy</item>
+        <item>watery</item>
+    </string-array>
+
+    <string-array name="secretions_taste">
+        <item>none</item>
+        <item>fishy-smell</item>
+        <item>malodorous</item>
+    </string-array>
+
+    <string-array name="secretions_symptoms">
+        <item>none</item>
+        <item>burning</item>
+        <item>itchy</item>
+        <item>painful</item>
+    </string-array>
+
 </resources>
