@@ -72,7 +72,7 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.PREIOD:
+            case MarkStyle.PREIOD:   //2020/12/20 leona
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.BLACK);
@@ -86,7 +86,7 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.MENSTRUAL:
+            case MarkStyle.MENSTRUAL:  //2020/12/20 leona
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.WHITE);

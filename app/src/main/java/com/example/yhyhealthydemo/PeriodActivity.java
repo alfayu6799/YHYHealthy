@@ -30,25 +30,59 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthydemo.adapter.ColorAdapter;
 import com.example.yhyhealthydemo.adapter.GridViewAdapter;
+import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
+import com.example.yhyhealthydemo.adapter.SymptomAdapter;
+import com.example.yhyhealthydemo.adapter.TasteAdapter;
+import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.tools.MyGridView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
 
-public class PeriodActivity extends AppCompatActivity implements View.OnClickListener {
+/*********
+ * 排卵紀錄資訊
+ * 照相
+ * 藍芽
+ * 權限
+ **********/
+public class PeriodActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = PeriodActivity.class.getSimpleName();
 
@@ -58,6 +92,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     ImageView photoShow;
     TextView  textBleStatus;
     TextView  textBodyTemp;
+    TextView  textAnalysis;
 
     private AlertDialog alertDialog;
 
@@ -89,11 +124,29 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
-    EditText   weight;
+    EditText   weight;    //體重
     String ColorId = "0";
     String TasteId = "0";
     String TypeId  = "0";
     String SympId  = "0";
+
+    private Switch bleeding, breastPain, intercourse;
+
+    //Api
+    private MenstruationRecord record;
+
+    //時間
+    SimpleDateFormat sdf;
+
+    //
+    private SymptomAdapter sAdapter;
+    private SecretionTypeAdapter tAdapter;
+    private TasteAdapter aAdapter;
+    private ColorAdapter cAdapter;
+    private String[] types;
+    private String[] symps;
+    private String[] taste;
+    private String[] colors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,15 +155,17 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
         path = getIntent().getStringExtra("path");
 
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         initView();
 
         //取的來自OvulationActivity的資料
         Intent intent = this.getIntent();
         String strDay = intent.getStringExtra("DAY");
         textRecordDate.setText(strDay);
+        setRecordInfo(strDay);  //以使用者點擊的日期為key
 
         checkPermission(); //權限check
-
     }
 
     private void initView() {
@@ -122,6 +177,11 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         photoShow = findViewById(R.id.ivPhoto);
         textBleStatus = findViewById(R.id.tvBLEConnectStatus);
         textBodyTemp = findViewById(R.id.tvBodyTemp);
+        textAnalysis = findViewById(R.id.tvAnalysis);
+
+        bleeding = findViewById(R.id.swBleeding);       //出血
+        breastPain = findViewById(R.id.swBreastPain);   //脹痛
+        intercourse = findViewById(R.id.swIntercourse); //行房
 
         //體重自行輸入
         weight = findViewById(R.id.edtWeight);
@@ -152,36 +212,46 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         startMeasure.setOnClickListener(this);
         saveSetting.setOnClickListener(this);
         startMeasure.setOnClickListener(this);
+
+        bleeding.setOnCheckedChangeListener(this);
+        breastPain.setOnCheckedChangeListener(this);
+        intercourse.setOnCheckedChangeListener(this);
     }
 
+    //症狀
     private void setSymptomData() {
-        String[] symps = new String[]{ getString(R.string.normal), getString(R.string.allergy), getString(R.string.hot),
+        symps = new String[]{ getString(R.string.normal), getString(R.string.allergy), getString(R.string.hot),
                 getString(R.string.pain)};
-        final GridViewAdapter mAdapter = new GridViewAdapter(this);
-        mAdapter.setData(symps, 0);     //導入資料並指定default position
-        gridViewSymptom.setAdapter(mAdapter);
+
+        sAdapter = new SymptomAdapter(this);
+
+        sAdapter.setData(symps, 0);     //導入資料並指定default position
+        gridViewSymptom.setAdapter(sAdapter);
         gridViewSymptom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                mAdapter.setSelection(position);   //傳直更新
-                mAdapter.notifyDataSetChanged();
+                sAdapter.setSelection(position);   //傳直更新
+                sAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onItemClick: setSymptomData = " + position);
                 SympId = "4" + position;
             }
         });
     }
 
+    //型態
     private void setTypeData() {
-        String[] types = new String[]{ getString(R.string.normal), getString(R.string.liquid), getString(R.string.thick),
+        types = new String[]{ getString(R.string.normal), getString(R.string.liquid), getString(R.string.thick),
                         getString(R.string.liquid_milky)};
-        final GridViewAdapter mAdapter = new GridViewAdapter(this);
-        mAdapter.setData(types, 0);     //導入資料並指定default position
-        gridViewType.setAdapter(mAdapter);
+
+        tAdapter = new SecretionTypeAdapter(this);
+
+        tAdapter.setData(types, 0);     //導入資料並指定default position
+        gridViewType.setAdapter(tAdapter);
         gridViewType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                mAdapter.setSelection(position);   //傳值更新
-                mAdapter.notifyDataSetChanged();
+                tAdapter.setSelection(position);   //傳值更新
+                tAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onItemClick: setTypeData = " + position);
                 TypeId = "3" + position;
             }
@@ -189,15 +259,17 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setTasteData() {
-        String[] taste = new String[]{ getString(R.string.normal), getString(R.string.fishy), getString(R.string.stink)};
-        final GridViewAdapter mAdapter = new GridViewAdapter(this);
-        mAdapter.setData(taste, 0);     //導入資料並指定default position
-        gridViewTaste.setAdapter(mAdapter);
+        taste = new String[]{ getString(R.string.normal), getString(R.string.fishy), getString(R.string.stink)};
+
+        aAdapter = new TasteAdapter(this);
+
+        aAdapter.setData(taste, 0);     //導入資料並指定default position
+        gridViewTaste.setAdapter(aAdapter);
         gridViewTaste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                mAdapter.setSelection(position);   //傳直更新
-                mAdapter.notifyDataSetChanged();
+                aAdapter.setSelection(position);   //傳直更新
+                aAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onItemClick: setTasteDate = " + position);
                 TasteId = "2" + position;
             }
@@ -205,18 +277,19 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setColorData() {
-        String[] colors = new String[]{ getString(R.string.normal), getString(R.string.brown), getString(R.string.yellow),
+        colors = new String[]{ getString(R.string.normal), getString(R.string.brown), getString(R.string.yellow),
                 getString(R.string.milky), getString(R.string.white), getString(R.string.greenish_yellow)};
 
-        final GridViewAdapter mAdapter = new GridViewAdapter(this);
-        mAdapter.setData(colors, 0);     //導入資料並指定default position
-        gridViewColor.setAdapter(mAdapter);
+        cAdapter = new ColorAdapter(this);
+
+        cAdapter.setData(colors, 0);     //導入資料並指定default position
+        gridViewColor.setAdapter(cAdapter);
         gridViewColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                mAdapter.setSelection(position);   //傳直更新
-                mAdapter.notifyDataSetChanged();
+                cAdapter.setSelection(position);   //傳直更新
+                cAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onItemClick: setColorData = " + position);
                 ColorId = "1" + position;
             }
@@ -263,6 +336,29 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    //Switch button listener  2021/01/07 leona
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
+        switch (compoundButton.getId()){
+            case R.id.swBleeding:   //出血
+                if (isCheck){
+                    Log.d(TAG, "onCheckedChanged: Bleeding");
+                }
+                break;
+            case R.id.swBreastPain: //脹痛
+                if(isCheck){
+                    Log.d(TAG, "onCheckedChanged: BreastPain");
+                }
+                break;
+            case R.id.swIntercourse: //行房
+                if (isCheck){
+                    Log.d(TAG, "onCheckedChanged: Intercourse");
+                }
+                break;
+        }
+    }
+
+    //ble init
     private void initBle() {
         //取得BluetoothAdapter，如果BluetoothAdapter==null，則該手機不支援Bluetooth
         //取得Adapter之前，需先使用BluetoothManager，此為系統層級需使用getSystemService
@@ -400,26 +496,11 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             gatt = device.connectGatt(PeriodActivity.this, false, gattcallback);
             //gatt = mBluetoothDevice.connectGatt(PeriodActivity.this, false, gattcallback);
             Log.d(TAG, "onItemClick: 點擊後就開始啟動gattcallback");
-
-            //在建立新連接之前要先釋放舊的連接資源不然會出現133的狀況
-//            if (bluetoothGatt != null){
-//                bluetoothGatt.disconnect();
-//                bluetoothGatt.close();
-//            }
         }
     }
 
     //gattCallBack 服務啟動寫入讀取等等都在此設定
     private BluetoothGattCallback gattcallback = new BluetoothGattCallback() {
-        @Override
-        public void onPhyUpdate(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
-            super.onPhyUpdate(gatt, txPhy, rxPhy, status);
-        }
-
-        @Override
-        public void onPhyRead(BluetoothGatt gatt, int txPhy, int rxPhy, int status) {
-            super.onPhyRead(gatt, txPhy, rxPhy, status);
-        }
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -538,20 +619,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             Log.d(TAG, "onDescriptorWrite: DescriptorWrite");
         }
 
-        @Override
-        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
-            super.onReliableWriteCompleted(gatt, status);
-        }
-
-        @Override
-        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            super.onReadRemoteRssi(gatt, rssi, status);
-        }
-
-        @Override
-        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-            super.onMtuChanged(gatt, mtu, status);
-        }
     };
 
     //權限check
@@ -615,6 +682,110 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
         }
+    }
+
+    //向後台要求資料 2021/01/08 leona
+    private void setRecordInfo(String selectDay) {
+        String myJSONStr = loadJSONFromAsset("menstruation_record_0108.json");
+        /*
+        new Thread() {
+            @Override
+            public void run() {
+                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("type", "3");
+                    json.put("userId", "H5E3q5MjA=");
+//                    json.put("testDate",selectDay);
+                    json.put("testDate","2019-10-01");  //有資料
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // 建立OkHttpClient
+                OkHttpClient okHttpClient = new OkHttpClient();
+
+                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
+
+                // 建立Request，設置連線資訊
+                Request request = new Request.Builder()
+                        .url("http://192.168.1.108:8080/allAiniita/aplus/RecordInfo")
+                        .addHeader("Authorization","xxx")
+                        .post(requestBody)
+                        .build();
+
+                // 執行Call連線到網址
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        // 連線失敗
+                        Log.d(TAG, "PeriodActivity onFailure: " + e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        // 連線成功，自response取得連線結果
+                        String result = response.body().string();  //字串
+                        Log.d(TAG, "回給我的資料: " + result);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                parserJson(result); //解析後台資料
+                            }
+                        });
+                    }
+                });
+            }
+        }.start();
+        */
+
+        parserJson(myJSONStr);
+    }
+
+    //解析後台資料
+    private void parserJson(String JsonResult) {
+        record = MenstruationRecord.newInstance(JsonResult);
+//        String BeastPain = record.getStatus().getBeastPain();        //脹痛
+//        String Bleeding = record.getStatus().getBleeding();          //出血
+//        String Intercourse = record.getStatus().getIntercourse();    //行房
+        String secretionsColor = record.getSecretions().getColor();
+        Log.d(TAG, "parserJson: " + secretionsColor);
+
+//        if(BeastPain.equals("Y")){
+//            breastPain.setChecked(true);
+//        }
+//
+//        if (Bleeding.equals("Y")){
+//            bleeding.setChecked(true);
+//        }
+//
+//        if (Intercourse.equals("Y")){
+//            intercourse.setChecked(true);
+//        }
+
+        if (secretionsColor.equals("milky")){
+            cAdapter.setData(colors,3);
+        }
+    }
+
+    //讀取local json file
+    public String loadJSONFromAsset(String fileName)
+    {
+        String json;
+        try
+        {
+            InputStream is = getApplicationContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     @Override

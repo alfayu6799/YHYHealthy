@@ -3628,10 +3628,10 @@
         "testDate": "2021/01/06",
         "menstruation": "",
         "measure": {
-            "param": "0.87",
-            "paramName": "ABC",
-            "temperature": 38.57946429823288,
-            "weight": 87
+            "param": "",
+            "paramName": "",
+            "temperature": 0.0,
+            "weight": 0.0
         },
         "status": {
             "bleeding": true,

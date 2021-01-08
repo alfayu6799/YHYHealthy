@@ -72,10 +72,10 @@
                 android:textSize="22sp"
                 android:text="分析結果 : "/>
             <TextView
+                android:id="@+id/tvAnalysis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:text="濾泡/黃體期"/>
+                android:textSize="22sp"/>
         </LinearLayout>
         <TextView
             android:id="@+id/tv_analysis"
@@ -215,7 +215,7 @@
                     android:textSize="22sp"
                     android:text="乳房脹痛"/>
                 <Switch
-                    android:id="@+id/swPain"
+                    android:id="@+id/swBreastPain"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="300dp"
@@ -237,7 +237,7 @@
                     android:textSize="22sp"
                     android:text="同房"/>
                 <Switch
-                    android:id="@+id/swSleepTo"
+                    android:id="@+id/swIntercourse"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:layout_marginLeft="300dp"

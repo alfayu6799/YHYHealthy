@@ -56,8 +56,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         apiUtil = new ApiUtil();
 
-        checkMenstrualExists();  //經期是否有設定
-
+//        checkMenstrualExists();  //經期是否有設定
+//
         ovulation.setOnClickListener(this);
         temperature.setOnClickListener(this);
         pregnancy.setOnClickListener(this);
@@ -71,11 +71,11 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
             case R.id.bt_ovulation:
-                if(isMenstrualExists) {
+//                if(isMenstrualExists) {
                     startActivity(new Intent(getActivity(), OvulationActivity.class));
-                }else {
-                    startActivity(new Intent(getActivity(), SystemUserActivity.class));
-                }
+//                }else {
+//                    startActivity(new Intent(getActivity(), SystemUserActivity.class));
+//                }
                 break;
             case R.id.bt_temperature:
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
@@ -92,7 +92,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     }
 
     /***  後台Api要求經期是否有設定 (POST)
-    *    http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists
+    *    http://192.168.1.108:8080/allAiniita/aplus/MenstrualExists
     ***/
     private void checkMenstrualExists() {
 
@@ -115,7 +115,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
                 // 建立Request，設置連線資訊
                 Request request = new Request.Builder()
-                        .url("http://192.168.1.144:8080/allAiniita/aplus/MenstrualExists")
+                        .url("http://192.168.1.108:8080/allAiniita/aplus/MenstrualExists")
                         .addHeader("Authorization","xxx")
                         .post(requestBody)
                         .build();

@@ -1,0 +1,25 @@
+{
+        "testDate": "2021-01-08",
+        "menstruation": "",
+        "measure": {
+            "param": "",
+            "paramName": "",
+            "temperature": 0.0,
+            "weight": 0.0
+        },
+        "status": {
+            "bleeding": true,
+            "breastPain": false,
+            "intercourse": false
+        },
+        "secretions": {
+            "color": "milky",
+            "secretionType": "viscous",
+            "smell": "fishy-smell",
+            "symptom": "burning"
+        },
+        "ovuRate": {
+             "salivaRate": 2,
+             "btRate": 1
+        }
+}
