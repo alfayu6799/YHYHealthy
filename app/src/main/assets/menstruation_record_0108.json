@@ -1,5 +1,5 @@
 {
-        "testDate": "2021-01-08",
+        "testDate": "2021-01-11",
         "menstruation": "",
         "measure": {
             "param": "",
@@ -10,7 +10,7 @@
         "status": {
             "bleeding": true,
             "breastPain": false,
-            "intercourse": false
+            "intercourse": true
         },
         "secretions": {
             "color": "brown",

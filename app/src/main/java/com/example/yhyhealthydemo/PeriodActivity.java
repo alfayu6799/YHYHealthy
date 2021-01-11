@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,10 +23,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.service.voice.AlwaysOnHotwordDetector;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -50,6 +55,8 @@ import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +65,11 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -113,8 +125,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
-    EditText   weight;    //體重
-
+    EditText   editWeight;    //體重
 
     private Switch bleeding, breastPain, intercourse;
 
@@ -172,8 +183,17 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         intercourse = findViewById(R.id.swIntercourse); //行房
 
         //體重自行輸入
-        weight = findViewById(R.id.edtWeight);
-        weight.setInputType(InputType.TYPE_NULL); //hide keyboard
+        editWeight = findViewById(R.id.edtWeight);
+        editWeight.setText("50"); //避免沒有輸入
+        editWeight.setInputType(InputType.TYPE_NULL); //hide keyboard
+        editWeight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                editWeight.setInputType(InputType.TYPE_CLASS_TEXT);
+                editWeight.onTouchEvent(event);
+               return true;
+            }
+        });
 
         //顏色
         gridViewColor = findViewById(R.id.gvColor);
@@ -272,14 +292,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 cAdapter.setSelection(position);   //傳直更新
                 cAdapter.notifyDataSetChanged();
-//                switch (position){
-//                    case 0:
-//                        Log.d(TAG, "onItemClick: "+ colors[0]);
-//                        break;
-//                    case 1:
-//                        Log.d(TAG, "onItemClick: "+ colors[1]);
-//                        break;
-//                }
+
             }
         });
     }
@@ -319,10 +332,35 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台
                 Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
 
+                UpdateApi(); //upload to api 2021/01/11 leona
 
                 finish();
                 break;
         }
+    }
+
+    //2021/01/11
+    private void UpdateApi() {
+        //體重
+        record.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+        //體溫
+        record.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
+
+        Log.d(TAG, "UpdateApi: " + record.toJSONString());
+
+        /*
+        MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+
+        // 建立OkHttpClient
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(JSON, record.toJSONString());
+        Request request = new Request.Builder()
+                .url("http://192.168.1.108:8080/allAiniita/aplus/Record")
+                .addHeader("Authorization","xxx")
+                .post(requestBody)
+                .build();
+        */
+
     }
 
     //Switch button listener  2021/01/07 leona
@@ -331,17 +369,23 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         switch (compoundButton.getId()){
             case R.id.swBleeding:   //出血
                 if (isCheck){
-                    Log.d(TAG, "onCheckedChanged: Bleeding");
+                    record.getStatus().setBleeding(true);
+                }else {
+                    record.getStatus().setBleeding(false);
                 }
                 break;
             case R.id.swBreastPain: //脹痛
                 if(isCheck){
-                    Log.d(TAG, "onCheckedChanged: BreastPain");
+                    record.getStatus().setBreastPain(true);
+                }else {
+                    record.getStatus().setBreastPain(false);
                 }
                 break;
             case R.id.swIntercourse: //行房
                 if (isCheck){
-                    Log.d(TAG, "onCheckedChanged: Intercourse");
+                    record.getStatus().setIntercourse(true);
+                }else {
+                    record.getStatus().setIntercourse(false);
                 }
                 break;
         }
@@ -442,7 +486,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void run() {
                     if (!mBluetoothDevices.contains(device)) { //利用contains判斷是否有搜尋到重複的device
-                        Log.d(TAG, "run: " + mBluetoothDevices);
+//                        Log.d(TAG, "run: " + mBluetoothDevices);
                         mBluetoothDevices.add(device);         //如沒重複則添加到bluetoothdevices中
                         if(Math.abs(rssi) <= 90) {             //過濾信號小於-90的設備
                             deviceName.add(device.getName() + " rssi:" + rssi + "\r\n" + device.getAddress()); //將device的Name、rssi、address裝到此ArrayList<Strin>中
@@ -590,9 +634,9 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                 String result = new String(characteristic.getValue());
                 String[] str = result.split(",");
                 String temp = str[2];
-                double bodytemp = Double.parseDouble(temp)/100;  //25.0
-                textBodyTemp.setText(String.valueOf(bodytemp));
-                Log.d(TAG, "onCharacteristicChanged: Characteristic get value : " + bodytemp);  //result : AIDO,0,2500,100
+                double bodyDegree = Double.parseDouble(temp)/100;  //25.0
+                textBodyTemp.setText(String.valueOf(bodyDegree));
+                Log.d(TAG, "onCharacteristicChanged: Characteristic get value : " + bodyDegree);  //result : AIDO,0,2500,100
             }
         }
 
@@ -745,7 +789,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
        //顏色
         String secretionsColor = record.getSecretions().getColor();
         RecordColor recordColor = RecordColor.getColor(secretionsColor);
-        //String ColorTwName = recordColor.getTwName();
         int pos_color = recordColor.getIndex();
         cAdapter.setData(colors, pos_color);
 
