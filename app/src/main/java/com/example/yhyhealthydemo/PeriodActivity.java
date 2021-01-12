@@ -55,6 +55,7 @@ import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -66,10 +67,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -184,7 +188,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
         //體重自行輸入
         editWeight = findViewById(R.id.edtWeight);
-        editWeight.setText("50"); //避免沒有輸入
         editWeight.setInputType(InputType.TYPE_NULL); //hide keyboard
         editWeight.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -195,21 +198,10 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        //顏色
         gridViewColor = findViewById(R.id.gvColor);
-        setColorData();
-
-        //味道
         gridViewTaste = findViewById(R.id.gvTaste);
-        setTasteData();
-
-        //型態
         gridViewType = findViewById(R.id.gvType);
-        setTypeData();
-
-        //症狀
         gridViewSymptom = findViewById(R.id.gvSymptom);
-        setSymptomData();
 
         if(path != null){
             photoShow.setImageURI(Uri.fromFile(new File(path)));
@@ -224,77 +216,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         bleeding.setOnCheckedChangeListener(this);
         breastPain.setOnCheckedChangeListener(this);
         intercourse.setOnCheckedChangeListener(this);
-    }
-
-    //症狀
-    private void setSymptomData() {
-        symps = new String[]{ getString(R.string.normal), getString(R.string.hot),getString(R.string.allergy),
-                getString(R.string.pain)};
-
-        sAdapter = new SymptomAdapter(this);
-
-        sAdapter.setData(symps, 0);     //導入資料並指定default position
-        gridViewSymptom.setAdapter(sAdapter);
-        gridViewSymptom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                sAdapter.setSelection(position);   //傳直更新
-                sAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    //型態
-    private void setTypeData() {
-        types = new String[]{ getString(R.string.normal), getString(R.string.thick),
-                        getString(R.string.liquid_milky), getString(R.string.liquid)};
-
-        tAdapter = new SecretionTypeAdapter(this);
-
-        tAdapter.setData(types, 0);     //導入資料並指定default position
-        gridViewType.setAdapter(tAdapter);
-        gridViewType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                tAdapter.setSelection(position);   //傳值更新
-                tAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void setTasteData() {
-        taste = new String[]{ getString(R.string.normal), getString(R.string.fishy), getString(R.string.stink)};
-
-        aAdapter = new TasteAdapter(this);
-
-        aAdapter.setData(taste, 0);     //導入資料並指定default position
-        gridViewTaste.setAdapter(aAdapter);
-        gridViewTaste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                aAdapter.setSelection(position);   //傳直更新
-                aAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void setColorData() {
-        colors = new String[]{ getString(R.string.normal), getString(R.string.white), getString(R.string.yellow),
-                               getString(R.string.milky), getString(R.string.brown), getString(R.string.greenish_yellow)};
-
-        cAdapter = new ColorAdapter(this);
-
-        cAdapter.setData(colors, 0);     //導入資料並指定default position
-        gridViewColor.setAdapter(cAdapter);
-        gridViewColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                cAdapter.setSelection(position);   //傳直更新
-                cAdapter.notifyDataSetChanged();
-
-            }
-        });
     }
 
     @Override
@@ -339,14 +260,17 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    //2021/01/11
+    //2021/01/11 leona
     private void UpdateApi() {
         //體重
-        record.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+        if(!TextUtils.isEmpty(editWeight.getText().toString())){
+            record.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+        }
+
         //體溫
         record.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
 
-        Log.d(TAG, "UpdateApi: " + record.toJSONString());
+        Log.d(TAG, "傳到後台的資料 : " + record.toJSONString());
 
         /*
         MediaType JSON = MediaType.parse("application/json;charset=utf-8");
@@ -719,9 +643,9 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
-        String myJSONStr = loadJSONFromAsset("menstruation_record_0108.json");
-        parserJson(myJSONStr);
-        /*
+//        String myJSONStr = loadJSONFromAsset("menstruation_record_0108.json");
+//        parserJson(myJSONStr);
+
         new Thread() {
             @Override
             public void run() {
@@ -730,8 +654,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     json.put("type", "3");
                     json.put("userId", "H5E3q5MjA=");
-//                    json.put("testDate",selectDay);
-                    json.put("testDate","2019-10-01");  //有資料
+                    json.put("testDate",selectDay);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -764,51 +687,129 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                parserJson(result); //解析後台資料
+                                parserJson(result); //解析後台資料 2021/01/12 leona
                             }
                         });
                     }
                 });
             }
         }.start();
-        */
+
     }
 
     //解析後台資料
     private void parserJson(String JsonResult) {
         record = MenstruationRecord.newInstance(JsonResult);
+        //體重
+        String userWeight = String.valueOf(record.getMeasure().getWeight());
+        editWeight.setText(userWeight);
 
-        //脹痛,出血,行房
-        boolean BeastPain = record.getStatus().isBreastPain();
-        breastPain.setChecked(BeastPain);
-        boolean Bleeding = record.getStatus().isBleeding();
-        bleeding.setChecked(Bleeding);
-        boolean Intercourse = record.getStatus().isIntercourse();
-        intercourse.setChecked(Intercourse);
+//        //脹痛,出血,行房
+//        boolean BeastPain = record.getStatus().isBreastPain();
+//        breastPain.setChecked(BeastPain);
+//        boolean Bleeding = record.getStatus().isBleeding();
+//        bleeding.setChecked(Bleeding);
+//        boolean Intercourse = record.getStatus().isIntercourse();
+//        intercourse.setChecked(Intercourse);
 
-       //顏色
+        //顏色,狀態,氣味,症狀
+        setSecretion();
+    }
+
+    private void setSecretion() {
+        //顏色
+        colors = new String[]{ getString(R.string.normal), getString(R.string.white), getString(R.string.yellow),
+                getString(R.string.milky), getString(R.string.brown), getString(R.string.greenish_yellow)};
+
+        cAdapter = new ColorAdapter(this);
+
         String secretionsColor = record.getSecretions().getColor();
         RecordColor recordColor = RecordColor.getColor(secretionsColor);
         int pos_color = recordColor.getIndex();
         cAdapter.setData(colors, pos_color);
+        gridViewColor.setAdapter(cAdapter);
+
+        gridViewColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                cAdapter.setSelection(position);   //傳直更新
+                cAdapter.notifyDataSetChanged();
+
+                RecordColor recordColor = RecordColor.getEnName(position);
+                String ColorName = recordColor.getName();
+                record.getSecretions().setColor(ColorName); //寫回後台
+            }
+        });
 
         //味道
+        taste = new String[]{ getString(R.string.normal), getString(R.string.fishy), getString(R.string.stink)};
+
+        aAdapter = new TasteAdapter(this);
+
         String secretionsTaste = record.getSecretions().getSmell();
         RecordTaste recordTaste = RecordTaste.getTaste(secretionsTaste);
         int pos_taste = recordTaste.getIndex();
-        aAdapter.setData(types, pos_taste);
+        aAdapter.setData(taste, pos_taste);
+
+        gridViewTaste.setAdapter(aAdapter);
+        gridViewTaste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                aAdapter.setSelection(position);   //傳直更新
+                aAdapter.notifyDataSetChanged();
+
+                RecordTaste recordTaste = RecordTaste.getEnName(position);
+                String TasteName = recordTaste.getName();
+                record.getSecretions().setSmell(TasteName); //寫回後台
+            }
+        });
 
         //型態
+        types = new String[]{ getString(R.string.normal), getString(R.string.thick),
+                getString(R.string.liquid_milky), getString(R.string.liquid)};
+
+        tAdapter = new SecretionTypeAdapter(this);
+
         String secretionsType = record.getSecretions().getSecretionType();
         RecordType recordType = RecordType.getType(secretionsType);
         int pos_type = recordType.getIndex();
         tAdapter.setData(types, pos_type);
 
+        gridViewType.setAdapter(tAdapter);
+        gridViewType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                tAdapter.setSelection(position);   //傳值更新
+                tAdapter.notifyDataSetChanged();
+                RecordType recordType = RecordType.getEnName(position);
+                String TypeName = recordType.getName();
+                record.getSecretions().setSecretionType(TypeName); //寫回後台
+            }
+        });
+
         //症狀
+        symps = new String[]{ getString(R.string.normal), getString(R.string.hot),getString(R.string.allergy),
+                getString(R.string.pain)};
+
+        sAdapter = new SymptomAdapter(this);
+
         String secretionsSymptom = record.getSecretions().getSymptom();
         RecordSymptom recordSymptom = RecordSymptom.getSymptom(secretionsSymptom);
         int pos_symptom = recordSymptom.getIndex();
         sAdapter.setData(symps,pos_symptom);
+
+        gridViewSymptom.setAdapter(sAdapter);
+        gridViewSymptom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                sAdapter.setSelection(position);   //傳直更新
+                sAdapter.notifyDataSetChanged();
+
+                RecordSymptom recordSymptom = RecordSymptom.getEnName(position);
+                String SymptomName = recordSymptom.getName();
+                record.getSecretions().setSymptom(SymptomName);
+            }
+        });
     }
 
     //讀取local json file

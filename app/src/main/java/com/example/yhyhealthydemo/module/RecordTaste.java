@@ -27,6 +27,15 @@ public enum RecordTaste {
         return null;
     }
 
+    public static RecordTaste getEnName(int index){
+        for (RecordTaste recordTaste:values()){
+            if(recordTaste.getIndex() == index){
+                return recordTaste;
+            }
+        }
+        return null;
+    }
+
     public String getName() {
         return name;
     }

@@ -13,7 +13,7 @@
             "intercourse": true
         },
         "secretions": {
-            "color": "brown",
+            "color": "yellow",
             "secretionType": "viscous",
             "smell": "none",
             "symptom": "burning"

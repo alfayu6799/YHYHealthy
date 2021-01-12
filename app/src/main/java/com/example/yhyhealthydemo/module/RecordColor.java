@@ -30,6 +30,15 @@ public enum RecordColor {
         return null;
     }
 
+    public static RecordColor getEnName(int index){
+        for (RecordColor recordColor:values()){
+            if(recordColor.getIndex() == index){
+                return recordColor;
+            }
+        }
+        return null;
+    }
+
     public String getName() {
         return name;
     }
@@ -45,4 +54,6 @@ public enum RecordColor {
     public int getIndex() {
         return index;
     }
+
+
 }

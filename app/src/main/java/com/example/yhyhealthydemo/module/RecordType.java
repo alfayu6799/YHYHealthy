@@ -28,6 +28,15 @@ public enum RecordType {
         return null;
     }
 
+    public static RecordType getEnName(int index){
+        for (RecordType recordType :values()){
+            if(recordType.getIndex() == index){
+                return recordType;
+            }
+        }
+        return null;
+    }
+
     public String getName() {
         return name;
     }

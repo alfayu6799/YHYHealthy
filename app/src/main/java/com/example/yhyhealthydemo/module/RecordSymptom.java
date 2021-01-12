@@ -28,6 +28,15 @@ public enum RecordSymptom {
         return null;
     }
 
+    public static RecordSymptom getEnName(int index){
+        for (RecordSymptom recordSymptom :values()){
+            if(recordSymptom.getIndex() == index){
+                return recordSymptom;
+            }
+        }
+        return null;
+    }
+
     public String getName() {
         return name;
     }
