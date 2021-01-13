@@ -16,6 +16,9 @@
 
     <string name="to">到</string>
 
+    <string name="param_name">唾液辨識:</string>
+    <string name="body_degree">基礎體溫:</string>
+
     <!-- 第三方庫 : slycalendar 專用 -->
     <string name="slycalendar_cancel">取消</string>
     <string name="slycalendar_save">確定</string>
@@ -110,4 +113,5 @@
     <string name="announcement">公告</string>
     <string name="shopping">購物</string>
     <string name="traning">教學</string>
+    <string name="api_unavailable">無法取得網路服務，請稍後再試</string>
 </resources>

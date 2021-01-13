@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.yhyhealthydemo.tools.ApiUtil;
-
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +23,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class MeasureFragment extends Fragment implements View.OnClickListener {
 
@@ -35,8 +31,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private View view;
 
     private Button ovulation, temperature, pregnancy,monitor;
-
-    private ApiUtil apiUtil;
 
     private boolean isMenstrualExists = false;
 
@@ -53,8 +47,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 //        pregnancy.setVisibility(View.INVISIBLE);
         monitor = view.findViewById(R.id.bt_monitor);
 //        monitor.setVisibility(View.INVISIBLE);
-
-        apiUtil = new ApiUtil();
 
 //        checkMenstrualExists();  //經期是否有設定
 //

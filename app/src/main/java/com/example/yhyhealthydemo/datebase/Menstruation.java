@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import static android.content.ContentValues.TAG;
 
 /*********************************
- * 排卵資訊-資料結構DataBean
+ * 排卵月曆-資料結構DataBean
  * 日期,體溫,經期狀態
  ******************************/
 public class Menstruation {

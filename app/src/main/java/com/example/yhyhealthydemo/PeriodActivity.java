@@ -13,7 +13,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,14 +22,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.service.voice.AlwaysOnHotwordDetector;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -48,10 +45,11 @@ import com.example.yhyhealthydemo.adapter.ColorAdapter;
 import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
 import com.example.yhyhealthydemo.adapter.SymptomAdapter;
 import com.example.yhyhealthydemo.adapter.TasteAdapter;
-import com.example.yhyhealthydemo.module.MenstruationRecord;
+import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.module.RecordSymptom;
 import com.example.yhyhealthydemo.module.RecordTaste;
 import com.example.yhyhealthydemo.module.RecordType;
+import com.example.yhyhealthydemo.tools.ApiProxy;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
 
@@ -59,27 +57,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.UUID;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
+import static com.example.yhyhealthydemo.tools.ApiProxy.RECORD_INFO;
 
 /*********
  * 排卵紀錄資訊
@@ -135,6 +123,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //Api
     private MenstruationRecord record;
+    private ApiProxy proxy;
 
     //日期格式
     SimpleDateFormat sdf;
@@ -159,6 +148,8 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         //日期格式
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+        proxy = ApiProxy.getInstance();  //api初始化
+
         //init
         initView();
 
@@ -169,6 +160,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         setRecordInfo(strDay);  //以使用者點擊的日期為key
 
         checkPermission(); //權限check
+
     }
 
     private void initView() {
@@ -271,19 +263,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         record.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
 
         Log.d(TAG, "傳到後台的資料 : " + record.toJSONString());
-
-        /*
-        MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-
-        // 建立OkHttpClient
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(JSON, record.toJSONString());
-        Request request = new Request.Builder()
-                .url("http://192.168.1.108:8080/allAiniita/aplus/Record")
-                .addHeader("Authorization","xxx")
-                .post(requestBody)
-                .build();
-        */
 
     }
 
@@ -643,63 +622,49 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
-//        String myJSONStr = loadJSONFromAsset("menstruation_record_0108.json");
-//        parserJson(myJSONStr);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("type", "3");
+            json.put("userId", "H5E3q5MjA=");
+            json.put("testDate",selectDay);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        new Thread() {
-            @Override
-            public void run() {
-                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("type", "3");
-                    json.put("userId", "H5E3q5MjA=");
-                    json.put("testDate",selectDay);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // 建立OkHttpClient
-                OkHttpClient okHttpClient = new OkHttpClient();
-
-                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
-
-                // 建立Request，設置連線資訊
-                Request request = new Request.Builder()
-                        .url("http://192.168.1.108:8080/allAiniita/aplus/RecordInfo")
-                        .addHeader("Authorization","xxx")
-                        .post(requestBody)
-                        .build();
-
-                // 執行Call連線到網址
-                okHttpClient.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        // 連線失敗
-                        Log.d(TAG, "PeriodActivity onFailure: " + e.toString());
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        // 連線成功，自response取得連線結果
-                        String result = response.body().string();  //字串
-                        Log.d(TAG, "回給我的資料: " + result);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                parserJson(result); //解析後台資料 2021/01/12 leona
-                            }
-                        });
-                    }
-                });
-            }
-        }.start();
-
+        proxy.buildPOST(RECORD_INFO, json.toString(), requestListener);
     }
 
+    private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parserJson(result);
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
     //解析後台資料
-    private void parserJson(String JsonResult) {
-        record = MenstruationRecord.newInstance(JsonResult);
+    private void parserJson(JSONObject result) {
+        record = MenstruationRecord.newInstance(result.toString());
+        Log.d(TAG, "解析後台資料: " + record.toJSONString());
         //體重
         String userWeight = String.valueOf(record.getMeasure().getWeight());
         editWeight.setText(userWeight);
@@ -810,26 +775,6 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
                 record.getSecretions().setSymptom(SymptomName);
             }
         });
-    }
-
-    //讀取local json file
-    public String loadJSONFromAsset(String fileName)
-    {
-        String json;
-        try
-        {
-            InputStream is = getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
     @Override

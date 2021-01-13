@@ -21,7 +21,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.yhyhealthydemo.datebase.Menstruation;
-import com.example.yhyhealthydemo.tools.ApiUtil;
+import com.example.yhyhealthydemo.datebase.MenstruationRecord;
+import com.example.yhyhealthydemo.tools.ApiProxy;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -43,18 +44,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
+
+import static com.example.yhyhealthydemo.tools.ApiProxy.RECORD_INFO;
 
 public class OvulationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,9 +65,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private TextView YearMonthTv;
     private TextView menstruationPeriodDay; //週期顯示
     private String choseDay;
-    private String periodDate = "";    //從api獲取日期
+    private String periodDate = "";     //從api獲取日期
     private String periodStatus = "";   //從api獲取狀態
-    private String periodDegree = ""; //從api獲取體溫
+    private String periodDegree = "";   //從api獲取體溫
 
     private String firstday = "";   //這個月第一天
     private String lastday = "";    //這個月最後一天
@@ -83,18 +79,18 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private TextView temperature;
     private TextView ovulResult;
 
-    private SimpleDateFormat sdf;
+    private SimpleDateFormat sdf;  //日期格式
 
     //圖表
     LineChart lineChart;
     private TextView periodRangDate;
     private ImageView preMonth, nextMonth;
-
     private ArrayList<Menstruation> menstruationArray;
-    private Menstruation menstruation;
+    private Menstruation menstruation; //dataBean
 
     //api
-    private ApiUtil okHttpApi;
+    private MenstruationRecord record; //dataBean
+    private ApiProxy proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +101,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //時間格式
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        okHttpApi = ApiUtil.getInstance();
+        initData(); //初始化
 
         initView();
+    }
 
+    //初始化dataBean & api
+    private void initData() {
+        record = new MenstruationRecord();
+        proxy = ApiProxy.getInstance();
     }
 
     private void initView() {
@@ -119,18 +120,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         chartLayout = findViewById(R.id.lychart);
 
         menstruationPeriodDay = findViewById(R.id.tv_ovul_period); //今天是週期的第?天
-
         ovulResult = findViewById(R.id.tv_ovul_result_1);  //唾液辨識Result
-
         temperature = findViewById(R.id.tv_ovul_temp_1);  //基礎體溫
 
-        oveuSetting = findViewById(R.id.tv_ovul_setting);
-        oveuEdit = findViewById(R.id.tv_ovul_edit);
+        oveuSetting = findViewById(R.id.tv_ovul_setting);  //經期設定
+        oveuEdit = findViewById(R.id.tv_ovul_edit);        //編輯紀錄
 
-        calendar.setOnClickListener(this);
-        chart.setOnClickListener(this);
-        oveuSetting.setOnClickListener(this);
-        oveuEdit.setOnClickListener(this);
+        calendar.setOnClickListener(this);               //月曆
+        chart.setOnClickListener(this);                  //圖表
+        oveuSetting.setOnClickListener(this);            //經期設定
+        oveuEdit.setOnClickListener(this);               //編輯紀錄
 
         //月曆
         calendarView = findViewById(R.id.calendar);
@@ -143,8 +142,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         periodRangDate = findViewById(R.id.tvMMDD);   //經期範圍
         preMonth = findViewById(R.id.imgPreMonth);    //前一個月
         nextMonth = findViewById(R.id.imgNextMonth);  //後一個月
-        preMonth.setOnClickListener(this);
-        nextMonth.setOnClickListener(this);
+        preMonth.setOnClickListener(this);            //前一個月
+        nextMonth.setOnClickListener(this);           //後一個月
 
         //月曆區先顯示
         calendar.setBackgroundResource(R.drawable.rectangle_button);
@@ -256,8 +255,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //從json讀取資料 for makeDate用(api) leona
         gatDataFromJson();
 
-        //api查詢本日是否有資料 leona
-        checkMenstruationIsComplete();
+        Date date = new Date();               //Today
+        String today = sdf.format(date);      //yyyy-MM-dd
+
+        //api查詢本日是否有資料
+        checkDataFromApi(today);
 
         //監聽日期
         calendarView.setOnDateClickListener(new OnDateClickListener() {
@@ -268,6 +270,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
 //                calendarView.markDate(
 //                        new DateData(date.getYear(), date.getMonth(), date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(255,0,0))));
+
                 Toast.makeText(OvulationActivity.this, "您選擇的日期為 : " + choseDay, Toast.LENGTH_SHORT).show();
 
                 //使用者選擇的日期若是未來日期則禁用編輯紀錄page 2021/01/06 leona
@@ -283,8 +286,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     e.printStackTrace();
                 }
 
-                //當使用者選擇日期時要向api要求資料
-                checkInfoFromApi(choseDay);
+                //轉換日期格式
+                String onClickDay = "";
+                try {
+                    Date date1 = sdf.parse(choseDay);
+                    onClickDay = sdf.format(date1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                checkDataFromApi(onClickDay); //當使用者自己選擇日期時則向後台Api詢問是否有資料
             }
         });
 
@@ -304,120 +314,73 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    //查詢本日是否有資料 2021/01/06
-    private void checkMenstruationIsComplete() {
-        Date date = new Date();               //Today
-        String today = sdf.format(date);      //yyyy-MM-dd
-
-
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-//                JSONObject json = new JSONObject();
-//                try {
-//                    json.put("type", "3");
-//                    json.put("userId", "H5E3q5MjA=");
-//                    json.put("testDate",today);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // 建立OkHttpClient
-//                OkHttpClient okHttpClient = new OkHttpClient();
-//
-//                RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));
-//
-//                // 建立Request，設置連線資訊
-//                Request request = new Request.Builder()
-//                        .url("http://192.168.1.108:8080/allAiniita/aplus/RecordInfo")
-//                        .addHeader("Authorization","xxx")
-//                        .post(requestBody)
-//                        .build();
-//
-//                // 執行Call連線到網址
-//                okHttpClient.newCall(request).enqueue(new Callback() {
-//                    @Override
-//                    public void onFailure(Call call, IOException e) {
-//                        // 連線失敗
-//                        Log.i("onFailure", e.toString());
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Call call, Response response) throws IOException {
-//                        // 連線成功，自response取得連線結果
-//                        String result = response.body().string();  //字串
-//                        parserJson(result); //解析後台資料
-//                    }
-//                });
-//            }
-//        }.start();
-
-    }
-
-    //解析後台來的資料
-    private void parserJson(String jsonString) {
-        Log.d(TAG, "查詢本日並解析後台來的資料: " + jsonString);
+    private void checkDataFromApi(String day) {
+        JSONObject json = new JSONObject();
         try {
-            JSONObject object = new JSONObject(jsonString);
-            JSONObject measureBean = object.getJSONObject("measure");
-            String param = measureBean.getString("param");          //唾液辨識機率
-            String paramName = measureBean.getString("paramName");  //唾液辨識結果
-            if(!param.equals("")){
-                oveuEdit.setText("編輯\n紀錄");
-                if (paramName.equals("Ovulation")){
-                    ovulResult.setText("唾液辨識 : 排卵期");
-                }
-            }else {
-                oveuEdit.setText("新增\n紀錄");
-            }
-
+            json.put("type", "3");
+            json.put("userId", "H5E3q5MjA=");
+            json.put("testDate", day);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        proxy.buildPOST(RECORD_INFO, json.toString(), requestListeren);
     }
 
-    //向後台Api詢問是否有資料
-    private void checkInfoFromApi(String selectDay) {
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd");
-        DecimalFormat df = new DecimalFormat("##0.00");   //保留小數點後兩位小數
-        String correctDay = "";
+    private ApiProxy.OnApiListener requestListeren = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
 
-        try {
-            Date date1 = sdf.parse(selectDay);
-            correctDay = sdf1.format(date1);
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parserJson(result);  //2021/01/13 leona
+                }
+            });
+        }
 
+        @Override
+        public void onFailure(String message) {
 
-//        String recordStr = loadJSONFromAsset("menstruation_record.json");
-//        try {
-//            JSONArray jsonArray = new JSONArray(recordStr);
-//            for (int i=0; i < jsonArray.length(); i++){
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                String menstruationDay = jsonObject.getString("testDate");    //日期
-//                if (menstruationDay.equals(correctDay)) {  //使用者點擊的日期與json內的日期吻合...
-//                    JSONObject menstruationBean = jsonObject.getJSONObject("measure");     //唾液辨識Bean
-//                    String paramName = menstruationBean.getString("paramName");     //唾液辨識結果
-//                    if(paramName.equals("ABC")){ //測試
-//                        ovulResult.setText("唾液辨識 : 排卵期");
-//                    }
-//                    double MTemperature = Double.parseDouble(menstruationBean.getString("temperature"));     //體溫
-//                    temperature.setText("基礎體溫 : " + df.format(MTemperature) + "\u2103 ");
-//                    JSONObject ovuRateBean = jsonObject.getJSONObject("ovuRate");        //排卵機率Bean
-//                    String salivaRate = ovuRateBean.getString("salivaRate");       //唾液辨識排卵機率
-//                    String btRate = ovuRateBean.getString("btRate");               //體溫排卵機率
-//                }
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        }
 
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    //解析後台來的資料 2021/01/13 leona
+    private void parserJson(JSONObject result) {
+        record = MenstruationRecord.newInstance(result.toString());
+        //唾液辨識結果
+        String paramName = record.getMeasure().getParamName();
+        if (!paramName.equals("")){
+            oveuEdit.setText("編輯\n紀錄");
+            if (paramName.equals("Ovulation")){
+                ovulResult.setText(getString(R.string.param_name) + " 排卵期");
+            }
+        }else {
+            oveuEdit.setText("新增\n紀錄");
+        }
+
+        //基礎體溫
+        String bodyDegree = String.valueOf(record.getMeasure().getTemperature());
+        temperature.setText(getString(R.string.body_degree) + " " + bodyDegree + " \u2103");
+
+        //根據唾液辨識結果得到機率
+        String salivaRate = String.valueOf(record.getOvuRate().getSalivaRate());
+        Log.d(TAG, "根據唾液辨識結果得到機率: " + salivaRate);
+
+        //根據基礎體溫結果得到的機率
+        String btRate = String.valueOf(record.getOvuRate().getBtRate());
+        Log.d(TAG, "根據基礎體溫結果得到的機率: " + btRate);
     }
 
-    //從Api or Local取得需要的資料集
+    //從Api or Local取得需要的資料集 月曆用
     private void gatDataFromJson() {
 
         String calendStr = loadJSONFromAsset("menstruation.json");

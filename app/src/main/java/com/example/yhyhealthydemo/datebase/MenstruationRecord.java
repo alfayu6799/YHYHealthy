@@ -1,4 +1,4 @@
-package com.example.yhyhealthydemo.module;
+package com.example.yhyhealthydemo.datebase;
 
 import android.text.TextUtils;
 
@@ -23,6 +23,8 @@ public class MenstruationRecord {
      * secretions : {"color":"milky","secretionType":"viscous","smell":"fishy-smell","symptom":"burning"}
      * ovuRate : {"salivaRate":2,"btRate":1}
      */
+    private String type;
+    private String userId;
 
     private String testDate;
     private String menstruation;
@@ -30,6 +32,23 @@ public class MenstruationRecord {
     private StatusBean status;               //狀態
     private SecretionsBean secretions;
     private OvuRateBean ovuRate;            //機率
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getTestDate() {
         return testDate;
