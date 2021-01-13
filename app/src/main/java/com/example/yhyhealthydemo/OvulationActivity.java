@@ -64,10 +64,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ExpCalendarView calendarView;
     private TextView YearMonthTv;
     private TextView menstruationPeriodDay; //週期顯示
-    private String choseDay;
     private String periodDate = "";     //從api獲取日期
     private String periodStatus = "";   //從api獲取狀態
     private String periodDegree = "";   //從api獲取體溫
+    private String onClickDay = "";
 
     private String firstday = "";   //這個月第一天
     private String lastday = "";    //這個月最後一天
@@ -266,7 +266,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDateClick(View view, DateData date) {
 
-                choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
+                String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
 
 //                calendarView.markDate(
 //                        new DateData(date.getYear(), date.getMonth(), date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(255,0,0))));
@@ -287,7 +287,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 }
 
                 //轉換日期格式
-                String onClickDay = "";
                 try {
                     Date date1 = sdf.parse(choseDay);
                     onClickDay = sdf.format(date1);
@@ -472,7 +471,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 dialogPickDate();
                 break;
             case R.id.tv_ovul_edit:     //經期編輯
-                periodEdit(choseDay);
+                periodEdit(onClickDay);  //日期格式:2021-01-04
                 break;
             case R.id.imgPreMonth:    //上一個月
                 Toast.makeText(this, "還沒寫好", Toast.LENGTH_SHORT).show();
@@ -485,13 +484,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private void periodEdit(String strDay) {
 
-        if (strDay == null){  //如果使用者沒有選擇任何一天就點擊編輯經期按鈕,其日期則以今天為主
+        //如果使用者沒有選擇任何一天就點擊編輯經期按鈕,其日期則以今天為主
+        if (strDay.equals("")){
             strDay = sdf.format(new Date());
         }
 
+        //將所選擇的日期帶到PeriodActivity頁面
         Intent intent = new Intent();
         intent.setClass(OvulationActivity.this, PeriodActivity.class);
-        intent.putExtra("DAY", strDay); //將所選擇的日期帶到PeriodActivity頁面
+        intent.putExtra("DAY", strDay);
         startActivity(intent);
     }
 
