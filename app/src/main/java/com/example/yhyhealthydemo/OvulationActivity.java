@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.yhyhealthydemo.datebase.Menstruation;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
-import com.example.yhyhealthydemo.tools.ApiProxy;
+import com.example.yhyhealthydemo.module.ApiProxy;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -36,7 +36,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
 
-import static com.example.yhyhealthydemo.tools.ApiProxy.RECORD_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
 
 public class OvulationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -290,10 +289,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 try {
                     Date date1 = sdf.parse(choseDay);
                     onClickDay = sdf.format(date1);
+                    checkDataFromApi(onClickDay); //當使用者自己選擇日期時則向後台Api詢問是否有資料
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                checkDataFromApi(onClickDay); //當使用者自己選擇日期時則向後台Api詢問是否有資料
+
             }
         });
 
@@ -310,7 +310,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //今天日期的背景顏色
         calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
                 .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
-
     }
 
     private void checkDataFromApi(String day) {
@@ -364,6 +363,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             }
         }else {
             oveuEdit.setText("新增\n紀錄");
+            ovulResult.setText(getString(R.string.param_name) + "");
         }
 
         //基礎體溫

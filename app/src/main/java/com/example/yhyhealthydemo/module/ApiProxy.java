@@ -1,4 +1,4 @@
-package com.example.yhyhealthydemo.tools;
+package com.example.yhyhealthydemo.module;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.yhyhealthydemo.R;
-import com.example.yhyhealthydemo.module.YHYHealthyApp;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;

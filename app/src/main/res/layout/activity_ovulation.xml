@@ -125,7 +125,7 @@
                     android:layout_marginTop="7dp"
                     android:layout_alignTop="@+id/tv_ovul_probability_1"
                     android:layout_toRightOf="@+id/ig_ovul_1_start1"
-                    android:src="@mipmap/start_yellow"/>
+                    android:src="@mipmap/start"/>
                 <ImageView
                     android:id="@+id/ig_ovul_1_start3"
                     android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                     android:layout_marginTop="7dp"
                     android:layout_alignTop="@+id/tv_ovul_probability_1"
                     android:layout_toRightOf="@+id/ig_ovul_1_start2"
-                    android:src="@mipmap/start_yellow"/>
+                    android:src="@mipmap/start"/>
                 <ImageView
                     android:id="@+id/ig_ovul_1_start4"
                     android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                     android:layout_marginTop="7dp"
                     android:layout_alignTop="@+id/tv_ovul_probability_1"
                     android:layout_toRightOf="@+id/ig_ovul_1_start3"
-                    android:src="@mipmap/start_yellow"/>
+                    android:src="@mipmap/start"/>
                 <ImageView
                     android:id="@+id/ig_ovul_1_start5"
                     android:layout_width="wrap_content"
@@ -192,7 +192,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_alignTop="@+id/ig_ovul_2_start1"
                     android:layout_toRightOf="@+id/ig_ovul_2_start1"
-                    android:src="@mipmap/start_yellow"/>
+                    android:src="@mipmap/start"/>
                 <ImageView
                     android:id="@+id/ig_ovul_2_start3"
                     android:layout_width="wrap_content"
@@ -201,7 +201,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_alignTop="@+id/ig_ovul_2_start2"
                     android:layout_toRightOf="@+id/ig_ovul_2_start2"
-                    android:src="@mipmap/start_yellow"/>
+                    android:src="@mipmap/start"/>
                 <ImageView
                     android:id="@+id/ig_ovul_2_start4"
                     android:layout_width="wrap_content"

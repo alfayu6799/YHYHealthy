@@ -49,7 +49,7 @@ import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.module.RecordSymptom;
 import com.example.yhyhealthydemo.module.RecordTaste;
 import com.example.yhyhealthydemo.module.RecordType;
-import com.example.yhyhealthydemo.tools.ApiProxy;
+import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
 
@@ -67,15 +67,15 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
-import static com.example.yhyhealthydemo.tools.ApiProxy.RECORD_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
 
 /*********
  * 排卵紀錄資訊
- * 照相
+ * 照相 CameraActivity
  * 藍芽
- * 權限
+ * 權限繼承DeviceBaseActivity
  **********/
-public class PeriodActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class PeriodActivity extends DeviceBaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = PeriodActivity.class.getSimpleName();
 
@@ -89,9 +89,11 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
     private AlertDialog alertDialog;
 
+    //permission
     public static final int REQUEST_CODE = 100;
     private String[] neededPermissions = new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
     boolean result;
+
     String path;
 
     //藍芽
@@ -159,7 +161,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
         textRecordDate.setText(strDay);
         setRecordInfo(strDay);  //以使用者點擊的日期為key
 
-        checkPermission(); //權限check
+        //checkPermission(); //權限check
 
     }
 
@@ -214,12 +216,7 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnPhoto:      //拍照
-                result = checkPermission();
-                if (result) {
-                    Intent camera = new Intent(PeriodActivity.this, CameraActivity.class);
-                    startActivity(camera);
-                    finish();
-                }
+                    openCamera();
                 break;
             case R.id.ivBLESearch:   //藍芽搜尋
                 result = checkPermission(); //要求權限(BLE要求local位置權限)
@@ -249,6 +246,17 @@ public class PeriodActivity extends AppCompatActivity implements View.OnClickLis
 
                 finish();
                 break;
+        }
+    }
+
+    //開啟相機功能
+    private void openCamera() {
+        if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
+            Intent camera = new Intent(PeriodActivity.this, CameraActivity.class);
+            startActivity(camera);
+            finish();
+        }else {
+            requestPermission();
         }
     }
 
