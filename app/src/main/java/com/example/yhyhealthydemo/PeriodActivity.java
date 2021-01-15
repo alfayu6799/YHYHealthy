@@ -1,9 +1,8 @@
 package com.example.yhyhealthydemo;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,13 +12,11 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -40,7 +37,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.adapter.ColorAdapter;
 import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
 import com.example.yhyhealthydemo.adapter.SymptomAdapter;
@@ -52,21 +48,15 @@ import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.UUID;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.os.Build.VERSION_CODES.M;
 import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
 
 /*********
@@ -84,15 +74,9 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
     ImageView searchBLE;
     ImageView photoShow;
     TextView  textBleStatus;
-    TextView  textBodyTemp;
     TextView  textAnalysis;
 
     private AlertDialog alertDialog;
-
-    //permission
-    public static final int REQUEST_CODE = 100;
-    private String[] neededPermissions = new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
-    boolean result;
 
     String path;
 
@@ -120,6 +104,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
     EditText   editWeight;    //體重
+    TextView   textBodyTemp; //體溫
 
     private Switch bleeding, breastPain, intercourse;
 
@@ -160,11 +145,9 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         String strDay = intent.getStringExtra("DAY");
         textRecordDate.setText(strDay);
         setRecordInfo(strDay);  //以使用者點擊的日期為key
-
-        //checkPermission(); //權限check
-
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         textRecordDate = findViewById(R.id.tvRecordDate);
         takePhoto = findViewById(R.id.btnPhoto);
@@ -186,7 +169,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         editWeight.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                editWeight.setInputType(InputType.TYPE_CLASS_TEXT);
+                editWeight.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editWeight.onTouchEvent(event);
                return true;
             }
@@ -219,10 +202,12 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
                     openCamera();
                 break;
             case R.id.ivBLESearch:   //藍芽搜尋
-                result = checkPermission(); //要求權限(BLE要求local位置權限)
-                if(result){
+                if(ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     initBle();
+                }else {
+                    requestPermission();
                 }
+
                 break;
             case R.id.btnStartMeasure: //開始量測
                 if (characteristic != null) { //確保write uuid要有資料才能寫資料
@@ -565,69 +550,6 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
     };
 
-    //權限check
-    private boolean checkPermission() {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= M ){
-            ArrayList<String> permissionsNotGranted = new ArrayList<>();
-            for (String permission : neededPermissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    permissionsNotGranted.add(permission);
-                }
-            }
-            if (permissionsNotGranted.size() > 0) {
-                boolean shouldShowAlert = false;
-                for (String permission : permissionsNotGranted) {
-                    shouldShowAlert = ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
-                }
-                if (shouldShowAlert) {
-                    showPermissionAlert(permissionsNotGranted.toArray(new String[permissionsNotGranted.size()]));
-                } else {
-                    requestPermissions(permissionsNotGranted.toArray(new String[permissionsNotGranted.size()]));
-                }
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void requestPermissions(String[] permissions) {
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE);
-    }
-
-    //權限dialog
-    private void showPermissionAlert(final String[] permissions) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setCancelable(true);
-        alertBuilder.setTitle(R.string.permission_required);
-        alertBuilder.setMessage(R.string.permission_message);
-        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                requestPermissions(permissions);
-            }
-        });
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
-    }
-
-    /**
-     * 取得權限判斷
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case REQUEST_CODE:
-                for (int result : grantResults) {
-                    if (result == PackageManager.PERMISSION_DENIED) {
-                        Toast.makeText(PeriodActivity.this, R.string.permission_warning, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
-                break;
-        }
-    }
-
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
         JSONObject json = new JSONObject();
@@ -795,5 +717,4 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         gatt = null;
         Toast.makeText(PeriodActivity.this, getString(R.string.ble_is_not_connect), Toast.LENGTH_SHORT).show();
     }
-
 }

@@ -42,13 +42,15 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.imgSystemSetting:
-                startActivity(new Intent(getActivity(),SystemSettingActivity.class));
+            case R.id.imgSystemSetting:       //系統設定
+                startActivity(new Intent(getActivity(), SystemSettingActivity.class));
                 break;
-            case R.id.imgSystemUserSetting:
-                startActivity(new Intent(getActivity(),SystemUserActivity.class));
+            case R.id.imgSystemUserSetting:  //使用者設定
+                startActivity(new Intent(getActivity(), SystemUserActivity.class));
                 break;
-
+            case R.id.imgSystemVedio:       //教學影片
+                startActivity(new Intent(getActivity(), SystemVideoActivity.class));
+                break;
         }
     }
 }

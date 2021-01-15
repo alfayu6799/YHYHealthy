@@ -106,56 +106,18 @@
                     android:layout_marginLeft="5dp"
                     android:textSize="@dimen/font_18"
                     android:text="排卵機率 :"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_1_start1"
+                <RatingBar
+                    android:id="@+id/rtSaliva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/FiveStarsStyle1"
                     android:layout_below="@+id/tv_ovul_result_1"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
                     android:layout_alignTop="@+id/tv_ovul_probability_1"
                     android:layout_toRightOf="@+id/tv_ovul_probability_1"
-                    android:src="@mipmap/start_yellow"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_1_start2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_alignTop="@+id/tv_ovul_probability_1"
-                    android:layout_toRightOf="@+id/ig_ovul_1_start1"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_1_start3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_alignTop="@+id/tv_ovul_probability_1"
-                    android:layout_toRightOf="@+id/ig_ovul_1_start2"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_1_start4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_alignTop="@+id/tv_ovul_probability_1"
-                    android:layout_toRightOf="@+id/ig_ovul_1_start3"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_1_start5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_alignTop="@+id/tv_ovul_probability_1"
-                    android:layout_toRightOf="@+id/ig_ovul_1_start4"
-                    android:src="@mipmap/start"/>
+                    android:numStars="5"
+                    android:rating="1"/>
                 <TextView
                     android:id="@+id/tv_ovul_temp_1"
                     android:layout_width="wrap_content"
@@ -174,52 +136,18 @@
                     android:layout_marginLeft="5dp"
                     android:textSize="@dimen/font_18"
                     android:text="排卵機率 :"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_2_start1"
+                <RatingBar
+                    android:id="@+id/rtBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/FiveStarsStyle1"
                     android:layout_below="@+id/tv_ovul_temp_1"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
                     android:layout_alignTop="@+id/tv_ovul_rate_1"
                     android:layout_toRightOf="@+id/tv_ovul_rate_1"
-                    android:src="@mipmap/start_yellow"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_2_start2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignTop="@+id/ig_ovul_2_start1"
-                    android:layout_toRightOf="@+id/ig_ovul_2_start1"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_2_start3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignTop="@+id/ig_ovul_2_start2"
-                    android:layout_toRightOf="@+id/ig_ovul_2_start2"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_2_start4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignTop="@+id/ig_ovul_2_start3"
-                    android:layout_toRightOf="@+id/ig_ovul_2_start3"
-                    android:src="@mipmap/start"/>
-                <ImageView
-                    android:id="@+id/ig_ovul_2_start5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignTop="@+id/ig_ovul_2_start4"
-                    android:layout_toRightOf="@+id/ig_ovul_2_start4"
-                    android:src="@mipmap/start"/>
+                    android:numStars="5"
+                    android:rating="1"/>
                 <TextView
                     android:id="@+id/tv_ovul_setting"
                     android:layout_width="80dp"

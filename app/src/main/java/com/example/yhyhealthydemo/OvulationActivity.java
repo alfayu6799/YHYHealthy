@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +79,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private TextView temperature;
     private TextView ovulResult;
 
+    private RatingBar bodySalivaRate, bodyDegreeRate;
+
     private SimpleDateFormat sdf;  //日期格式
 
     //圖表
@@ -121,6 +124,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         menstruationPeriodDay = findViewById(R.id.tv_ovul_period); //今天是週期的第?天
         ovulResult = findViewById(R.id.tv_ovul_result_1);  //唾液辨識Result
         temperature = findViewById(R.id.tv_ovul_temp_1);  //基礎體溫
+        bodySalivaRate = findViewById(R.id.rtSaliva);         //唾液辨識機率
+        bodyDegreeRate = findViewById(R.id.rtBt);         //基礎體溫機率
 
         oveuSetting = findViewById(R.id.tv_ovul_setting);  //經期設定
         oveuEdit = findViewById(R.id.tv_ovul_edit);        //編輯紀錄
@@ -371,12 +376,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         temperature.setText(getString(R.string.body_degree) + " " + bodyDegree + " \u2103");
 
         //根據唾液辨識結果得到機率
-        String salivaRate = String.valueOf(record.getOvuRate().getSalivaRate());
-        Log.d(TAG, "根據唾液辨識結果得到機率: " + salivaRate);
+        int salivaRate = record.getOvuRate().getSalivaRate();
+        bodySalivaRate.setRating(salivaRate);
 
         //根據基礎體溫結果得到的機率
-        String btRate = String.valueOf(record.getOvuRate().getBtRate());
-        Log.d(TAG, "根據基礎體溫結果得到的機率: " + btRate);
+        int btRate = record.getOvuRate().getBtRate();
+        bodyDegreeRate.setRating(btRate);
     }
 
     //從Api or Local取得需要的資料集 月曆用
