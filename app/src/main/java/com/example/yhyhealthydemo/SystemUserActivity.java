@@ -11,6 +11,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 
+import com.example.yhyhealthydemo.module.ApiProxy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
+
 /**
  * 使用者設定:
  * 變更密碼
@@ -36,12 +44,63 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     Switch    contraceptionStatus;
     Switch    childStatus;
 
+    //api
+    ApiProxy proxy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_user);
 
         initView();
+
+        initData();
+    }
+
+    private void initData() {
+        proxy = ApiProxy.getInstance();
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("type", "3");
+            json.put("userId", "H5E3q5MjA=");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        proxy.buildPOST(MARRIAGE_INFO, json.toString(), marriageListeren);
+    }
+
+    private ApiProxy.OnApiListener marriageListeren = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parserJson(result); //解析後台來的資料
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    //解析後台來的資料
+    private void parserJson(JSONObject result) {
+
     }
 
     private void initView() {
