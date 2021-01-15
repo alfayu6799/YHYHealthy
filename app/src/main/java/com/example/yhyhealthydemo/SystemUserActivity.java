@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 
+import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
 
     //api
     ApiProxy proxy;
+    MarriageData marriageData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,16 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
 
     //解析後台來的資料
     private void parserJson(JSONObject result) {
+        marriageData = MarriageData.newInstance(result.toString());
 
+        //婚姻
+        boolean married = marriageData.isMarried();
+        marriageStatus.setChecked(married);
+
+        //孩子
+        
+
+        //避孕
     }
 
     private void initView() {
