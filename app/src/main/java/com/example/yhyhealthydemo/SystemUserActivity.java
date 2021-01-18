@@ -103,15 +103,19 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     //解析後台來的資料
     private void parserJson(JSONObject result) {
         marriageData = MarriageData.newInstance(result.toString());
+        Log.d(TAG, "parserJson: " + result.toString());
 
         //婚姻
-        boolean married = marriageData.isMarried();
+        boolean married = marriageData.getSuccess().isMarried();
         marriageStatus.setChecked(married);
 
         //孩子
-        
+        boolean child = marriageData.getSuccess().isHasChild();
+        childStatus.setChecked(child);
 
         //避孕
+        boolean contraception = marriageData.getSuccess().isContraception();
+        contraceptionStatus.setChecked(contraception);
     }
 
     private void initView() {
@@ -131,6 +135,7 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
         back.setOnClickListener(this);
         toPregnancy.setOnClickListener(this);
         toMenstruation.setOnClickListener(this);
+        changeBasicInfo.setOnClickListener(this);
 
         marriageStatus.setOnCheckedChangeListener(this);
         contraceptionStatus.setOnCheckedChangeListener(this);
@@ -142,6 +147,9 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
         switch (view.getId()){
             case R.id.ivBackSetting:
                 finish();  //返回設定頁並關閉此Activity
+                break;
+            case R.id.ivUserBasicInfo: //個人基本資料變更
+                startActivity(new Intent(this, UserBasicActivity.class)); //個人基本資料
                 break;
             case R.id.ivMenstruationSetting:
                 startActivity(new Intent(this, MenstruationSettingActivity.class)); //經期設定頁面
@@ -155,25 +163,25 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
         switch (compoundButton.getId()){
-            case R.id.switchMarriage:
+            case R.id.switchMarriage: //婚姻狀況
                 if (isCheck){
-                    Log.d(TAG, "onCheckedChanged: 婚姻Y" );
+                    marriageStatus.setChecked(true);
                 }else{
-                    Log.d(TAG, "onCheckedChanged: 婚姻N" );
+                    marriageStatus.setChecked(false);
                 }
                 break;
-            case R.id.switchContraception:
+            case R.id.switchContraception: //行房
                 if (isCheck){
-                    Log.d(TAG, "onCheckedChanged: 避孕Y" );
+                    contraceptionStatus.setChecked(true);
                 }else {
-                    Log.d(TAG, "onCheckedChanged: 避孕N" );
+                    contraceptionStatus.setChecked(false);
                 }
                 break;
-            case R.id.switchChild:
+            case R.id.switchChild:   //小孩
                 if (isCheck){
-                    Log.d(TAG, "onCheckedChanged: 孩子Y" );
+                    childStatus.setChecked(true);
                 }else {
-                    Log.d(TAG, "onCheckedChanged: 孩子N" );
+                    childStatus.setChecked(false);
                 }
                 break;
         }

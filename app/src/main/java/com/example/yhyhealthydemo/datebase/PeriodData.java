@@ -9,68 +9,87 @@ import com.google.gson.Gson;
  * */
 public class PeriodData {
 
+
     /**
-     * type :
-     * userId :
-     * cycle : 28
-     * period : 5
-     * lastDate : 2019-09-30
-     * endDate : 2019-10-04
+     * success : {"type":"","userId":"","cycle":28,"period":5,"lastDate":"2019-09-30","endDate":"2019-10-04"}
+     * errorCode : 0
      */
 
-    private String type;
-    private String userId;
-    private int cycle;
-    private int period;
-    private String lastDate;
-    private String endDate;
+    private SuccessBean success;
+    private int errorCode;
 
-    public String getType() {
-        return type;
+    public SuccessBean getSuccess() {
+        return success;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    public static class SuccessBean {
+        /**
+         * type :
+         * userId :
+         * cycle : 28
+         * period : 5
+         * lastDate : 2019-09-30
+         * endDate : 2019-10-04
+         */
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+        private String type;
+        private String userId;
+        private int cycle;
+        private int period;
+        private String lastDate;
+        private String endDate;
 
-    public int getCycle() {
-        return cycle;
-    }
+        public String getType() {
+            return type;
+        }
 
-    public void setCycle(int cycle) {
-        this.cycle = cycle;
-    }
+        public void setType(String type) {
+            this.type = type;
+        }
 
-    public int getPeriod() {
-        return period;
-    }
+        public String getUserId() {
+            return userId;
+        }
 
-    public void setPeriod(int period) {
-        this.period = period;
-    }
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
 
-    public String getLastDate() {
-        return lastDate;
-    }
+        public int getCycle() {
+            return cycle;
+        }
 
-    public void setLastDate(String lastDate) {
-        this.lastDate = lastDate;
-    }
+        public void setCycle(int cycle) {
+            this.cycle = cycle;
+        }
 
-    public String getEndDate() {
-        return endDate;
-    }
+        public int getPeriod() {
+            return period;
+        }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+        public void setPeriod(int period) {
+            this.period = period;
+        }
+
+        public String getLastDate() {
+            return lastDate;
+        }
+
+        public void setLastDate(String lastDate) {
+            this.lastDate = lastDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
     }
 
     /**

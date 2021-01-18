@@ -3,41 +3,61 @@ package com.example.yhyhealthydemo.datebase;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-
+/***********
+ * 婚姻狀況DataBean
+ * **************/
 public class MarriageData {
 
     /**
-     * married : false
-     * contraception : false
-     * hasChild : false
+     * success : {"married":true,"contraception":false,"hasChild":false}
+     * errorCode : 0
      */
 
-    private boolean married;
-    private boolean contraception;
-    private boolean hasChild;
+    private SuccessBean success;
+    private int errorCode;
 
-    public boolean isMarried() {
-        return married;
+    public SuccessBean getSuccess() {
+        return success;
     }
 
-    public void setMarried(boolean married) {
-        this.married = married;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public boolean isContraception() {
-        return contraception;
-    }
+    public static class SuccessBean {
+        /**
+         * married : true
+         * contraception : false
+         * hasChild : false
+         */
 
-    public void setContraception(boolean contraception) {
-        this.contraception = contraception;
-    }
+        private boolean married;
+        private boolean contraception;
+        private boolean hasChild;
 
-    public boolean isHasChild() {
-        return hasChild;
-    }
+        public boolean isMarried() {
+            return married;
+        }
 
-    public void setHasChild(boolean hasChild) {
-        this.hasChild = hasChild;
+        public void setMarried(boolean married) {
+            this.married = married;
+        }
+
+        public boolean isContraception() {
+            return contraception;
+        }
+
+        public void setContraception(boolean contraception) {
+            this.contraception = contraception;
+        }
+
+        public boolean isHasChild() {
+            return hasChild;
+        }
+
+        public void setHasChild(boolean hasChild) {
+            this.hasChild = hasChild;
+        }
     }
 
     /**

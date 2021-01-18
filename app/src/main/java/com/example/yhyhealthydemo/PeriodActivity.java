@@ -249,11 +249,11 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
     private void UpdateApi() {
         //體重
         if(!TextUtils.isEmpty(editWeight.getText().toString())){
-            record.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+            record.getSuccess().getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
         }
 
         //體溫
-        record.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
+        record.getSuccess().getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
 
         Log.d(TAG, "傳到後台的資料 : " + record.toJSONString());
 
@@ -265,23 +265,23 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         switch (compoundButton.getId()){
             case R.id.swBleeding:   //出血
                 if (isCheck){
-                    record.getStatus().setBleeding(true);
+                    record.getSuccess().getStatus().setBleeding(true);
                 }else {
-                    record.getStatus().setBleeding(false);
+                    record.getSuccess().getStatus().setBleeding(false);
                 }
                 break;
             case R.id.swBreastPain: //脹痛
                 if(isCheck){
-                    record.getStatus().setBreastPain(true);
+                    record.getSuccess().getStatus().setBreastPain(true);
                 }else {
-                    record.getStatus().setBreastPain(false);
+                    record.getSuccess().getStatus().setBreastPain(false);
                 }
                 break;
             case R.id.swIntercourse: //行房
                 if (isCheck){
-                    record.getStatus().setIntercourse(true);
+                    record.getSuccess().getStatus().setIntercourse(true);
                 }else {
-                    record.getStatus().setIntercourse(false);
+                    record.getSuccess().getStatus().setIntercourse(false);
                 }
                 break;
         }
@@ -596,7 +596,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         record = MenstruationRecord.newInstance(result.toString());
         Log.d(TAG, "解析後台資料: " + record.toJSONString());
         //體重
-        String userWeight = String.valueOf(record.getMeasure().getWeight());
+        String userWeight = String.valueOf(record.getSuccess().getMeasure().getWeight());
         editWeight.setText(userWeight);
 
 //        //脹痛,出血,行房
@@ -618,7 +618,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
         cAdapter = new ColorAdapter(this);
 
-        String secretionsColor = record.getSecretions().getColor();
+        String secretionsColor = record.getSuccess().getSecretions().getColor();
         RecordColor recordColor = RecordColor.getColor(secretionsColor);
         int pos_color = recordColor.getIndex();
         cAdapter.setData(colors, pos_color);
@@ -632,7 +632,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
                 RecordColor recordColor = RecordColor.getEnName(position);
                 String ColorName = recordColor.getName();
-                record.getSecretions().setColor(ColorName); //寫回後台
+                record.getSuccess().getSecretions().setColor(ColorName); //寫回後台
             }
         });
 
@@ -641,7 +641,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
         aAdapter = new TasteAdapter(this);
 
-        String secretionsTaste = record.getSecretions().getSmell();
+        String secretionsTaste = record.getSuccess().getSecretions().getSmell();
         RecordTaste recordTaste = RecordTaste.getTaste(secretionsTaste);
         int pos_taste = recordTaste.getIndex();
         aAdapter.setData(taste, pos_taste);
@@ -655,7 +655,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
                 RecordTaste recordTaste = RecordTaste.getEnName(position);
                 String TasteName = recordTaste.getName();
-                record.getSecretions().setSmell(TasteName); //寫回後台
+                record.getSuccess().getSecretions().setSmell(TasteName); //寫回後台
             }
         });
 
@@ -665,7 +665,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
         tAdapter = new SecretionTypeAdapter(this);
 
-        String secretionsType = record.getSecretions().getSecretionType();
+        String secretionsType = record.getSuccess().getSecretions().getSecretionType();
         RecordType recordType = RecordType.getType(secretionsType);
         int pos_type = recordType.getIndex();
         tAdapter.setData(types, pos_type);
@@ -678,7 +678,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
                 tAdapter.notifyDataSetChanged();
                 RecordType recordType = RecordType.getEnName(position);
                 String TypeName = recordType.getName();
-                record.getSecretions().setSecretionType(TypeName); //寫回後台
+                record.getSuccess().getSecretions().setSecretionType(TypeName); //寫回後台
             }
         });
 
@@ -688,7 +688,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
         sAdapter = new SymptomAdapter(this);
 
-        String secretionsSymptom = record.getSecretions().getSymptom();
+        String secretionsSymptom = record.getSuccess().getSecretions().getSymptom();
         RecordSymptom recordSymptom = RecordSymptom.getSymptom(secretionsSymptom);
         int pos_symptom = recordSymptom.getIndex();
         sAdapter.setData(symps,pos_symptom);
@@ -702,7 +702,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
 
                 RecordSymptom recordSymptom = RecordSymptom.getEnName(position);
                 String SymptomName = recordSymptom.getName();
-                record.getSecretions().setSymptom(SymptomName);
+                record.getSuccess().getSecretions().setSymptom(SymptomName);
             }
         });
     }

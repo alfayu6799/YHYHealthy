@@ -58,10 +58,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textSize="22dp"
         android:text="@string/system_vedio"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        android:textSize="22dp"
+        app:layout_constraintStart_toStartOf="@+id/textView34"
+        app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
     <TextView
         android:id="@+id/textView7"
@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_arrow_forward_ios_32dp"
-        app:layout_constraintStart_toStartOf="@+id/imgSystemUserSetting"
+        app:layout_constraintStart_toStartOf="@+id/imgSystemObser"
         app:layout_constraintTop_toTopOf="@+id/textView6" />
 
     <ImageView
@@ -142,6 +142,24 @@
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="@+id/imgSystemProvision"
         app:layout_constraintTop_toTopOf="@id/textView8" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="22dp"
+        android:text="@string/setting_for_Observation"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <ImageView
+        android:id="@+id/imgSystemObser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_arrow_forward_ios_32dp"
+        app:layout_constraintStart_toStartOf="@+id/imgSystemUserSetting"
+        app:layout_constraintTop_toTopOf="@+id/textView34" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

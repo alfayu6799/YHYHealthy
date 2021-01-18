@@ -27,11 +27,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         ImageView UserSetting = view.findViewById(R.id.imgSystemUserSetting);
         ImageView video = view.findViewById(R.id.imgSystemVedio);
         ImageView provision = view.findViewById(R.id.imgSystemProvision);
+        ImageView observation = view.findViewById(R.id.imgSystemObser);
         TextView  version = view.findViewById(R.id.tvVersion);
         TextView  logout = view.findViewById(R.id.tvLogout);
 
         setting.setOnClickListener(this);
         UserSetting.setOnClickListener(this);
+        observation.setOnClickListener(this);
         video.setOnClickListener(this);
         provision.setOnClickListener(this);
         logout.setOnClickListener(this);
@@ -47,6 +49,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.imgSystemUserSetting:  //使用者設定
                 startActivity(new Intent(getActivity(), SystemUserActivity.class));
+                break;
+            case R.id.imgSystemObser:       //觀測者編輯
+                startActivity(new Intent(getActivity(), SysObservationActivity.class));
                 break;
             case R.id.imgSystemVedio:       //教學影片
                 startActivity(new Intent(getActivity(), SystemVideoActivity.class));

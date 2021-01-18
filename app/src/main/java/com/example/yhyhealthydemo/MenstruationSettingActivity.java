@@ -26,6 +26,7 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
 
     ImageView back;
     EditText  cycleLength, periodLength;
+    EditText  firstDay, endDay;
 
     //api
     ApiProxy proxy;
@@ -36,9 +37,8 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menstruation_setting);
 
-        initData();
-
         initView();
+        initData();
 
     }
 
@@ -46,6 +46,8 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
         back = findViewById(R.id.ivBackUserSetting);
         cycleLength = findViewById(R.id.edtCycleLength);     //週期長度
         periodLength = findViewById(R.id.edtPeriodLength);   //經期長度
+        firstDay = findViewById(R.id.editTextDateStart);     //起始日
+        endDay = findViewById(R.id.editTextDateEnd);         //結束日
 
         back.setOnClickListener(this);
     }
@@ -95,17 +97,20 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
         period = PeriodData.newInstance(result.toString());
 
         //週期長度
-        String periodSize = String.valueOf(period.getCycle());
+        String periodSize = String.valueOf(period.getSuccess().getCycle());
         cycleLength.setText(periodSize);
-
+//
         //經期長度
-        String cycleSize = String.valueOf(period.getPeriod());
+        String cycleSize = String.valueOf(period.getSuccess().getPeriod());
         periodLength.setText(cycleSize);
 
         //開始時間
-
+        String startDay = period.getSuccess().getLastDate();
+        firstDay.setText(startDay);
 
         //結束時間
+        String endingDay = period.getSuccess().getEndDate();
+        endDay.setText(endingDay);
     }
 
     @Override
@@ -114,6 +119,16 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
             case R.id.ivBackUserSetting:
                 finish();
                 break;
+            case R.id.editTextDateStart:
+                dialogPickDate();
+            case R.id.editTextDateEnd:
+
+                break;
         }
+    }
+
+    //日期彈跳視窗
+    private void dialogPickDate() {
+
     }
 }

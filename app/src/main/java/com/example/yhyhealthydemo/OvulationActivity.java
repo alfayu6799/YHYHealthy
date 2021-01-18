@@ -360,7 +360,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
         //唾液辨識結果
-        String paramName = record.getMeasure().getParamName();
+        String paramName = record.getSuccess().getMeasure().getParamName();
         if (!paramName.equals("")){
             oveuEdit.setText("編輯\n紀錄");
             if (paramName.equals("Ovulation")){
@@ -372,15 +372,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         }
 
         //基礎體溫
-        String bodyDegree = String.valueOf(record.getMeasure().getTemperature());
+        String bodyDegree = String.valueOf(record.getSuccess().getMeasure().getTemperature());
         temperature.setText(getString(R.string.body_degree) + " " + bodyDegree + " \u2103");
 
         //根據唾液辨識結果得到機率
-        int salivaRate = record.getOvuRate().getSalivaRate();
+        int salivaRate = record.getSuccess().getOvuRate().getSalivaRate();
         bodySalivaRate.setRating(salivaRate);
 
         //根據基礎體溫結果得到的機率
-        int btRate = record.getOvuRate().getBtRate();
+        int btRate = record.getSuccess().getOvuRate().getBtRate();
         bodyDegreeRate.setRating(btRate);
     }
 
