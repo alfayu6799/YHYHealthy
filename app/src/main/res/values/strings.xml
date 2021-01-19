@@ -149,4 +149,6 @@
     <string name="please_input_email">請輸入信箱地址</string>
     <string name="please_input_area_code">請輸入國際區碼</string>
     <string name="please_input_phone">請輸入手機號碼</string>
+    <string name="please_input_old_password">請輸入舊密碼</string>
+    <string name="please_input_new_password">請輸入新密碼</string>
 </resources>

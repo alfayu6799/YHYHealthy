@@ -2,7 +2,6 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
-import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 
 /**
  * 使用者設定:
@@ -41,6 +39,7 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     ImageView changePassword, changeBasicInfo, verificationStyle, changeDeviceNo;
     ImageView authorizationCode;
 
+    //婚姻狀況
     Switch    marriageStatus;
     Switch    contraceptionStatus;
     Switch    childStatus;
@@ -136,6 +135,7 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
         toPregnancy.setOnClickListener(this);
         toMenstruation.setOnClickListener(this);
         changeBasicInfo.setOnClickListener(this);
+        changePassword.setOnClickListener(this);
 
         marriageStatus.setOnCheckedChangeListener(this);
         contraceptionStatus.setOnCheckedChangeListener(this);
@@ -148,8 +148,17 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
             case R.id.ivBackSetting:
                 finish();  //返回設定頁並關閉此Activity
                 break;
-            case R.id.ivUserBasicInfo: //個人基本資料變更
-                startActivity(new Intent(this, UserBasicActivity.class)); //個人基本資料
+            case R.id.ivPasswordChange:
+                startActivity(new Intent(this, UserChangePassActivity.class)); //變更密碼
+                break;
+            case R.id.ivUserBasicInfo:
+                startActivity(new Intent(this, UserBasicActivity.class));  //個人基本資料
+                break;
+            case R.id.ivUserVerificationStyle:
+                dialogVerification();  //驗證方式 : email or SMS
+                break;
+            case R.id.ivUserAuthorizationCode:
+                dialogAuthCode();   //遠端授權碼
                 break;
             case R.id.ivMenstruationSetting:
                 startActivity(new Intent(this, MenstruationSettingActivity.class)); //經期設定頁面
@@ -157,9 +166,23 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
             case R.id.ivPregnancySetting:
                 startActivity(new Intent(this, PregnancySettingActivity.class));  //懷孕設定頁面
                 break;
+            case R.id.ivUserDeviceNo:
+                //裝置序號
+                break;
+
+
         }
     }
 
+    //遠端授權碼彈跳視窗
+    private void dialogAuthCode() {
+    }
+
+    //驗證方式 : email or SMS 彈跳視窗
+    private void dialogVerification() {
+    }
+
+    //Switch button onclick
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
         switch (compoundButton.getId()){

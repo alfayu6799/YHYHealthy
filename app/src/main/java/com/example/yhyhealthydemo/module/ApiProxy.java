@@ -34,52 +34,55 @@ public class ApiProxy {
     private static ApiProxy INSTANCE = null;
 
     //Api網址
-    private static String URL = "http://192.168.1.108:8080/allAiniita/aplus/";
+    private static String URL = "http://192.168.1.108:8080/";
 
     //註冊用api
-    public static String REGISTER = "register";
+    public static String REGISTER = "allUser/users/register";
+
+    //登入api
+    public static String LOGIN = "allUser/users/login";
 
     //查詢用戶資訊api
-    public static String USER_INFO = "info";
+    public static String USER_INFO = "allUser/users/info";
 
     //更新用戶資訊api
-    public static String USER_UPDATE = "update";
+    public static String USER_UPDATE = "allUser/users/update";
 
     //忘記密碼api
-    public static String FORGET_PASSWORD = "forget";
+    public static String FORGET_PASSWORD = "allUser/users/forget";
 
     //更新密碼api
-    public static String CHANGE_PASSWORD = "change";
+    public static String CHANGE_PASSWORD = "allUser/users/change";
 
     //經期是否已設定api
-    public static String MENSTRUAL_EXISTS = "MenstrualExists";
+    public static String MENSTRUAL_EXISTS = "allAiniita/aplus/MenstrualExists";
 
     //查詢經期設定資訊api
-    public static String MENSTRUAL_RECORD_INFO = "MenstrualRecordInfo";
+    public static String MENSTRUAL_RECORD_INFO = "allAiniita/aplus/MenstrualRecordInfo";
 
     //更新經期設定api
-    public static String MENSTRUAL_RECORD_UPDATE = "MenstrualRecord";
+    public static String MENSTRUAL_RECORD_UPDATE = "allAiniita/aplus/MenstrualRecord";
 
     //週期狀態api(月曆與圖表)
-    public static String CYCLE_RECORD = "CycleRecord";
+    public static String CYCLE_RECORD = "allAiniita/aplus/CycleRecord";
 
     //排卵紀錄查詢api
-    public static String RECORD_INFO = "RecordInfo";
+    public static String RECORD_INFO = "allAiniita/aplus/RecordInfo";
 
     //排卵紀錄更新api
-    public static String RECORD_UPDATE = "Record";
+    public static String RECORD_UPDATE = "allAiniita/aplus/Record";
 
     //唾液圖片辨識api
-    public static String IMAGE_DETECTION = "ImgDetection";
+    public static String IMAGE_DETECTION = "allAiniita/aplus/ImgDetection";
 
     //實際經期設定api
-    public static String PERIOD_UPDATE = "PeriodData";
+    public static String PERIOD_UPDATE = "allAiniita/aplus/PeriodData";
 
     //查詢婚姻狀況api
-    public static String MARRIAGE_INFO = "MarriageInfo";
+    public static String MARRIAGE_INFO = "allAiniita/aplus/MarriageInfo";
 
     //更新婚姻狀況api
-    public static String MARRIAGE = "Marriage";
+    public static String MARRIAGE = "allAiniita/aplus/Marriage";
 
     //單例化
     private YHYHealthyApp app;

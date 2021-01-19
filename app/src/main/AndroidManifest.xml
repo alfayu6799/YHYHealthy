@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".UserBasicActivity"></activity>
+        <activity android:name=".UserChangePassActivity"></activity>
+        <activity android:name=".UserBasicActivity" />
         <activity android:name=".SysBleActivity" />
         <activity android:name=".SysObservationActivity" />
         <activity android:name=".PregnancySettingActivity" />
