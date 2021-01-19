@@ -1,0 +1,14 @@
+{
+    "success": {
+        "userAccount": "demo05",
+        "name": "Test05",
+        "gender": "F",
+        "email": "rc54195018@gmail.com",
+        "birthday": "1999-09-30",
+        "telCode": null,
+        "mobile": "",
+        "height": 165.0,
+        "weight": 41.0
+    },
+    "errorCode": 0
+}

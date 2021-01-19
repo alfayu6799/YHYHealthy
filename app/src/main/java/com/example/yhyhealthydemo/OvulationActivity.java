@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -326,10 +325,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        proxy.buildPOST(RECORD_INFO, json.toString(), requestListeren);
+        proxy.buildPOST(RECORD_INFO, json.toString(), requestListener);
     }
 
-    private ApiProxy.OnApiListener requestListeren = new ApiProxy.OnApiListener() {
+    private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
 

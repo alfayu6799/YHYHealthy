@@ -63,10 +63,10 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
             e.printStackTrace();
         }
 
-        proxy.buildPOST(MENSTRUAL_RECORD_INFO, json.toString(), periodListeren);
+        proxy.buildPOST(MENSTRUAL_RECORD_INFO, json.toString(), periodListener);
     }
 
-    private ApiProxy.OnApiListener periodListeren = new ApiProxy.OnApiListener() {
+    private ApiProxy.OnApiListener periodListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
 

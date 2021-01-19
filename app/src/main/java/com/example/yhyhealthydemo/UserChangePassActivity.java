@@ -3,9 +3,20 @@ package com.example.yhyhealthydemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.yhyhealthydemo.module.ApiProxy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 
 /**
  * 使用者變更密碼
@@ -13,13 +24,21 @@ import android.widget.ImageView;
 
 public class UserChangePassActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "UserChangePassActivity";
+
     Button update;
     ImageView back;
+    EditText oldPassword, newPassword;
+
+    //api
+    ApiProxy proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userchange_passwd);
+
+        proxy = ApiProxy.getInstance();
 
         initView();
     }
@@ -27,6 +46,8 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
     private void initView() {
         update = findViewById(R.id.btnUpdatePassWD);
         back = findViewById(R.id.ivBackSetting5);
+        oldPassword = findViewById(R.id.edtOldPassword);
+        newPassword = findViewById(R.id.edtNewPassword);
         update.setOnClickListener(this);
         back.setOnClickListener(this);
     }
@@ -46,5 +67,44 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
 
     //後台更新
     private void updateToApi() {
+        String oldPW = oldPassword.getText().toString();
+        String newPW = newPassword.getText().toString();
+
+        if(TextUtils.isEmpty(oldPW) || (TextUtils.isEmpty(newPW))){
+            Toast.makeText(UserChangePassActivity.this, "不得空白!!", Toast.LENGTH_SHORT).show();
+        }else {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("password", oldPW);
+                json.put("newPassword", newPW);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            finish();
+            //proxy.buildPOST(MARRIAGE_INFO, json.toString(), changeListener);
+        }
     }
+
+    private ApiProxy.OnApiListener changeListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            //Toast.makeText(UserChangePassActivity.this, "變更成功!!", Toast.LENGTH_SHORT).show();
+            //finish();
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 }

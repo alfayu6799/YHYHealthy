@@ -69,10 +69,10 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
 
-        proxy.buildPOST(MARRIAGE_INFO, json.toString(), marriageListeren);
+        proxy.buildPOST(MARRIAGE_INFO, json.toString(), marriageListener);
     }
 
-    private ApiProxy.OnApiListener marriageListeren = new ApiProxy.OnApiListener() {
+    private ApiProxy.OnApiListener marriageListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
 

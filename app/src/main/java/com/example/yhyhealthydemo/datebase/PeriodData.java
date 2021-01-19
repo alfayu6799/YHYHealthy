@@ -9,7 +9,6 @@ import com.google.gson.Gson;
  * */
 public class PeriodData {
 
-
     /**
      * success : {"type":"","userId":"","cycle":28,"period":5,"lastDate":"2019-09-30","endDate":"2019-10-04"}
      * errorCode : 0

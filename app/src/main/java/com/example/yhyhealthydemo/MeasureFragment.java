@@ -98,10 +98,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        proxy.buildPOST(MENSTRUAL_EXISTS, json.toString(), existsListener);
+        proxy.buildPOST(MENSTRUAL_EXISTS, json.toString(), exitsListener);
     }
 
-    private ApiProxy.OnApiListener existsListener = new ApiProxy.OnApiListener() {
+    private ApiProxy.OnApiListener exitsListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
 

@@ -151,4 +151,5 @@
     <string name="please_input_phone">請輸入手機號碼</string>
     <string name="please_input_old_password">請輸入舊密碼</string>
     <string name="please_input_new_password">請輸入新密碼</string>
+    <string name="set_years_range">本服務適用年齡為12~80歲</string>
 </resources>
