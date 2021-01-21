@@ -1,10 +1,14 @@
 package com.example.yhyhealthydemo.module;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ScrollView;
 
 import com.example.yhyhealthydemo.R;
 
@@ -13,14 +17,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.http2.Header;
 
 /*******************
  * 處理網路請求
@@ -84,6 +91,12 @@ public class ApiProxy {
     //更新婚姻狀況api
     public static String MARRIAGE = "allAiniita/aplus/Marriage";
 
+    //
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String SCEPTER = "Scepter";
+    private static String authToken;
+    private static String scepterToken;
+
     //單例化
     private YHYHealthyApp app;
 
@@ -108,13 +121,29 @@ public class ApiProxy {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
-    //POST JSON
-    public void buildPOST(String action, String body, OnApiListener listener){
+    //登入時專用
+    public void build(String action, String body, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
         request.url(URL + action);
         request.post(requestBody);
-        request.addHeader("Authorization","xxx");
+        request.addHeader("Authorization", "xxx");
+        buildRequest(request.build(), listener);
+    }
+
+    //POST JSON
+    public void buildPOST(String action, String body, OnApiListener listener){
+        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyMjA0NDAsImV4cCI6MTYxMTIyNDA0MH0.I6UvJRwda2sCPTgSmtEiD9QBV6pLWn2DxT2-KRuKTsFx36js9TSHYd86RRLpdMIbOC7ceaZtRC4E22INOwEi5Q";
+        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyMjA0NDB9.GL2rOg1BaYMiU03UZ1bjzBAcToPsYqmKI3zZ9IMG-aD3E3rnDn1keODyHe3xnTHa91MqdgiJGHtJCTmablTdAw";
+        Log.d(TAG, "buildPOST authToken: " + authToken);
+        Log.d(TAG, "buildPOST scepterToken: " + scepterToken);
+
+        RequestBody requestBody = RequestBody.create(JSON, body);
+        Request.Builder request = new Request.Builder();
+        request.url(URL + action);
+        request.post(requestBody);
+        request.addHeader(AUTHORIZATION, authToken1);
+        request.addHeader(SCEPTER, scepterToken1);
         buildRequest(request.build(), listener);
     }
 
@@ -145,6 +174,18 @@ public class ApiProxy {
                 int code = response.code();
                 assert response.body() != null;
                 String string = response.body().string();
+
+                if(response.header("Authorization") != null){  //如果回覆是空值的話則不要複寫
+                    authToken = response.header("Authorization");
+                }
+
+                if(response.header("Scepter") != null){   //如果回覆是空值的話則不要複寫
+                    scepterToken = response.header("Scepter");
+                }
+
+                Log.d(TAG, "onResponse auth: " + authToken);
+                Log.d(TAG, "onResponse scepter: " + scepterToken);
+
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(string);
@@ -159,6 +200,7 @@ public class ApiProxy {
             }
         });
     }
+
 
     public interface OnApiListener{
         void onPreExecute();

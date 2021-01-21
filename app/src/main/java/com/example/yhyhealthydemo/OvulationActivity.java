@@ -319,8 +319,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private void checkDataFromApi(String day) {
         JSONObject json = new JSONObject();
         try {
-            json.put("type", "3");
-            json.put("userId", "H5E3q5MjA=");
             json.put("testDate", day);
         } catch (JSONException e) {
             e.printStackTrace();

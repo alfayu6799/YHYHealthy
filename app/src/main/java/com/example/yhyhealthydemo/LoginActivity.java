@@ -4,7 +4,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,20 +14,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yhyhealthydemo.module.ApiProxy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "LoginActivity";
 
     Button loginButton;
     EditText account, password;
     TextView register, forget;
 
+    ApiProxy proxy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getSupportActionBar().hide(); //hide ActionBar
         setContentView(R.layout.activity_login);
+
+        proxy = ApiProxy.getInstance();
 
         initView();
     }
@@ -46,8 +60,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-//                userLoginApi(); //將使用者的資料傳給後台
-                Intent intent = new Intent(this,MainActivity.class);
+//                userLoginApi(); //跟後台要token
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -59,6 +73,50 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
         }
     }
+
+    private void userLoginApi() {
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", "demo05");
+            json.put("password", "111111");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        proxy.build(LOGIN, json.toString(), loginListener);
+    }
+
+    private ApiProxy.OnApiListener loginListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            Log.d(TAG, "onSuccess: " + result.toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     //忘記密碼fxn
     private void dialogForget() {

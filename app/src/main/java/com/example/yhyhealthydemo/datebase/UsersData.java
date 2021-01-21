@@ -8,8 +8,9 @@ import com.google.gson.Gson;
  * 使用者帳號 dataBean
  * */
 public class UsersData {
+
     /**
-     * success : {"userAccount":"demo05","name":"Test05","gender":"F","email":"rc54195018@gmail.com","birthday":"1999-09-30","telCode":null,"mobile":"","height":165,"weight":41}
+     * success : {"userAccount":"demo05","name":"Test05","gender":"F","email":"rc54195018@gmail.com","birthday":"1999-09-30","telCode":"","mobile":"","height":180,"weight":50}
      * errorCode : 0
      */
 
@@ -31,10 +32,10 @@ public class UsersData {
          * gender : F
          * email : rc54195018@gmail.com
          * birthday : 1999-09-30
-         * telCode : null
+         * telCode :
          * mobile :
-         * height : 165.0
-         * weight : 41.0
+         * height : 180.0
+         * weight : 50.0
          */
 
         private String userAccount;
@@ -42,7 +43,7 @@ public class UsersData {
         private String gender;
         private String email;
         private String birthday;
-        private Object telCode;
+        private String telCode;
         private String mobile;
         private double height;
         private double weight;
@@ -87,11 +88,11 @@ public class UsersData {
             this.birthday = birthday;
         }
 
-        public Object getTelCode() {
+        public String getTelCode() {
             return telCode;
         }
 
-        public void setTelCode(Object telCode) {
+        public void setTelCode(String telCode) {
             this.telCode = telCode;
         }
 

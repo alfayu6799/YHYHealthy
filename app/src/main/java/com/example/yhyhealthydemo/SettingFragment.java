@@ -2,10 +2,7 @@ package com.example.yhyhealthydemo;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +22,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         ImageView setting = view.findViewById(R.id.imgSystemSetting);
         ImageView UserSetting = view.findViewById(R.id.imgSystemUserSetting);
+        ImageView userAccount = view.findViewById(R.id.imgSystemAccount);
         ImageView video = view.findViewById(R.id.imgSystemVedio);
         ImageView provision = view.findViewById(R.id.imgSystemProvision);
         ImageView observation = view.findViewById(R.id.imgSystemObser);
@@ -33,6 +31,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
         setting.setOnClickListener(this);
         UserSetting.setOnClickListener(this);
+        userAccount.setOnClickListener(this);
         observation.setOnClickListener(this);
         video.setOnClickListener(this);
         provision.setOnClickListener(this);
@@ -47,14 +46,20 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             case R.id.imgSystemSetting:       //系統設定
                 startActivity(new Intent(getActivity(), SystemSettingActivity.class));
                 break;
-            case R.id.imgSystemUserSetting:  //使用者設定
+            case R.id.imgSystemUserSetting:  //個人設定
                 startActivity(new Intent(getActivity(), SystemUserActivity.class));
+                break;
+            case R.id.imgSystemAccount:      //帳戶設定
+                startActivity(new Intent(getActivity(), SystemAccountActivity.class));
                 break;
             case R.id.imgSystemObser:       //觀測者編輯
                 startActivity(new Intent(getActivity(), SysObservationActivity.class));
                 break;
             case R.id.imgSystemVedio:       //教學影片
                 startActivity(new Intent(getActivity(), SystemVideoActivity.class));
+                break;
+            case R.id.imgSystemProvision:  //使用條款
+                startActivity(new Intent(getActivity(), SystemProvisionActivity.class));
                 break;
         }
     }

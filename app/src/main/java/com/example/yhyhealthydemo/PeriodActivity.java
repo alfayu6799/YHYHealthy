@@ -225,11 +225,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台
-                Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
-
                 UpdateApi(); //upload to api 2021/01/11 leona
-
-                finish();
                 break;
         }
     }
@@ -245,7 +241,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         }
     }
 
-    //2021/01/11 leona
+    //上傳至後台儲存 2021/01/11 leona
     private void UpdateApi() {
         //體重
         if(!TextUtils.isEmpty(editWeight.getText().toString())){
@@ -256,7 +252,8 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
         record.getSuccess().getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
 
         Log.d(TAG, "傳到後台的資料 : " + record.toJSONString());
-
+        Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     //Switch button listener  2021/01/07 leona
@@ -554,8 +551,6 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
     private void setRecordInfo(String selectDay) {
         JSONObject json = new JSONObject();
         try {
-            json.put("type", "3");
-            json.put("userId", "H5E3q5MjA=");
             json.put("testDate",selectDay);
         } catch (JSONException e) {
             e.printStackTrace();

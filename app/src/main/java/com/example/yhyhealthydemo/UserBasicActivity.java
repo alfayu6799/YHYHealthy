@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.datebase.UsersData;
+import com.example.yhyhealthydemo.module.ApiProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
 
 /***** ****
  * 設定 - 個人設定 - 基本資料
@@ -43,6 +47,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
     //api
     UsersData usersData;
+    ApiProxy proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +56,77 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         usersData = new UsersData();
 
-        initData();
         initView();
+
+        initData();
     }
 
     //get data from api
     private void initData() {
-        String myJSONStr = loadJSONFromAsset("member.json");
-        try {
-            JSONObject obj = new JSONObject(myJSONStr);
-            usersData = UsersData.newInstance(obj.toString());
+        proxy = ApiProxy.getInstance();
+        proxy.buildPOST(USER_INFO, "", userInfoListener);
+    }
 
-//            Log.d(TAG, "initData: " + usersData.toJSONString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private ApiProxy.OnApiListener userInfoListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
         }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parserJson(result); //解析後台來的資料
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    private void parserJson(JSONObject result) {
+        usersData = UsersData.newInstance(result.toString());
+
+        //帳號
+        accountInfo.setText(usersData.getSuccess().getUserAccount());
+
+        //名稱
+        accountName.setText(usersData.getSuccess().getName());
+
+        //性別
+        if(usersData.getSuccess().getGender().equals("F")){
+            genderInfo.setText(getString(R.string.female));  //女性
+        }else{
+            genderInfo.setText(getString(R.string.male));   //男性
+        }
+
+        //信箱
+        accountMail.setText(usersData.getSuccess().getEmail());
+
+        //生日
+        birthday.setText(usersData.getSuccess().getBirthday());
+
+        //國際區碼
+        areaCode.setText(usersData.getSuccess().getTelCode());
+
+        //電話號碼
+        phoneNo.setText(usersData.getSuccess().getMobile());
+
+        //身高
+        bodyHeight.setText(String.valueOf(usersData.getSuccess().getHeight()));
+
+        //體重
+        bodyWeight.setText(String.valueOf(usersData.getSuccess().getWeight()));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -73,7 +134,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         back = findViewById(R.id.ivBackSetting6);
         buttonSave = findViewById(R.id.btnSaveToApi);
         accountInfo = findViewById(R.id.textUserAccount);   //帳號不得變更
-        accountInfo.setText(usersData.getSuccess().getUserAccount());
         accountName = findViewById(R.id.edtChangeName);     //變更名稱
         accountName.setInputType(InputType.TYPE_NULL); //hide keyboard
         accountName.setOnTouchListener(new View.OnTouchListener() {
@@ -120,8 +180,19 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
     //傳至後台
     private void updateToApi() {
-        String nickName = accountName.getText().toString();
-        usersData.getSuccess().setName(nickName);
+        //用戶名稱
+        usersData.getSuccess().setName(accountName.getText().toString());
+        //信箱
+        usersData.getSuccess().setEmail(accountMail.getText().toString());
+        //國際區碼
+        usersData.getSuccess().setTelCode(areaCode.getText().toString());
+        //手機號碼
+        usersData.getSuccess().setMobile(phoneNo.getText().toString());
+        //身高
+        usersData.getSuccess().setHeight(Double.parseDouble(bodyHeight.getText().toString()));
+        //體重
+        usersData.getSuccess().setWeight(Double.parseDouble(bodyWeight.getText().toString()));
+
         Log.d(TAG, "updateToApi: " + usersData.toJSONString());
         finish();
     }
@@ -139,6 +210,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 if (year <= mYear) {
                     // 完成選擇，顯示日期
                     birthday.setText(mDateTimeFormat(year) + "-" + mDateTimeFormat(monthOfYear + 1) + "-" + mDateTimeFormat(dayOfMonth));
+                    //生日
                     usersData.getSuccess().setBirthday(birthday.getText().toString());
                 } else {
                     Toast.makeText(UserBasicActivity.this, getString(R.string.set_years_range), Toast.LENGTH_LONG).show();
@@ -167,11 +239,13 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 switch (which) {
                     case 0: //女性
                         genderInfo.setText(getString(R.string.female));
+                        //性別
                         usersData.getSuccess().setGender("F");
                         dialog.dismiss();
                         break;
                     case 1: //男性
                         genderInfo.setText(getString(R.string.male));
+                        //性別
                         usersData.getSuccess().setGender("M");
                         dialog.dismiss();
                         break;
@@ -201,5 +275,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             return null;
         }
         return json;
+    }
+
+    //禁用返回健
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 }

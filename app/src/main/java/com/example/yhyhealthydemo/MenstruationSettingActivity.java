@@ -55,15 +55,7 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
     private void initData() {
         proxy = ApiProxy.getInstance();
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put("type", "3");
-            json.put("userId", "H5E3q5MjA=");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        proxy.buildPOST(MENSTRUAL_RECORD_INFO, json.toString(), periodListener);
+        proxy.buildPOST(MENSTRUAL_RECORD_INFO, "", periodListener);
     }
 
     private ApiProxy.OnApiListener periodListener = new ApiProxy.OnApiListener() {
@@ -95,7 +87,7 @@ public class MenstruationSettingActivity extends AppCompatActivity implements Vi
 
     private void parserJson(JSONObject result) {
         period = PeriodData.newInstance(result.toString());
-
+        Log.d(TAG, "parserJson: " + period);
         //週期長度
         String periodSize = String.valueOf(period.getSuccess().getCycle());
         cycleLength.setText(periodSize);

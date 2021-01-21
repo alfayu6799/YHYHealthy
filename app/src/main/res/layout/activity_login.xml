@@ -41,10 +41,6 @@
                 android:textColorHint="#7E7E7F"
                 android:maxLines="1"
                 android:drawableLeft="@drawable/ic_account_circle_black_24dp" />
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:background="#f9d7db" />-->
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"

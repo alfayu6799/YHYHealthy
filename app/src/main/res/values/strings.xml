@@ -95,7 +95,7 @@
     <string name="ble_rssi">訊號強度</string>
     <string name="ble_stop_in_5secs">五秒時間到停止搜尋</string>
     <string name="please_input_name">請輸入名稱</string>
-    <string name="please_input_birthday">請輸入出生年月日</string>
+    <string name="please_input_birthday">請選擇出生年月日</string>
     <string name="please_input_height">請輸入身高</string>
     <string name="please_input_weight">請輸入體重</string>
     <string name="remote_new_user">新增監控者</string>
@@ -152,4 +152,5 @@
     <string name="please_input_old_password">請輸入舊密碼</string>
     <string name="please_input_new_password">請輸入新密碼</string>
     <string name="set_years_range">本服務適用年齡為12~80歲</string>
+    <string name="system_account">帳戶設定</string>
 </resources>

@@ -50,14 +50,12 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         monitor = view.findViewById(R.id.bt_monitor);
 //        monitor.setVisibility(View.INVISIBLE);
 
-        proxy = ApiProxy.getInstance();  //api實例化
-
-        checkMenstrualExists();  //經期是否有設定
-
         ovulation.setOnClickListener(this);
         temperature.setOnClickListener(this);
         pregnancy.setOnClickListener(this);
         monitor.setOnClickListener(this);
+
+        checkMenstrualExists(); //經期是否有設定
 
         return view;
     }
@@ -89,16 +87,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     //經期是否有設定
     private void checkMenstrualExists() {
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("type", "3");
-            json.put("userId", "H5E3q5MjA=");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        proxy.buildPOST(MENSTRUAL_EXISTS, json.toString(), exitsListener);
+        proxy = ApiProxy.getInstance();  //api實例化
+        proxy.buildPOST(MENSTRUAL_EXISTS, "", exitsListener);
     }
 
     private ApiProxy.OnApiListener exitsListener = new ApiProxy.OnApiListener() {
@@ -109,7 +99,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "isMenstrualExists: success!!");
+            Log.d(TAG, "isMenstrualExists: " + result.toString());
             isMenstrualExists = true;
         }
 

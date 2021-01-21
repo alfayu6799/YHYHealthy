@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background"
+    tools:context=".MarriageSettingActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textSize="24dp"
+        android:text="@string/setting_user_marriage_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBackSetting9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_baseline_arrow_back_ios_32" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="100dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="300dp" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:textSize="24dp"
+        android:text="@string/setting_user_marriage"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:textSize="24dp"
+        android:text="@string/setting_for_contraception"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:textSize="24dp"
+        android:text="@string/setting_for_child"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+    <Switch
+        android:id="@+id/switchMarriage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:track="@drawable/sw_track"
+        tools:ignore="UseSwitchCompatOrMaterialXml"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toTopOf="@+id/textView25" />
+
+    <Switch
+        android:id="@+id/switchContraception"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="UseSwitchCompatOrMaterialXml"
+        android:track="@drawable/sw_track"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toTopOf="@+id/textView26" />
+
+    <Switch
+        android:id="@+id/switchChild"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="UseSwitchCompatOrMaterialXml"
+        android:track="@drawable/sw_track"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline22"
+        app:layout_constraintTop_toTopOf="@+id/textView33" />
+
+    <Button
+        android:id="@+id/btnSaveToApi2"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:text="@string/slycalendar_save"
+        android:background="@drawable/shape_268e9f"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
