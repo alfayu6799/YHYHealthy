@@ -20,9 +20,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
  * 使用者設定 - 經期設定
  * */
 
-public class MenstruationSettingActivity extends AppCompatActivity implements View.OnClickListener {
+public class PeriodSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "MenstruationSettingActi";
+    private static final String TAG = "PeriodSettingActivity";
 
     ImageView back;
     EditText  cycleLength, periodLength;

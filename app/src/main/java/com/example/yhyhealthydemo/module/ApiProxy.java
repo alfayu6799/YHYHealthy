@@ -133,8 +133,8 @@ public class ApiProxy {
 
     //POST JSON
     public void buildPOST(String action, String body, OnApiListener listener){
-        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyMjA0NDAsImV4cCI6MTYxMTIyNDA0MH0.I6UvJRwda2sCPTgSmtEiD9QBV6pLWn2DxT2-KRuKTsFx36js9TSHYd86RRLpdMIbOC7ceaZtRC4E22INOwEi5Q";
-        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyMjA0NDB9.GL2rOg1BaYMiU03UZ1bjzBAcToPsYqmKI3zZ9IMG-aD3E3rnDn1keODyHe3xnTHa91MqdgiJGHtJCTmablTdAw";
+        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyOTI0OTQsImV4cCI6MTYxMTI5NjA5NH0.DHGq5Eb6wsxFudBbtBBMsFL_GCXGESA0ZstSHLEPvpPxlC4bIZsWV_8ON7eB13IKoYebsaMdub2yv1eucBU4Hg";
+        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTEyOTI0OTR9.d_sCBlqP-6ZqrhJwc5MpgpurLjZCO2F-K3CbXJtwl2sxeQtZgLfUNtenKZdtxa-dajzUUqcbZUcTkEEpbyVuxQ";
         Log.d(TAG, "buildPOST authToken: " + authToken);
         Log.d(TAG, "buildPOST scepterToken: " + scepterToken);
 

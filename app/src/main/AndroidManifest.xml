@@ -19,7 +19,7 @@
         <activity android:name=".SysBleActivity" />
         <activity android:name=".SysObservationActivity" />
         <activity android:name=".PregnancySettingActivity" />
-        <activity android:name=".MenstruationSettingActivity" />
+        <activity android:name=".PeriodSettingActivity" />
         <activity android:name=".SystemVideoActivity" />
         <activity android:name=".SystemUserActivity" />
         <activity android:name=".SystemSettingActivity" />

@@ -4,19 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
-
-import com.example.yhyhealthydemo.datebase.MarriageData;
-import com.example.yhyhealthydemo.module.ApiProxy;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 
 /**
  * 使用者設定:
@@ -67,7 +56,7 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
                 startActivity(new Intent(this, MarriageSettingActivity.class));  //婚姻狀態
                 break;
             case R.id.ivMenstruationSetting:
-                startActivity(new Intent(this, MenstruationSettingActivity.class)); //經期設定頁面
+                startActivity(new Intent(this, PeriodSettingActivity.class)); //經期設定頁面
                 break;
             case R.id.ivPregnancySetting:
                 startActivity(new Intent(this, PregnancySettingActivity.class));  //懷孕設定頁面

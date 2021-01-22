@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corners_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivObserverShot"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"
+        android:src="@mipmap/imageview" />
+
+    <TextView
+        android:id="@+id/tvObserverName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ivObserverShot"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:text="Matt Bomer"/>
+
+    <TextView
+        android:id="@+id/tvObserverGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivObserverShot"
+        android:layout_below="@+id/tvObserverName"
+        android:layout_marginTop="8dp"
+        android:textSize="20dp"
+        android:text="@string/male"/>
+
+    <TextView
+        android:id="@+id/tvObserverBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivObserverShot"
+        android:layout_below="@+id/tvObserverGender"
+        android:layout_marginTop="8dp"
+        android:textSize="18dp"
+        android:text="1974/01/27"/>
+
+    <TextView
+        android:id="@+id/tvObserverEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvObserverName"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="20dp"
+        android:textSize="18dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/edit"/>
+
+    <TextView
+        android:id="@+id/tvObserverDel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvObserverName"
+        android:layout_below="@+id/tvObserverEdit"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="80dp"
+        android:textSize="18dp"
+        android:textColor="@color/red"
+        android:text="@string/delete"/>
+</RelativeLayout>

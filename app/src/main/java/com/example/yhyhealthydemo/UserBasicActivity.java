@@ -2,7 +2,6 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -17,19 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.datebase.UsersData;
 import com.example.yhyhealthydemo.module.ApiProxy;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
-
-import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
 
 /***** ****
@@ -124,9 +114,20 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         //身高
         bodyHeight.setText(String.valueOf(usersData.getSuccess().getHeight()));
+        double height = usersData.getSuccess().getHeight();
 
         //體重
         bodyWeight.setText(String.valueOf(usersData.getSuccess().getWeight()));
+        double weight = usersData.getSuccess().getWeight();
+        
+        //BMI計算
+        calculate(height, weight);
+    }
+
+    private void calculate(double height, double weight) {
+        float h = (float)height/100;
+        float bmiValue = (float) weight/(h*h);
+        BMIValue.setText(String.valueOf(bmiValue));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -240,13 +241,13 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                     case 0: //女性
                         genderInfo.setText(getString(R.string.female));
                         //性別
-                        usersData.getSuccess().setGender("F");
+                        //usersData.getSuccess().setGender("F");
                         dialog.dismiss();
                         break;
                     case 1: //男性
                         genderInfo.setText(getString(R.string.male));
                         //性別
-                        usersData.getSuccess().setGender("M");
+                        //usersData.getSuccess().setGender("M");
                         dialog.dismiss();
                         break;
                 }
@@ -255,26 +256,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         AlertDialog alert = builder.create();
         alert.setCanceledOnTouchOutside(false);
         alert.show();
-    }
-
-    //讀取local json file
-    public String loadJSONFromAsset(String fileName)
-    {
-        String json;
-        try
-        {
-            InputStream is = getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
     //禁用返回健

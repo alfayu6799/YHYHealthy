@@ -153,4 +153,6 @@
     <string name="please_input_new_password">請輸入新密碼</string>
     <string name="set_years_range">本服務適用年齡為12~80歲</string>
     <string name="system_account">帳戶設定</string>
+    <string name="edit">編輯</string>
+    <string name="delete">刪除</string>
 </resources>

@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText account, password;
     TextView register, forget;
 
+    //api
     ApiProxy proxy;
 
     @Override
