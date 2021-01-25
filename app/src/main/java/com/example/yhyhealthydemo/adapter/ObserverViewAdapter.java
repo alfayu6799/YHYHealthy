@@ -6,14 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.yhyhealthydemo.R;
-import com.example.yhyhealthydemo.data.Remote;
 import com.example.yhyhealthydemo.datebase.Observation;
-
 import java.util.List;
 
 public class ObserverViewAdapter extends RecyclerView.Adapter<ObserverViewAdapter.ViewHolder>{

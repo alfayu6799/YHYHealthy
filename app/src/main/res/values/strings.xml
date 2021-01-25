@@ -155,4 +155,6 @@
     <string name="system_account">帳戶設定</string>
     <string name="edit">編輯</string>
     <string name="delete">刪除</string>
+    <string name="tel_code">國際編碼</string>
+    <string name="please_input_vaild_email">請輸入有效的電子郵件地址</string>
 </resources>

@@ -29,43 +29,31 @@
         android:maxLength="20"
         android:background="@drawable/shape_edit_background"
         android:hint="@string/please_input_account"/>
-    <EditText
-        android:id="@+id/edtPasswordInput"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/PasswordLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:padding="10dp"
-        android:maxLength="12"
-        android:inputType="text"
-        android:lines="1"
-        android:background="@drawable/shape_edit_background"
-        android:hint="@string/please_input_password"/>
-    <EditText
-        android:id="@+id/edtPasswordConfirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:padding="10dp"
-        android:inputType="text"
-        android:lines="1"
-        android:background="@drawable/shape_edit_background"
-        android:hint="@string/please_confirm_password"/>
-    <EditText
-        android:id="@+id/edtEmailInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:padding="10dp"
-        android:inputType="text"
-        android:lines="1"
-        android:background="@drawable/shape_edit_background"
-        android:hint="@string/email_account"/>
+        app:passwordToggleEnabled="true"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:background="@drawable/shape_edit_background">
+        <EditText
+            android:id="@+id/edtPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp"
+            android:inputType="textPassword"
+            android:maxLength="12"
+            android:lines="1"
+            android:hint="@string/please_input_password"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,6 +86,77 @@
             android:buttonTint="@color/black"
             android:text="@string/phone"/>
     </RadioGroup>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/EmailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:background="@drawable/shape_edit_background">
+        <EditText
+            android:id="@+id/edtEmailInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp"
+            android:inputType="textEmailAddress"
+            android:lines="1"
+            android:hint="@string/email_account"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TelCodeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:background="@drawable/shape_edit_background"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edTelCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:ems="3"
+            android:hint="@string/tel_code"
+            android:inputType="number"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/MobileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:background="@drawable/shape_edit_background"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/edMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:ems="3"
+            android:hint="@string/please_input_phone"
+            android:inputType="number"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/btnRegisterSend"
         android:layout_width="200dp"

@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //不讓虛擬鍵盤蓋文
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         proxy = ApiProxy.getInstance();
 
@@ -48,8 +52,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
+        //暫時
+        account.setText("demo05");
+        password.setText("111111");
+        
+        //註冊
         register = findViewById(R.id.tv_register);
+        
+        //忘記密碼
         forget = findViewById(R.id.tv_forget);
+        
+        //登入Onclick
         loginButton = findViewById(R.id.bt_login);
 
         loginButton.setOnClickListener(this);
@@ -61,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-//                userLoginApi(); //跟後台要token
+//                userLoginApi(); //登入時與後台驗證並取得token
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -75,12 +88,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    //登入時與後台驗證並取得token
     private void userLoginApi() {
+
+        if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString()))
+            return;
+
+        String loginAccount = account.getText().toString();
+        String loginPassword = password.getText().toString();
 
         JSONObject json = new JSONObject();
         try {
-            json.put("account", "demo05");
-            json.put("password", "111111");
+            json.put("account", loginAccount);
+            json.put("password", loginPassword);
         } catch (JSONException e) {
             e.printStackTrace();
         }
