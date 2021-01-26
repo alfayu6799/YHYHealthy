@@ -159,7 +159,6 @@
                     android:gravity="right"
                     android:ems="10"
                     android:lines="1"
-                    android:maxLength="20"
                     android:padding="10dp"
                     android:background="@null"
                     android:inputType="textEmailAddress"

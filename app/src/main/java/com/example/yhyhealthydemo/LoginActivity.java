@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.FORGET_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 
 
@@ -52,9 +53,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
-        //暫時
-        account.setText("demo05");
-        password.setText("111111");
+//        //暫時
+//        account.setText("demo05");
+//        password.setText("111111");
         
         //註冊
         register = findViewById(R.id.tv_register);
@@ -74,10 +75,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-//                userLoginApi(); //登入時與後台驗證並取得token
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                userLoginApi(); //登入時與後台驗證並取得token
+//                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                startActivity(intent);
+//                finish();
                 break;
             case R.id.tv_register: //註冊
                 startActivity(new Intent(getBaseContext(), PrivacyActivity.class)); //隱私權page
@@ -105,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
 
-        proxy.build(LOGIN, json.toString(), loginListener);
+        proxy.buildLogin(LOGIN, json.toString(), loginListener);
     }
 
     private ApiProxy.OnApiListener loginListener = new ApiProxy.OnApiListener() {
@@ -116,7 +117,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result.toString());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View mView = layoutInflater.inflate(R.layout.dialog_forget_password, null);
         alertDialogForget.setView(mView);
 
-        EditText email = mView.findViewById(R.id.et_email);
+        EditText editAccount = mView.findViewById(R.id.etAccount);
         alertDialogForget.setCancelable(false)
                 .setPositiveButton("送出", new DialogInterface.OnClickListener() {
                     @Override
@@ -166,18 +166,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailStr = email.getText().toString();
-                Boolean wantToCloseDialog = (email.getText().toString().trim().isEmpty());
+
+                Boolean wantToCloseDialog = (editAccount.getText().toString().trim().isEmpty());
                 if (wantToCloseDialog){
-                    Toast.makeText(LoginActivity.this, "信箱帳號不得為空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.account_is_not_empty), Toast.LENGTH_SHORT).show();
                 }else{
-//                    forgetPasswordApi(); //傳給後台去做發送確認信函給使用者
-                    Toast.makeText(LoginActivity.this, "確認函已經發送至信箱 : " + emailStr, Toast.LENGTH_SHORT).show();
+                    String accountStr = editAccount.getText().toString().trim();
+                    forgetPasswordApi(accountStr); //傳給後台去處理
                     dialog.dismiss();
                 }
             }
         });
     }
+
+    private void forgetPasswordApi(String accountStr) {
+        Log.d(TAG, "forgetPasswordApi: " + accountStr);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", accountStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //proxy.buildPOST(FORGET_PASSWORD, json.toString(), forgetListener);
+    }
+
+    private ApiProxy.OnApiListener forgetListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            Log.d(TAG, "onSuccess: " + result.toString());
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
 
     public static boolean isValidAccount(String account){
         String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
@@ -186,11 +220,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return  matcher.matches();
     }
 
-    //check email is Valid
-    public static boolean isValidEmailAddress(String email) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
-        java.util.regex.Matcher m = p.matcher(email);
-        return m.matches();
-    }
 }

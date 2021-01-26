@@ -10,13 +10,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
+import com.example.yhyhealthydemo.datebase.ChangeUserMarriageApi;
 import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 
 /***  ****************
@@ -38,6 +41,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     //api
     ApiProxy proxy;
     MarriageData marriageData;
+    ChangeUserMarriageApi changeUserMarriageApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
         setContentView(R.layout.activity_marriage_setting);
 
         proxy = ApiProxy.getInstance();
+        changeUserMarriageApi = new ChangeUserMarriageApi();
 
         initView();
 
@@ -82,7 +87,22 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result); //解析後台來的資料
+                    try {
+                        Log.d(TAG, "婚姻狀況: " + result.toString());
+                        JSONObject object = new JSONObject(result.toString());
+                        String str = object.getString("errorCode");
+                        if(str.equals("6")){ //第一次
+                            marriageStatus.setChecked(false);
+                            childStatus.setChecked(false);
+                            contraceptionStatus.setChecked(false);
+                        }else{
+                            parserJson(result); //解析後台來的資料
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
             });
         }
@@ -106,14 +126,17 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
         //婚姻
         boolean married = marriageData.getSuccess().isMarried();
         marriageStatus.setChecked(married);
+        changeUserMarriageApi.setMarried(married);
 
         //孩子
         boolean child = marriageData.getSuccess().isHasChild();
         childStatus.setChecked(child);
+        changeUserMarriageApi.setHasChild(child);
 
         //避孕
         boolean contraception = marriageData.getSuccess().isContraception();
         contraceptionStatus.setChecked(contraception);
+        changeUserMarriageApi.setContraception(contraception);
     }
 
     //Switch button onclick
@@ -123,22 +146,28 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
             case R.id.switchMarriage: //婚姻狀況
                 if (isCheck){
                     marriageStatus.setChecked(true);
+                    changeUserMarriageApi.setMarried(true);
                 }else{
                     marriageStatus.setChecked(false);
+                    changeUserMarriageApi.setMarried(false);
                 }
                 break;
             case R.id.switchContraception: //行房
                 if (isCheck){
                     contraceptionStatus.setChecked(true);
+                    changeUserMarriageApi.setContraception(true);
                 }else {
                     contraceptionStatus.setChecked(false);
+                    changeUserMarriageApi.setContraception(false);
                 }
                 break;
             case R.id.switchChild:   //小孩
                 if (isCheck){
                     childStatus.setChecked(true);
+                    changeUserMarriageApi.setHasChild(true);
                 }else {
                     childStatus.setChecked(false);
+                    changeUserMarriageApi.setHasChild(false);
                 }
                 break;
         }
@@ -158,8 +187,42 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
     //寫回後台
     private void updateToApi() {
-        Log.d(TAG, "updateToApi: " + marriageData.toJSONString());
+        proxy.buildPOST(MARRIAGE, changeUserMarriageApi.toJSONString(), changeMarriageListener);
     }
+    private ApiProxy.OnApiListener changeMarriageListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        String str = jsonObject.getString("success");
+                        if(str.equals("true")){
+                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     //禁用返回健
     @Override

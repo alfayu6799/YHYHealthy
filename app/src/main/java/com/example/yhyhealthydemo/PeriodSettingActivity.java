@@ -2,17 +2,28 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.yhyhealthydemo.datebase.ChangeUserPeriodApi;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 
@@ -25,12 +36,15 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
     private static final String TAG = "PeriodSettingActivity";
 
     ImageView back;
-    EditText  cycleLength, periodLength;
-    EditText  firstDay, endDay;
+    TextView  periodLength;
+    EditText  cycleLength;
+    TextView  firstDay, endDay;
+    Button    save;
 
     //api
     ApiProxy proxy;
     PeriodData period;
+    ChangeUserPeriodApi changeUserPeriodApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +59,20 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
     private void initView() {
         back = findViewById(R.id.ivBackUserSetting);
         cycleLength = findViewById(R.id.edtCycleLength);     //週期長度
-        periodLength = findViewById(R.id.edtPeriodLength);   //經期長度
-        firstDay = findViewById(R.id.editTextDateStart);     //起始日
-        endDay = findViewById(R.id.editTextDateEnd);         //結束日
+        periodLength = findViewById(R.id.tvPeriodLength);   //經期長度
+        firstDay = findViewById(R.id.tvDateStart);     //起始日
+        endDay = findViewById(R.id.tvDateEnd);         //結束日
+        save = findViewById(R.id.btnSaveToApi3);
 
+        firstDay.setOnClickListener(this);
+        endDay.setOnClickListener(this);
         back.setOnClickListener(this);
+        save.setOnClickListener(this);
     }
 
     private void initData() {
         proxy = ApiProxy.getInstance();
+        changeUserPeriodApi = new ChangeUserPeriodApi();
 
         proxy.buildPOST(MENSTRUAL_RECORD_INFO, "", periodListener);
     }
@@ -69,7 +88,17 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result); //解析後台來的資料
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        String str = object.getString("errorCode");
+                        if(str.equals("6")) { //第一次
+
+                        }else {
+                            parserJson(result); //解析後台來的資料
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -85,13 +114,14 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         }
     };
 
+    //解析後台來的資料
     private void parserJson(JSONObject result) {
         period = PeriodData.newInstance(result.toString());
-        Log.d(TAG, "parserJson: " + period);
+        Log.d(TAG, "經期設定JSON解析: " + result.toString());
         //週期長度
         String periodSize = String.valueOf(period.getSuccess().getCycle());
         cycleLength.setText(periodSize);
-//
+
         //經期長度
         String cycleSize = String.valueOf(period.getSuccess().getPeriod());
         periodLength.setText(cycleSize);
@@ -99,10 +129,12 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         //開始時間
         String startDay = period.getSuccess().getLastDate();
         firstDay.setText(startDay);
+        changeUserPeriodApi.setLastDate(startDay);
 
         //結束時間
         String endingDay = period.getSuccess().getEndDate();
         endDay.setText(endingDay);
+        changeUserPeriodApi.setEndDate(endingDay);
     }
 
     @Override
@@ -111,16 +143,79 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
             case R.id.ivBackUserSetting:
                 finish();
                 break;
-            case R.id.editTextDateStart:
+            case R.id.tvDateStart:
                 dialogPickDate();
-            case R.id.editTextDateEnd:
-
+                break;
+            case R.id.tvDateEnd:
+                dialogPikeDate2();
+                break;
+            case R.id.btnSaveToApi3:
+                checkBeforeUpdate();
                 break;
         }
     }
 
+    //上傳前檢查欄位是否都有填寫
+    private void checkBeforeUpdate() {
+
+        //判斷上次經期開始日是否有填寫
+        if(TextUtils.isEmpty(firstDay.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.start_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //判斷上次經期結束日是否有填寫
+        if(TextUtils.isEmpty(endDay.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.end_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //判斷週期是否有填寫
+        if(TextUtils.isEmpty(cycleLength.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.cycle_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        updateToApi();
+    }
+
+    //後台更新資料
+    private void updateToApi() {
+        //週期
+        changeUserPeriodApi.setCycle(Integer.parseInt(cycleLength.getText().toString()));
+        changeUserPeriodApi.setPeriod(Integer.parseInt(periodLength.getText().toString()));
+        Log.d(TAG, "updateToApi: " + changeUserPeriodApi.toJSONString());
+    }
+
     //日期彈跳視窗
     private void dialogPickDate() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        DatePickerDialog pickerDialog = new DatePickerDialog(PeriodSettingActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                Calendar start = Calendar.getInstance();
+                start.set(year, month, dayOfMonth);
+                firstDay.setText(df.format(start.getTime()));
+                changeUserPeriodApi.setLastDate(firstDay.getText().toString());
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        pickerDialog.show();
+    }
 
+    //日期彈跳視窗
+    private void dialogPikeDate2(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        DatePickerDialog pickerDialog = new DatePickerDialog(PeriodSettingActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                Calendar start = Calendar.getInstance();
+                start.set(year, month, dayOfMonth);
+                endDay.setText(df.format(start.getTime()));
+                changeUserPeriodApi.setEndDate(endDay.getText().toString());
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        pickerDialog.show();
     }
 }

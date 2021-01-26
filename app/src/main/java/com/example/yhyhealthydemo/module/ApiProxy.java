@@ -49,6 +49,9 @@ public class ApiProxy {
     //登入api
     public static String LOGIN = "allUser/users/login";
 
+    //驗證碼api
+    public static String COMP = "allUser/ext/comp";
+
     //查詢用戶資訊api
     public static String USER_INFO = "allUser/users/info";
 
@@ -97,6 +100,13 @@ public class ApiProxy {
     private static String authToken;
     private static String scepterToken;
 
+    //註冊專用Authorization token
+    private static final String REGISTER_AUTH_CODE = "$2a$10$x42hx/UBe.PxFEoAk0RyuO0ImZ4h71hptmgvIF1sRZxA1HFqjJUAK";
+    //忘記密碼專用Authorization token
+    private static final String FORGET_AUTH_CODE = "$2a$10$yXAkhpwHtBm6Ws0dYohU5OzcjpkWW5QOCW7d6LOnVFPjDbnCjeciO";
+    //驗證碼專用Authorization token
+    private static final String VERIFICATION_CODE = "$2a$10$Ymh9oITzzZN3KZVDzajXZODBZqHXBrCexz1I3P5nhRL14cDDOZxH6";
+
     //單例化
     private YHYHealthyApp app;
 
@@ -121,8 +131,29 @@ public class ApiProxy {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
-    //登入時專用
-    public void build(String action, String body, OnApiListener listener){
+    //驗證碼專用
+    public void buildInit(String action, String body, OnApiListener listener){
+        RequestBody requestBody = RequestBody.create(JSON, body);
+        Request.Builder request = new Request.Builder();
+        request.url(URL + action);
+        request.post(requestBody);
+        request.addHeader("Authorization", VERIFICATION_CODE);
+        buildRequest(request.build(), listener);
+    }
+
+    //註冊專用
+    public void buildRegister(String action, String body, OnApiListener listener){
+        RequestBody requestBody = RequestBody.create(JSON, body);
+        Request.Builder request = new Request.Builder();
+        request.url(URL + action);
+        request.post(requestBody);
+        request.addHeader("Authorization", REGISTER_AUTH_CODE);
+        request.addHeader("DefaultLan","zh-TW");  //不能省略
+        buildRequest(request.build(), listener);
+    }
+
+    //登入專用
+    public void buildLogin(String action, String body, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
         request.url(URL + action);
@@ -133,8 +164,8 @@ public class ApiProxy {
 
     //POST JSON
     public void buildPOST(String action, String body, OnApiListener listener){
-        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE1MzgxMTMsImV4cCI6MTYxMTU0MTcxM30.uXWWAqovpzgCeN2slZNxoLWBJIv-U6OZdCnsTXgcYsbuBNVbFFO7uEZ09LI1pYt0javf57ezWeuLCMflsHWKlA";
-        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE1MzgxMTN9.Bt_ykDnDZbs24OoM2HCOyE13Fq46W2GAJsHMgmRT56ELhSNJbvJ03eEYixLxQ9XTshoAka1V4x-YEyj57PBULQ";
+        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE2NTIzMjMsImV4cCI6MTYxMTY1NTkyM30.JvZKoy7Q_Aj4WAQ1bOK3r4K_mt7r9VkQCKgXleas2__SrS09yiy60sA7MvJHFPwgSvGU7-QznhW96ocDHtSklg";
+        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE2NTIzMjN9.4IpAvwzoCBo-Kite2sih36LBZ5yTgBRCgoiAuJT8Z_p1tCu4bAsgontZqqsdG5EeQWML3nIHlhWwYwNwf4pLLQ";
         Log.d(TAG, "buildPOST authToken: " + authToken);
         Log.d(TAG, "buildPOST scepterToken: " + scepterToken);
 
@@ -142,8 +173,8 @@ public class ApiProxy {
         Request.Builder request = new Request.Builder();
         request.url(URL + action);
         request.post(requestBody);
-        request.addHeader(AUTHORIZATION, authToken1);
-        request.addHeader(SCEPTER, scepterToken1);
+        request.addHeader(AUTHORIZATION, authToken);
+        request.addHeader(SCEPTER, scepterToken);
         buildRequest(request.build(), listener);
     }
 

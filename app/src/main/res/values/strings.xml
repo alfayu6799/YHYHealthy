@@ -157,4 +157,15 @@
     <string name="delete">刪除</string>
     <string name="tel_code">國際編碼</string>
     <string name="please_input_vaild_email">請輸入有效的電子郵件地址</string>
+    <string name="account_is_not_empty">帳號不得空白</string>
+    <string name="please_input_compcode">請輸入驗證碼</string>
+    <string name="compcode_from">請由信箱或簡訊取得驗證碼</string>
+    <string name="name_is_not_empty">名稱不得空白</string>
+    <string name="birthday_is_not_empty">生日不得空白</string>
+    <string name="gender_is_not_empty">性別請再次確認</string>
+    <string name="email_is_not_empty">信箱不得空白</string>
+    <string name="update_to_Api_is_success">資料上傳更新成功</string>
+    <string name="start_is_not_empty">起始日不得空白</string>
+    <string name="end_is_not_empty">結束日不得空白</string>
+    <string name="cycle_is_not_empty">週期不得空白</string>
 </resources>

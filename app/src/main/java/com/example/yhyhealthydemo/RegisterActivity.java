@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -20,9 +21,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.BlockingDeque;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 import static com.example.yhyhealthydemo.module.ApiProxy.REGISTER;
 
@@ -100,7 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
                         if (email.getText().toString().trim().matches(emailPattern)){ //有效的mail address
                             //寫回後台
                             upDataToApi();
-//                            Log.d(TAG, "onClick: account:" + account.getText().toString() + " password:" + password.getText().toString() + " mail:" + email.getText().toString());
                         }else {
                             Toast.makeText(RegisterActivity.this, getString(R.string.please_input_vaild_email), Toast.LENGTH_SHORT).show();
                         }
@@ -134,6 +138,8 @@ public class RegisterActivity extends AppCompatActivity {
         String telCodeNo = edtTelCode.getText().toString().trim();
         String phoneNo = edtMobile.getText().toString().trim();
 
+        //parserTemp();
+
         JSONObject json = new JSONObject();
         try {
             json.put("account", accountNo);
@@ -144,8 +150,8 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        //proxy.build(REGISTER, json.toString(), registerListener);
+        //註冊專用
+        proxy.buildRegister(REGISTER, json.toString(), registerListener);
     }
 
     private ApiProxy.OnApiListener registerListener = new ApiProxy.OnApiListener() {
@@ -156,11 +162,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result.toString());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
+                    parserJson(result);
                 }
             });
         }
@@ -175,5 +180,127 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     };
+
+    //解析後台回的資料
+    private void parserJson(JSONObject result) {
+        Log.d(TAG, "parserJson: " + result.toString());
+        try {
+            JSONObject object = new JSONObject(result.toString());
+            JSONObject status = object.getJSONObject("success");
+            String code = status.getString("statusCode");
+
+            if(code.equals("1")){ //未開通
+                showCompInfo();
+            }else if (code.equals("2")){  //已開通
+                finish(); //關閉並回到登入頁面
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //驗證碼Dialog
+    private void showCompInfo() {
+        AlertDialog.Builder alertBox = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        EditText edInput = new EditText(this);
+        layout.addView(edInput);
+
+        alertBox.setTitle(getString(R.string.please_input_compcode));
+        alertBox.setMessage(getString(R.string.compcode_from));
+        alertBox.setView(layout);
+
+        //取消
+        alertBox.setNegativeButton(getString(R.string.slycalendar_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        //確定
+        alertBox.setPositiveButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(TextUtils.isEmpty(edInput.getText().toString()))
+                    return;
+                String accountStr = account.getText().toString(); //帳號
+                String compStr = edInput.getText().toString();    //開通碼
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("account", accountStr);
+                    json.put("verCode", compStr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                proxy.buildInit(COMP, json.toString(), verificationListener);
+            }
+        });
+
+        alertBox.show();
+    }
+
+
+    private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            Log.d(TAG, "onSuccess: " + result);
+            finish();
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    private void parserTemp() {
+        String myJSONStr = loadJSONFromAsset("register.json");
+        try {
+            JSONObject object = new JSONObject(myJSONStr);
+            JSONObject status = object.getJSONObject("success");
+            String code = status.getString("statusCode");
+            if (code.equals("1")){ //未開通
+                showCompInfo();
+            }else if (code.equals("2")){ //已開通
+                finish(); //關閉並回到登入頁面
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //讀取local json file
+    public String loadJSONFromAsset(String fileName)
+    {
+        String json;
+        try
+        {
+            InputStream is = getApplicationContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
 
 }

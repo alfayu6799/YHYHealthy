@@ -99,8 +99,14 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "isMenstrualExists: " + result.toString());
-            isMenstrualExists = true;
+            try {
+                JSONObject jsonObject = new JSONObject(result.toString());
+                String str = jsonObject.getString("success");
+                isMenstrualExists = Boolean.parseBoolean(str);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override

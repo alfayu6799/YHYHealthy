@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,11 +17,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthydemo.datebase.ChangeUserBasicInfoApi;
 import com.example.yhyhealthydemo.datebase.UsersData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.USER_UPDATE;
 
 /***** ****
  * 設定 - 個人設定 - 基本資料
@@ -38,6 +44,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     //api
     UsersData usersData;
     ApiProxy proxy;
+    //使用者的基本資料全塞入此物件
+    ChangeUserBasicInfoApi changeUserBasicInfoApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,9 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     //get data from api
     private void initData() {
         proxy = ApiProxy.getInstance();
+        //修改使用者基本資料API
+        changeUserBasicInfoApi = new ChangeUserBasicInfoApi();
+        //取得使用者基本資料API
         proxy.buildPOST(USER_INFO, "", userInfoListener);
     }
 
@@ -96,8 +107,10 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //性別
         if(usersData.getSuccess().getGender().equals("F")){
             genderInfo.setText(getString(R.string.female));  //女性
+            changeUserBasicInfoApi.setGender("F");
         }else{
             genderInfo.setText(getString(R.string.male));   //男性
+            changeUserBasicInfoApi.setGender("M");
         }
 
         //信箱
@@ -174,29 +187,92 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 dialogPickBirthday();
                 break;
             case R.id.btnSaveToApi:
-                updateToApi();
+                checkBeforeUpdate();
                 break;
         }
     }
 
+    //更新前要先檢查資料是否齊全
+    private void checkBeforeUpdate() {
+        //判斷名稱是否有填寫
+        if(TextUtils.isEmpty(accountName.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.name_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //判斷信箱是否有填寫
+        if(TextUtils.isEmpty(accountMail.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.email_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //判斷生日是否有填寫
+        if(TextUtils.isEmpty(birthday.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.birthday_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        updateToApi(); //寫回後端
+    }
+
     //傳至後台
     private void updateToApi() {
+        //帳戶
+        changeUserBasicInfoApi.setUserAccount(accountInfo.getText().toString());
         //用戶名稱
-        usersData.getSuccess().setName(accountName.getText().toString());
+        changeUserBasicInfoApi.setName(accountName.getText().toString());
         //信箱
-        usersData.getSuccess().setEmail(accountMail.getText().toString());
+        changeUserBasicInfoApi.setEmail(accountMail.getText().toString());
         //國際區碼
-        usersData.getSuccess().setTelCode(areaCode.getText().toString());
+        changeUserBasicInfoApi.setTelCode(areaCode.getText().toString());
         //手機號碼
-        usersData.getSuccess().setMobile(phoneNo.getText().toString());
+        changeUserBasicInfoApi.setMobile(phoneNo.getText().toString());
         //身高
-        usersData.getSuccess().setHeight(Double.parseDouble(bodyHeight.getText().toString()));
+        changeUserBasicInfoApi.setHeight(Double.parseDouble(bodyHeight.getText().toString()));
         //體重
-        usersData.getSuccess().setWeight(Double.parseDouble(bodyWeight.getText().toString()));
+        changeUserBasicInfoApi.setWeight(Double.parseDouble(bodyWeight.getText().toString()));
 
-        Log.d(TAG, "updateToApi: " + usersData.toJSONString());
-        finish();
+        Log.d(TAG, "用戶基本資料上傳: " + changeUserBasicInfoApi.toJSONString());
+
+        //上傳到後台
+        proxy.buildPOST(USER_UPDATE, changeUserBasicInfoApi.toJSONString(), changeInfoListener);
     }
+
+    private ApiProxy.OnApiListener changeInfoListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        String str = jsonObject.getString("success");
+                        if(str.equals("true")){
+                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     //出生年月日彈跳視窗選擇
     private void dialogPickBirthday() {
@@ -212,7 +288,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                     // 完成選擇，顯示日期
                     birthday.setText(mDateTimeFormat(year) + "-" + mDateTimeFormat(monthOfYear + 1) + "-" + mDateTimeFormat(dayOfMonth));
                     //生日
-                    usersData.getSuccess().setBirthday(birthday.getText().toString());
+                    changeUserBasicInfoApi.setBirthday(birthday.getText().toString());
                 } else {
                     Toast.makeText(UserBasicActivity.this, getString(R.string.set_years_range), Toast.LENGTH_LONG).show();
                 }
@@ -241,13 +317,13 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                     case 0: //女性
                         genderInfo.setText(getString(R.string.female));
                         //性別
-                        //usersData.getSuccess().setGender("F");
+                        changeUserBasicInfoApi.setGender("F");
                         dialog.dismiss();
                         break;
                     case 1: //男性
                         genderInfo.setText(getString(R.string.male));
                         //性別
-                        //usersData.getSuccess().setGender("M");
+                        changeUserBasicInfoApi.setGender("M");
                         dialog.dismiss();
                         break;
                 }
