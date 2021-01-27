@@ -168,4 +168,9 @@
     <string name="start_is_not_empty">起始日不得空白</string>
     <string name="end_is_not_empty">結束日不得空白</string>
     <string name="cycle_is_not_empty">週期不得空白</string>
+    <string name="account_is_error">帳號或密碼不正確</string>
+    <string name="compcode_is_not_empty">驗證碼不得為空</string>
+    <string name="comp_code_error">驗證碼不正確</string>
+    <string name="period_is_not_empty">經期長度不得空白</string>
+    <string name="need_comp_code">請由信箱或簡訊獲取驗證碼</string>
 </resources>

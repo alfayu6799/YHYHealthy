@@ -121,7 +121,6 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     //解析後台來的資料並填入
     private void parserJson(JSONObject result) {
         marriageData = MarriageData.newInstance(result.toString());
-        Log.d(TAG, "parserJson: " + result.toString());
 
         //婚姻
         boolean married = marriageData.getSuccess().isMarried();

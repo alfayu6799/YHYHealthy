@@ -31,6 +31,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 import static com.example.yhyhealthydemo.module.ApiProxy.REGISTER;
 
+/**** ************
+ * 註冊功能
+ * api需要info:帳號,密碼,信箱,國際區碼,手機號碼
+ * 流程 : 開通帳號需要有驗證碼
+ * * * * * ** ***********/
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
@@ -125,6 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    //將資料寫回後台
     private void upDataToApi() {
         Log.d(TAG, "upDataToApi: account:" + account.getText().toString()
                 + " password:" + password.getText().toString()
@@ -137,8 +144,6 @@ public class RegisterActivity extends AppCompatActivity {
         String mailAddress = email.getText().toString().trim();
         String telCodeNo = edtTelCode.getText().toString().trim();
         String phoneNo = edtMobile.getText().toString().trim();
-
-        //parserTemp();
 
         JSONObject json = new JSONObject();
         try {
@@ -165,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result);
+                    parserJson(result); //需要解析後台回復的資訊
                 }
             });
         }
@@ -183,15 +188,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     //解析後台回的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "parserJson: " + result.toString());
+        Log.d(TAG, "註冊功能的後台解析: " + result.toString());
         try {
             JSONObject object = new JSONObject(result.toString());
             JSONObject status = object.getJSONObject("success");
-            String code = status.getString("statusCode");
-
-            if(code.equals("1")){ //未開通
-                showCompInfo();
-            }else if (code.equals("2")){  //已開通
+            int code = status.getInt("statusCode");
+            if(code == 1){ //未開通
+                showCompInfo(); //驗證碼Dialog
+            }else if (code == 2){  //已開通
                 finish(); //關閉並回到登入頁面
             }
         } catch (JSONException e) {
@@ -265,42 +269,5 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     };
-
-    private void parserTemp() {
-        String myJSONStr = loadJSONFromAsset("register.json");
-        try {
-            JSONObject object = new JSONObject(myJSONStr);
-            JSONObject status = object.getJSONObject("success");
-            String code = status.getString("statusCode");
-            if (code.equals("1")){ //未開通
-                showCompInfo();
-            }else if (code.equals("2")){ //已開通
-                finish(); //關閉並回到登入頁面
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //讀取local json file
-    public String loadJSONFromAsset(String fileName)
-    {
-        String json;
-        try
-        {
-            InputStream is = getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 
 }

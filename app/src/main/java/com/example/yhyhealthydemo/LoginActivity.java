@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 import static com.example.yhyhealthydemo.module.ApiProxy.FORGET_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 
@@ -53,9 +54,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
-//        //暫時
-//        account.setText("demo05");
-//        password.setText("111111");
         
         //註冊
         register = findViewById(R.id.tv_register);
@@ -95,13 +93,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString()))
             return;
 
-        String loginAccount = account.getText().toString();
-        String loginPassword = password.getText().toString();
-
+        //登入時需傳給後台:帳戶&密碼
         JSONObject json = new JSONObject();
         try {
-            json.put("account", loginAccount);
-            json.put("password", loginPassword);
+            json.put("account", account.getText().toString());
+            json.put("password", password.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -120,9 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    parser(result); //解析後台回傳的資訊
                 }
             });
 
@@ -131,6 +125,115 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onFailure(String message) {
             Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    //解析後台回傳的資訊
+    private void parser(JSONObject result) {
+        Log.d(TAG, "Login parser: " + result.toString());
+        try {
+            JSONObject object = new JSONObject(result.toString());
+            int errorCode = object.getInt("errorCode");
+            if(errorCode == 1){ //無此帳號或密碼錯誤...
+                Toast.makeText(getApplicationContext(), getString(R.string.account_is_error), Toast.LENGTH_SHORT).show();
+            }else if (errorCode == 34){ //尚未開通帳戶
+                showCompInfo();  //驗證碼輸入Dialog
+            }else if (errorCode == 0){ //登入成功
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+                //因為success內容有二個重要資訊其排卵功能需要用到所以要解析json
+                JSONObject success = object.getJSONObject("success");
+                boolean maritalSet = success.getBoolean("maritalSet");
+                boolean menstrualSet = success.getBoolean("menstrualSet");
+                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+                pref.edit().putString("ACCOUNT", account.getText().toString())
+                        .putString("PASSWORD", password.getText().toString())
+                        .putBoolean("MARRIAGE", maritalSet)
+                        .putBoolean("MENSTRUAL", menstrualSet).apply();
+                finish();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //驗證碼輸入
+    private void showCompInfo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_input_compcode));
+        builder.setMessage(getString(R.string.need_comp_code));
+
+        //set custom layout
+        View compLayout = getLayoutInflater().inflate(R.layout.dialog_comp, null);
+        builder.setView(compLayout);
+        builder.setCancelable(false);
+
+        //add ok button
+        builder.setPositiveButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                EditText editText = compLayout.findViewById(R.id.edtCompCode);
+                if(TextUtils.isEmpty(editText.getText().toString())){
+                    Toast.makeText(getApplicationContext(), getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //傳至後台驗證
+                checkComp(editText);
+            }
+        });
+        AlertDialog compDialog = builder.create();
+        compDialog.show();
+    }
+
+    //傳至後台驗證
+    private void checkComp(EditText editText) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", account.getText().toString());
+            json.put("verCode", editText.getText().toString());
+            json.put("param", password.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildInit(COMP, json.toString(), verificationListener);
+    }
+
+    private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            Log.d(TAG, "onSuccess: " + result.toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int erCode = object.getInt("errorCode");
+                        if(erCode == 5){
+                            Toast.makeText(getApplicationContext(), getString(R.string.comp_code_error), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public void onFailure(String message) {
+
         }
 
         @Override
@@ -179,15 +282,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+    //後台尚未完整 2021/01/27
     private void forgetPasswordApi(String accountStr) {
         Log.d(TAG, "forgetPasswordApi: " + accountStr);
         JSONObject json = new JSONObject();
         try {
             json.put("account", accountStr);
+            json.put("language", "zh-TW");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //proxy.buildPOST(FORGET_PASSWORD, json.toString(), forgetListener);
+        Log.d(TAG, "忘記密碼Api: " + json.toString());
+        //proxy.buildPassWD(FORGET_PASSWORD, json.toString(), forgetListener);
     }
 
     private ApiProxy.OnApiListener forgetListener = new ApiProxy.OnApiListener() {

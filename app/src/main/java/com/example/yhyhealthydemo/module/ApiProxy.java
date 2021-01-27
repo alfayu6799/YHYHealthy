@@ -131,6 +131,16 @@ public class ApiProxy {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
+    //忘記密碼專用
+    public void buildPassWD(String action, String body, OnApiListener listener){
+        RequestBody requestBody = RequestBody.create(JSON, body);
+        Request.Builder request = new Request.Builder();
+        request.url(URL + action);
+        request.post(requestBody);
+        request.addHeader("Authorization", FORGET_AUTH_CODE);
+        buildRequest(request.build(), listener);
+    }
+
     //驗證碼專用
     public void buildInit(String action, String body, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
@@ -204,7 +214,7 @@ public class ApiProxy {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 int code = response.code();
                 assert response.body() != null;
-                String string = response.body().string();
+//                String string = response.body().string();
 
                 if(response.header("Authorization") != null){  //如果回覆是空值的話則不要複寫
                     authToken = response.header("Authorization");
@@ -219,15 +229,20 @@ public class ApiProxy {
 
                 JSONObject jsonObject = null;
                 try {
-                    jsonObject = new JSONObject(string);
+                    jsonObject = new JSONObject(response.body().string());
+                    int erCode = jsonObject.getInt("errorCode");
+                    if(erCode != 0){  //如果errorCode有訊息
+                        listener.onSuccess(jsonObject);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                if (code == 200){
+                if (code == 200 ){
                     listener.onSuccess(jsonObject);
                 }
                 listener.onPostExecute();
+
             }
         });
     }

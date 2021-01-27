@@ -4,6 +4,10 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
+/**  *** **********
+ * 婚姻設定更新Api
+ * * * * ****  ****/
+
 public class ChangeUserMarriageApi {
 
     /**

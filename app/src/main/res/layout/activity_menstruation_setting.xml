@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="50dp" />
+        app:layout_constraintGuide_begin="35dp" />
 
     <TextView
         android:id="@+id/textView11"
@@ -29,11 +29,12 @@
         android:id="@+id/ivBackUserSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:src="@drawable/ic_baseline_arrow_back_ios_32"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_baseline_arrow_back_ios_32" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView13"
@@ -42,7 +43,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_period_length"
-        android:textSize="24dp"
+        android:textSize="22dp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -53,7 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_menstruation_length"
-        android:textSize="24dp"
+        android:textSize="22dp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -64,7 +65,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="@string/setting_for_menstruation_start"
-        android:textSize="24dp"
+        android:textSize="22dp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -75,7 +76,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_menstruation_end"
-        android:textSize="24dp"
+        android:textSize="22dp"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
@@ -84,13 +85,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="250dp" />
+        app:layout_constraintGuide_begin="220dp" />
 
     <EditText
         android:id="@+id/edtCycleLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:ems="2"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
@@ -98,30 +98,34 @@
 
     <TextView
         android:id="@+id/tvPeriodLength"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:drawableRight="@drawable/ic_baseline_calculate_24"
         android:textSize="24dp"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
         app:layout_constraintTop_toTopOf="@+id/textView14" />
 
     <TextView
         android:id="@+id/tvDateStart"
-        android:layout_width="110dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="20dp"
+        android:layout_marginTop="16dp"
+        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+        android:padding="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <TextView
         android:id="@+id/tvDateEnd"
-        android:layout_width="110dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="20dp"
+        android:layout_marginTop="16dp"
+        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+        android:padding="12dp"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
-        app:layout_constraintTop_toTopOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDateStart" />
 
     <Button
         android:id="@+id/btnSaveToApi3"

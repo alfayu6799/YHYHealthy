@@ -1,5 +1,6 @@
 package com.example.yhyhealthydemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,11 +32,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private Button ovulation, temperature, pregnancy, monitor;
 
-    private boolean isMenstrualExists = false;
-
-    //api
-    private ApiProxy proxy;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,8 +51,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         pregnancy.setOnClickListener(this);
         monitor.setOnClickListener(this);
 
-        checkMenstrualExists(); //經期是否有設定
-
         return view;
     }
 
@@ -65,11 +59,12 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
             case R.id.bt_ovulation:
-                if(isMenstrualExists) {
-                    startActivity(new Intent(getActivity(), OvulationActivity.class));
-                }else {
-                    startActivity(new Intent(getActivity(), SystemUserActivity.class));
-                }
+                checkOvulationInfo();
+               // if(isMenstrualExists) {
+                    //startActivity(new Intent(getActivity(), OvulationActivity.class));
+               // }else {
+                   // startActivity(new Intent(getActivity(), SystemUserActivity.class));
+              //  }
                 break;
             case R.id.bt_temperature:
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
@@ -85,39 +80,21 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //經期是否有設定
-    private void checkMenstrualExists() {
-        proxy = ApiProxy.getInstance();  //api實例化
-        proxy.buildPOST(MENSTRUAL_EXISTS, "", exitsListener);
+    //檢查婚姻狀況與經期設定是否有設定完成
+    private void checkOvulationInfo() {
+        //取得相關資訊
+        boolean marriageStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MARRIAGE", false);
+        boolean menstrualStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MENSTRUAL", false);
+
+        //判斷進入排卵功能必需的元素是否齊全
+        if (!marriageStatus) {  //婚姻狀態不齊全
+            startActivity(new Intent(getActivity(), MarriageSettingActivity.class));
+        } else if (!menstrualStatus){ //經期設定不齊全
+            startActivity(new Intent(getActivity(), PeriodSettingActivity.class));
+        }else {
+            startActivity(new Intent(getActivity(), OvulationActivity.class));
+        }
+
     }
-
-    private ApiProxy.OnApiListener exitsListener = new ApiProxy.OnApiListener() {
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public void onSuccess(JSONObject result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result.toString());
-                String str = jsonObject.getString("success");
-                isMenstrualExists = Boolean.parseBoolean(str);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        public void onFailure(String message) {
-            Log.d(TAG, "isMenstrualExists failure!!");
-        }
-
-        @Override
-        public void onPostExecute() {
-
-        }
-    };
 
 }

@@ -2,6 +2,10 @@ package com.example.yhyhealthydemo.datebase;
 
 import com.google.gson.Gson;
 
+/**  *** **********
+ * 經期設定更新Api
+ * * * * ****  ****/
+
 public class ChangeUserPeriodApi {
 
     /**

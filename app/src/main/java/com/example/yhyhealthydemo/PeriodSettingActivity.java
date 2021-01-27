@@ -18,6 +18,10 @@ import com.example.yhyhealthydemo.datebase.ChangeUserPeriodApi;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,13 +70,14 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
         firstDay.setOnClickListener(this);
         endDay.setOnClickListener(this);
+        periodLength.setOnClickListener(this);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
     }
 
     private void initData() {
         proxy = ApiProxy.getInstance();
-        changeUserPeriodApi = new ChangeUserPeriodApi();
+        changeUserPeriodApi = new ChangeUserPeriodApi(); //變更經期設定Api
 
         proxy.buildPOST(MENSTRUAL_RECORD_INFO, "", periodListener);
     }
@@ -90,10 +95,8 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        String str = object.getString("errorCode");
-                        if(str.equals("6")) { //第一次
-
-                        }else {
+                        int erCode = object.getInt("errorCode");
+                        if (erCode == 0){
                             parserJson(result); //解析後台來的資料
                         }
                     } catch (JSONException e) {
@@ -129,12 +132,12 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         //開始時間
         String startDay = period.getSuccess().getLastDate();
         firstDay.setText(startDay);
-        changeUserPeriodApi.setLastDate(startDay);
+        changeUserPeriodApi.setLastDate(startDay); //存到JavaBean
 
         //結束時間
         String endingDay = period.getSuccess().getEndDate();
         endDay.setText(endingDay);
-        changeUserPeriodApi.setEndDate(endingDay);
+        changeUserPeriodApi.setEndDate(endingDay); //存到JavaBean
     }
 
     @Override
@@ -149,10 +152,26 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
             case R.id.tvDateEnd:
                 dialogPikeDate2();
                 break;
+            case R.id.tvPeriodLength:
+                calculate();  //計算
+                break;
             case R.id.btnSaveToApi3:
                 checkBeforeUpdate();
                 break;
         }
+    }
+
+    //計算經期長度
+    private void calculate() {
+        if(TextUtils.isEmpty(firstDay.getText().toString()) || TextUtils.isEmpty(endDay.getText().toString()))
+            return;
+
+        //使用第三方套件:Joda-Time
+        DateTime d1 = new DateTime(firstDay.getText().toString());
+        DateTime d2 = new DateTime(endDay.getText().toString());
+        int days = Days.daysBetween(d1,d2).getDays() + 1 ;
+        periodLength.setText(String.valueOf(days));
+        changeUserPeriodApi.setPeriod(days); //存到JavaBean
     }
 
     //上傳前檢查欄位是否都有填寫
@@ -173,6 +192,11 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         //判斷週期是否有填寫
         if(TextUtils.isEmpty(cycleLength.getText().toString())){
             Toast.makeText(getApplicationContext(), getString(R.string.cycle_is_not_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(periodLength.getText().toString())){
+            Toast.makeText(getApplicationContext(), getString(R.string.period_is_not_empty), Toast.LENGTH_SHORT).show();
             return;
         }
 
