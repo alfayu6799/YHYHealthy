@@ -152,13 +152,13 @@ public class ApiProxy {
     }
 
     //註冊專用
-    public void buildRegister(String action, String body, OnApiListener listener){
+    public void buildRegister(String action, String body, String language, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
         request.url(URL + action);
         request.post(requestBody);
         request.addHeader("Authorization", REGISTER_AUTH_CODE);
-        request.addHeader("DefaultLan","zh-TW");  //不能省略
+        request.addHeader("DefaultLan", language);  //不能省略
         buildRequest(request.build(), listener);
     }
 
@@ -214,7 +214,6 @@ public class ApiProxy {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 int code = response.code();
                 assert response.body() != null;
-//                String string = response.body().string();
 
                 if(response.header("Authorization") != null){  //如果回覆是空值的話則不要複寫
                     authToken = response.header("Authorization");

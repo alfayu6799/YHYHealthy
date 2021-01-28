@@ -3,6 +3,7 @@ package com.example.yhyhealthydemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_UPDATE;
 
 /**
  * 使用者設定 - 經期設定
@@ -155,7 +157,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
             case R.id.tvPeriodLength:
                 calculate();  //計算
                 break;
-            case R.id.btnSaveToApi3:
+            case R.id.btnSaveToApi3://儲存
                 checkBeforeUpdate();
                 break;
         }
@@ -208,7 +210,52 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         //週期
         changeUserPeriodApi.setCycle(Integer.parseInt(cycleLength.getText().toString()));
         changeUserPeriodApi.setPeriod(Integer.parseInt(periodLength.getText().toString()));
-        Log.d(TAG, "updateToApi: " + changeUserPeriodApi.toJSONString());
+
+        //執行後台更新
+        proxy.buildPOST(MENSTRUAL_RECORD_UPDATE, changeUserPeriodApi.toJSONString(), changePeriodListener);
+    }
+
+    private ApiProxy.OnApiListener changePeriodListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(result.toString());
+                        String str = jsonObject.getString("success");
+                        if(str.equals("true")){
+                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                            writeToSharedPreferences();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
+    //經期設定寫到SharedPreferences
+    private void writeToSharedPreferences() {
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putBoolean("MENSTRUAL", true).apply();
     }
 
     //日期彈跳視窗

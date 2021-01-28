@@ -1,10 +1,9 @@
 package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,21 +13,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.google.android.material.textfield.TextInputLayout;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.concurrent.BlockingDeque;
+import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
-import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 import static com.example.yhyhealthydemo.module.ApiProxy.REGISTER;
 
 /**** ************
@@ -41,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    private Button register;
+    private Button btnRegister;
     private EditText account, password, email;
     private EditText edtTelCode, edtMobile;
     private TextInputLayout emailLayout, telCodeLayout, mobileLayout;
@@ -52,6 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     //api
     ApiProxy proxy;
+
+    //
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +70,12 @@ public class RegisterActivity extends AppCompatActivity {
         edtTelCode.setText("CN"); //暫時
         edtMobile = findViewById(R.id.edMobile);
 
+        //使用信箱或簡訊的方法註冊(RadioButton)
         registerGroup = findViewById(R.id.rdGroupRegister);
         registerGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rdoBtnEmail){
+                if (checkedId == R.id.rdoBtnEmail){  //信箱是default(在xml設定// )
                     emailLayout.setVisibility(View.VISIBLE);
                     telCodeLayout.setVisibility(View.GONE);
                     mobileLayout.setVisibility(View.GONE);
@@ -93,8 +89,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        register = findViewById(R.id.btnRegisterSend);
-        register.setOnClickListener(new View.OnClickListener() {
+        //註冊Onclick
+        btnRegister = findViewById(R.id.btnRegisterSend);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -105,14 +102,14 @@ public class RegisterActivity extends AppCompatActivity {
                 //採用mail驗證方式
                 if(verificationStyle.equals("email")){
                     if(TextUtils.isEmpty(email.getText().toString())){
-                        Toast.makeText(RegisterActivity.this, getString(R.string.please_input_email), Toast.LENGTH_SHORT).show();
+                        Toasty.error(RegisterActivity.this, getString(R.string.please_input_email), Toast.LENGTH_SHORT, true).show();
                         return;
                     }else {
                         if (email.getText().toString().trim().matches(emailPattern)){ //有效的mail address
                             //寫回後台
                             upDataToApi();
                         }else {
-                            Toast.makeText(RegisterActivity.this, getString(R.string.please_input_vaild_email), Toast.LENGTH_SHORT).show();
+                            Toasty.error(RegisterActivity.this, getString(R.string.please_input_vaild_email), Toast.LENGTH_SHORT, true).show();
                         }
                     }
                 } //end of verificationStyle is email
@@ -120,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //採用簡訊驗證方式
                 if(verificationStyle.equals("phone")){
                     if(TextUtils.isEmpty(edtTelCode.getText().toString()) || TextUtils.isEmpty(edtMobile.getText().toString())){
-                        Toast.makeText(RegisterActivity.this, getString(R.string.please_input_phone), Toast.LENGTH_SHORT).show();
+                        Toasty.error(RegisterActivity.this, getString(R.string.please_input_phone), Toast.LENGTH_SHORT, true).show();
                         return;
                     }else {
                         //寫回後台
@@ -133,11 +130,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     //將資料寫回後台
     private void upDataToApi() {
-        Log.d(TAG, "upDataToApi: account:" + account.getText().toString()
-                + " password:" + password.getText().toString()
-                + " Email" + email.getText().toString()
-                + " telCode:"  + edtTelCode.getText().toString()
-                + " mobile:"   + edtMobile.getText().toString());
+        //取得手機語系
+        String language = getResources().getConfiguration().locale.getLanguage(); //語系
+        String country =  getResources().getConfiguration().locale.getCountry(); //國家代碼
+        String defaultLen = language + "-" + country;  //ex:zh-TW, zh-CN
 
         String accountNo = account.getText().toString().trim();
         String passWD = password.getText().toString().trim();
@@ -155,14 +151,19 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //註冊專用
-        proxy.buildRegister(REGISTER, json.toString(), registerListener);
+
+        //註冊專用(須帶手機語系defaultLen)
+        proxy.buildRegister(REGISTER, json.toString(), defaultLen, registerListener);
     }
 
     private ApiProxy.OnApiListener registerListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            progressDialog = new ProgressDialog(RegisterActivity.this);
+            progressDialog.setMessage(getString(R.string.progress));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
@@ -182,92 +183,32 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute() {
-
+            if(progressDialog != null)
+                progressDialog.dismiss();
         }
     };
 
     //解析後台回的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "註冊功能的後台解析: " + result.toString());
+        Log.d(TAG, "註冊完成後台回覆: " + result.toString());
         try {
             JSONObject object = new JSONObject(result.toString());
-            JSONObject status = object.getJSONObject("success");
-            int code = status.getInt("statusCode");
-            if(code == 1){ //未開通
-                showCompInfo(); //驗證碼Dialog
-            }else if (code == 2){  //已開通
-                finish(); //關閉並回到登入頁面
+            int errorCode = object.getInt("errorCode");
+            if(errorCode == 0){ //註冊成功後台會回覆是否需開通code
+                JSONObject success = object.getJSONObject("success");
+                int code = success.getInt("statusCode");
+                if(code == 1){ //未開通
+                    Toasty.success(RegisterActivity.this, getString(R.string.register_success), Toast.LENGTH_SHORT, true).show();
+                    finish();
+                }else if (code == 2) { //已開通
+                    finish(); //關閉並回到登入頁面
+                }
+            }else if (errorCode == 2){  //帳號已經存在
+                Toasty.error(RegisterActivity.this, getString(R.string.account_has_already), Toast.LENGTH_SHORT, true).show();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    //驗證碼Dialog
-    private void showCompInfo() {
-        AlertDialog.Builder alertBox = new AlertDialog.Builder(this);
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        EditText edInput = new EditText(this);
-        layout.addView(edInput);
-
-        alertBox.setTitle(getString(R.string.please_input_compcode));
-        alertBox.setMessage(getString(R.string.compcode_from));
-        alertBox.setView(layout);
-
-        //取消
-        alertBox.setNegativeButton(getString(R.string.slycalendar_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        //確定
-        alertBox.setPositiveButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(TextUtils.isEmpty(edInput.getText().toString()))
-                    return;
-                String accountStr = account.getText().toString(); //帳號
-                String compStr = edInput.getText().toString();    //開通碼
-
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("account", accountStr);
-                    json.put("verCode", compStr);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                proxy.buildInit(COMP, json.toString(), verificationListener);
-            }
-        });
-
-        alertBox.show();
-    }
-
-
-    private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result);
-            finish();
-        }
-
-        @Override
-        public void onFailure(String message) {
-
-        }
-
-        @Override
-        public void onPostExecute() {
-
-        }
-    };
-
 }

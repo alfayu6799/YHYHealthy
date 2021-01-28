@@ -59,12 +59,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
             case R.id.bt_ovulation:
-                checkOvulationInfo();
-               // if(isMenstrualExists) {
-                    //startActivity(new Intent(getActivity(), OvulationActivity.class));
-               // }else {
-                   // startActivity(new Intent(getActivity(), SystemUserActivity.class));
-              //  }
+                checkOvulationInfo(); //檢查婚姻狀況與經期設定是否有設定完成
                 break;
             case R.id.bt_temperature:
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
@@ -82,7 +77,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     //檢查婚姻狀況與經期設定是否有設定完成
     private void checkOvulationInfo() {
-        //取得相關資訊
+        //取得相關資訊(local file)
         boolean marriageStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MARRIAGE", false);
         boolean menstrualStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MENSTRUAL", false);
 

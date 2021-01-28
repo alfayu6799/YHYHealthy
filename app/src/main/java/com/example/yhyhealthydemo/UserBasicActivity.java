@@ -4,11 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.datebase.ChangeUserBasicInfoApi;
 import com.example.yhyhealthydemo.datebase.UsersData;
 import com.example.yhyhealthydemo.module.ApiProxy;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
+import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_UPDATE;
 
@@ -46,6 +45,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     ApiProxy proxy;
     //使用者的基本資料全塞入此物件
     ChangeUserBasicInfoApi changeUserBasicInfoApi;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,19 +197,19 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private void checkBeforeUpdate() {
         //判斷名稱是否有填寫
         if(TextUtils.isEmpty(accountName.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.name_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(UserBasicActivity.this, getString(R.string.name_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
         //判斷信箱是否有填寫
         if(TextUtils.isEmpty(accountMail.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.email_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(UserBasicActivity.this, getString(R.string.email_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
         //判斷生日是否有填寫
         if(TextUtils.isEmpty(birthday.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.birthday_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(UserBasicActivity.this, getString(R.string.birthday_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
@@ -232,8 +233,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //體重
         changeUserBasicInfoApi.setWeight(Double.parseDouble(bodyWeight.getText().toString()));
 
-        Log.d(TAG, "用戶基本資料上傳: " + changeUserBasicInfoApi.toJSONString());
-
         //上傳到後台
         proxy.buildPOST(USER_UPDATE, changeUserBasicInfoApi.toJSONString(), changeInfoListener);
     }
@@ -241,7 +240,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private ApiProxy.OnApiListener changeInfoListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            progressDialog = new ProgressDialog(UserBasicActivity.this);
+            progressDialog.setMessage(getString(R.string.progress));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
@@ -253,7 +256,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         String str = jsonObject.getString("success");
                         if(str.equals("true")){
-                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                            Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -270,7 +273,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onPostExecute() {
-
+            if(progressDialog != null)
+                progressDialog.dismiss();
         }
     };
 

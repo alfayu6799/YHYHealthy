@@ -3,6 +3,7 @@ package com.example.yhyhealthydemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,12 +13,15 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.developer.kalert.KAlertDialog;
 import com.example.yhyhealthydemo.datebase.ChangeUserMarriageApi;
 import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
@@ -90,19 +94,17 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
                     try {
                         Log.d(TAG, "婚姻狀況: " + result.toString());
                         JSONObject object = new JSONObject(result.toString());
-                        String str = object.getString("errorCode");
-                        if(str.equals("6")){ //第一次
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 6) { //查無資料
                             marriageStatus.setChecked(false);
                             childStatus.setChecked(false);
                             contraceptionStatus.setChecked(false);
-                        }else{
+                        } else {
                             parserJson(result); //解析後台來的資料
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
             });
         }
@@ -203,7 +205,8 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
                         JSONObject jsonObject = new JSONObject(result.toString());
                         String str = jsonObject.getString("success");
                         if(str.equals("true")){
-                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                            Toasty.success(MarriageSettingActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
+                            writeToSharedPreferences();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -222,6 +225,12 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
         }
     };
+
+    //婚姻狀況寫到SharedPreferences
+    private void writeToSharedPreferences() {
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putBoolean("MARRIAGE", true).apply();
+    }
 
     //禁用返回健
     @Override

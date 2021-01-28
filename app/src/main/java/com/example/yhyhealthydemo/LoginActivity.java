@@ -2,6 +2,8 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import es.dmoral.toasty.Toasty;
+
 import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 import static com.example.yhyhealthydemo.module.ApiProxy.FORGET_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
@@ -38,6 +42,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //api
     ApiProxy proxy;
+
+    //
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +115,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ApiProxy.OnApiListener loginListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage(getString(R.string.progress));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
@@ -129,7 +140,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onPostExecute() {
-
+            if(progressDialog != null)
+                progressDialog.dismiss();
         }
     };
 
@@ -139,13 +151,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             JSONObject object = new JSONObject(result.toString());
             int errorCode = object.getInt("errorCode");
-            if(errorCode == 1){ //無此帳號或密碼錯誤...
-                Toast.makeText(getApplicationContext(), getString(R.string.account_is_error), Toast.LENGTH_SHORT).show();
+            if(errorCode == 1) { //無此帳號或密碼錯誤...
+                Toasty.error(LoginActivity.this, getString(R.string.account_is_error), Toast.LENGTH_SHORT, true).show();
+            }else if(errorCode == 6){
+                Toasty.error(LoginActivity.this, getString(R.string.account_is_no_data), Toast.LENGTH_SHORT, true).show();
             }else if (errorCode == 34){ //尚未開通帳戶
                 showCompInfo();  //驗證碼輸入Dialog
             }else if (errorCode == 0){ //登入成功
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
                 //因為success內容有二個重要資訊其排卵功能需要用到所以要解析json
                 JSONObject success = object.getJSONObject("success");
                 boolean maritalSet = success.getBoolean("maritalSet");
@@ -155,6 +167,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .putString("PASSWORD", password.getText().toString())
                         .putBoolean("MARRIAGE", maritalSet)
                         .putBoolean("MENSTRUAL", menstrualSet).apply();
+
+                Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
+
+                //導至首頁
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         } catch (JSONException e) {
@@ -180,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onClick(DialogInterface dialogInterface, int i) {
                 EditText editText = compLayout.findViewById(R.id.edtCompCode);
                 if(TextUtils.isEmpty(editText.getText().toString())){
-                    Toast.makeText(getApplicationContext(), getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT).show();
+                    Toasty.error(LoginActivity.this, getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT, true).show();
                     return;
                 }
 
@@ -198,7 +216,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             json.put("account", account.getText().toString());
             json.put("verCode", editText.getText().toString());
-            json.put("param", password.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -220,8 +237,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int erCode = object.getInt("errorCode");
-                        if(erCode == 5){
-                            Toast.makeText(getApplicationContext(), getString(R.string.comp_code_error), Toast.LENGTH_SHORT).show();
+                        if(erCode == 5){  //驗證碼不對
+                            Toasty.error(LoginActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
+                        }else if (erCode == 0){ //驗證成功
+                            Toasty.success(LoginActivity.this, getString(R.string.access_success), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -272,7 +291,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Boolean wantToCloseDialog = (editAccount.getText().toString().trim().isEmpty());
                 if (wantToCloseDialog){
-                    Toast.makeText(getApplicationContext(), getString(R.string.account_is_not_empty), Toast.LENGTH_SHORT).show();
+                    Toasty.error(LoginActivity.this, getString(R.string.account_is_not_empty), Toast.LENGTH_SHORT, true).show();
                 }else{
                     String accountStr = editAccount.getText().toString().trim();
                     forgetPasswordApi(accountStr); //傳給後台去處理
