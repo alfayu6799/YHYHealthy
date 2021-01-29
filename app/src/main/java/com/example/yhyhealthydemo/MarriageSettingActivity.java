@@ -17,6 +17,7 @@ import com.developer.kalert.KAlertDialog;
 import com.example.yhyhealthydemo.datebase.ChangeUserMarriageApi;
 import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,7 +84,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     private ApiProxy.OnApiListener marriageListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            ProgressDialogUtil.showProgressDialog(MarriageSettingActivity.this);
         }
 
         @Override
@@ -92,7 +93,6 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
                 @Override
                 public void run() {
                     try {
-                        Log.d(TAG, "婚姻狀況: " + result.toString());
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 6) { //查無資料
@@ -116,7 +116,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
         @Override
         public void onPostExecute() {
-
+            ProgressDialogUtil.dismiss();
         }
     };
 
@@ -188,12 +188,13 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
     //寫回後台
     private void updateToApi() {
+
         proxy.buildPOST(MARRIAGE, changeUserMarriageApi.toJSONString(), changeMarriageListener);
     }
     private ApiProxy.OnApiListener changeMarriageListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+                ProgressDialogUtil.showProgressDialog(MarriageSettingActivity.this);
         }
 
         @Override
@@ -222,7 +223,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
         @Override
         public void onPostExecute() {
-
+            ProgressDialogUtil.dismiss();
         }
     };
 

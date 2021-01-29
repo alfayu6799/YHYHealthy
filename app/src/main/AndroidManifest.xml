@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MarriageSettingActivity"></activity>
+        <activity android:name=".ForgetPassActivity"></activity>
+        <activity android:name=".MarriageSettingActivity" />
         <activity android:name=".SystemProvisionActivity" />
         <activity android:name=".SystemAccountActivity" />
         <activity android:name=".UserChangePassActivity" />

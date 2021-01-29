@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.yhyhealthydemo.datebase.ChangeUserPeriodApi;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -29,6 +30,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_UPDATE;
@@ -181,27 +184,27 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
         //判斷上次經期開始日是否有填寫
         if(TextUtils.isEmpty(firstDay.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.start_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(PeriodSettingActivity.this, getString(R.string.start_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
         //判斷上次經期結束日是否有填寫
         if(TextUtils.isEmpty(endDay.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.end_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(PeriodSettingActivity.this, getString(R.string.end_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
         //判斷週期是否有填寫
         if(TextUtils.isEmpty(cycleLength.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.cycle_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(PeriodSettingActivity.this, getString(R.string.cycle_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
 
         if(TextUtils.isEmpty(periodLength.getText().toString())){
-            Toast.makeText(getApplicationContext(), getString(R.string.period_is_not_empty), Toast.LENGTH_SHORT).show();
+            Toasty.error(PeriodSettingActivity.this, getString(R.string.period_is_not_empty), Toast.LENGTH_SHORT, true).show();
             return;
         }
-
+        //上傳更新資料
         updateToApi();
     }
 
@@ -218,7 +221,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
     private ApiProxy.OnApiListener changePeriodListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            ProgressDialogUtil.showProgressDialog(PeriodSettingActivity.this);
         }
 
         @Override
@@ -231,7 +234,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
                         jsonObject = new JSONObject(result.toString());
                         String str = jsonObject.getString("success");
                         if(str.equals("true")){
-                            Toast.makeText(getApplicationContext(), getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT).show();
+                            Toasty.success(PeriodSettingActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
                         }
                     } catch (JSONException e) {
@@ -248,7 +251,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
         @Override
         public void onPostExecute() {
-
+            ProgressDialogUtil.dismiss();
         }
     };
 

@@ -2,7 +2,6 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,18 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.module.ApiProxy;
-
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Objects;
-
 import es.dmoral.toasty.Toasty;
-
 import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
-import static com.example.yhyhealthydemo.module.ApiProxy.FORGET_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
 
 
@@ -43,8 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //api
     ApiProxy proxy;
 
-    //
-    private ProgressDialog progressDialog;
+    String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(getBaseContext(), PrivacyActivity.class)); //隱私權page
                 break;
             case R.id.tv_forget:  //忘記密碼
-                dialogForget();
+                startActivity(new Intent(getBaseContext(), ForgetPassActivity.class));
                 break;
         }
     }
@@ -97,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //登入時與後台驗證並取得token
     private void userLoginApi() {
 
+        //帳號和密碼不得空白
         if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString()))
             return;
 
@@ -115,11 +108,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ApiProxy.OnApiListener loginListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage(getString(R.string.progress));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            //顯示對話方塊
+            ProgressDialogUtil.showProgressDialog(LoginActivity.this);
         }
 
         @Override
@@ -140,8 +130,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onPostExecute() {
-            if(progressDialog != null)
-                progressDialog.dismiss();
+            //隱藏對話方塊
+            ProgressDialogUtil.dismiss();
         }
     };
 
@@ -201,7 +191,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toasty.error(LoginActivity.this, getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT, true).show();
                     return;
                 }
-
                 //傳至後台驗證
                 checkComp(editText);
             }
@@ -225,7 +214,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            //顯示對話方塊
+            ProgressDialogUtil.showProgressDialog(LoginActivity.this);
         }
 
         @Override
@@ -257,92 +247,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onPostExecute() {
-
+            //隱藏對話方塊
+            ProgressDialogUtil.dismiss();
         }
     };
-
-    //忘記密碼fxn
-    private void dialogForget() {
-        AlertDialog.Builder alertDialogForget = new AlertDialog.Builder(this);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View mView = layoutInflater.inflate(R.layout.dialog_forget_password, null);
-        alertDialogForget.setView(mView);
-
-        EditText editAccount = mView.findViewById(R.id.etAccount);
-        alertDialogForget.setCancelable(false)
-                .setPositiveButton("送出", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
-                            dialogInterface.dismiss();
-                    }
-                });
-
-        AlertDialog dialog = alertDialogForget.create();
-        dialog.show();
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Boolean wantToCloseDialog = (editAccount.getText().toString().trim().isEmpty());
-                if (wantToCloseDialog){
-                    Toasty.error(LoginActivity.this, getString(R.string.account_is_not_empty), Toast.LENGTH_SHORT, true).show();
-                }else{
-                    String accountStr = editAccount.getText().toString().trim();
-                    forgetPasswordApi(accountStr); //傳給後台去處理
-                    dialog.dismiss();
-                }
-            }
-        });
-    }
-
-    //後台尚未完整 2021/01/27
-    private void forgetPasswordApi(String accountStr) {
-        Log.d(TAG, "forgetPasswordApi: " + accountStr);
-        JSONObject json = new JSONObject();
-        try {
-            json.put("account", accountStr);
-            json.put("language", "zh-TW");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG, "忘記密碼Api: " + json.toString());
-        //proxy.buildPassWD(FORGET_PASSWORD, json.toString(), forgetListener);
-    }
-
-    private ApiProxy.OnApiListener forgetListener = new ApiProxy.OnApiListener() {
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result.toString());
-        }
-
-        @Override
-        public void onFailure(String message) {
-
-        }
-
-        @Override
-        public void onPostExecute() {
-
-        }
-    };
-
-
-    public static boolean isValidAccount(String account){
-        String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regEx);
-        java.util.regex.Matcher matcher = pattern.matcher(account);
-        return  matcher.matches();
-    }
-
 }

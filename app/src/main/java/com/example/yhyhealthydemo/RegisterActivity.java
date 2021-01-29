@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,6 +100,12 @@ public class RegisterActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString()))
                          return;
 
+                //帳號和密碼輸入不得少於6
+                if(account.getText().toString().trim().length() < 6 || password.getText().toString().trim().length() < 6) {
+                    Toasty.error(RegisterActivity.this, getString(R.string.number_less_six), Toast.LENGTH_SHORT, true).show();
+                    return;
+                }
+
                 //採用mail驗證方式
                 if(verificationStyle.equals("email")){
                     if(TextUtils.isEmpty(email.getText().toString())){
@@ -159,11 +166,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ApiProxy.OnApiListener registerListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            progressDialog = new ProgressDialog(RegisterActivity.this);
-            progressDialog.setMessage(getString(R.string.progress));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            //顯示對話方塊
+            ProgressDialogUtil.showProgressDialog(RegisterActivity.this);
         }
 
         @Override
@@ -183,8 +187,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onPostExecute() {
-            if(progressDialog != null)
-                progressDialog.dismiss();
+            //隱藏對話方塊
+            ProgressDialogUtil.dismiss();
+//            if(progressDialog != null)
+//                progressDialog.dismiss();
         }
     };
 

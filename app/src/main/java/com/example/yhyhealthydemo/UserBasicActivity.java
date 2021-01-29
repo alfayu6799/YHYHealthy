@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.example.yhyhealthydemo.datebase.ChangeUserBasicInfoApi;
 import com.example.yhyhealthydemo.datebase.UsersData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
@@ -46,8 +49,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     //使用者的基本資料全塞入此物件
     ChangeUserBasicInfoApi changeUserBasicInfoApi;
 
-    private ProgressDialog progressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private ApiProxy.OnApiListener userInfoListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            //顯示對話方塊
+            ProgressDialogUtil.showProgressDialog(UserBasicActivity.this);
         }
 
         @Override
@@ -92,7 +94,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onPostExecute() {
-
+            ProgressDialogUtil.dismiss();
         }
     };
 
@@ -133,11 +135,12 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //體重
         bodyWeight.setText(String.valueOf(usersData.getSuccess().getWeight()));
         double weight = usersData.getSuccess().getWeight();
-        
-        //BMI計算
+
         calculate(height, weight);
+
     }
 
+    //BMI計算
     private void calculate(double height, double weight) {
         float h = (float)height/100;
         float bmiValue = (float) weight/(h*h);
@@ -240,11 +243,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private ApiProxy.OnApiListener changeInfoListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            progressDialog = new ProgressDialog(UserBasicActivity.this);
-            progressDialog.setMessage(getString(R.string.progress));
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            //顯示對話方塊
+            ProgressDialogUtil.showProgressDialog(UserBasicActivity.this);
         }
 
         @Override
@@ -273,8 +273,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onPostExecute() {
-            if(progressDialog != null)
-                progressDialog.dismiss();
+            ProgressDialogUtil.dismiss();
         }
     };
 
