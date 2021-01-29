@@ -182,4 +182,5 @@
     <string name="access_success">驗證成功,請再次登入</string>
     <string name="login_success">登入成功</string>
     <string name="number_less_six">字數不得少於6</string>
+    <string name="change_password_success">變更密碼成功,下次登入請使用新密碼</string>
 </resources>

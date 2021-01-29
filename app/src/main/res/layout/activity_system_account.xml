@@ -47,17 +47,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline20"
         app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView45"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="@string/setting_user_verification"-->
-<!--        android:textSize="24dp"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline20"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/textView47" />-->
-
     <TextView
         android:id="@+id/textView46"
         android:layout_width="wrap_content"
@@ -73,12 +62,11 @@
         android:id="@+id/textView47"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:textSize="24dp"
         android:text="@string/setting_for_device"
-        app:layout_constraintStart_toStartOf="@+id/guideline20"
-        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="@+id/textView45"
+        app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
     <ImageView
         android:id="@+id/ivPasswordChange"
@@ -115,4 +103,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView47"
         android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="24dp"
+        android:text="@string/verification"
+        app:layout_constraintStart_toStartOf="@+id/textView46"
+        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+    <ImageView
+        android:id="@+id/ivCompCodeChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView45"
+        app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_32dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

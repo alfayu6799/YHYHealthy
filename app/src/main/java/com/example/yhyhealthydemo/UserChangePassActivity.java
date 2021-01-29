@@ -12,10 +12,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.dmoral.toasty.Toasty;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.CHANGE_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 
 /**
@@ -80,21 +84,33 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            finish();
-            //proxy.buildPOST(MARRIAGE_INFO, json.toString(), changeListener);
+
+            proxy.buildPOST(CHANGE_PASSWORD, json.toString(), changePasswordListener);
         }
     }
 
-    private ApiProxy.OnApiListener changeListener = new ApiProxy.OnApiListener() {
+    private ApiProxy.OnApiListener changePasswordListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            ProgressDialogUtil.showProgressDialog(UserChangePassActivity.this);
         }
 
         @Override
         public void onSuccess(JSONObject result) {
-            //Toast.makeText(UserChangePassActivity.this, "變更成功!!", Toast.LENGTH_SHORT).show();
-            //finish();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        boolean success = object.getBoolean("success");
+                        if(success){
+                            Toasty.success(UserChangePassActivity.this, getString(R.string.change_password_success), Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         @Override
@@ -104,7 +120,7 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onPostExecute() {
-
+            ProgressDialogUtil.dismiss();
         }
     };
 }
