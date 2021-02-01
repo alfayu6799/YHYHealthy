@@ -186,4 +186,7 @@
     <string name="please_input_need_height_and_weight">BMI需要輸入身高體重</string>
     <string name="body_weight_is_not_empty">體重不得空白</string>
     <string name="body_height_is_not_empty">身高不得空白</string>
+    <string name="logout_success">登出成功</string>
+    <string name="days_is_not_allow_tomorrow">日期不得選擇未來</string>
+    <string name="endday_is_not_before_lastday">結束日不得小於起始日</string>
 </resources>
