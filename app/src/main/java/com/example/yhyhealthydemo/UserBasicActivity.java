@@ -7,11 +7,14 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -53,6 +56,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_basic);
+        //不讓虛擬鍵盤蓋文
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         usersData = new UsersData();
 
@@ -100,6 +105,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
     private void parserJson(JSONObject result) {
         usersData = UsersData.newInstance(result.toString());
+        Log.d(TAG, "parserJson:  " + result.toString());
 
         //帳號
         accountInfo.setText(usersData.getSuccess().getUserAccount());
@@ -121,6 +127,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         //生日
         birthday.setText(usersData.getSuccess().getBirthday());
+        changeUserBasicInfoApi.setBirthday(usersData.getSuccess().getBirthday());
 
         //國際區碼
         areaCode.setText(usersData.getSuccess().getTelCode());
@@ -135,15 +142,18 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //體重
         bodyWeight.setText(String.valueOf(usersData.getSuccess().getWeight()));
         double weight = usersData.getSuccess().getWeight();
-
-        calculate(height, weight);
-
+        if((weight == 0) || (height == 0)){
+            BMIValue.setText(getString(R.string.please_input_need_height_and_weight));
+        }else {
+            calculate(height, weight);
+        }
     }
 
     //BMI計算
     private void calculate(double height, double weight) {
         float h = (float)height/100;
         float bmiValue = (float) weight/(h*h);
+
         BMIValue.setText(String.valueOf(bmiValue));
     }
 
@@ -170,6 +180,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         phoneNo = findViewById(R.id.edtPhoneNumber);       //電話號碼
         bodyHeight = findViewById(R.id.edtHeight);         //身高
         bodyWeight = findViewById(R.id.editWeight);        //體重
+        bodyWeight.addTextChangedListener(weightWatcher);
         BMIValue = findViewById(R.id.textBMI);             //BMI
 
         back.setOnClickListener(this);
@@ -177,6 +188,24 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         genderInfo.setOnClickListener(this);              //性別onclick
         birthday.setOnClickListener(this);                //生日onclick
     }
+
+    private TextWatcher weightWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            double w = Double.parseDouble(bodyWeight.getText().toString()); //體重
+            double h = Double.parseDouble(bodyHeight.getText().toString()); //身高
+            calculate(h, w);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            Log.d(TAG, "afterTextChanged: " + editable);
+        }
+    };
 
     @Override
     public void onClick(View view) {
@@ -216,6 +245,17 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             return;
         }
 
+        //判斷體重是否空白
+        if(TextUtils.isEmpty(bodyWeight.getText().toString())){
+            Toasty.error(UserBasicActivity.this, getString(R.string.body_weight_is_not_empty), Toast.LENGTH_SHORT, true).show();
+            return;
+        }
+
+        //判斷身高是否空白
+        if (TextUtils.isEmpty(bodyHeight.getText().toString())){
+            Toasty.error(UserBasicActivity.this, getString(R.string.body_height_is_not_empty), Toast.LENGTH_SHORT, true).show();
+        }
+
         updateToApi(); //寫回後端
     }
 
@@ -236,6 +276,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //體重
         changeUserBasicInfoApi.setWeight(Double.parseDouble(bodyWeight.getText().toString()));
 
+        Log.d(TAG, "updateToApi:  " + changeUserBasicInfoApi.toJSONString());
         //上傳到後台
         proxy.buildPOST(USER_UPDATE, changeUserBasicInfoApi.toJSONString(), changeInfoListener);
     }
@@ -280,21 +321,16 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     //出生年月日彈跳視窗選擇
     private void dialogPickBirthday() {
         Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR) - 12;
+        int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog pickerDialog = new DatePickerDialog(UserBasicActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (year <= mYear) {
-                    // 完成選擇，顯示日期
                     birthday.setText(mDateTimeFormat(year) + "-" + mDateTimeFormat(monthOfYear + 1) + "-" + mDateTimeFormat(dayOfMonth));
                     //生日
                     changeUserBasicInfoApi.setBirthday(birthday.getText().toString());
-                } else {
-                    Toast.makeText(UserBasicActivity.this, getString(R.string.set_years_range), Toast.LENGTH_LONG).show();
-                }
             }
         },mYear, mMonth, mDay);
         pickerDialog.show();
