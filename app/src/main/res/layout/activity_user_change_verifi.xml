@@ -98,6 +98,33 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_edit_background"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/emailStyleLayout"
+        app:layout_constraintTop_toTopOf="@+id/guideline13"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/please_input_password"
+            android:inputType="textPassword"
+            android:lines="1"
+            android:padding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phoneStyleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -149,4 +176,23 @@
             android:lines="1"
             android:hint="@string/please_input_phone"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSaveStyleToApi"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/shape_268e9f"
+        android:text="@string/update_to_api"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/textView48"
+        app:layout_constraintStart_toEndOf="@+id/textView48"
+        app:layout_constraintTop_toTopOf="@+id/textView48" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="325dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

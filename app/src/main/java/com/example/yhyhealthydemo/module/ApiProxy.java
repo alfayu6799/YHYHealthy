@@ -64,6 +64,9 @@ public class ApiProxy {
     //更新密碼api
     public static String CHANGE_PASSWORD = "allUser/users/change";
 
+    //更新驗證方式
+    public static String CHANGE_VERIFICATION_STYLE = "allUser/users/sendType";
+
     //經期是否已設定api
     public static String MENSTRUAL_EXISTS = "allAiniita/aplus/MenstrualExists";
 
@@ -131,6 +134,18 @@ public class ApiProxy {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
+    //更改驗證方式專用
+    public void buildVerification(String action, String body, String language, OnApiListener listener){
+        RequestBody requestBody = RequestBody.create(JSON, body);
+        Request.Builder request = new Request.Builder();
+        request.url(URL + action);
+        request.post(requestBody);
+        request.addHeader(AUTHORIZATION, authToken);
+        request.addHeader(SCEPTER, scepterToken);
+        request.addHeader("DefaultLan", language);
+        buildRequest(request.build(), listener);
+    }
+
     //忘記密碼專用
     public void buildPassWD(String action, String body, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
@@ -174,11 +189,6 @@ public class ApiProxy {
 
     //POST JSON
     public void buildPOST(String action, String body, OnApiListener listener){
-        String authToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE2NTIzMjMsImV4cCI6MTYxMTY1NTkyM30.JvZKoy7Q_Aj4WAQ1bOK3r4K_mt7r9VkQCKgXleas2__SrS09yiy60sA7MvJHFPwgSvGU7-QznhW96ocDHtSklg";
-        String scepterToken1 = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTMtMjAiLCJpYXQiOjE2MTE2NTIzMjN9.4IpAvwzoCBo-Kite2sih36LBZ5yTgBRCgoiAuJT8Z_p1tCu4bAsgontZqqsdG5EeQWML3nIHlhWwYwNwf4pLLQ";
-        Log.d(TAG, "buildPOST authToken: " + authToken);
-        Log.d(TAG, "buildPOST scepterToken: " + scepterToken);
-
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
         request.url(URL + action);
