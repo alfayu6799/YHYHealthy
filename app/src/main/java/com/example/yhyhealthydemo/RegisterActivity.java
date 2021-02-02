@@ -46,9 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
     //api
     ApiProxy proxy;
 
-    //
-    private ProgressDialog progressDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

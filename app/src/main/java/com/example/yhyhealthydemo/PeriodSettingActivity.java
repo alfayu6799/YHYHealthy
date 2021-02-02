@@ -50,6 +50,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
     private static final String TAG = "PeriodSettingActivity";
 
     ImageView back;
+    ImageView calculateOnClick;
     TextView  periodLength;
     EditText  cycleLength;
     TextView  firstDay, endDay;
@@ -72,17 +73,19 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
     private void initView() {
         back = findViewById(R.id.ivBackUserSetting);
-        cycleLength = findViewById(R.id.edtCycleLength);     //週期長度
-        periodLength = findViewById(R.id.tvPeriodLength);   //經期長度
-        firstDay = findViewById(R.id.tvDateStart);     //起始日
+        cycleLength = findViewById(R.id.edtCycleLength);        //週期長度
+        periodLength = findViewById(R.id.tvPeriodLength);       //經期長度
+        calculateOnClick = findViewById(R.id.ivPeriodLength);   //計算經期
+        firstDay = findViewById(R.id.tvDateStart);              //起始日
         firstDay.addTextChangedListener(lastWatch);
-        endDay = findViewById(R.id.tvDateEnd);         //結束日
+        endDay = findViewById(R.id.tvDateEnd);                   //結束日
         endDay.addTextChangedListener(endWatch);
         save = findViewById(R.id.btnSaveToApi3);
 
         firstDay.setOnClickListener(this);
         endDay.setOnClickListener(this);
-        periodLength.setOnClickListener(this);
+        //periodLength.setOnClickListener(this);
+        calculateOnClick.setOnClickListener(this);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
     }
@@ -152,6 +155,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         changeUserPeriodApi.setEndDate(endingDay); //存到JavaBean
     }
 
+    //
     private TextWatcher lastWatch = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -160,7 +164,9 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-                
+                //不得選擇未來日期
+            checkDayRange(firstDay.getText().toString());
+
         }
 
         @Override
@@ -169,6 +175,19 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         }
     };
 
+    //檢查使用者輸入的日期是否是未來
+    private void checkDayRange(String days) {
+        Calendar mCalendar = Calendar.getInstance();
+        CharSequence sequence = DateFormat.format("yyyy-MM-dd", mCalendar.getTime());
+        DateTime today = new DateTime(sequence);        //今天
+        DateTime last_day = new DateTime(days); //使用者選擇的日期
+        if(today.isBefore(last_day)){
+            Toasty.error(PeriodSettingActivity.this, getString(R.string.days_is_not_allow_tomorrow), Toast.LENGTH_SHORT, true).show();
+            periodLength.setText("");
+        }
+    }
+
+    //
     private TextWatcher endWatch = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -198,7 +217,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
             case R.id.tvDateEnd:  //結束日
                 dialogPikeDate2();
                 break;
-            case R.id.tvPeriodLength:
+            case R.id.ivPeriodLength:
                 calculate();  //計算
                 break;
             case R.id.btnSaveToApi3://儲存
@@ -229,6 +248,7 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
         //不得選擇未來日期
         if(today.isBefore(d1) || today.isBefore(d2)){
             Toasty.error(PeriodSettingActivity.this, getString(R.string.days_is_not_allow_tomorrow), Toast.LENGTH_SHORT, true).show();
+            periodLength.setText("");
             return;
         }
 
@@ -239,6 +259,8 @@ public class PeriodSettingActivity extends AppCompatActivity implements View.OnC
 
     //上傳前檢查欄位是否都有填寫
     private void checkBeforeUpdate() {
+
+        Log.d(TAG, "起始日: " + firstDay.getText().toString() +" 結束日:" + endDay.getText().toString());
 
         //判斷上次經期開始日是否有填寫
         if(TextUtils.isEmpty(firstDay.getText().toString())){

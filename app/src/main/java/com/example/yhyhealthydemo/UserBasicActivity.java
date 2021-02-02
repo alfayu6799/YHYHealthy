@@ -180,7 +180,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         phoneNo = findViewById(R.id.edtPhoneNumber);       //電話號碼
         bodyHeight = findViewById(R.id.edtHeight);         //身高
         bodyWeight = findViewById(R.id.editWeight);        //體重
-        bodyWeight.addTextChangedListener(weightWatcher);
+        bodyWeight.addTextChangedListener(weightWatcher);   //體重Listener
         BMIValue = findViewById(R.id.textBMI);             //BMI
 
         back.setOnClickListener(this);
@@ -295,8 +295,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 public void run() {
                     try {
                         JSONObject jsonObject = new JSONObject(result.toString());
-                        String str = jsonObject.getString("success");
-                        if(str.equals("true")){
+                        boolean success = jsonObject.getBoolean("success");
+                        if(success){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {

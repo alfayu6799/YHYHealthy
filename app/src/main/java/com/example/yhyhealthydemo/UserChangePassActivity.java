@@ -2,6 +2,7 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,7 +76,7 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
         String newPW = newPassword.getText().toString();
 
         if(TextUtils.isEmpty(oldPW) || (TextUtils.isEmpty(newPW))){
-            Toast.makeText(UserChangePassActivity.this, "不得空白!!", Toast.LENGTH_SHORT).show();
+            Toasty.error(UserChangePassActivity.this, getString(R.string.not_allow_empty), Toast.LENGTH_SHORT, true).show();
         }else {
             JSONObject json = new JSONObject();
             try {
@@ -105,6 +106,8 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
                         boolean success = object.getBoolean("success");
                         if(success){
                             Toasty.success(UserChangePassActivity.this, getString(R.string.change_password_success), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

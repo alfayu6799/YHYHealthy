@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
-
+        //暫時
         account.setText("demo21");
         password.setText("123456");
         

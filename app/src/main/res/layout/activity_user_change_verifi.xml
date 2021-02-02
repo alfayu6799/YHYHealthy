@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background"
+    tools:context=".UserChangeVerifiActivity">
+
+    <ImageView
+        android:id="@+id/igBackSetting15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_baseline_arrow_back_ios_32" />
+
+    <TextView
+        android:id="@+id/textView48"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textSize="24dp"
+        android:text="修改驗證方式"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/igBackSetting15"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/verification"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+    <RadioGroup
+        android:id="@+id/rdoGroupStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView49">
+
+        <RadioButton
+            android:id="@+id/rtoBtnMailStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:textSize="24dp"
+            android:buttonTint="@color/black"
+            android:text="@string/email" />
+
+        <RadioButton
+            android:id="@+id/rtoBtnPhoneStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:buttonTint="@color/black"
+            android:text="@string/phone" />
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailStyleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:background="@drawable/shape_edit_background"
+        app:layout_constraintStart_toStartOf="@+id/rdoGroupStyle"
+        app:layout_constraintTop_toBottomOf="@+id/rdoGroupStyle">
+
+        <EditText
+            android:id="@+id/edtEmailStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp"
+            android:inputType="textEmailAddress"
+            android:lines="1"
+            android:hint="@string/email_account"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneStyleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_edit_background"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        app:hintTextColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/rdoGroupStyle"
+        app:layout_constraintTop_toBottomOf="@+id/rdoGroupStyle">
+
+        <EditText
+            android:id="@+id/edtTelCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp"
+            android:inputType="textEmailAddress"
+            android:lines="1"
+            android:hint="@string/tel_code"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mobileStyleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_edit_background"
+        android:textColorHint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/red"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/phoneStyleLayout"
+        app:layout_constraintTop_toBottomOf="@+id/phoneStyleLayout">
+        <EditText
+            android:id="@+id/edtMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:padding="10dp"
+            android:inputType="textEmailAddress"
+            android:lines="1"
+            android:hint="@string/please_input_phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

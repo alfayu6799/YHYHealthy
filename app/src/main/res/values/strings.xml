@@ -182,11 +182,15 @@
     <string name="access_success">驗證成功,請再次登入</string>
     <string name="login_success">登入成功</string>
     <string name="number_less_six">字數不得少於6</string>
-    <string name="change_password_success">變更密碼成功,下次登入請使用新密碼</string>
+    <string name="change_password_success">變更密碼成功,請使用新密碼登入</string>
     <string name="please_input_need_height_and_weight">BMI需要輸入身高體重</string>
     <string name="body_weight_is_not_empty">體重不得空白</string>
     <string name="body_height_is_not_empty">身高不得空白</string>
     <string name="logout_success">登出成功</string>
     <string name="days_is_not_allow_tomorrow">日期不得選擇未來</string>
     <string name="endday_is_not_before_lastday">結束日不得小於起始日</string>
+    <string name="not_allow_empty">不允許空白</string>
+    <string name="edit_auth_code">更新授權碼</string>
+    <string name="please_press_button_to_update">請按下更新按鈕變更授權碼</string>
+    <string name="update_auth_code">更新</string>
 </resources>
