@@ -52,6 +52,9 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     //使用者的基本資料全塞入此物件
     ChangeUserBasicInfoApi changeUserBasicInfoApi;
 
+    //
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +81,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private ApiProxy.OnApiListener userInfoListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            //顯示對話方塊
-            ProgressDialogUtil.showProgressDialog(UserBasicActivity.this);
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(UserBasicActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -94,12 +100,12 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
+            progressDialog.dismiss();
         }
     };
 
@@ -284,8 +290,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private ApiProxy.OnApiListener changeInfoListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            //顯示對話方塊
-            ProgressDialogUtil.showProgressDialog(UserBasicActivity.this);
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(UserBasicActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -314,7 +323,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
+            progressDialog.dismiss();
         }
     };
 

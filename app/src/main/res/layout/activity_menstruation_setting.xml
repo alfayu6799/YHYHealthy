@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/yhy_background"
-    tools:context=".PeriodSettingActivity">
+    tools:context=".UserPeriodActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -109,7 +109,7 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+        android:text="@string/start_period_date"
         android:padding="12dp"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
@@ -120,7 +120,7 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+        android:text="@string/end_period_day"
         android:padding="12dp"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
@@ -152,12 +152,12 @@
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-    <ImageView
-        android:id="@+id/ivPeriodLength"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/textView14"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toTopOf="@+id/textView14"
-        android:src="@drawable/ic_baseline_calculate_24" />
+<!--    <ImageView-->
+<!--        android:id="@+id/ivPeriodLength"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/textView14"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/textView14"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/textView14"-->
+<!--        android:src="@drawable/ic_baseline_calculate_24" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

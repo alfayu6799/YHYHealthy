@@ -47,7 +47,7 @@
         android:text="討論區"/>
 
     <Button
-        android:id="@+id/onlinecall"
+        android:id="@+id/onlineCall"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@drawable/shape_button"

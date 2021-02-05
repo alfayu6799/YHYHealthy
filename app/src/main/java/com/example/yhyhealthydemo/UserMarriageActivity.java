@@ -2,7 +2,7 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +13,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.developer.kalert.KAlertDialog;
 import com.example.yhyhealthydemo.datebase.ChangeUserMarriageApi;
 import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
-import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,9 +29,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
  * 設定 - 個人 - 婚姻狀態
  * * **********************/
 
-public class MarriageSettingActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class UserMarriageActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    private static final String TAG = "MarriageSettingActivity";
+    private static final String TAG = "UserMarriageActivity";
 
     ImageView back;
     Button save;
@@ -42,6 +40,8 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     Switch    marriageStatus;
     Switch    contraceptionStatus;
     Switch    childStatus;
+
+    private ProgressDialog progressDialog;
 
     //api
     ApiProxy proxy;
@@ -84,7 +84,6 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     private ApiProxy.OnApiListener marriageListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            ProgressDialogUtil.showProgressDialog(MarriageSettingActivity.this);
         }
 
         @Override
@@ -111,12 +110,11 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
         }
     };
 
@@ -194,7 +192,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
     private ApiProxy.OnApiListener changeMarriageListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-                ProgressDialogUtil.showProgressDialog(MarriageSettingActivity.this);
+
         }
 
         @Override
@@ -206,7 +204,7 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
                         JSONObject jsonObject = new JSONObject(result.toString());
                         String str = jsonObject.getString("success");
                         if(str.equals("true")){
-                            Toasty.success(MarriageSettingActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
+                            Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
                         }
                     } catch (JSONException e) {
@@ -218,12 +216,12 @@ public class MarriageSettingActivity extends AppCompatActivity implements Compou
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
+
         }
     };
 

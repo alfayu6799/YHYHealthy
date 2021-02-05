@@ -2,6 +2,7 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -37,6 +38,8 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
 
     //api
     ApiProxy proxy;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,11 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
     private ApiProxy.OnApiListener changePasswordListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            ProgressDialogUtil.showProgressDialog(UserChangePassActivity.this);
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(UserChangePassActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -123,7 +130,7 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
+            progressDialog.dismiss();
         }
     };
 }

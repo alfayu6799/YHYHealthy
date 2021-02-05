@@ -30,7 +30,7 @@ public class MarkStyle {
         private Paint paint;
         {
             paint = new Paint();
-            paint.setColor(Color.rgb(63, 81, 200));
+            paint.setColor(Color.rgb(58, 114, 168));
         }
         @Override
         public void draw(Canvas canvas) {

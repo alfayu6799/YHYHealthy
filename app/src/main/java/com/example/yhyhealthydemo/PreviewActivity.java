@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.yhyhealthydemo.fragments.DocumentaryFragment;
-
 import java.io.File;
 
 /************************
@@ -40,7 +36,7 @@ public class PreviewActivity extends AppPage {
             @Override
             public void onClick(View view) {
                 //照片上傳到後台後再回到編輯紀錄的頁面
-                Intent intent = new Intent(PreviewActivity.this, PeriodActivity.class);
+                Intent intent = new Intent(PreviewActivity.this, PeriodRecordActivity.class);
                 intent.putExtra("path", path);
                 startActivity(intent);
                 finish();

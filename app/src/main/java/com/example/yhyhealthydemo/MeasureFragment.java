@@ -6,18 +6,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import com.example.yhyhealthydemo.module.ApiProxy;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_EXISTS;
 
 /****
  * 首頁
@@ -83,9 +75,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         //判斷進入排卵功能必需的元素是否齊全
         if (!marriageStatus) {  //婚姻狀態不齊全
-            startActivity(new Intent(getActivity(), MarriageSettingActivity.class));
+            startActivity(new Intent(getActivity(), UserMarriageActivity.class));
         } else if (!menstrualStatus){ //經期設定不齊全
-            startActivity(new Intent(getActivity(), PeriodSettingActivity.class));
+            startActivity(new Intent(getActivity(), UserPeriodActivity.class));
         }else {
             startActivity(new Intent(getActivity(), OvulationActivity.class));
         }

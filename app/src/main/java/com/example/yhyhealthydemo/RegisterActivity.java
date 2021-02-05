@@ -46,6 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
     //api
     ApiProxy proxy;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,7 +166,10 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onPreExecute() {
             //顯示對話方塊
-            ProgressDialogUtil.showProgressDialog(RegisterActivity.this);
+            if(progressDialog == null) {
+                progressDialog = ProgressDialog.show(RegisterActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }
+            if (!progressDialog.isShowing()) progressDialog.show();
         }
 
         @Override
@@ -185,9 +190,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onPostExecute() {
             //隱藏對話方塊
-            ProgressDialogUtil.dismiss();
-//            if(progressDialog != null)
-//                progressDialog.dismiss();
+            progressDialog.dismiss();
         }
     };
 

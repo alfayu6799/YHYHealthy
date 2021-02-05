@@ -97,7 +97,7 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
 
     private void updateToApi() {
         Log.d(TAG, "updateToApi: wait for Api response");
-         //ProgressDialogUtil.showProgressDialog(SystemAccountActivity.this);
+
     }
 
     //跟後台要求授權碼

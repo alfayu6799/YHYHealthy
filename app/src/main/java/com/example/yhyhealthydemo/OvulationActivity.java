@@ -3,12 +3,16 @@ package com.example.yhyhealthydemo;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +24,8 @@ import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthydemo.datebase.CycleRecord;
 import com.example.yhyhealthydemo.datebase.Menstruation;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.module.ApiProxy;
@@ -30,6 +36,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +51,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import es.dmoral.toasty.Toasty;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.CYCLE_RECORD;
+import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_DELETE;
+import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_UPDATE;
 import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
 
 public class OvulationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -81,6 +93,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private RatingBar bodySalivaRate, bodyDegreeRate;
 
     private SimpleDateFormat sdf;  //日期格式
+    private DateData selectedDate;
 
     //圖表
     LineChart lineChart;
@@ -92,6 +105,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //api
     private MenstruationRecord record; //dataBean
     private ApiProxy proxy;
+    private CycleRecord cycleRecord;
+
+    private ProgressDialog progressDialog;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +127,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //初始化dataBean & api
     private void initData() {
         record = new MenstruationRecord();
+        cycleRecord = new CycleRecord();
         proxy = ApiProxy.getInstance();
     }
 
@@ -253,36 +271,52 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //set 月曆月份Title
         YearMonthTv.setText(Calendar.getInstance().get(Calendar.YEAR) + "年" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "月");
 
-        calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
+        //calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
 
-        //從json讀取資料 for makeDate用(api) leona
-        gatDataFromJson();
+        //2021/02/05
+        setCycleRecord();
 
-        Date date = new Date();               //Today
-        String today = sdf.format(date);      //yyyy-MM-dd
+        DateTime today = new DateTime(new Date());  //今天
+        String todayStr = today.toString("yyyy-MM-dd");
 
-        //api查詢本日是否有資料
-        checkDataFromApi(today);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4*1000);
+                    //api查詢本日是否有資料
+                    checkDataFromApi(todayStr);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         //監聽日期
         calendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
+                calendarView.getMarkedDates().removeAdd();
+                calendarView.markDate(date);
+                selectedDate = date;
 
-                String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
-
+//                //今天日期Mark
 //                calendarView.markDate(
 //                        new DateData(date.getYear(), date.getMonth(), date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(255,0,0))));
 
-                Toast.makeText(OvulationActivity.this, "您選擇的日期為 : " + choseDay, Toast.LENGTH_SHORT).show();
+                String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
 
-                //使用者選擇的日期若是未來日期則禁用編輯紀錄page 2021/01/06 leona
+                Toasty.info(OvulationActivity.this, "您選擇的日期為" + choseDay, Toast.LENGTH_SHORT,true).show();
+
+                //使用者選擇的日期若是未來日期則禁用編輯紀錄和經期設定
                 try {
                     Date toDay = new Date();               //Today
                     Date selectDay = sdf.parse(choseDay);  //user select day
                     if(toDay.before(selectDay)){
+                        oveuSetting.setEnabled(false);
                         oveuEdit.setEnabled(false);
                     }else {
+                        oveuSetting.setEnabled(true);
                         oveuEdit.setEnabled(true);
                     }
                 } catch (ParseException e) {
@@ -314,8 +348,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //今天日期的背景顏色
         calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
                 .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
+
+//        selectedDate = new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+//        calendarView.markDate(selectedDate);
     }
 
+    //去跟後台要單一日的排卵資料
     private void checkDataFromApi(String day) {
         JSONObject json = new JSONObject();
         try {
@@ -323,13 +361,20 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //排卵資料後端
+        Log.d(TAG, "排卵資料後端Api: " + json.toString());
         proxy.buildPOST(RECORD_INFO, json.toString(), requestListener);
     }
 
+    //排卵資料監聽
     private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(OvulationActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -337,23 +382,34 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result);  //2021/01/13 leona
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        int errorCode = jsonObject.getInt("errorCode");
+                        if(errorCode == 0){
+                            parserJson(result);  //2021/01/13 leona
+                        }else {
+                            Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
         public void onPostExecute() {
-
+            progressDialog.dismiss();
         }
     };
 
-    //解析後台來的資料 2021/01/13 leona
+    /** 解析單一筆後台來的資料並顯示在月曆下的框框內 **/
+    /**共四組資訊 : 唾液辨識結果 基礎體溫 唾液辨識機率 基礎體溫機率 */
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
         //唾液辨識結果
@@ -381,48 +437,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         bodyDegreeRate.setRating(btRate);
     }
 
-    //從Api or Local取得需要的資料集 月曆用
-    private void gatDataFromJson() {
-
-        String calendStr = loadJSONFromAsset("menstruation.json");
-
-        try {
-            JSONObject obj = new JSONObject(calendStr);
-            String status = obj.getString("status");
-            if (status.equals("Success")) {
-                JSONArray array = obj.getJSONArray("data");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject objdata = array.getJSONObject(i);
-                    periodDate = objdata.getString("testDate");      //日期
-                    periodStatus = objdata.getString("cycleStatus"); //狀態
-                    periodDegree = objdata.getString("temperature"); //體溫
-
-                    //時間:年月日
-                    String[] str = periodDate.split("/");
-                    int yaer = Integer.parseInt(str[0]);    //ex:2020
-                    int month = Integer.parseInt(str[1]);   //ex:12
-                    int day = Integer.parseInt(str[2]);     //ex:25
-
-                    if (periodStatus.equals("1")){ //月經日
-                        calendarView.markDate(
-                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(207,97,148))));
-                    }
-
-                    if (periodStatus.equals("2")){  //排卵日
-                        calendarView.markDate(
-                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.parseColor("#D5AD45"))));
-                    }
-
-                    if(periodStatus.equals("5")){  //預計經期
-                        calendarView.markDate(
-                                new DateData(yaer, month, day).setMarkStyle(new MarkStyle(MarkStyle.PREIOD, Color.rgb(207,97,148))));
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     //讀取local json file
     public String loadJSONFromAsset(String fileName)
@@ -470,7 +484,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 onBackPressed();
                 break;
             case R.id.tv_ovul_setting:  //經期設定
-                dialogPickDate();
+                showPeriod(onClickDay); //日期格式:2021-01-04
                 break;
             case R.id.tv_ovul_edit:     //經期編輯
                 periodEdit(onClickDay);  //日期格式:2021-01-04
@@ -485,7 +499,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void periodEdit(String strDay) {
-
         //如果使用者沒有選擇任何一天就點擊編輯經期按鈕,其日期則以今天為主
         if (strDay.equals("")){
             strDay = sdf.format(new Date());
@@ -493,13 +506,18 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         //將所選擇的日期帶到PeriodActivity頁面
         Intent intent = new Intent();
-        intent.setClass(OvulationActivity.this, PeriodActivity.class);
+        intent.setClass(OvulationActivity.this, PeriodRecordActivity.class);
         intent.putExtra("DAY", strDay);
         startActivity(intent);
     }
 
     //經期設定對話框
-    private void dialogPickDate() {
+    private void showPeriod(String clickDay) {
+        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
+        if (clickDay.equals("")){
+            clickDay = sdf.format(new Date());
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
         final View view = inflater.inflate(R.layout.dialog_datepicker,null);
@@ -507,31 +525,26 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
         EditText toDate = view.findViewById(R.id.et_to_date);     //起始日期
         EditText fromDate = view.findViewById(R.id.et_from_date); //結束日期
-        Button sendDate = view.findViewById(R.id.bt_send_date);   //儲存
 
-        AlertDialog dialog = builder.create();
+        toDate.setText(clickDay);        //將使用者選擇的日期帶入,禁用自行輸入,可避免選擇未來日期
+        DateTime startDay = new DateTime(clickDay); //ex : 2021-02-03T00:00:00.000Z
 
-        toDate.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(OvulationActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                //todo
-                                Calendar newDate = Calendar.getInstance();
-                                newDate.set(year, month, dayOfMonth);
-                                toDate.setText(dateFormatter.format(newDate.getTime()));
+        //經由使用者輸入的經期長度自動計算結束日期
+        int periodLength = getSharedPreferences("yhyHealthy", MODE_PRIVATE).getInt("PERIOD", 0) - 1;
+        DateTime endDay = startDay.plusDays(periodLength);
+        fromDate.setText(endDay.toString("yyyy-MM-dd"));  //自動計算結束日期
 
-                            }
-                        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-            }
-        });
+        //Button's onClick
+        Button btnSave = view.findViewById(R.id.btnDateSave);     //更新onClick
+        Button btnCancel = view.findViewById(R.id.btnDateCancel); //取消onClick
+        Button btnDelete = view.findViewById(R.id.btnDateDelete); //刪除onClick
 
+        dialog = builder.create();
+
+        //結束日
         fromDate.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -550,16 +563,189 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        sendDate.setOnClickListener(new View.OnClickListener() {
+        //取消onClick
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ToDate = toDate.getText().toString();
-                String FromDate = fromDate.getText().toString();
-                Toast.makeText(OvulationActivity.this, "您設定的範圍為: " + ToDate + "~" + FromDate, Toast.LENGTH_LONG).show();
                 dialog.dismiss();
+            }
+        });
+
+        //更新onClick
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //參數 startDate & endDate
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("startDate", toDate.getText().toString());
+                    json.put("endDate", fromDate.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                proxy.buildPOST(PERIOD_UPDATE, json.toString(), periodListener);
+            }
+        });
+
+        //刪除onClick
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //參數 startDate & endDate
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("startDate", toDate.getText().toString());
+                    json.put("endDate", fromDate.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                proxy.buildPOST(PERIOD_DELETE, json.toString(), deletePeriodListener);
             }
         });
 
         dialog.show();
     }
+
+    //經期刪除Api
+    private ApiProxy.OnApiListener deletePeriodListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(OvulationActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            try {
+                JSONObject object = new JSONObject(result.toString());
+                boolean success = object.getBoolean("success");
+                if(success){
+                    Toasty.success(OvulationActivity.this,getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
+                    dialog.dismiss();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+    
+    //經期更新Api
+    private ApiProxy.OnApiListener periodListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(OvulationActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        boolean success = object.getBoolean("success");
+                        if(success) {
+                            Toasty.success(OvulationActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                            dialog.dismiss();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //後端資料填滿月曆
+    private void setCycleRecord() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("startDate", "2021-01-31");
+            json.put("endDate","2021-03-06");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "setCycleRecord: " + json.toString());
+        proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
+    }
+
+    private ApiProxy.OnApiListener cycleRecordListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(OvulationActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        int errorCode = jsonObject.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserCycleData(result);
+                        }else {
+                            Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //解析週期資料
+    private void parserCycleData(JSONObject result) {
+        cycleRecord = CycleRecord.newInstance(result.toString());
+        for (int i = 0; i < cycleRecord.getSuccess().size(); i ++){
+
+
+        }
+
+    }
+
 }

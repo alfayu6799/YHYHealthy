@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="經期設定"
+            android:text="@string/real_period"
             android:textSize="22sp"
             android:gravity="center"/>
         <EditText
@@ -32,7 +32,7 @@
             android:cursorVisible="false"
             android:clickable="false"
             android:focusableInTouchMode="false"
-            android:hint="Select  date"/>
+            android:hint="@string/start_period_date"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,20 +52,46 @@
             android:gravity="center"
             android:cursorVisible="false"
             android:background="@drawable/shape_editbox"
-            android:hint="Select date "
+            android:hint="@string/end_period_day"
             android:clickable="false"
             android:focusableInTouchMode="false"
             android:inputType="text"/>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/bt_send_date"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:text="儲存"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp">
 
+        <Button
+            android:id="@+id/btnDateDelete"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="@string/delete"
+            android:textColor="@color/red"
+            android:background="@null"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:id="@+id/btnDateCancel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnDateDelete"
+            android:textSize="18dp"
+            android:text="@string/slycalendar_cancel"
+            android:background="@null"
+            android:layout_marginLeft="30dp"/>
+
+        <Button
+            android:id="@+id/btnDateSave"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="@string/slycalendar_save"
+            android:background="@null"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_toRightOf="@+id/btnDateCancel"/>
+
+    </RelativeLayout>
 </LinearLayout>

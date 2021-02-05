@@ -92,7 +92,7 @@ public class PeriodData {
     }
 
     /**
-     * JSON 字串轉 Menstruation 物件
+     * JSON 字串轉物件
      *
      * @param jsonString json 格式的資料
      * @return TemperatureReceives 物件

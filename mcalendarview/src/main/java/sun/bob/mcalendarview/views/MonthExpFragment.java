@@ -29,7 +29,7 @@ public class MonthExpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         LinearLayout ret = new LinearLayout(getContext());
-        ret.setBackgroundColor(Color.TRANSPARENT);  //20201224 leona
+        ret.setBackgroundColor(Color.TRANSPARENT);  //20201224 leona 將背景白色改為透明色
         ret.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         monthViewExpd = new MonthViewExpd(getContext());

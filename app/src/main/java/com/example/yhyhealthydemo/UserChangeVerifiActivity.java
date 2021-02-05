@@ -1,7 +1,10 @@
 package com.example.yhyhealthydemo;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,6 +26,7 @@ import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.CHANGE_VERIFICATION_STYLE;
+import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 
 public class UserChangeVerifiActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +38,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
     private Button     btnSave;
     private ImageView  imgExit;
     private String Style = "mail";
+    private ProgressDialog progressDialog;
 
     //api
     ApiProxy proxy;
@@ -143,11 +148,16 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
     private ApiProxy.OnApiListener verificationChangeListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            ProgressDialogUtil.showProgressDialog(UserChangeVerifiActivity.this);
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(UserChangeVerifiActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
         public void onSuccess(JSONObject result) {
+            Log.d(TAG, "onSuccess: " + result.toString());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -158,8 +168,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                             JSONObject success = object.getJSONObject("success");
                             int code = success.getInt("statusCode");
                             if (code == 1){ //尚未開通
-                                Toasty.success(UserChangeVerifiActivity.this, getString(R.string.change_verification_success), Toast.LENGTH_SHORT, true).show();
-                                finish();
+                                showCompCode();
                             }else if(code == 2) { //已開通
                                 finish();
                             }
@@ -176,12 +185,96 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
         public void onPostExecute() {
-            ProgressDialogUtil.dismiss();
+            progressDialog.dismiss();
+        }
+    };
+
+    //輸入驗證碼完成更新 2021/02/03
+    private void showCompCode(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_input_compcode));
+        builder.setMessage(getString(R.string.need_comp_code));
+
+        //set custom layout
+        View compLayout = getLayoutInflater().inflate(R.layout.dialog_comp, null);
+        builder.setView(compLayout);
+        builder.setCancelable(false);
+
+        //add ok button
+        builder.setPositiveButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                EditText editText = compLayout.findViewById(R.id.edtCompCode);
+                if(TextUtils.isEmpty(editText.getText().toString())){
+                    Toasty.error(UserChangeVerifiActivity.this, getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT, true).show();
+                    return;
+                }
+                //傳至後台驗證比對
+                checkComp(editText);
+            }
+        });
+        AlertDialog compDialog = builder.create();
+        compDialog.show();
+    }
+
+    private void checkComp(EditText editText){
+        //去SharedPreferences取得使用者的帳號:ACCOUNT
+        String account = getSharedPreferences("yhyHealthy", MODE_PRIVATE).getString("ACCOUNT", "");
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", account);
+            json.put("verCode", editText.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildInit(COMP, json.toString(), verificationListener);
+    }
+
+    private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            //顯示對話方塊
+            if(progressDialog == null) {
+                progressDialog = ProgressDialog.show(UserChangeVerifiActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }
+            if (!progressDialog.isShowing()) progressDialog.show();
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject object = new JSONObject(result.toString());
+                            int errorCode = object.getInt("errorCode");
+                            if(errorCode == 5){  //驗證碼不對
+                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
+                            }else if (errorCode == 0){ //驗證成功
+                                Toasty.success(UserChangeVerifiActivity.this, getString(R.string.change_verification_success), Toast.LENGTH_SHORT, true).show();
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure:  " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
         }
     };
 }

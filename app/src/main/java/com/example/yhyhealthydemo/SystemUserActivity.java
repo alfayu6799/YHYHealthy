@@ -53,10 +53,10 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
                 startActivity(new Intent(this, UserBasicActivity.class));  //個人基本資料
                 break;
             case R.id.ivMarriageSetting:
-                startActivity(new Intent(this, MarriageSettingActivity.class));  //婚姻狀態
+                startActivity(new Intent(this, UserMarriageActivity.class));  //婚姻狀態
                 break;
             case R.id.ivMenstruationSetting:
-                startActivity(new Intent(this, PeriodSettingActivity.class)); //經期設定頁面
+                startActivity(new Intent(this, UserPeriodActivity.class)); //經期設定頁面
                 break;
             case R.id.ivPregnancySetting:
                 startActivity(new Intent(this, PregnancySettingActivity.class));  //懷孕設定頁面

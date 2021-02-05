@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,8 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ApiProxy.OnApiListener loginListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            //顯示對話方塊
-            ProgressDialogUtil.showProgressDialog(LoginActivity.this);
+
         }
 
         @Override
@@ -133,8 +134,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onPostExecute() {
-            //隱藏對話方塊
-            ProgressDialogUtil.dismiss();
         }
     };
 
@@ -217,8 +216,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-            //顯示對話方塊
-            ProgressDialogUtil.showProgressDialog(LoginActivity.this);
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(LoginActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -229,10 +231,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        int erCode = object.getInt("errorCode");
-                        if(erCode == 5){  //驗證碼不對
+                        int errorCode = object.getInt("errorCode");
+                        if(errorCode == 5){  //驗證碼不對
                             Toasty.error(LoginActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
-                        }else if (erCode == 0){ //驗證成功
+                        }else if (errorCode == 0){ //驗證成功
                             Toasty.success(LoginActivity.this, getString(R.string.access_success), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
@@ -251,7 +253,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onPostExecute() {
             //隱藏對話方塊
-            ProgressDialogUtil.dismiss();
+            progressDialog.dismiss();
         }
     };
 }

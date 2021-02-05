@@ -65,9 +65,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
  * 藍芽
  * 權限繼承DeviceBaseActivity
  **********/
-public class PeriodActivity extends DeviceBaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = PeriodActivity.class.getSimpleName();
+    private static final String TAG = PeriodRecordActivity.class.getSimpleName();
 
     TextView  textRecordDate;
     Button    takePhoto, startMeasure, saveSetting;
@@ -233,7 +233,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
     //開啟相機功能
     private void openCamera() {
         if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
-            Intent camera = new Intent(PeriodActivity.this, CameraActivity.class);
+            Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class);
             startActivity(camera);
             finish();
         }else {
@@ -328,7 +328,7 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 ScanFunction(true);
-                Toast.makeText(PeriodActivity.this, getString(R.string.ble_start_scanner), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PeriodRecordActivity.this, getString(R.string.ble_start_scanner), Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "dialog : 使用者自行啟動搜尋功能");
             }
         });
@@ -355,14 +355,14 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
                 public void run() {
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);//停止搜尋
                     mScanning = false; //搜尋旗標設為false
-                    Toast.makeText(PeriodActivity.this, getString(R.string.ble_stop_in_10), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PeriodRecordActivity.this, getString(R.string.ble_stop_in_10), Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"ScanFunction() : Stop Scan");
                 }
             },SCAN_TIME); //10後要執行此Runnable
 
             mScanning = true; //搜尋旗標設為true
             mBluetoothAdapter.startLeScan(mLeScanCallback);//開始搜尋BLE設備
-            Toast.makeText(PeriodActivity.this, getString(R.string.ble_start_scanner), Toast.LENGTH_SHORT).show();
+            Toast.makeText(PeriodRecordActivity.this, getString(R.string.ble_start_scanner), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "ScanFunction() : Start Scan");
         }
         else {
@@ -419,8 +419,8 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
             }
 
             //連上藍芽設備後就開始動作了....
-            gatt = device.connectGatt(PeriodActivity.this, false, gattcallback);
-            //gatt = mBluetoothDevice.connectGatt(PeriodActivity.this, false, gattcallback);
+            gatt = device.connectGatt(PeriodRecordActivity.this, false, gattcallback);
+            //gatt = mBluetoothDevice.connectGatt(PeriodRecordActivity.this, false, gattcallback);
             Log.d(TAG, "onItemClick: 點擊後就開始啟動gattcallback");
         }
     }
@@ -710,6 +710,6 @@ public class PeriodActivity extends DeviceBaseActivity implements View.OnClickLi
             return;
         gatt.close();
         gatt = null;
-        Toast.makeText(PeriodActivity.this, getString(R.string.ble_is_not_connect), Toast.LENGTH_SHORT).show();
+        Toast.makeText(PeriodRecordActivity.this, getString(R.string.ble_is_not_connect), Toast.LENGTH_SHORT).show();
     }
 }

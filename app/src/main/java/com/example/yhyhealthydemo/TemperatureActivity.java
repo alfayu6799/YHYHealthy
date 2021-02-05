@@ -551,16 +551,6 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         Log.d(TAG, "onResume: ");
     }
 
-//    //禁用返回鍵 20201218
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//
-//            return true;
-//        }
-//        return false;
-//    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
