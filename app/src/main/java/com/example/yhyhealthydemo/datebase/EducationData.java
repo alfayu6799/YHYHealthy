@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class EducationApi {
+public class EducationData {
 
     private List<ServiceItemListBean> serviceItemList;
 
@@ -112,20 +112,20 @@ public class EducationApi {
      * @param jsonString json 格式的資料
      * @return TemperatureReceives 物件
      */
-    public static EducationApi newInstance(String jsonString) {
+    public static EducationData newInstance(String jsonString) {
 
         if (TextUtils.isEmpty(jsonString)) {
-            return new EducationApi();
+            return new EducationData();
         }
 
         Gson gson = new Gson();
-        EducationApi item;
+        EducationData item;
 
         try {
-            item = gson.fromJson(jsonString, EducationApi.class);
+            item = gson.fromJson(jsonString, EducationData.class);
         } catch (Exception e) {
             e.printStackTrace();
-            item = new EducationApi();
+            item = new EducationData();
         }
 
         return item;

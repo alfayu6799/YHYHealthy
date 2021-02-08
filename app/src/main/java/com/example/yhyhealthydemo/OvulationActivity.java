@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -79,10 +80,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private String periodStatus = "";   //從api獲取狀態
     private String periodDegree = "";   //從api獲取體溫
     private String onClickDay = "";
-
-    private String firstday = "";   //這個月第一天
-    private String lastday = "";    //這個月最後一天
-    private String firstMonth= "";  //這個月份
 
     private TextView oveuSetting; //經期設定click
     private TextView oveuEdit;    //經期編輯click
@@ -174,11 +171,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
     //圖表資料顯示
+    @SuppressLint("SetTextI18n")
     private void initChartData() {
+        DateTime dt = new DateTime();
+        //當月份第一天
+        String firstDay = dt.dayOfMonth().withMinimumValue().toString("MM/dd");
+        String lastDay = dt.dayOfMonth().withMaximumValue().toString("MM/dd");
 
-        getThisMonth();  //取得當月份的第一天與最後一天日期
-
-        periodRangDate.setText(firstday + " ~ " + lastday); //經期顯示期間
+        periodRangDate.setText(firstDay + " ~ " + lastDay); //經期顯示期間
 
         menstruationArray = new ArrayList<>();
 
@@ -245,31 +245,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    //圖表日期顯示範圍(一整個月)
-    private void getThisMonth() {
-        Calendar cale = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd" );
-        SimpleDateFormat format1 = new SimpleDateFormat("MM");
-
-        // 獲取前月的第一天
-        cale = Calendar.getInstance();
-        cale.add(Calendar.MONTH, 0);
-        cale.set(Calendar.DAY_OF_MONTH, 1);
-        firstday = format.format(cale.getTime());
-        firstMonth = format1.format(cale.getTime());
-
-        // 獲取前月的最後一天
-        cale = Calendar.getInstance();
-        cale.add(Calendar.MONTH, 1);
-        cale.set(Calendar.DAY_OF_MONTH, 0);
-        lastday = format.format(cale.getTime());
-    }
-
     //月曆init
+    @SuppressLint("SetTextI18n")
     private void setCalendar() {
+        DateTime dt = new DateTime();
 
         //set 月曆月份Title
-        YearMonthTv.setText(Calendar.getInstance().get(Calendar.YEAR) + "年" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "月");
+        YearMonthTv.setText(dt.getYear() + getString(R.string.year) + dt.getMonthOfYear() + getString(R.string.month_of_year));
 
         //calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
 
@@ -323,15 +305,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     e.printStackTrace();
                 }
 
-                //轉換日期格式
-                try {
-                    Date date1 = sdf.parse(choseDay);
-                    onClickDay = sdf.format(date1);
-                    checkDataFromApi(onClickDay); //當使用者自己選擇日期時則向後台Api詢問是否有資料
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                //當使用者自己選擇日期時則向後台Api詢問是否有資料
+                DateTime date1 = new DateTime(choseDay);
+                String str = date1.toString("yyyy-MM-dd");
+                checkDataFromApi(str);
             }
         });
 

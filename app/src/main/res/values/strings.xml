@@ -212,4 +212,6 @@
     <string name="catalog">類別</string>
     <string name="nursing">護理</string>
     <string name="nutrition">營養</string>
+    <string name="year">年</string>
+    <string name="month_of_year">月</string>
 </resources>
