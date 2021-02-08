@@ -44,7 +44,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
             Picasso.get().load(URL_IMG + dataList.get(position).getIconImg()).into(holder.icon);
             holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
             holder.recyclerView.setHasFixedSize(true);
-
+            holder.recyclerView.setAdapter(new EducationSubAdapter (context,dataList.get(position).getAttrlist()));
     }
 
     @Override
