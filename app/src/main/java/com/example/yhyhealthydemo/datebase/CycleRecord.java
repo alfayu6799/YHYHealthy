@@ -14,7 +14,6 @@ public class CycleRecord {
     private int errorCode;
     private List<SuccessBean> success;
 
-
     public int getErrorCode() {
         return errorCode;
     }

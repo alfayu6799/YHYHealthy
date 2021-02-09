@@ -1,51 +1,72 @@
 package com.example.yhyhealthydemo.datebase;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
+
+import java.util.List;
 
 public class ArticleData {
 
+    private List<ArticleListBean> articleList;
+
+    public List<ArticleListBean> getArticleList() {
+        return articleList;
+    }
+
+    public static class ArticleListBean {
+        /**
+         * id : 21
+         * title : 孕媽咪“愛愛”的迷思
+         * html : 21-zh-TW.html
+         * img : 21-zh-TW.jpg
+         */
+
+        private String id;
+        private String title;
+        private String html;
+        private String img;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getHtml() {
+            return html;
+        }
+
+        public String getImg() {
+            return img;
+        }
+    }
+
     /**
-     * attrId : 01
-     * attrName : 生理保養
-     * serviceItemId : 01
-     * iconImg : article_2.png
+     * JSON 字串轉 物件
+     *
+     * @param jsonString json 格式的資料
+     * @return TemperatureReceives 物件
      */
+    public static ArticleData newInstance(String jsonString) {
 
-    private String attrId;
-    private String attrName;      //圖片名稱
-    private String serviceItemId;
-    private String iconImg;       //圖片png檔
+        if (TextUtils.isEmpty(jsonString)) {
+            return new ArticleData();
+        }
 
-    public String getAttrId() {
-        return attrId;
-    }
+        Gson gson = new Gson();
+        ArticleData item;
 
-    public void setAttrId(String attrId) {
-        this.attrId = attrId;
-    }
+        try {
+            item = gson.fromJson(jsonString, ArticleData.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            item = new ArticleData();
+        }
 
-    public String getAttrName() {
-        return attrName;
-    }
-
-    public void setAttrName(String attrName) {
-        this.attrName = attrName;
-    }
-
-    public String getServiceItemId() {
-        return serviceItemId;
-    }
-
-    public void setServiceItemId(String serviceItemId) {
-        this.serviceItemId = serviceItemId;
-    }
-
-    public String getIconImg() {
-        return iconImg;
-    }
-
-    public void setIconImg(String iconImg) {
-        this.iconImg = iconImg;
+        return item;
     }
 
     /**

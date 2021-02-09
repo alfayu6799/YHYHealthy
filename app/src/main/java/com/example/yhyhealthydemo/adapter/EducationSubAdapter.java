@@ -1,6 +1,9 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yhyhealthydemo.ArticleActivity;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.EducationData;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.URL_IMG;
+
 public class EducationSubAdapter extends RecyclerView.Adapter<EducationSubAdapter.EducationSubViewHolder>{
 
-    //衛教icon
-    private static String IMG_PATH = "http://192.168.1.120:8080/health_education/iconImg/";
+    private static final String TAG = "EducationSubAdapter";
 
     private Context context;
     private List<EducationData.ServiceItemListBean.AttrlistBean> list;
@@ -36,7 +42,24 @@ public class EducationSubAdapter extends RecyclerView.Adapter<EducationSubAdapte
     @Override
     public void onBindViewHolder(@NonNull EducationSubViewHolder holder, int position) {
             holder.articleName.setText(list.get(position).getAttrName());
-            Picasso.get().load(IMG_PATH + list.get(position).getIconImg()).into(holder.articleIcon);
+            Picasso.get().load(URL_IMG + list.get(position).getIconImg()).into(holder.articleIcon);
+
+            holder.articleIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String attrID = list.get(position).getAttrId();
+                    String ServiceItemId = list.get(position).getServiceItemId();
+                    String AttrName = list.get(position).getAttrName();
+                    //將點擊的icon資料傳到另一個頁面
+                    Intent intent = new Intent(context, ArticleActivity.class); //文章頁面
+                    Bundle bundle = new Bundle();
+                    bundle.putString("AttrID", attrID);
+                    bundle.putString("ServiceItemId", ServiceItemId);
+                    bundle.putString("AttName", AttrName);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
     }
 
     @Override
@@ -56,4 +79,5 @@ public class EducationSubAdapter extends RecyclerView.Adapter<EducationSubAdapte
             articleIcon = itemView.findViewById(R.id.iv_item_icon);
         }
     }
+
 }

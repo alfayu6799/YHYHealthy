@@ -45,9 +45,6 @@ public class ApiProxy {
     //Api網址
     private static String URL = "http://192.168.1.108:8080/";
 
-    //衛教api網址 (暫時)
-    private static String URL_EDU = "http://192.168.1.120:8080/hesys_api/";
-
     //註冊用api
     public static String REGISTER = "allUser/users/register";
 
@@ -105,8 +102,26 @@ public class ApiProxy {
     //更新婚姻狀況api
     public static String MARRIAGE = "allAiniita/aplus/Marriage";
 
+    //衛教IP網址
+    private static String URL_EDUCATION = "http://192.168.1.120:8080/";
+
+    //衛教分類api網址 (暫時)
+    private static String EDU_HESYS = "hesys_api/";
+
     //衛教文章分類api
-    public static String EDU_ART_CATALOG = "article/getNewItemAttr";
+    public static String EDU_ART_CATALOG = EDU_HESYS + "article/getNewItemAttr";
+
+    //衛教文章api網址
+    public static String ARTICLE_LIST = EDU_HESYS + "article/getNewList";
+
+    //衛教icon網址 (暫時)
+    public static String URL_IMG = URL_EDUCATION + "health_education/iconImg/";
+
+    //衛教文章icon網址(暫時)
+    public static String ARTICLE_IMG = URL_EDUCATION + "health_education/img/";
+
+    //衛教文章內容api
+    public static String ARTICLE_TEXT = URL_EDUCATION + "health_education/html/";
 
     //
     private static final String AUTHORIZATION = "Authorization";
@@ -156,7 +171,7 @@ public class ApiProxy {
     public void buildEdu(String action, String body, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
-        request.url(URL_EDU + action);
+        request.url(URL_EDUCATION + action);
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, authToken);
         request.addHeader(SCEPTER, scepterToken);

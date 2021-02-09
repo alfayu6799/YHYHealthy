@@ -45,7 +45,7 @@ public class EducationFragment extends Fragment implements View.OnClickListener 
 
         switch (view.getId()){
             case R.id.article:
-                target = ArticleActivity.class;
+                target = CatalogActivity.class;
                 break;
             case R.id.video:
                 target = VideoActivity.class;

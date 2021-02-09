@@ -10,19 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.yhyhealthydemo.ArticleActivity;
 import com.example.yhyhealthydemo.R;
-import com.example.yhyhealthydemo.datebase.ArticleData;
 import com.example.yhyhealthydemo.datebase.EducationData;
+import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.EducationViewHolder>{
+import static com.example.yhyhealthydemo.module.ApiProxy.URL_IMG;
 
-    //衛教icon
-    private static String URL_IMG = "http://192.168.1.120:8080/health_education/iconImg/";
+public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.EducationViewHolder> {
 
+    private static final String TAG = "EducationAdapter";
     private Context context;
     private List<EducationData.ServiceItemListBean> dataList;
 
@@ -40,17 +39,20 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
 
     @Override
     public void onBindViewHolder(@NonNull EducationViewHolder holder, int position) {
-            holder.name.setText(dataList.get(position).getName());
-            Picasso.get().load(URL_IMG + dataList.get(position).getIconImg()).into(holder.icon);
-            holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-            holder.recyclerView.setHasFixedSize(true);
-            holder.recyclerView.setAdapter(new EducationSubAdapter (context,dataList.get(position).getAttrlist()));
+        int spacingInPixels = 10;  //設定item間距的距離
+        holder.name.setText(dataList.get(position).getName());
+        Picasso.get().load(URL_IMG + dataList.get(position).getIconImg()).into(holder.icon);
+        holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        holder.recyclerView.setHasFixedSize(true);
+        holder.recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        holder.recyclerView.setAdapter(new EducationSubAdapter (context,dataList.get(position).getAttrlist()));
     }
 
     @Override
     public int getItemCount() {
         return dataList.size();
     }
+
 
     public class EducationViewHolder extends RecyclerView.ViewHolder{
 
@@ -65,5 +67,4 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
             recyclerView = itemView.findViewById(R.id.rv_sub_item);
         }
     }
-
 }

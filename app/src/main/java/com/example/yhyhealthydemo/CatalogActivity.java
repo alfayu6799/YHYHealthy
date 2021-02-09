@@ -9,32 +9,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.yhyhealthydemo.adapter.ArticleAdapter;
-import com.example.yhyhealthydemo.datebase.ArticleData;
+import com.example.yhyhealthydemo.adapter.EducationAdapter;
+import com.example.yhyhealthydemo.datebase.EducationData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import static com.example.yhyhealthydemo.module.ApiProxy.ARTICLE_LIST;
 
-public class ArticleActivity extends AppCompatActivity {
+import static com.example.yhyhealthydemo.module.ApiProxy.EDU_ART_CATALOG;
 
-    private static final String TAG = "ArticleActivity";
+/******** ************
+ * 衛教 - 類別首頁 : 熱更新
+ * *******  ***** ****/
 
-    private String attrID = "";
-    private String serviceItemId ="";
-    private String attrName = "";
+public class CatalogActivity extends AppCompatActivity {
 
-    private ImageView back;
-    private RecyclerView rvArt;
-    private TextView articleTitle;
+    private static final String TAG = "CatalogActivity";
+
+    ImageView back;
+
+    RecyclerView recyclerView;
 
     //api
     ApiProxy proxy;
-    ArticleData articleData;
+    EducationData educationData;
 
     //進度條
     ProgressDialog progressDialog;
@@ -42,24 +42,18 @@ public class ArticleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article);
+        setContentView(R.layout.activity_catalog);
 
         proxy = ApiProxy.getInstance();
-        articleData = new ArticleData();
+        educationData = new EducationData();
 
         initView();
 
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle != null){
-            attrID = bundle.getString("AttrID");
-            serviceItemId = bundle.getString("ServiceItemId");
-            attrName = bundle.getString("AttName");
-            loadInfo(); //呼叫後端資料
-        }
+        initDate();
     }
 
     private void initView() {
-        back = findViewById(R.id.imageBack);
+        back = findViewById(R.id.eduBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,16 +61,14 @@ public class ArticleActivity extends AppCompatActivity {
             }
         });
 
-        articleTitle = findViewById(R.id.tvArtTitle);
-
-        int spacingInPixels = 20;  //設定item間距的距離
-        rvArt = findViewById(R.id.rv_article);
-        rvArt.setLayoutManager(new LinearLayoutManager(this));
-        rvArt.setHasFixedSize(true);
-        rvArt.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
+        int spacingInPixels = 30;  //設定item間距的距離
+        recyclerView = findViewById(R.id.rvEdu);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
     }
 
-    private void loadInfo() {
+    private void initDate() {
         //取得手機語系
         String language = getResources().getConfiguration().locale.getLanguage();
         String country = getResources().getConfiguration().locale.getCountry();
@@ -85,22 +77,19 @@ public class ArticleActivity extends AppCompatActivity {
         JSONObject json = new JSONObject();
         try {
             json.put("sysId", "0");
-            json.put("serviceItemId", serviceItemId);
-            json.put("attrId", attrID);
             json.put("language", defaultLan);
-            json.put("offset",1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "POST JSON INFO: " + json.toString());
-        proxy.buildEdu(ARTICLE_LIST, json.toString(), requestListener);
+
+        proxy.buildEdu(EDU_ART_CATALOG, json.toString(), requestListener);
     }
 
     private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
             if(progressDialog == null){
-                progressDialog = ProgressDialog.show(ArticleActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+                progressDialog = ProgressDialog.show(CatalogActivity.this, getString(R.string.title_process), getString(R.string.process), true);
             }else {
                 progressDialog.show();
             }
@@ -127,11 +116,11 @@ public class ArticleActivity extends AppCompatActivity {
         }
     };
 
-    //解析文章
+    //將需要的text&icon填入
     private void parserResult(JSONObject result) {
-        articleData = ArticleData.newInstance(result.toString());
-        ArticleAdapter adapter = new ArticleAdapter(this, articleData.getArticleList());
-        rvArt.setAdapter(adapter);
-        articleTitle.setText(attrName);
+        educationData = EducationData.newInstance(result.toString());
+        EducationAdapter adapter = new EducationAdapter(CatalogActivity.this, educationData.getServiceItemList());
+        recyclerView.setAdapter(adapter);
     }
+
 }

@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
@@ -692,7 +693,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0){
-                            parserCycleData(result);
+                            parserCycleData(result); //解析週期資料
                         }else {
                             Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -719,7 +720,17 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private void parserCycleData(JSONObject result) {
         cycleRecord = CycleRecord.newInstance(result.toString());
         for (int i = 0; i < cycleRecord.getSuccess().size(); i ++){
+            String testDay = cycleRecord.getSuccess().get(i).getTestDate();
 
+            List<Integer> count = cycleRecord.getSuccess().get(i).getCycleStatus();
+            if (count.size() >=2){
+                int code1 = cycleRecord.getSuccess().get(i).getCycleStatus().get(0);
+                int code2 = cycleRecord.getSuccess().get(i).getCycleStatus().get(1);
+                Log.d(TAG, "parserCycleData 1: " + testDay + "code1:" + code1 + " code2:" + code2);
+            }else {
+                int code = cycleRecord.getSuccess().get(i).getCycleStatus().get(0);
+                Log.d(TAG, "parserCycleData 2: " + testDay + " code1:" + code);
+            }
 
         }
 
