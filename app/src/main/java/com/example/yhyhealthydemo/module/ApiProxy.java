@@ -121,7 +121,7 @@ public class ApiProxy {
     public static String ARTICLE_IMG = URL_EDUCATION + "health_education/img/";
 
     //衛教文章內容api
-    public static String ARTICLE_TEXT = URL_EDUCATION + "health_education/html/";
+    //public static String ARTICLE_TEXT = URL_EDUCATION + "health_education/html/";
 
     //
     private static final String AUTHORIZATION = "Authorization";
