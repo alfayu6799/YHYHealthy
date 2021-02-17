@@ -12,9 +12,7 @@ import com.example.yhyhealthydemo.module.ApiProxy;
 
 public class ArticleDetailActivity extends AppCompatActivity {
 
-    WebView webView;
-
-    private static String ARTICLE_HTML = "http://192.168.1.120:8080/health_education/html/";
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +25,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             String html = bundle.getString("HTML");
-            webView.loadUrl(ARTICLE_HTML + html);
+            webView.loadUrl(html);
         }
         
     }

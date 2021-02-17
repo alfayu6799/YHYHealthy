@@ -103,25 +103,19 @@ public class ApiProxy {
     public static String MARRIAGE = "allAiniita/aplus/Marriage";
 
     //衛教IP網址
-    private static String URL_EDUCATION = "http://192.168.1.120:8080/";
-
-    //衛教分類api網址 (暫時)
-    private static String EDU_HESYS = "hesys_api/";
+    private static String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";
 
     //衛教文章分類api
-    public static String EDU_ART_CATALOG = EDU_HESYS + "article/getNewItemAttr";
+    public static String EDU_ART_CATALOG = "article/getNewItemAttr";
+
+    //衛教影片分類api
+    public static String EDU_VIDEO_CATALOG = "video/getNewItemAttr";
 
     //衛教文章api網址
-    public static String ARTICLE_LIST = EDU_HESYS + "article/getNewList";
+    public static String ARTICLE_LIST = "article/getNewList";
 
-    //衛教icon網址 (暫時)
-    public static String URL_IMG = URL_EDUCATION + "health_education/iconImg/";
-
-    //衛教文章icon網址(暫時)
-    public static String ARTICLE_IMG = URL_EDUCATION + "health_education/img/";
-
-    //衛教文章內容api
-    //public static String ARTICLE_TEXT = URL_EDUCATION + "health_education/html/";
+    //衛教影片api網址
+    public static String VIDEO_LIST = "video/getNewList";
 
     //
     private static final String AUTHORIZATION = "Authorization";
@@ -168,13 +162,14 @@ public class ApiProxy {
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
     //衛教專用
-    public void buildEdu(String action, String body, OnApiListener listener){
+    public void buildEdu(String action, String body, String language, OnApiListener listener){
         RequestBody requestBody = RequestBody.create(JSON, body);
         Request.Builder request = new Request.Builder();
         request.url(URL_EDUCATION + action);
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, authToken);
         request.addHeader(SCEPTER, scepterToken);
+        request.addHeader(DEFAULTLAN, language);
         buildRequest(request.build(), listener);
     }
 

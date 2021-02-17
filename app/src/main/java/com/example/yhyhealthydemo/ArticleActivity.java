@@ -84,16 +84,13 @@ public class ArticleActivity extends AppCompatActivity {
 
         JSONObject json = new JSONObject();
         try {
-            json.put("sysId", "0");
             json.put("serviceItemId", serviceItemId);
             json.put("attrId", attrID);
-            json.put("language", defaultLan);
             json.put("offset",1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "POST JSON INFO: " + json.toString());
-        proxy.buildEdu(ARTICLE_LIST, json.toString(), requestListener);
+        proxy.buildEdu(ARTICLE_LIST, json.toString(), defaultLan,requestListener);
     }
 
     private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {

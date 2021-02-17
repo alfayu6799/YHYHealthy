@@ -18,8 +18,6 @@ import com.example.yhyhealthydemo.datebase.EducationData;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-import static com.example.yhyhealthydemo.module.ApiProxy.URL_IMG;
-
 public class EducationSubAdapter extends RecyclerView.Adapter<EducationSubAdapter.EducationSubViewHolder>{
 
     private static final String TAG = "EducationSubAdapter";
@@ -42,8 +40,7 @@ public class EducationSubAdapter extends RecyclerView.Adapter<EducationSubAdapte
     @Override
     public void onBindViewHolder(@NonNull EducationSubViewHolder holder, int position) {
             holder.articleName.setText(list.get(position).getAttrName());
-            Picasso.get().load(URL_IMG + list.get(position).getIconImg()).into(holder.articleIcon);
-
+            Picasso.get().load(list.get(position).getIconImg()).into(holder.articleIcon);
             holder.articleIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

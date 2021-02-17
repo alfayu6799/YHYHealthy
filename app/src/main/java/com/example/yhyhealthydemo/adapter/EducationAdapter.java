@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,7 @@ import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.EducationData;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
-
-import static com.example.yhyhealthydemo.module.ApiProxy.URL_IMG;
 
 public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.EducationViewHolder> {
 
@@ -41,7 +39,7 @@ public class EducationAdapter extends RecyclerView.Adapter<EducationAdapter.Educ
     public void onBindViewHolder(@NonNull EducationViewHolder holder, int position) {
         int spacingInPixels = 10;  //設定item間距的距離
         holder.name.setText(dataList.get(position).getName());
-        Picasso.get().load(URL_IMG + dataList.get(position).getIconImg()).into(holder.icon);
+        Picasso.get().load(dataList.get(position).getIconImg()).into(holder.icon);
         holder.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
