@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.yhyhealthydemo.adapter.VideoListAdapter;
 import com.example.yhyhealthydemo.datebase.VideoListData;
@@ -22,6 +25,8 @@ public class VideoDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "VideoDetailActivity";
 
+    private TextView title;
+    private ImageView back;
     private RecyclerView recyclerView;
 
     //api
@@ -46,11 +51,22 @@ public class VideoDetailActivity extends AppCompatActivity {
             String attrId = bundle.getString("AttrID");
             String serviceItemId = bundle.getString("ServiceItemId");
             String videoName = bundle.getString("AttName");
-            initVideo(attrId, serviceItemId, videoName);
+            title.setText(videoName);
+            initVideo(attrId, serviceItemId);
         }
     }
 
     private void initView() {
+        title = findViewById(R.id.tvArtTitle);
+
+        back = findViewById(R.id.imageBackVideo);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         recyclerView = findViewById(R.id.rv_video);
         int spacingInPixels = 10;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,7 +74,7 @@ public class VideoDetailActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
     }
 
-    private void initVideo(String attrId, String serviceItemId, String videoName) {
+    private void initVideo(String attrId, String serviceItemId) {
         //取得手機語系
         String language = getResources().getConfiguration().locale.getLanguage();
         String country = getResources().getConfiguration().locale.getCountry();

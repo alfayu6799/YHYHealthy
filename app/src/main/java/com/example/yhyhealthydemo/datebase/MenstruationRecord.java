@@ -32,9 +32,8 @@ public class MenstruationRecord {
     }
 
     public static class SuccessBean {
+
         /**
-         * type :
-         * userId :
          * testDate : 2021-01-18
          * menstruation :
          * measure : {"param":"0.8","paramName":"Ovulation","temperature":33.23,"weight":70.2}
@@ -43,30 +42,12 @@ public class MenstruationRecord {
          * ovuRate : {"salivaRate":4,"btRate":1}
          */
 
-        private String type;
-        private String userId;
         private String testDate;
         private String menstruation;
         private MeasureBean measure;
         private StatusBean status;
         private SecretionsBean secretions;
         private OvuRateBean ovuRate;
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
 
         public String getTestDate() {
             return testDate;

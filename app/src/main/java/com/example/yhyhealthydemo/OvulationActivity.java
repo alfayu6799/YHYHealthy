@@ -290,6 +290,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
 
                 Toasty.info(OvulationActivity.this, "您選擇的日期為" + choseDay, Toast.LENGTH_SHORT,true).show();
+                DateTime dt = new DateTime(choseDay);  //格式化使用者選擇的日期
+                onClickDay = dt.toString("yyyy-MM-dd");
 
                 //使用者選擇的日期若是未來日期則禁用編輯紀錄和經期設定
                 try {
@@ -485,7 +487,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //將所選擇的日期帶到PeriodActivity頁面
         Intent intent = new Intent();
         intent.setClass(OvulationActivity.this, PeriodRecordActivity.class);
-        intent.putExtra("DAY", strDay);
+        Bundle bundle = new Bundle();
+        bundle.putString("DAY" , strDay);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
@@ -726,10 +730,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             if (count.size() >=2){
                 int code1 = cycleRecord.getSuccess().get(i).getCycleStatus().get(0);
                 int code2 = cycleRecord.getSuccess().get(i).getCycleStatus().get(1);
-                Log.d(TAG, "parserCycleData 1: " + testDay + "code1:" + code1 + " code2:" + code2);
+                //Log.d(TAG, "parserCycleData 1: " + testDay + "code1:" + code1 + " code2:" + code2);
             }else {
                 int code = cycleRecord.getSuccess().get(i).getCycleStatus().get(0);
-                Log.d(TAG, "parserCycleData 2: " + testDay + " code1:" + code);
+                //Log.d(TAG, "parserCycleData 2: " + testDay + " code1:" + code);
             }
 
         }

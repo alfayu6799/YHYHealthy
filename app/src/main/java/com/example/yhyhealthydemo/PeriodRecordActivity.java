@@ -41,6 +41,7 @@ import com.example.yhyhealthydemo.adapter.ColorAdapter;
 import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
 import com.example.yhyhealthydemo.adapter.SymptomAdapter;
 import com.example.yhyhealthydemo.adapter.TasteAdapter;
+import com.example.yhyhealthydemo.datebase.ChangeRecord;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.module.RecordSymptom;
 import com.example.yhyhealthydemo.module.RecordTaste;
@@ -48,13 +49,19 @@ import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
+
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
+
+import es.dmoral.toasty.Toasty;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
@@ -79,6 +86,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private AlertDialog alertDialog;
 
     String path;
+    String strDay;
 
     //藍芽
     private BluetoothManager mBluetoothManager;
@@ -109,8 +117,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private Switch bleeding, breastPain, intercourse;
 
     //Api
-    private MenstruationRecord record;
     private ApiProxy proxy;
+    private MenstruationRecord record;
+    private ChangeRecord changeRecord;
 
     //日期格式
     SimpleDateFormat sdf;
@@ -130,21 +139,28 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_period);
 
-        path = getIntent().getStringExtra("path");
+        path = getIntent().getStringExtra("path");      //照相回來的參數
 
         //日期格式
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        proxy = ApiProxy.getInstance();  //api初始化
-
+        changeRecord = new ChangeRecord();
         //init
         initView();
 
         //取的來自OvulationActivity的資料
-        Intent intent = this.getIntent();
-        String strDay = intent.getStringExtra("DAY");
-        textRecordDate.setText(strDay);
-        setRecordInfo(strDay);  //以使用者點擊的日期為key
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            strDay = bundle.getString("DAY");
+            if (strDay == null){  //避免從相機拍照完回來後日期為空 2021/02/18
+                DateTime day = new DateTime(new Date());
+                String today = day.toString("yyyy-MM-dd");
+                strDay = today;
+            }else {
+                textRecordDate.setText(strDay);
+            }
+            setRecordInfo(strDay);  //以使用者點擊的日期為key
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -198,8 +214,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btnPhoto:      //拍照
-                    openCamera();
+            case R.id.btnPhoto:      //拍照OnClick
+                    checkIsToday();  //檢查日期
                 break;
             case R.id.ivBLESearch:   //藍芽搜尋
                 if(ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -225,8 +241,34 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 }
                 break;
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台
-                UpdateApi(); //upload to api 2021/01/11 leona
+                checkBeforeUpdate();
                 break;
+        }
+    }
+
+    private void checkBeforeUpdate() {
+        //體重
+        if(!TextUtils.isEmpty(editWeight.getText().toString())){
+            Log.d(TAG, "checkBeforeUpdate: " + editWeight.getText().toString());
+            changeRecord.getMeasure().setTemperature(26);
+            //record.getSuccess().getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+//            changeRecord.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+        }
+
+        //體溫
+        //record.getSuccess().getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
+//        changeRecord.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
+        UpdateApi();
+    }
+
+    //拍照辨識需檢查是否當日 2021/02/18
+    private void checkIsToday() {
+        DateTime today = new DateTime(new Date());
+        String todayStr = today.toString("yyyy-MM-dd");
+        if (strDay.equals(todayStr)){ //限當日可以拍照
+            openCamera();
+        }else {
+            Toasty.info(PeriodRecordActivity.this,getString(R.string.camera_only_today), Toast.LENGTH_SHORT, true).show();
         }
     }
 
@@ -243,15 +285,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //上傳至後台儲存 2021/01/11 leona
     private void UpdateApi() {
-        //體重
-        if(!TextUtils.isEmpty(editWeight.getText().toString())){
-            record.getSuccess().getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
-        }
+        Log.d(TAG, "上傳到後台的資料 : " + changeRecord.toJSONString());
+        //2021/02/19 will design
 
-        //體溫
-        record.getSuccess().getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
-
-        Log.d(TAG, "傳到後台的資料 : " + record.toJSONString());
         Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -549,13 +585,15 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
+        proxy = ApiProxy.getInstance(); //api實體化
+
+        //取得日期資訊
         JSONObject json = new JSONObject();
         try {
             json.put("testDate",selectDay);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         proxy.buildPOST(RECORD_INFO, json.toString(), requestListener);
     }
 
@@ -577,7 +615,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
@@ -594,13 +632,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         String userWeight = String.valueOf(record.getSuccess().getMeasure().getWeight());
         editWeight.setText(userWeight);
 
-//        //脹痛,出血,行房
-//        boolean BeastPain = record.getStatus().isBreastPain();
-//        breastPain.setChecked(BeastPain);
-//        boolean Bleeding = record.getStatus().isBleeding();
-//        bleeding.setChecked(Bleeding);
-//        boolean Intercourse = record.getStatus().isIntercourse();
-//        intercourse.setChecked(Intercourse);
+        //脹痛,出血,行房
+        boolean BeastPain = record.getSuccess().getStatus().isBreastPain();
+        breastPain.setChecked(BeastPain);
+        boolean Bleeding = record.getSuccess().getStatus().isBleeding();
+        bleeding.setChecked(Bleeding);
+        boolean Intercourse = record.getSuccess().getStatus().isIntercourse();
+        intercourse.setChecked(Intercourse);
 
         //顏色,狀態,氣味,症狀
         setSecretion();

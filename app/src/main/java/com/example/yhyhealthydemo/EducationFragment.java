@@ -45,16 +45,16 @@ public class EducationFragment extends Fragment implements View.OnClickListener 
 
         switch (view.getId()){
             case R.id.article:
-                target = CatalogActivity.class;
+                target = CatalogActivity.class; //文章
                 break;
             case R.id.video:
-                target = VideoActivity.class;
+                target = VideoActivity.class; //影片
                 break;
             case R.id.discuss:
-                target = FourmActivity.class;
+                target = FourmActivity.class; //討論區
                 break;
             case R.id.onlineCall:
-                target = OnLineCallActivity.class;
+                target = OnLineCallActivity.class; //線上諮詢
                 break;
         }
         if (target != null) startActivity(new Intent(getContext(), target));

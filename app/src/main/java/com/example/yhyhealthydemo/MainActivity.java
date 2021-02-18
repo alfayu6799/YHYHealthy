@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_home:     //首頁
                     fragment = new MeasureFragment();
                     break;
-                case R.id.nav_record:   //歷史紀錄
-                    fragment = new RecordFragment();
-                    break;
                 case R.id.nav_edu:      //衛教
                     fragment = new EducationFragment();
+                    break;
+                case R.id.nav_record:   //歷史紀錄
+                    fragment = new RecordFragment();
                     break;
                 case R.id.nav_setting:  //設定
                     fragment = new SettingFragment();

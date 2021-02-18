@@ -73,4 +73,7 @@ dependencies {
 
     //A powerful image downloading and caching library for Android
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //youtube
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 }

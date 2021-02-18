@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.joda.time.DateTime;
+
 import java.io.File;
+import java.util.Date;
 
 /************************
 * 排卵拍照後結果上傳page

@@ -10,6 +10,7 @@
     <string name="monitor">呼吸監測</string>
     <string name="update_success">資料上傳成功</string>
     <string name="delete_success">資料刪除成功</string>
+    <string name="camera_only_today">拍照辨識僅限當日</string>
 
     <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
     <string name="select_function">功能 : </string>
