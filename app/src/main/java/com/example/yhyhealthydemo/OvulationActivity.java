@@ -439,13 +439,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         //自動判斷今天是經期的第幾天 2021/02/20
         String testDay = record.getSuccess().getTestDate();
-        Log.d(TAG, "parserJson: " + testDay);
-//        //經期第一天
-//        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("FirstDay", "");
-//        //經期長度
-//        int length = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getInt("CYCLE", 0);
-//
-//        DateTime begin = new DateTime(beginStr);
+        //經期第一天
+        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("BEGIN", "");
+        //經期長度
+        int length = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getInt("CYCLE", 0);
+        Log.d(TAG, "經期第一天: " + beginStr + " testDay:" + testDay);
+
+        //DateTime begin = new DateTime(beginStr); //經期第一天
 //        DateTime end = new DateTime(testDay);
 //        Period p = new Period(begin, end, PeriodType.days()); //今天與經期第一天比較
 //        int days = p.getDays() + 1;
