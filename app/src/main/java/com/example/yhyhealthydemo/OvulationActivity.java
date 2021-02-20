@@ -9,7 +9,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +41,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,6 +98,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private SimpleDateFormat sdf;  //日期格式
     private DateData selectedDate;
 
+    private String firstDayOfMonth;  //本月份的前五天
+    private String lastDayOfMonth;   //本月份的後五天
+
     //圖表
     LineChart lineChart;
     private TextView periodRangDate;
@@ -107,6 +115,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
+    
+    private String startStr = ""; //經期第一天
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +130,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         initData(); //初始化
 
         initView();
+
     }
 
     //初始化dataBean & api
@@ -175,11 +186,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     @SuppressLint("SetTextI18n")
     private void initChartData() {
         DateTime dt = new DateTime();
-        //當月份第一天
-        String firstDay = dt.dayOfMonth().withMinimumValue().toString("MM/dd");
-        String lastDay = dt.dayOfMonth().withMaximumValue().toString("MM/dd");
 
-        periodRangDate.setText(firstDay + " ~ " + lastDay); //經期顯示期間
+        String firstOfMonth = dt.dayOfMonth().withMinimumValue().toString("MM/dd"); //當月份第一天之月日
+        String lastOfMonth = dt.dayOfMonth().withMaximumValue().toString("MM/dd");  //當月份最後一天之月日
+
+        periodRangDate.setText(firstOfMonth + " ~ " + lastOfMonth); //經期顯示期間
 
         menstruationArray = new ArrayList<>();
 
@@ -254,19 +265,23 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //set 月曆月份Title
         YearMonthTv.setText(dt.getYear() + getString(R.string.year) + dt.getMonthOfYear() + getString(R.string.month_of_year));
 
-        //calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
-
-        //2021/02/05
-        setCycleRecord();
+        calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
 
         DateTime today = new DateTime(new Date());  //今天
+        firstDayOfMonth = dt.dayOfMonth().withMinimumValue().plusDays(-5).toString("yyyy-MM-dd"); //當月份第一天之年月日
+        lastDayOfMonth = dt.dayOfMonth().withMaximumValue().plusDays(+5).toString("yyyy-MM-dd");  //當月份最後一天之年月日
+
+        //2021/02/05
+        setCycleRecord(firstDayOfMonth, lastDayOfMonth); //週期月曆資料
+
         String todayStr = today.toString("yyyy-MM-dd");
 
+        //單一日資料
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(4*1000);
+                    Thread.sleep(2*1000);
                     //api查詢本日是否有資料
                     checkDataFromApi(todayStr);
                 } catch (InterruptedException e) {
@@ -282,10 +297,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 calendarView.getMarkedDates().removeAdd();
                 calendarView.markDate(date);
                 selectedDate = date;
-
-//                //今天日期Mark
-//                calendarView.markDate(
-//                        new DateData(date.getYear(), date.getMonth(), date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(255,0,0))));
 
                 String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
 
@@ -320,7 +331,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onMonthChange(int year, int month) {
-                YearMonthTv.setText(String.format("%d年%d月", year, month));
+                String yearStr = String.valueOf(year);
+                String monthStr = String.valueOf(month);
+                String yearMonth = yearStr + "-" + monthStr;
+                YearMonthTv.setText(yearStr + getString(R.string.year) + monthStr + getString(R.string.month_of_year));
+
+                String customFirstDayOfMonth = new DateTime(yearMonth).dayOfMonth().withMinimumValue().plusDays(-5).toString("yyyy-MM-dd");
+                String customLastDayOfMonth = new DateTime(yearMonth).dayOfMonth().withMaximumValue().plusDays(+5).toString("yyyy-MM-dd");
+                setCycleRecord(customFirstDayOfMonth,customLastDayOfMonth);
             }
         });
 
@@ -329,8 +347,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
                 .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
 
-//        selectedDate = new DateData(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
-//        calendarView.markDate(selectedDate);
     }
 
     //去跟後台要單一日的排卵資料
@@ -341,8 +357,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //排卵資料後端
-        Log.d(TAG, "排卵資料後端Api: " + json.toString());
         proxy.buildPOST(RECORD_INFO, json.toString(), requestListener);
     }
 
@@ -390,6 +404,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     /** 解析單一筆後台來的資料並顯示在月曆下的框框內 **/
     /**共四組資訊 : 唾液辨識結果 基礎體溫 唾液辨識機率 基礎體溫機率 */
+    @SuppressLint("SetTextI18n")
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
         //唾液辨識結果
@@ -397,7 +412,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         if (!paramName.equals("")){
             oveuEdit.setText("編輯\n紀錄");
             if (paramName.equals("Ovulation")){
-                ovulResult.setText(getString(R.string.param_name) + " 排卵期");
+                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.in_period));
+            }else if(paramName.equals("General")){
+                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.non_period));
+            }else if(paramName.equals("FollicularORLutealPhase")){
+                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.in_cell));
+            }else if(paramName.equals("Unrecognizable")){
+                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.unknow));
             }
         }else {
             oveuEdit.setText("新增\n紀錄");
@@ -415,6 +436,25 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //根據基礎體溫結果得到的機率
         int btRate = record.getSuccess().getOvuRate().getBtRate();
         bodyDegreeRate.setRating(btRate);
+
+        //自動判斷今天是經期的第幾天 2021/02/20
+        String testDay = record.getSuccess().getTestDate();
+        Log.d(TAG, "parserJson: " + testDay);
+//        //經期第一天
+//        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("FirstDay", "");
+//        //經期長度
+//        int length = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getInt("CYCLE", 0);
+//
+//        DateTime begin = new DateTime(beginStr);
+//        DateTime end = new DateTime(testDay);
+//        Period p = new Period(begin, end, PeriodType.days()); //今天與經期第一天比較
+//        int days = p.getDays() + 1;
+//        if(days > length || days <= 0){
+//            menstruationPeriodDay.setText(getString(R.string.period_day_out_order));
+//        }else {
+//            menstruationPeriodDay.setText(getString(R.string.period_day) + days + getString(R.string.day));
+//        }
+
     }
 
 
@@ -666,11 +706,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     };
 
     //後端資料填滿月曆
-    private void setCycleRecord() {
+    private void setCycleRecord(String startDay, String endDay) {
         JSONObject json = new JSONObject();
         try {
-            json.put("startDate", "2021-01-31");
-            json.put("endDate","2021-03-06");
+            json.put("startDate", startDay);
+            json.put("endDate", endDay);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -723,6 +763,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //解析週期資料
     private void parserCycleData(JSONObject result) {
         cycleRecord = CycleRecord.newInstance(result.toString());
+
+        //經期第一天  2021/02/20
+        startStr = new DateTime(cycleRecord.getSuccess().get(0).getTestDate()).toString("yyyy-MM-dd");
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putString("BEGIN", startStr).apply();  //將經期的第一天日期記錄到檔案
+
         for (int i = 0; i < cycleRecord.getSuccess().size(); i ++){
             String testDay = cycleRecord.getSuccess().get(i).getTestDate();
 
@@ -733,11 +779,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 //Log.d(TAG, "parserCycleData 1: " + testDay + "code1:" + code1 + " code2:" + code2);
             }else {
                 int code = cycleRecord.getSuccess().get(i).getCycleStatus().get(0);
-                //Log.d(TAG, "parserCycleData 2: " + testDay + " code1:" + code);
+
+                if(code == 5){
+                        //Log.d(TAG, "parserCycleData: code5 :" + testDay);
+
+                }else if(code == 6){
+                    //Log.d(TAG, "parserCycleData: code6 :" + testDay);
+                }
             }
 
         }
 
     }
-
 }

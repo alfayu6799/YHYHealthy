@@ -1,5 +1,7 @@
 package com.example.yhyhealthydemo.datebase;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 
 /**
@@ -17,51 +19,31 @@ public class ChangeRecord {
      * testDate : 2021-02-18
      */
 
-    private MeasureBean measure;
+    private MeasureBean measure = new MeasureBean();
     private String menstruation;
-    private OvuRateBean ovuRate;
-    private SecretionsBean secretions;
-    private StatusBean status;
+    private OvuRateBean ovuRate = new OvuRateBean();
+    private SecretionsBean secretions = new SecretionsBean();
+    private StatusBean status = new StatusBean();
     private String testDate;
 
     public MeasureBean getMeasure() {
         return measure;
     }
 
-    public void setMeasure(MeasureBean measure) {
-        this.measure = measure;
-    }
-
     public String getMenstruation() {
         return menstruation;
-    }
-
-    public void setMenstruation(String menstruation) {
-        this.menstruation = menstruation;
     }
 
     public OvuRateBean getOvuRate() {
         return ovuRate;
     }
 
-    public void setOvuRate(OvuRateBean ovuRate) {
-        this.ovuRate = ovuRate;
-    }
-
     public SecretionsBean getSecretions() {
         return secretions;
     }
 
-    public void setSecretions(SecretionsBean secretions) {
-        this.secretions = secretions;
-    }
-
     public StatusBean getStatus() {
         return status;
-    }
-
-    public void setStatus(StatusBean status) {
-        this.status = status;
     }
 
     public String getTestDate() {
@@ -226,6 +208,7 @@ public class ChangeRecord {
             this.intercourse = intercourse;
         }
     }
+
 
     /**
      * SignInAPI 物件轉 JSON字串

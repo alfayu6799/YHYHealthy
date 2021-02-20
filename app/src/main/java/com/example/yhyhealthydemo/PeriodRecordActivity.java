@@ -4,6 +4,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -43,10 +44,12 @@ import com.example.yhyhealthydemo.adapter.SymptomAdapter;
 import com.example.yhyhealthydemo.adapter.TasteAdapter;
 import com.example.yhyhealthydemo.datebase.ChangeRecord;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
+import com.example.yhyhealthydemo.datebase.PhotoData;
 import com.example.yhyhealthydemo.module.RecordSymptom;
 import com.example.yhyhealthydemo.module.RecordTaste;
 import com.example.yhyhealthydemo.module.RecordType;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ImageUtils;
 import com.example.yhyhealthydemo.tools.MyGridView;
 import com.example.yhyhealthydemo.module.RecordColor;
 
@@ -64,7 +67,9 @@ import es.dmoral.toasty.Toasty;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
+import static com.example.yhyhealthydemo.module.ApiProxy.IMAGE_DETECTION;
 import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_UPDATE;
 
 /*********
  * 排卵紀錄資訊
@@ -76,17 +81,18 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     private static final String TAG = PeriodRecordActivity.class.getSimpleName();
 
-    TextView  textRecordDate;
-    Button    takePhoto, startMeasure, saveSetting;
-    ImageView searchBLE;
-    ImageView photoShow;
-    TextView  textBleStatus;
-    TextView  textAnalysis;
+    private TextView  textRecordDate;
+    private Button    takePhoto, startMeasure, saveSetting, photoIdentify;
+    private ImageView searchBLE;
+    private ImageView photoShow;
+    private TextView  textBleStatus;
+    private TextView  textAnalysis;
 
     private AlertDialog alertDialog;
 
-    String path;
-    String strDay;
+    private String photoPath;
+    private String strDay;
+    private String base64Str;
 
     //藍芽
     private BluetoothManager mBluetoothManager;
@@ -111,8 +117,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
-    EditText   editWeight;    //體重
-    TextView   textBodyTemp; //體溫
+    private EditText   editWeight;    //體重
+    private TextView   textBodyTemp; //體溫
 
     private Switch bleeding, breastPain, intercourse;
 
@@ -120,9 +126,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private ApiProxy proxy;
     private MenstruationRecord record;
     private ChangeRecord changeRecord;
+    private PhotoData photoData;
 
     //日期格式
-    SimpleDateFormat sdf;
+    private SimpleDateFormat sdf;
 
     //顏色,氣味,症狀,型態 Adapter
     private SymptomAdapter sAdapter;
@@ -134,17 +141,18 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private String[] taste;  //氣味
     private String[] colors; //顏色
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_period);
 
-        path = getIntent().getStringExtra("path");      //照相回來的參數
+        photoPath = getIntent().getStringExtra("path");      //照相回來的參數
 
         //日期格式
         sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        changeRecord = new ChangeRecord();
         //init
         initView();
 
@@ -167,6 +175,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private void initView() {
         textRecordDate = findViewById(R.id.tvRecordDate);
         takePhoto = findViewById(R.id.btnPhoto);
+        photoIdentify = findViewById(R.id.btnPhotoIdentify); //辨識Onclick
         searchBLE = findViewById(R.id.ivBLESearch);
         startMeasure = findViewById(R.id.btnStartMeasure);
         saveSetting = findViewById(R.id.btnSaveSetting);
@@ -196,8 +205,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         gridViewType = findViewById(R.id.gvType);
         gridViewSymptom = findViewById(R.id.gvSymptom);
 
-        if(path != null){
-            photoShow.setImageURI(Uri.fromFile(new File(path)));
+        if(photoPath != null){ //拍完相機回來的資料 2021/02/19
+            photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
+            takePhoto.setText(R.string.re_camera);     //2021/02/19
+            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
         }
 
         takePhoto.setOnClickListener(this);
@@ -205,6 +216,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         startMeasure.setOnClickListener(this);
         saveSetting.setOnClickListener(this);
         startMeasure.setOnClickListener(this);
+        photoIdentify.setOnClickListener(this);  //2021/02/19
 
         bleeding.setOnCheckedChangeListener(this);
         breastPain.setOnCheckedChangeListener(this);
@@ -240,25 +252,94 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     gatt.writeCharacteristic(characteristic);
                 }
                 break;
-            case R.id.btnSaveSetting: //將資料收集完後上傳至後台
-                checkBeforeUpdate();
+            case R.id.btnSaveSetting: //將資料收集完後上傳至後台Onclick
+                checkBeforeUpdate();  //上傳至後台先檢查資訊是否齊全fxn
+                break;
+            case R.id.btnPhotoIdentify: //將照片傳給後台去辨識
+                upPhotoToApi();
                 break;
         }
     }
 
+    //2021/02/19 照片辨識
+    private void upPhotoToApi() {
+        //先將照片編碼成base64
+        base64Str = ImageUtils.imageToBase64(photoPath);
+        //今天日期
+        DateTime today = new DateTime();
+        String todayStr = today.toString("yyyy-MM-dd");
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("testDate", todayStr);
+            json.put("img", base64Str);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildPOST(IMAGE_DETECTION, json.toString(), photoIdentifyListener);
+    }
+
+    private ApiProxy.OnApiListener photoIdentifyListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(PeriodRecordActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserPhotoId(result);  //2021/02/19
+                        }else {
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //照片辨識後後台回來的訊息 2021/02/19
+    private void parserPhotoId(JSONObject result) {
+        photoData = PhotoData.newInstance(result.toString());
+        String paramName = photoData.getSuccess().getParamName();
+        String param = photoData.getSuccess().getParam();
+        changeRecord.getMeasure().setParam(param); //後台需要這個資料
+        textAnalysis.setText(paramName); //顯示分析結果
+    }
+
+    //上傳至後台先檢查資訊是否齊全
     private void checkBeforeUpdate() {
         //體重
         if(!TextUtils.isEmpty(editWeight.getText().toString())){
             Log.d(TAG, "checkBeforeUpdate: " + editWeight.getText().toString());
-            changeRecord.getMeasure().setTemperature(26);
-            //record.getSuccess().getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
-//            changeRecord.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
+            changeRecord.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
         }
 
         //體溫
-        //record.getSuccess().getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
-//        changeRecord.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
-        UpdateApi();
+        changeRecord.getMeasure().setTemperature(Double.parseDouble(textBodyTemp.getText().toString()));
+        UpdateToApi();
     }
 
     //拍照辨識需檢查是否當日 2021/02/18
@@ -275,7 +356,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //開啟相機功能
     private void openCamera() {
         if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
-            Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class);
+            Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class); //自定義Camera功能
             startActivity(camera);
             finish();
         }else {
@@ -283,13 +364,66 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
     }
 
-    //上傳至後台儲存 2021/01/11 leona
-    private void UpdateApi() {
+    //上傳至後台儲存 2021/02/19 leona
+    private void UpdateToApi() {
+        //需要日期傳到後台去做更新
+        changeRecord.setTestDate(strDay);
         Log.d(TAG, "上傳到後台的資料 : " + changeRecord.toJSONString());
-        //2021/02/19 will design
 
-        Toast.makeText(this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
-        finish();
+        proxy.buildPOST(RECORD_UPDATE, changeRecord.toJSONString(), changeRecordListener);
+
+    }
+
+    private ApiProxy.OnApiListener changeRecordListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(PeriodRecordActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    parserUpdateResult(result);
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    private void parserUpdateResult(JSONObject result) {
+        Log.d(TAG, "parserUpdateResult: " + result.toString());
+        try {
+            JSONObject jsonObject = new JSONObject(result.toString());
+            int errorCode = jsonObject.getInt("errorCode");
+            if (errorCode == 0){
+                boolean success = jsonObject.getBoolean("success");
+                if (success){
+                    Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+//                    Intent intent = new Intent();
+//                    intent.setClass(PeriodRecordActivity.this, OvulationActivity.class);
+//                    intent.putExtra("update",1);
+//                    startActivity(intent);
+                    finish(); //回到前一頁
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     //Switch button listener  2021/01/07 leona
@@ -298,23 +432,23 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         switch (compoundButton.getId()){
             case R.id.swBleeding:   //出血
                 if (isCheck){
-                    record.getSuccess().getStatus().setBleeding(true);
+                    changeRecord.getStatus().setBleeding(true);
                 }else {
-                    record.getSuccess().getStatus().setBleeding(false);
+                    changeRecord.getStatus().setBleeding(false);
                 }
                 break;
             case R.id.swBreastPain: //脹痛
                 if(isCheck){
-                    record.getSuccess().getStatus().setBreastPain(true);
+                    changeRecord.getStatus().setBreastPain(true);
                 }else {
-                    record.getSuccess().getStatus().setBreastPain(false);
+                    changeRecord.getStatus().setBreastPain(false);
                 }
                 break;
             case R.id.swIntercourse: //行房
                 if (isCheck){
-                    record.getSuccess().getStatus().setIntercourse(true);
+                    changeRecord.getStatus().setIntercourse(true);
                 }else {
-                    record.getSuccess().getStatus().setIntercourse(false);
+                    changeRecord.getStatus().setIntercourse(false);
                 }
                 break;
         }
@@ -585,7 +719,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //向後台要求資料 2021/01/08 leona
     private void setRecordInfo(String selectDay) {
-        proxy = ApiProxy.getInstance(); //api實體化
+        proxy = ApiProxy.getInstance();      //api實體化
+        changeRecord = new ChangeRecord();   //實體化
 
         //取得日期資訊
         JSONObject json = new JSONObject();
@@ -600,7 +735,11 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
         @Override
         public void onPreExecute() {
-
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(PeriodRecordActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -620,7 +759,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
         @Override
         public void onPostExecute() {
-
+            progressDialog.dismiss();
         }
     };
 
@@ -631,6 +770,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         //體重
         String userWeight = String.valueOf(record.getSuccess().getMeasure().getWeight());
         editWeight.setText(userWeight);
+
+        //體溫
+
 
         //脹痛,出血,行房
         boolean BeastPain = record.getSuccess().getStatus().isBreastPain();
@@ -656,6 +798,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         int pos_color = recordColor.getIndex();
         cAdapter.setData(colors, pos_color);
         gridViewColor.setAdapter(cAdapter);
+        changeRecord.getSecretions().setColor(secretionsColor);  //2021/02/19
 
         gridViewColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -665,7 +808,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
                 RecordColor recordColor = RecordColor.getEnName(position);
                 String ColorName = recordColor.getName();
-                record.getSuccess().getSecretions().setColor(ColorName); //寫回後台
+                changeRecord.getSecretions().setColor(ColorName);//寫回後台
             }
         });
 
@@ -678,6 +821,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         RecordTaste recordTaste = RecordTaste.getTaste(secretionsTaste);
         int pos_taste = recordTaste.getIndex();
         aAdapter.setData(taste, pos_taste);
+        changeRecord.getSecretions().setSmell(secretionsTaste); //2021/02/19
 
         gridViewTaste.setAdapter(aAdapter);
         gridViewTaste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -688,7 +832,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
                 RecordTaste recordTaste = RecordTaste.getEnName(position);
                 String TasteName = recordTaste.getName();
-                record.getSuccess().getSecretions().setSmell(TasteName); //寫回後台
+                changeRecord.getSecretions().setSmell(TasteName); //寫回後台
             }
         });
 
@@ -702,6 +846,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         RecordType recordType = RecordType.getType(secretionsType);
         int pos_type = recordType.getIndex();
         tAdapter.setData(types, pos_type);
+        changeRecord.getSecretions().setSecretionType(secretionsType);  //2021/02/19
 
         gridViewType.setAdapter(tAdapter);
         gridViewType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -711,7 +856,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 tAdapter.notifyDataSetChanged();
                 RecordType recordType = RecordType.getEnName(position);
                 String TypeName = recordType.getName();
-                record.getSuccess().getSecretions().setSecretionType(TypeName); //寫回後台
+                changeRecord.getSecretions().setSecretionType(TypeName);  //寫回後台
             }
         });
 
@@ -725,6 +870,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         RecordSymptom recordSymptom = RecordSymptom.getSymptom(secretionsSymptom);
         int pos_symptom = recordSymptom.getIndex();
         sAdapter.setData(symps,pos_symptom);
+        changeRecord.getSecretions().setSymptom(secretionsSymptom);  //2021/02/19
 
         gridViewSymptom.setAdapter(sAdapter);
         gridViewSymptom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -735,7 +881,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
                 RecordSymptom recordSymptom = RecordSymptom.getEnName(position);
                 String SymptomName = recordSymptom.getName();
-                record.getSuccess().getSecretions().setSymptom(SymptomName);
+                changeRecord.getSecretions().setSymptom(SymptomName); //寫回後台
             }
         });
     }

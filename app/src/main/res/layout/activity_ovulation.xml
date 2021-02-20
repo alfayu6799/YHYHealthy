@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:textSize="22sp"
-                    android:text="今天是週期第N天"/>
+                    android:text="週期第N天"/>
                 <TextView
                     android:id="@+id/tv_ovul_result_1"
                     android:layout_width="wrap_content"

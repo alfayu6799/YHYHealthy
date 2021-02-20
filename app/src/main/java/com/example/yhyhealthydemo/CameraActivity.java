@@ -117,7 +117,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
     public void onPictureTaken(byte[] data, Camera camera) {
         String path = "";
         if ((path = saveImage(data)) != null) {
-            Intent it = new Intent(CameraActivity.this, PreviewActivity.class);
+            Intent it = new Intent(CameraActivity.this, PeriodRecordActivity.class);
             it.putExtra("path", path);
             startActivity(it);
             finish();
@@ -147,7 +147,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
         Bitmap mBitmap = Bitmap.createBitmap(bitmap,0 ,0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         try {
-            File file = File.createTempFile("img","");
+            File file = File.createTempFile("img",".jpg");
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

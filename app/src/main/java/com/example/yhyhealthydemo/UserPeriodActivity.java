@@ -330,7 +330,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
@@ -343,6 +343,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
     private void writeToSharedPreferences() {
         SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
         pref.edit().putInt("PERIOD", Integer.parseInt(periodLength.getText().toString())).apply();
+        pref.edit().putInt("CYCLE" , Integer.parseInt(cycleLength.getText().toString())).apply();
         pref.edit().putBoolean("MENSTRUAL", true).apply();
     }
 

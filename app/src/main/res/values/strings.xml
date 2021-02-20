@@ -215,4 +215,13 @@
     <string name="nutrition">營養</string>
     <string name="year">年</string>
     <string name="month_of_year">月</string>
+    <string name="re_camera">重新拍照</string>
+    <string name="identify">辨識</string>
+    <string name="in_period">排卵期</string>
+    <string name="in_cell">黃體濾泡期</string>
+    <string name="unknow">無法辨識</string>
+    <string name="non_period">非排卵期</string>
+    <string name="period_day">週期的第</string>
+    <string name="period_day_out_order">周期的第N天</string>
+    <string name="day">天</string>
 </resources>

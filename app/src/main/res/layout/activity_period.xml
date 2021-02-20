@@ -57,8 +57,8 @@
                 <Button
                     android:id="@+id/btnPhoto"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="35dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/ivPhoto"
@@ -69,6 +69,23 @@
                     android:background="@drawable/shape_268e9f"
                     android:textColor="@color/white"
                     android:text="拍照"/>
+                <Button
+                    android:id="@+id/btnPhotoIdentify"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/btnPhoto"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/ivPhoto"
+                    android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
+                    android:gravity="center"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_268e9f"
+                    android:textColor="@color/white"
+                    android:text="@string/identify" />
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,12 +103,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="22sp"/>
             </LinearLayout>
-            <TextView
-                android:id="@+id/tv_analysis"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textSize="18sp"
-                android:text="說明"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
