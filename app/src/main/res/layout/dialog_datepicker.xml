@@ -80,8 +80,7 @@
             android:layout_toRightOf="@id/btnDateDelete"
             android:textSize="18dp"
             android:text="@string/slycalendar_cancel"
-            android:background="@null"
-            android:layout_marginLeft="30dp"/>
+            android:background="@null"/>
 
         <Button
             android:id="@+id/btnDateSave"

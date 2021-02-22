@@ -342,6 +342,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
     //經期設定寫到SharedPreferences
     private void writeToSharedPreferences() {
         SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putString("BEGIN", firstDay.getText().toString()).apply();
         pref.edit().putInt("PERIOD", Integer.parseInt(periodLength.getText().toString())).apply();
         pref.edit().putInt("CYCLE" , Integer.parseInt(cycleLength.getText().toString())).apply();
         pref.edit().putBoolean("MENSTRUAL", true).apply();

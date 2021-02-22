@@ -50,7 +50,7 @@ public class Menstruation {
      * JSON 字串轉 Menstruation 物件
      *
      * @param jsonString json 格式的資料
-     * @return TemperatureReceives 物件
+     * @return 物件
      */
     public static Menstruation newInstance(String jsonString) {
 

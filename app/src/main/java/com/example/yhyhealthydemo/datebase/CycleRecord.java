@@ -56,7 +56,7 @@ public class CycleRecord {
      * JSON 字串轉  物件
      *
      * @param jsonString json 格式的資料
-     * @return TemperatureReceives 物件
+     * @return 物件
      */
     public static CycleRecord newInstance(String jsonString) {
 
