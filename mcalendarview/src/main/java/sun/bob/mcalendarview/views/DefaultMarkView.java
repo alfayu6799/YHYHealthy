@@ -55,16 +55,16 @@ public class DefaultMarkView extends BaseMarkView {
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.WHITE);
                 circleDrawable = new ShapeDrawable(new OvalShape());
-                circleDrawable.getPaint().setColor(style.getColor());
-                this.setPadding(20, 20, 20, 20);
+//                circleDrawable.getPaint().setColor(style.getColor());
+//                this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.BACKGROUND:
+            case MarkStyle.BACKGROUND: //當日日期的背景色
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
-                textView.setTextColor(Color.WHITE);
+                textView.setTextColor(Color.BLACK);
                 circleDrawable = new ShapeDrawable(new OvalShape());
                 circleDrawable.getPaint().setColor(style.getColor());
                 this.setPadding(20, 20, 20, 20);
@@ -72,7 +72,7 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.PREIOD:   //2020/12/20 leona
+            case MarkStyle.PREIOD:   //2021/02/23 leona 純空心圓(虛線外圍)
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.BLACK);
@@ -86,15 +86,43 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.MENSTRUAL:  //2020/12/20 leona
+            case MarkStyle.REALLYPERIOD:  //2020/12/20 leona 虛線(月經)+實心圓
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
-                textView.setTextColor(Color.WHITE);
+                textView.setTextColor(Color.BLACK);
                 shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.OVAL);
                 shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
                 shape.setColor(style.getColor());
                 shape.setStroke(20, Color.parseColor("#CF6194"), 10,8);
+                this.setPadding(20, 20, 20, 20);
+                textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
+                textView.setBackground(shape);
+                this.addView(textView);
+                return;
+            case MarkStyle.PREDICION:    //2021/02/23 leona 虛線(預計排卵日)+實心圓
+                this.setLayoutParams(matchParentParams);
+                this.setOrientation(HORIZONTAL);
+                textView.setTextColor(Color.BLACK);
+                shape = new GradientDrawable();
+                shape.setShape(GradientDrawable.OVAL);
+                shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
+                shape.setColor(style.getColor());
+                shape.setStroke(20, Color.parseColor("#7793DD"), 10,8);
+                this.setPadding(20, 20, 20, 20);
+                textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
+                textView.setBackground(shape);
+                this.addView(textView);
+                return;
+            case MarkStyle.DOTTEDLINE:  //2021/02/23 leona 虛線(預計排卵期)+實心圓
+                this.setLayoutParams(matchParentParams);
+                this.setOrientation(HORIZONTAL);
+                textView.setTextColor(Color.BLACK);
+                shape = new GradientDrawable();
+                shape.setShape(GradientDrawable.OVAL);
+                shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
+                shape.setColor(style.getColor());
+                shape.setStroke(20, Color.parseColor("#D5AD45"), 10,8);
                 this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
                 textView.setBackground(shape);

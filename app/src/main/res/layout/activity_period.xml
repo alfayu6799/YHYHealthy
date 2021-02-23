@@ -149,7 +149,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textSize="42dp"
-                    android:text="36.5"/>
+                    android:text="34.5"/>
                 <Button
                     android:id="@+id/btnStartMeasure"
                     android:layout_width="match_parent"

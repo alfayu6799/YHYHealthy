@@ -32,75 +32,85 @@ public class Math {
         return new DateData(dYear, dMonth, dDay);
     }
 
-
     public int getCalenderBgResID()
     {
-        List<Integer> statusCode=date.getCycleStatus();
+        List<Integer> statusCode = date.getCycleStatus();
 
         //陣列個數判斷
         if(statusCode.size()==1)
         {
             if (statusCode.get(SINGLE)==1)
-                return resID;
+                return 1;
             if (statusCode.get(SINGLE)==2)
-                return resID;
+                return 2;
             if (statusCode.get(SINGLE)==3)
-                return resID;
+                return 3;
             if (statusCode.get(SINGLE)==4)
-                return resID;
+                return 4;
             if (statusCode.get(SINGLE)==5)
-                return resID;
+                return 5;
             if (statusCode.get(SINGLE)==6)
-                return resID;
+                return 6;
             if (statusCode.get(SINGLE)==7)
-                return resID;
-
+                return 7;
         }
-
 
         else if(statusCode.size()==2)
         {
-
             if (statusCode.get(DOTTED)==5)
             {
                 if (statusCode.get(FILLED)==0)
-                    return resID;
+                    return 8;
                 if (statusCode.get(FILLED)==1)
-                    return resID;
+                    return 9;
                 if (statusCode.get(FILLED)==2)
-                    return resID;
+                    return 10;
                 if (statusCode.get(FILLED)==3)
-                    return resID;
+                    return 11;
                 if (statusCode.get(FILLED)==4)
-                    return resID;
+                    return 12;
             }
 
             if (statusCode.get(DOTTED)==6)
             {
                 if (statusCode.get(FILLED)==0)
-                    return resID;
+                    return 13;
                 if (statusCode.get(FILLED)==1)
-                    return resID;
+                    return 14;
                 if (statusCode.get(FILLED)==2)
-                    return resID;
+                    return 15;
                 if (statusCode.get(FILLED)==3)
-                    return resID;
+                    return 16;
                 if (statusCode.get(FILLED)==4)
-                    return resID;
+                    return 17;
             }
 
             if (statusCode.get(DOTTED)==7)
             {
                 if (statusCode.get(FILLED)==0)
-                    return resID;
+                    return 18;
                 if (statusCode.get(FILLED)==1)
-                    return resID;
+                    return 19;
                 if (statusCode.get(FILLED)==2)
-                    return resID;
+                    return 20;
                 if (statusCode.get(FILLED)==3)
-                    return resID;
+                    return 21;
                 if (statusCode.get(FILLED)==4)
-                    return resID;
+                    return 22;
+            }
+
+            if (statusCode.get(DOTTED)==4)
+            {
+                if (statusCode.get(FILLED)==0)
+                    return 23;
+                if (statusCode.get(FILLED)==1)
+                    return 24;
+                if (statusCode.get(FILLED)==2)
+                    return 25;
+                if (statusCode.get(FILLED)==3)
+                    return 26;
+                if (statusCode.get(FILLED)==4)
+                    return 27;
             }
 
         }

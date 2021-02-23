@@ -3,8 +3,6 @@ package com.example.yhyhealthydemo;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -28,7 +26,6 @@ import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.datebase.CycleRecord;
 import com.example.yhyhealthydemo.datebase.Menstruation;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
@@ -41,9 +38,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-
 import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.json.JSONArray;
@@ -59,14 +54,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import es.dmoral.toasty.Toasty;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
 import sun.bob.mcalendarview.views.ExpCalendarView;
 import sun.bob.mcalendarview.vo.DateData;
-
 import static com.example.yhyhealthydemo.module.ApiProxy.CYCLE_RECORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_DELETE;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_UPDATE;
@@ -99,9 +92,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private SimpleDateFormat sdf;  //日期格式
     private DateData selectedDate;
-
-    private String firstDayOfMonth;  //本月份的前五天
-    private String lastDayOfMonth;   //本月份的後五天
 
     //圖表
     private LineChart lineChart;
@@ -265,26 +255,21 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //set 月曆月份Title
         YearMonthTv.setText(dt.getYear() + getString(R.string.year) + dt.getMonthOfYear() + getString(R.string.month_of_year));
 
-        calendarView.getMarkedDates().removeAdd(); //清除掉之前餘留的MarkedDate
-
         DateTime today = new DateTime(new Date());  //今天
-        firstDayOfMonth = dt.dayOfMonth().withMinimumValue().plusDays(-5).toString("yyyy-MM-dd"); //當月份第一天之年月日
-        lastDayOfMonth = dt.dayOfMonth().withMaximumValue().plusDays(+5).toString("yyyy-MM-dd");  //當月份最後一天之年月日
+        String firstDayOfMonth = dt.dayOfMonth().withMinimumValue().plusDays(-5).toString("yyyy-MM-dd"); //當月份第一天之年月日
+        String lastDayOfMonth = dt.dayOfMonth().withMaximumValue().plusDays(+5).toString("yyyy-MM-dd");  //當月份最後一天之年月日
 
         //2021/02/05
-        setCycleRecord(firstDayOfMonth, lastDayOfMonth); //週期月曆資料
-
-        //今天日期的格式
-        String todayStr = today.toString("yyyy-MM-dd");
+        setCycleRecord(firstDayOfMonth, lastDayOfMonth); //週期月曆資料初始化
 
         //單一日資料
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2*1000);
+                    Thread.sleep(2 * 1000);
                     //api查詢本日是否有資料
-                    checkDataFromApi(todayStr);
+                    checkDataFromApi(today.toString("yyyy-MM-dd"));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -295,15 +280,28 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         calendarView.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-                calendarView.getMarkedDates().removeAdd();
-                calendarView.markDate(date);
-                selectedDate = date;
 
+                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+                //read
+                String prefDay = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("CHOSE_DAY", "");
+                //clear before chose day  2021/02/23
+                String[] strings = prefDay.split("-");
+                int year = Integer.parseInt(strings[0]);
+                int month = Integer.parseInt(strings[1]);
+                int day = Integer.parseInt(strings[2]);
+                calendarView.unMarkDate(year, month, day);  //清掉之前marked的日期(單擊)
+
+                calendarView.markDate(date); //使用者所選的日期
                 String choseDay = String.format("%d-%d-%d", date.getYear(), date.getMonth(), date.getDay());
-
                 Toasty.info(OvulationActivity.this, "您選擇的日期為" + choseDay, Toast.LENGTH_SHORT,true).show();
-                DateTime dt = new DateTime(choseDay);  //格式化使用者選擇的日期
-                onClickDay = dt.toString("yyyy-MM-dd");
+                //write
+                pref.edit().putString("CHOSE_DAY", choseDay).apply();
+
+//                calendarView.getMarkedDates().removeAdd(); //移除全部有make的日期
+//                calendarView.unMarkDate(date);
+
+                //將使用者點擊的日期傳給全域變數onClickDay去做後續動作
+                onClickDay = new DateTime(choseDay).toString("yyyy-MM-dd");
 
                 //使用者選擇的日期若是未來日期則禁用編輯紀錄和經期設定
                 try {
@@ -321,8 +319,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 }
 
                 //當使用者自己選擇日期時則向後台Api詢問是否有資料
-                DateTime date1 = new DateTime(choseDay);
-                String str = date1.toString("yyyy-MM-dd");
+                String str = new DateTime(choseDay).toString("yyyy-MM-dd");
                 checkDataFromApi(str);
             }
         });
@@ -343,10 +340,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         //今天日期的背景顏色
-        calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
-                .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192))));
+        //calendarView.markDate(new DateData(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE))
+          //      .setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(192,192,192)))); //類似灰色背景
 
     }
 
@@ -742,7 +739,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "setCycleRecord: " + json.toString());
+        Log.d(TAG, "搜尋範圍: " + json.toString());
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -791,7 +788,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //解析週期資料 2021/02/22
     private void parserCycleData(JSONObject result) {
         cycleRecord = CycleRecord.newInstance(result.toString());
-//        Log.d(TAG, "parserCycleData1: " + cycleRecord.toJSONString());
+        Log.d(TAG, "parserCycleData1: " + cycleRecord.toJSONString());
 
         List<CycleRecord.SuccessBean> dataList = cycleRecord.getSuccess();
 
@@ -799,10 +796,31 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
             Math math = new Math(dataList.get(i));
 
+            int calenderBgResID = math.getCalenderBgResID();
+
+            String testDay = math.getDateData().getYear() + "/" + math.getDateData().getMonth() + "/" + math.getDateData().getDay();
+
+            Log.d(TAG, "parserCycleData: " + calenderBgResID + " testDay:" + testDay);
+            
+            if(calenderBgResID == 14){ //月經&預計排卵日
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.PREDICION, Color.rgb(207,97,148))));
+            }else if (calenderBgResID == 5 || calenderBgResID == 8){ //預計排卵期
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.PREIOD, Color.rgb(213,173,69))));
+            }else if (calenderBgResID == 9){  //月經&預計排卵期
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.DOTTEDLINE, Color.rgb(207,97,148))));
+            }else if (calenderBgResID == 2){  //排卵期
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.rgb(213,173,69))));
+            }else if (calenderBgResID == 24){ //月經&預計經期[1,4]
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.REALLYPERIOD, Color.rgb(207,97,148))));
+            }else if (calenderBgResID == 6 || calenderBgResID == 13){ //預計排卵日 13=[0,6]
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.PREIOD, Color.rgb(119,147,221))));
+            }else if (calenderBgResID == 4){  //預計經期
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.PREIOD, Color.rgb(207,97,148))));
+            }else if (calenderBgResID == 15){  //排卵期&預計排卵日 [2,6]
+                calendarView.markDate(math.getDateData().setMarkStyle(new MarkStyle(MarkStyle.PREDICION, Color.rgb(119,147,221))));
+            }
         }
 
-
     }
-
 
 }

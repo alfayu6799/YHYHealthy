@@ -53,7 +53,9 @@ public class MarkStyleExp {
         {
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setColor(lightGrayColor);
+
+            //paint.setColor(lightGrayColor );
+            paint.setColor(Color.TRANSPARENT);  //2021/02/23 leona
         }
 
         @Override
