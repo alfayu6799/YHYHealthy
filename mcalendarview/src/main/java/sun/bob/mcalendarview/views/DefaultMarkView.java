@@ -6,8 +6,12 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
@@ -19,8 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import sun.bob.mcalendarview.CellConfig;
 import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.R;
 import sun.bob.mcalendarview.vo.DateData;
 import sun.bob.mcalendarview.vo.DayData;
 
@@ -31,11 +38,12 @@ public class DefaultMarkView extends BaseMarkView {
     private TextView textView;
     private AbsListView.LayoutParams matchParentParams;
     private int orientation;
-
+    private Context context;
     private View sideBar;
     private TextView markTextView;
     private ShapeDrawable circleDrawable;
     private GradientDrawable shape;  //20201224 add by leona
+    private GradientDrawable shape2;
 
     public DefaultMarkView(Context context) {
         super(context);
@@ -50,18 +58,18 @@ public class DefaultMarkView extends BaseMarkView {
         textView.setGravity(Gravity.CENTER);
         matchParentParams = new AbsListView.LayoutParams((int) CellConfig.cellWidth, (int) CellConfig.cellHeight);
         switch (style.getStyle()){
-            case MarkStyle.DEFAULT:
+            case MarkStyle.DEFAULT:  //內部填滿 and text's color is white
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.WHITE);
                 circleDrawable = new ShapeDrawable(new OvalShape());
-//                circleDrawable.getPaint().setColor(style.getColor());
-//                this.setPadding(20, 20, 20, 20);
+                circleDrawable.getPaint().setColor(style.getColor());
+                this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.BACKGROUND: //當日日期的背景色
+            case MarkStyle.BACKGROUND:  //內部填滿 and text's color is black
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.BLACK);
@@ -72,7 +80,7 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.PREIOD:   //2021/02/23 leona 純空心圓(虛線外圍)
+            case MarkStyle.PREIOD:   //2021/02/23 leona 純空心圓 and text's color is black
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.BLACK);
@@ -86,15 +94,16 @@ public class DefaultMarkView extends BaseMarkView {
                 textView.setBackground(circleDrawable);
                 this.addView(textView);
                 return;
-            case MarkStyle.REALLYPERIOD:  //2020/12/20 leona 虛線(月經)+實心圓
+            case MarkStyle.REALLYPERIOD:  //2020/12/20 leona 虛線(預計月經)+實心圓
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(HORIZONTAL);
                 textView.setTextColor(Color.BLACK);
                 shape = new GradientDrawable();
-                shape.setShape(GradientDrawable.OVAL);
-                shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
-                shape.setColor(style.getColor());
-                shape.setStroke(20, Color.parseColor("#CF6194"), 10,8);
+                shape.setShape(GradientDrawable.OVAL); //設置為陀圓形
+                shape.setColor(style.getColor());  //設定顏色
+
+                //shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
+//                shape.setStroke(15, Color.parseColor("#CF6194"), 10,8);
                 this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
                 textView.setBackground(shape);
@@ -121,7 +130,7 @@ public class DefaultMarkView extends BaseMarkView {
                 shape = new GradientDrawable();
                 shape.setShape(GradientDrawable.OVAL);
                 shape.setCornerRadii(new float[]{0,0,0,0,0,0,0,0});
-                shape.setColor(style.getColor());
+                shape.setColor(Color.BLUE);
                 shape.setStroke(20, Color.parseColor("#D5AD45"), 10,8);
                 this.setPadding(20, 20, 20, 20);
                 textView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, (float) 1.0));
@@ -132,7 +141,6 @@ public class DefaultMarkView extends BaseMarkView {
                 this.setLayoutParams(matchParentParams);
                 this.setOrientation(VERTICAL);
                 textView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, (float) 2.0));
-
                 this.addView(new PlaceHolderVertical(getContext()));
                 this.addView(textView);
                 this.addView(new Dot(getContext(), style.getColor()));

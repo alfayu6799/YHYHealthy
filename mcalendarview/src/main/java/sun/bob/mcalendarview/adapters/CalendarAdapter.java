@@ -1,15 +1,19 @@
 package sun.bob.mcalendarview.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.R;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.utils.CurrentCalendar;
 import sun.bob.mcalendarview.views.BaseCellView;
@@ -70,6 +74,7 @@ public class CalendarAdapter extends ArrayAdapter implements Observer {
         }
         if (dayData.getDate().equals(CurrentCalendar.getCurrentDateData())){
             ret.setBackground(MarkStyle.todayBackground);
+//            ret.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.ic_brightness_1_24dp));
         }
         return ret;
     }

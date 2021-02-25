@@ -21,14 +21,16 @@ public class MarkStyle {
     public static final int PREDICION = 14;
     public static final int DOTTEDLINE = 15;
 
+
 //    public static int defaultColor = Color.rgb(0, 148, 243);
-    public static int defaultColor = Color.rgb(173, 10, 107);
+    public static int defaultColor = Color.TRANSPARENT; //點擊日期的背景色
 
     public static String text;
     public static int textColor;
 
     public static int current = DEFAULT;
 
+    //沒用到
     public static Drawable todayBackground = new Drawable() {
         private Paint paint;
         {

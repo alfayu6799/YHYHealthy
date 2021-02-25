@@ -14,7 +14,7 @@ public class MarkStyleExp {
     public static final int chooseColor = Color.rgb(105, 75, 125);
     public static final int lightGrayColor = Color.rgb(245, 245, 245);
 
-    public static Drawable choose = new Drawable() {
+    public static Drawable choose = new Drawable() {  //選擇的日期
         private Paint paint;
 
         {
@@ -47,13 +47,12 @@ public class MarkStyleExp {
         }
     };
 
-    public static Drawable today = new Drawable() {
+    public static Drawable today = new Drawable() {  //今天
         private Paint paint;
 
         {
             paint = new Paint();
             paint.setAntiAlias(true);
-
             //paint.setColor(lightGrayColor );
             paint.setColor(Color.TRANSPARENT);  //2021/02/23 leona
         }

@@ -48,13 +48,13 @@ public class DefaultCellView extends BaseCellView {
         super.onMeasure(measureWidthSpec, measureHeightSpec);
     }
 
-    public boolean setDateChoose() {
+    public boolean setDateChoose() {  //選中的日期
         setBackgroundDrawable(MarkStyleExp.choose);
         textView.setTextColor(Color.WHITE);
         return true ;
     }
 
-    public void setDateToday(){
+    public void setDateToday(){      //今天
         setBackgroundDrawable(MarkStyleExp.today);
         textView.setTextColor(Color.rgb(105, 75, 125));
     }
