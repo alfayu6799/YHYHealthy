@@ -226,4 +226,5 @@
     <string name="day">天</string>
     <string name="please_chose_really_day">請選擇實際經期:</string>
     <string name="delete_really_day">做刪除</string>
+    <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
 </resources>
