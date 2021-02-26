@@ -218,7 +218,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 String firstDay = String.valueOf(LocalDate.from(date.getDate()).with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5));
                 String lastDay = String.valueOf(LocalDate.from(date.getDate()).with(TemporalAdjusters.lastDayOfMonth()).plusDays(+5));
                 setCycleRecord(firstDay, lastDay);  //read 週期資料
-                widget.removeDecorators(); //2021/02/26 
+                widget.removeDecorators();    //
             }
         });
 
