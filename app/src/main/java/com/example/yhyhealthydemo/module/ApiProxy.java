@@ -234,6 +234,7 @@ public class ApiProxy {
         request.url(URL + action);
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, "xxx");
+        request.addHeader("system","6");
         buildRequest(request.build(), listener);
     }
 

@@ -15,8 +15,6 @@ import org.threeten.bp.LocalDate;
 
 public class OneDayDecorator implements DayViewDecorator {
 
-    private static final String TAG = "OneDayDecorator";
-
     private CalendarDay date;
 
     public OneDayDecorator() {

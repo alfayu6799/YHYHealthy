@@ -1,139 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/yhy_background"
     tools:context=".MeasureFragment">
 
-<!--    <include layout="@layout/app_bar"/>-->
-
     <TextView
-        android:layout_centerHorizontal="true"
+        android:id="@+id/textView53"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="YHY Healthy"
         android:textSize="22dp"
-        android:text="YHY Healthy" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/announcement"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_oval"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="20dp"
-        android:src="@mipmap/announcement" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
 
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/announcement"
-        android:layout_alignLeft="@+id/announcement"
-        android:textSize="18dp"
-        android:layout_marginLeft="35dp"
-        android:text="@string/announcement"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
 
-    <ImageView
-        android:id="@+id/store"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_oval"
-        android:layout_toRightOf="@+id/announcement"
-        android:layout_alignTop="@+id/announcement"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/shopping"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2599179" />
 
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/store"
-        android:layout_alignLeft="@+id/store"
-        android:textSize="18dp"
-        android:layout_marginLeft="35dp"
-        android:text="@string/shopping"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
 
-    <ImageView
-        android:id="@+id/guid"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline29"
+        app:layout_constraintEnd_toStartOf="@+id/guideline30"
+        app:layout_constraintStart_toStartOf="@+id/guideline28"
+        app:layout_constraintTop_toTopOf="@+id/guideline27" >
+
+        <ImageView
+            android:id="@+id/announcement"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/announcement" />
+
+        <ImageView
+            android:id="@+id/store"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            app:srcCompat="@mipmap/shopping" />
+        <ImageView
+            android:id="@+id/guid"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            app:srcCompat="@mipmap/shopping" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline31"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_oval"
-        android:layout_toRightOf="@+id/store"
-        android:layout_alignTop="@+id/store"
-        android:layout_marginLeft="10dp"
-        android:src="@mipmap/training"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline31"
+        app:layout_constraintEnd_toStartOf="@+id/guideline30"
+        app:layout_constraintStart_toStartOf="@+id/guideline28"
+        app:layout_constraintTop_toTopOf="@+id/guideline29">
+
+        <TextView
+            android:id="@+id/textView54"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/announcement"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/textView55"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/shopping"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/textView56"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/traning"
+            android:textSize="22dp" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/store"
-        android:layout_alignLeft="@+id/guid"
-        android:textSize="18dp"
-        android:layout_marginLeft="35dp"
-        android:text="@string/traning"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.52" />
 
-    <Button
-        android:id="@+id/bt_ovulation"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline32"
+        app:layout_constraintEnd_toStartOf="@+id/guideline30"
+        app:layout_constraintStart_toStartOf="@+id/guideline28"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/bt_ovulation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableTop="@mipmap/ovul_icon"
+            android:layout_weight="1"
+            android:textSize="22dp"
+            android:textColor="#FFF"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/bg_round_button"
+            android:text="@string/ovulation" />
+
+        <Button
+            android:id="@+id/bt_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:textSize="22dp"
+            android:textColor="#FFF"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:drawableTop="@mipmap/temper_icon"
+            android:background="@drawable/bg_round_button"
+            android:text="@string/temperature" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:layout_marginLeft="40dp"
-        android:textSize="22dp"
-        android:textColor="#FFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:drawableTop="@mipmap/ovul_icon"
-        android:background="@drawable/bg_round_button"
-        android:text="@string/ovulation" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
 
-    <Button
-        android:id="@+id/bt_temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/bt_ovulation"
-        android:layout_alignTop="@+id/bt_ovulation"
-        android:layout_marginLeft="20dp"
-        android:textSize="22dp"
-        android:textColor="#FFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:drawableTop="@mipmap/temper_icon"
-        android:background="@drawable/bg_round_button"
-        android:text="@string/temperature" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline33"
+        app:layout_constraintEnd_toStartOf="@+id/guideline30"
+        app:layout_constraintStart_toStartOf="@+id/guideline28"
+        app:layout_constraintTop_toTopOf="@+id/guideline32">
 
-    <Button
-        android:id="@+id/bt_pregnancy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bt_ovulation"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_round_button"
-        android:text="@string/pregnancy"
-        android:textColor="#FFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:drawableTop="@mipmap/preg_icon"
-        android:textSize="22dp" />
+        <Button
+            android:id="@+id/bt_pregnancy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_round_button"
+            android:drawableTop="@mipmap/preg_icon"
+            android:paddingTop="10dp"
+            android:text="@string/pregnancy"
+            android:textColor="#FFF"
+            android:textSize="22dp" />
 
-    <Button
-        android:id="@+id/bt_monitor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/bt_pregnancy"
-        android:layout_below="@+id/bt_temperature"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:textSize="22dp"
-        android:textColor="#FFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="5dp"
-        android:drawableTop="@mipmap/breath_icon"
-        android:text="@string/monitor"
-        android:background="@drawable/bg_round_button"/>
-
-</RelativeLayout>
+        <Button
+            android:id="@+id/bt_monitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_round_button"
+            android:drawableTop="@mipmap/breath_icon"
+            android:paddingTop="10dp"
+            android:text="@string/monitor"
+            android:textColor="#FFF"
+            android:textSize="22dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

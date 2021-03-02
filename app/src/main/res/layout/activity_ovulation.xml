@@ -9,12 +9,14 @@
     tools:context=".OvulationActivity">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22dp"
-        android:gravity="center"
-        android:text="@string/ovulation"/>
-<!--    <include layout="@layout/app_bar"/>-->
+        android:id="@+id/textView52"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:text="@string/ovulation"
+        android:textSize="22dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,143 +38,207 @@
             android:text="圖表"
             android:textSize="18dp"/>
     </LinearLayout>
-    <!-- 月曆區 -->
-    <LinearLayout
-        android:id="@+id/ly_calender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-        <!-- 月曆元件 第三方庫 -->
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            app:mcv_showOtherDates="all"
-            app:mcv_selectionColor="#00F"/>
 
-    </LinearLayout>
+    <!-- 月曆 layout -->
     <ScrollView
-        android:id="@+id/ly_scroll_comment"
+        android:id="@+id/lyScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:visibility="gone">
+        android:fillViewport="true"
+        android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="vertical">
-            <RelativeLayout
+            android:orientation="vertical" >
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/corners_bg">
-                <TextView
-                    android:id="@+id/tv_ovul_period"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="22sp"
-                    android:text="週期第N天"/>
-                <TextView
-                    android:id="@+id/tv_ovul_result_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_below="@+id/tv_ovul_period"
-                    android:textSize="@dimen/font_18"
-                    android:text="唾液辨識 :"/>
-                <TextView
-                    android:id="@+id/tv_ovul_probability_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="@dimen/font_18"
-                    android:text="排卵機率 :"/>
-                <RatingBar
-                    android:id="@+id/rtSaliva"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/FiveStarsStyle1"
-                    android:layout_below="@+id/tv_ovul_result_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_alignTop="@+id/tv_ovul_probability_1"
-                    android:layout_toRightOf="@+id/tv_ovul_probability_1"
-                    android:numStars="5"
-                    android:rating="1"/>
-                <TextView
-                    android:id="@+id/tv_ovul_temp_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_probability_1"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="@dimen/font_18"
-                    android:text="基礎體溫 :"/>
-                <TextView
-                    android:id="@+id/tv_ovul_rate_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="@dimen/font_18"
-                    android:text="排卵機率 :"/>
-                <RatingBar
-                    android:id="@+id/rtBt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/FiveStarsStyle1"
-                    android:layout_below="@+id/tv_ovul_temp_1"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_alignTop="@+id/tv_ovul_rate_1"
-                    android:layout_toRightOf="@+id/tv_ovul_rate_1"
-                    android:numStars="5"
-                    android:rating="1"/>
-                <TextView
-                    android:id="@+id/tv_ovul_setting"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_toRightOf="@+id/tv_ovul_period"
-                    android:layout_marginLeft="55dp"
-                    android:layout_marginTop="5dp"
-                    android:textSize="22sp"
-                    android:gravity="center"
-                    android:background="@drawable/shape_for_ovulation"
-                    android:text="經期\n設定"/>
-                <TextView
-                    android:id="@+id/tv_ovul_edit"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_toRightOf="@+id/tv_ovul_period"
-                    android:layout_below="@+id/tv_ovul_setting"
-                    android:layout_marginLeft="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:textSize="22sp"
-                    android:gravity="center"
-                    android:background="@drawable/shape_for_ovulation"
-                    android:text="編輯\n紀錄"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/corners_bg">
-                <LinearLayout
-                    android:id="@+id/ly_color"
+                android:orientation="vertical">
+                <!-- 月曆元件 第三方庫 -->
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    app:mcv_showOtherDates="all"
+                    app:mcv_selectionColor="#00F"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/corners_bg"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline39"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="260dp" />
+
+                    <TextView
+                        android:id="@+id/tvShowPeriodDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:text="週期第N天"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline39"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_ovul_result_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:textSize="20sp"
+                        android:text="唾液辨識 :"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvShowPeriodDay" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="118dp" />
+
+                    <TextView
+                        android:id="@+id/tv_ovul_probability_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:textSize="20sp"
+                        android:text="排卵機率 :"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ovul_result_1" />
+
+                    <TextView
+                        android:id="@+id/tv_ovul_temp_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:textSize="20sp"
+                        android:text="基礎體溫 :"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ovul_probability_1" />
+
+                    <TextView
+                        android:id="@+id/textView62"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:textSize="20sp"
+                        android:text="排卵機率 :"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline40"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ovul_temp_1" />
+
+                    <RatingBar
+                        android:id="@+id/rtSaliva"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:numStars="5"
+                        android:rating="1"
+                        style="@style/FiveStarsStyle1"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_probability_1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/tv_ovul_probability_1" />
+
+                    <RatingBar
+                        android:id="@+id/rtBt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:numStars="5"
+                        android:rating="1"
+                        style="@style/FiveStarsStyle1"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView62"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/textView62" />
+
+                    <Button
+                        android:id="@+id/btnPeriodSetting"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_for_ovulation"
+                        android:textSize="22sp"
+                        android:text="經期\n設定"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline39"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnPeriodEdit"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/shape_for_ovulation"
+                        android:text="編輯\n紀錄"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/btnPeriodSetting"
+                        app:layout_constraintStart_toStartOf="@+id/btnPeriodSetting"
+                        app:layout_constraintTop_toBottomOf="@+id/btnPeriodSetting" />
+
+                    <TextView
+                        android:id="@+id/tvIdResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="18dp"
+                        android:text="無法辨識"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_result_1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/tv_ovul_result_1" />
+
+                    <TextView
+                        android:id="@+id/tvDegreeResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="35.52"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_temp_1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/tv_ovul_temp_1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/corners_bg"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="24dp"
@@ -200,11 +266,8 @@
                         android:src="@drawable/ic_brightness_4_24dp"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/ly_color_sub"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/ly_color"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="24dp"
@@ -232,10 +295,8 @@
                         android:text="濾泡/黃體期"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/ly_color2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/ly_color_sub"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="24dp"
@@ -264,11 +325,8 @@
                         android:src="@drawable/shape_dash_7"/>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/ly_color_sub2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/ly_color2"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="24dp"
@@ -296,14 +354,17 @@
                         android:visibility="invisible"
                         android:text="濾泡/黃體期"/>
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
+
     <!-- 圖表區 -->
     <LinearLayout
-        android:id="@+id/lychart"
+        android:id="@+id/lyChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"

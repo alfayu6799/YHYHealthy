@@ -2,6 +2,8 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         register.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -103,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             json.put("account", account.getText().toString());
             json.put("password", password.getText().toString());
+            json.put("sysId","6");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -163,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 
                 //導至首頁
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

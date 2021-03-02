@@ -14,7 +14,7 @@ public class Menstruation {
 
     /**
      * testDate : 2020/08/01
-     * temperature : 37.82542905043851
+     * temperature : 37.82
      * cycleStatus : 1
      */
 

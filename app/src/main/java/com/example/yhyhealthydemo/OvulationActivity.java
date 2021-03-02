@@ -50,19 +50,16 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.temporal.TemporalAdjuster;
+import org.threeten.bp.temporal.ChronoUnit;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,11 +68,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import es.dmoral.toasty.Toasty;
-import sun.bob.mcalendarview.MarkStyle;
-import sun.bob.mcalendarview.listeners.OnDateClickListener;
-import sun.bob.mcalendarview.listeners.OnMonthChangeListener;
-import sun.bob.mcalendarview.views.ExpCalendarView;
-import sun.bob.mcalendarview.vo.DateData;
+
 import static com.example.yhyhealthydemo.module.ApiProxy.CYCLE_RECORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_DELETE;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_UPDATE;
@@ -85,24 +78,27 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private static final String TAG = "OvulationActivity";
 
-    private LinearLayout calendarLayout, chartLayout;
+    private LinearLayout chartLayout;
     private ScrollView scrollViewLayout;
     private Button calendar, chart;
 
     //月曆
     private MaterialCalendarView widget;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
-    private TextView menstruationPeriodDay;        //週期顯示
+    private TextView menstruationPeriodDay;        //週期顯示TextView
     private String onClickDay = "";
+    private String firstDayOfThisMonth;
+    private String lastDayOfThisMonth;
+
 
     private String periodDate = "";     //從api獲取日期
     private String periodDegree = "";   //從api獲取體溫
 
-    private TextView oveuSetting; //經期設定click
-    private TextView oveuEdit;    //經期編輯click
+    private Button btnSetting; //經期設定click
+    private Button btnEdit;    //經期編輯click
 
-    private TextView temperature;
-    private TextView ovulResult;
+    private TextView textDegreeResult;
+    private TextView textMenstruationResult;
 
     private RatingBar bodySalivaRate, bodyDegreeRate;
 
@@ -148,23 +144,22 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private void initView() {
         calendar = findViewById(R.id.btnSwitchCalendar);
         chart = findViewById(R.id.btnSwitchChart);
-        calendarLayout = findViewById(R.id.ly_calender);
-        scrollViewLayout = findViewById(R.id.ly_scroll_comment);
-        chartLayout = findViewById(R.id.lychart);
+        scrollViewLayout = findViewById(R.id.lyScrollView);
+        chartLayout = findViewById(R.id.lyChart);
 
-        menstruationPeriodDay = findViewById(R.id.tv_ovul_period); //今天是週期的第?天
-        ovulResult = findViewById(R.id.tv_ovul_result_1);  //唾液辨識Result
-        temperature = findViewById(R.id.tv_ovul_temp_1);  //基礎體溫
+        menstruationPeriodDay = findViewById(R.id.tvShowPeriodDay); //今天是週期的第?天
+        textMenstruationResult = findViewById(R.id.tvIdResult);        //唾液辨識Result
+        textDegreeResult = findViewById(R.id.tvDegreeResult);       //基礎體溫
         bodySalivaRate = findViewById(R.id.rtSaliva);         //唾液辨識機率
-        bodyDegreeRate = findViewById(R.id.rtBt);         //基礎體溫機率
+        bodyDegreeRate = findViewById(R.id.rtBt);              //基礎體溫機率
 
-        oveuSetting = findViewById(R.id.tv_ovul_setting);  //經期設定
-        oveuEdit = findViewById(R.id.tv_ovul_edit);        //編輯紀錄
+        btnSetting = findViewById(R.id.btnPeriodSetting);  //經期設定
+        btnEdit = findViewById(R.id.btnPeriodEdit);        //編輯紀錄
 
         calendar.setOnClickListener(this);               //月曆
         chart.setOnClickListener(this);                  //圖表
-        oveuSetting.setOnClickListener(this);            //經期設定
-        oveuEdit.setOnClickListener(this);               //編輯紀錄
+        btnSetting.setOnClickListener(this);            //經期設定
+        btnEdit.setOnClickListener(this);               //編輯紀錄
 
         //月曆重構 2021/02/25
         widget = findViewById(R.id.calendar);
@@ -184,25 +179,27 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //月曆區先顯示
         calendar.setBackgroundResource(R.drawable.rectangle_button);
         calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
-        calendarLayout.setVisibility(View.VISIBLE);
         scrollViewLayout.setVisibility(View.VISIBLE);
     }
 
     //初始化日曆
     private void initCalendar() {
 
-        String firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //起始日-5天
-        String lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
+        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //起始日-5天
+        lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
 
         widget.addDecorators(
                 new MySelectorDecorator(this), //點擊日期後的背景
                 oneDayDecorator
         );
 
-        //經期月曆 起始日&結束日 //資料龐大下日後另外開線程處理比較保險
+        //經期月曆 (起始日&結束日)
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
 
-        //檢查今天是否有資料 2021/02/25
+        //顯示今天是周期的第幾天
+        checkPeriodDayOfThisMonth(LocalDate.now());
+
+        //自動檢查今天是否有資料 2021/02/25
         checkTodayInfo(String.valueOf(LocalDate.now()));
 
         //監聽月曆滑動
@@ -217,14 +214,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 String firstDay = String.valueOf(LocalDate.from(date.getDate()).with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5));
                 String lastDay = String.valueOf(LocalDate.from(date.getDate()).with(TemporalAdjusters.lastDayOfMonth()).plusDays(+5));
-                setCycleRecord(firstDay, lastDay);  //read 週期資料
+                firstDayOfThisMonth = firstDay;
+                lastDayOfThisMonth = lastDay;
+                setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);  //read 週期資料
                 widget.removeDecorators();    //
             }
         });
 
     }
 
-    //檢查今天是否有資料
+    //檢查單日是否有資料
     private void checkTodayInfo(String dayStr) {
         JSONObject json = new JSONObject();
         try {
@@ -286,24 +285,24 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //唾液辨識結果
         String paramName = record.getSuccess().getMeasure().getParamName();
         if (!paramName.equals("")){
-            oveuEdit.setText("編輯\n紀錄");
+            btnEdit.setText("編輯\n紀錄");
             if (paramName.equals("Ovulation")){
-                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.in_period));
+                textMenstruationResult.setText(getString(R.string.in_period));
             }else if(paramName.equals("General")){
-                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.non_period));
+                textMenstruationResult.setText(getString(R.string.non_period));
             }else if(paramName.equals("FollicularORLutealPhase")){
-                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.in_cell));
+                textMenstruationResult.setText(getString(R.string.in_cell));
             }else if(paramName.equals("Unrecognizable")){
-                ovulResult.setText(getString(R.string.param_name) + " " + getString(R.string.unknow));
+                textMenstruationResult.setText(getString(R.string.unknow));
             }
         }else {
-            oveuEdit.setText("新增\n紀錄");
-            ovulResult.setText(getString(R.string.param_name) + "");
+            btnEdit.setText("新增\n紀錄");
+            textMenstruationResult.setText("");
         }
 
         //基礎體溫
         String bodyDegree = String.valueOf(record.getSuccess().getMeasure().getTemperature());
-        temperature.setText(getString(R.string.body_degree) + " " + bodyDegree + " \u2103");
+        textDegreeResult.setText(bodyDegree + " \u2103");
 
         //根據唾液辨識結果得到機率
         int salivaRate = record.getSuccess().getOvuRate().getSalivaRate();
@@ -313,165 +312,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         int btRate = record.getSuccess().getOvuRate().getBtRate();
         bodyDegreeRate.setRating(btRate);
 
-        //自動判斷今天是經期的第幾天 2021/02/20
-        String testDay = record.getSuccess().getTestDate();
-        //經期第一天
-        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("BEGIN", "");
-        //經期長度
-        int length = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getInt("CYCLE", 28);
-        Log.d(TAG, "經期第一天: " + beginStr + " 使用者單擊的日期:" + testDay +" 長度:" + length);
-
-        //2021/02/22
-        if(TextUtils.isEmpty(beginStr)){
-            menstruationPeriodDay.setText(getString(R.string.period_day_out_order));
-        }else {
-            DateTime begin = new DateTime(beginStr); //經期第一天
-            DateTime end = new DateTime(testDay);    //使用者單擊的日期
-            Period p = new Period(begin, end, PeriodType.days()); //今天與經期第一天比較
-            int days = p.getDays() + 1;
-            if (days > length || days == 0){
-                menstruationPeriodDay.setText(getString(R.string.period_day_out_order));
-            }else {
-                menstruationPeriodDay.setText(getString(R.string.period_day) + days + getString(R.string.day));
-            }
-        }
-
-    }
-
-    //圖表資料顯示
-    @SuppressLint("SetTextI18n")
-    private void initChartData() {
-        DateTime dt = new DateTime();
-
-        String firstOfMonth = dt.dayOfMonth().withMinimumValue().toString("MM/dd"); //當月份第一天之月日
-        String lastOfMonth = dt.dayOfMonth().withMaximumValue().toString("MM/dd");  //當月份最後一天之月日
-
-        periodRangDate.setText(firstOfMonth + " ~ " + lastOfMonth); //經期顯示期間
-
-        menstruationArray = new ArrayList<>();
-
-        String myJSONStr = loadJSONFromAsset("menstruation_12.json");
-        try {
-            JSONObject obj = new JSONObject(myJSONStr);
-            String status = obj.getString("status");
-            if (status.equals("Success")) {
-                JSONArray array = obj.getJSONArray("data");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject objdata = array.getJSONObject(i);
-                    periodDate = objdata.getString("testDate");      //日期(X軸)
-                    periodDegree = objdata.getString("temperature"); //體溫(y軸)
-
-                    menstruation = new Menstruation(); //實體化
-
-                    //時間:年月日
-                    String[] str = periodDate.split("/");
-                    String day = str[2];  //只需日期當X軸
-                    menstruation.setTestDate(day);
-                    menstruation.setTemperature(Double.parseDouble(periodDegree));
-                    menstruationArray.add(menstruation);
-
-                    ArrayList<String> label = new ArrayList<>();    //X軸(時間)
-                    ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
-
-                    for (int j = 0; j < menstruationArray.size(); j++ ) {
-                        String xValues = menstruationArray.get(j).getTestDate();
-                        double yValues = menstruationArray.get(j).getTemperature();
-                        entries.add(new Entry(j, (float) yValues));
-                        label.add(xValues);
-
-                        LineDataSet lineDataSet = new LineDataSet(entries, "");
-                        lineDataSet.setColor(Color.RED);  //軸線顏色
-                        LineData data = new LineData(lineDataSet);
-                        lineChart.setData(data);
-
-                        XAxis xAxis = lineChart.getXAxis(); //取得X軸
-                        xAxis.setValueFormatter(new IndexAxisValueFormatter(label)); //x軸放入自定義的時間
-                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //日期顯示在底層
-                        xAxis.setGranularity(1f);                      //x軸最小間隔
-                        xAxis.setLabelCount(label.size());             //X軸的數量來自資料集
-                        xAxis.setGridColor(Color.BLACK);               //設置X軸的網格線的顏色
-                        xAxis.setAxisLineColor(Color.BLACK);
-                        xAxis.enableGridDashedLine(10f, 10f, 0f); //X軸格線虛線
-
-                        YAxis rightAxis = lineChart.getAxisRight();         //獲取右側的Y軸
-                        rightAxis.setEnabled(false);                        //不顯示右側Y軸
-                        YAxis leftAxis = lineChart.getAxisLeft();           //獲取左側的Y軸線
-                        leftAxis.setDrawGridLines(false);                   //隱藏Y軸的格線
-
-                        leftAxis.setLabelCount(7);    //體溫最多7階
-                        xAxis.setLabelCount(10);      //日期做多10階
-
-                        lineChart.getLegend().setEnabled(false);            //隱藏圖例
-                        lineChart.getDescription().setEnabled(false);       //隱藏描述
-                        lineChart.invalidate();                             //重新刷圖表
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    //讀取local json file
-    public String loadJSONFromAsset(String fileName)
-    {
-        String json;
-        try
-        {
-            InputStream is = getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.btnSwitchCalendar: //月曆
-                calendar.setBackgroundResource(R.drawable.rectangle_button);
-                chart.setBackgroundResource(R.drawable.relative_shape);
-                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
-                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
-                calendarLayout.setVisibility(View.VISIBLE);
-                scrollViewLayout.setVisibility(View.VISIBLE);
-                chartLayout.setVisibility(View.GONE);
-                break;
-            case R.id.btnSwitchChart:  //圖表
-                calendar.setBackgroundResource(R.drawable.relative_shape);
-                chart.setBackgroundResource(R.drawable.rectangle_button);
-                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
-                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
-                calendarLayout.setVisibility(View.GONE);
-                scrollViewLayout.setVisibility(View.GONE);
-                chartLayout.setVisibility(View.VISIBLE);
-                initChartData(); //獲取數據
-                break;
-            case R.id.btnBack:
-                onBackPressed();
-                break;
-            case R.id.tv_ovul_setting:  //經期設定
-                showPeriod(onClickDay); //日期格式:2021-01-04
-                break;
-            case R.id.tv_ovul_edit:     //經期編輯
-                periodEdit(onClickDay);  //日期格式:2021-01-04
-                break;
-            case R.id.imgPreMonth:    //上一個月
-                Toast.makeText(this, "還沒寫好", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.imgNextMonth:   //下一個月
-                Toast.makeText(this, "沒有資料", Toast.LENGTH_SHORT).show();
-                break;
-        }
     }
 
     //紀錄按鈕
@@ -493,7 +333,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //經期設定對話框
     private void showPeriod(String clickDay) {
-        DateTime dt = new DateTime();
+
         //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
         if (clickDay.equals("")){
             clickDay =  new DateTime(new Date()).toString("yyyy-MM-dd"); //今天
@@ -577,16 +417,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //將經期第一天砍掉 2021/02/22
                 SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
                 String startDate = pref.getString("BEGIN", "");
                 String endDate = pref.getString("END", "");
 
+                //使用者點擊的日期須與sharePref內的日期符合才可以砍掉經期
                 if(!toDate.getText().toString().equals(startDate)){
                     Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day) + startDate
                             + getString(R.string.delete_really_day), Toast.LENGTH_SHORT, true).show();
                 }else {
-                    //參數 startDate & endDate
                     JSONObject json = new JSONObject();
                     try {
                         json.put("startDate", startDate);
@@ -620,11 +459,17 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 boolean success = object.getBoolean("success");
                 if(success){
                     Toasty.success(OvulationActivity.this,getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
-                    //要砍掉 SharedPreferences內的內容
-                    SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                    pref.edit().putString("BEGIN", "").apply();
-                    pref.edit().putString("END", "").apply();
-//                    setCalendar(); //重刷資料
+
+                    //砍掉SharedPreferences內的內容
+                    deleteSharePref();
+
+                    //重刷資料前先清除之前的mark
+                    widget.removeDecorators();
+
+                    //重刷資料
+                    initCalendar();
+
+                    //關閉對話框
                     dialog.dismiss();
                 }
             } catch (JSONException e) {
@@ -642,7 +487,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             progressDialog.dismiss();
         }
     };
-    
+
+    //砍掉SharedPreferences內經期第一天與最後一天的內容
+    private void deleteSharePref() {
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putString("BEGIN", "").apply();
+        pref.edit().putString("END", "").apply();
+    }
+
     //經期更新Api
     private ApiProxy.OnApiListener periodListener = new ApiProxy.OnApiListener() {
         @Override
@@ -664,7 +516,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         boolean success = object.getBoolean("success");
                         if(success) {
                             Toasty.success(OvulationActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-//                            setCalendar(); //重刷資料
+
+                            //重刷資料前先清除之前的mark
+                            widget.removeDecorators();
+
+                            //重刷資料
+                            initCalendar();
+
+                            //關閉對話框
                             dialog.dismiss();
                         }
                     } catch (JSONException e) {
@@ -694,7 +553,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "搜尋範圍: " + json.toString());
+
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -769,24 +628,180 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         oneDayDecorator.setDate(date.getDate());
         widget.invalidateDecorators();  //重新繪製
 
-        checkTodayInfo(String.valueOf(choseDay)); //根據使用者點擊的日期去跟後台要資料
+        //根據使用者點擊的日期去跟後台要資料
+        checkTodayInfo(String.valueOf(choseDay));
+
         if(choseDay.equals(LocalDate.now())){ //使用者點擊的日期與今天同一天
-            oveuSetting.setEnabled(true);
-            oveuEdit.setEnabled(true);
+            btnSetting.setEnabled(true);
+            btnEdit.setEnabled(true);
         }else{
             checkEditEnable(choseDay); //根據使用者點擊的日期去判斷經期設定是否禁止
         }
 
         //將使用者點擊的日期之值帶給onClick
         onClickDay = String.valueOf(choseDay);
+
+        //根據使用者點擊的日期去計算週期是第幾天? 2021/03/02
+        checkPeriodDayOfThisMonth(choseDay);
+    }
+
+    //週期第幾天Fxn 2021/03/02
+    @SuppressLint("SetTextI18n")
+    private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
+        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("BEGIN", "");
+        LocalDate begin = LocalDate.parse(beginStr);
+        long numOfDays = ChronoUnit.DAYS.between(begin, choseDay);
+
+        if (TextUtils.isEmpty(beginStr)){
+            menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
+        }else {
+           if(numOfDays >= 0){
+               numOfDays = numOfDays + 1;
+               menstruationPeriodDay.setText(getString(R.string.period_day) + numOfDays + getString(R.string.day));
+           }else {
+               menstruationPeriodDay.setText(getString(R.string.period_day_out_order)); //超出本月份周期
+           }
+        }
     }
 
     //經期設定是否禁止
     private void checkEditEnable(LocalDate choseDay) {
         boolean flag = LocalDate.now().isAfter(choseDay);
-        oveuSetting.setEnabled(flag);
-        oveuEdit.setEnabled(flag);
+        btnSetting.setEnabled(flag);
+        btnEdit.setEnabled(flag);
     }
 
 
+    //圖表資料顯示
+    @SuppressLint("SetTextI18n")
+    private void initChartData() {
+
+        periodRangDate.setText(firstDayOfThisMonth + " ~ " + lastDayOfThisMonth); //經期顯示期間
+
+        menstruationArray = new ArrayList<>();
+
+        String myJSONStr = loadJSONFromAsset("menstruation_02.json");
+        try {
+            JSONObject obj = new JSONObject(myJSONStr);
+            String status = obj.getString("status");
+            if (status.equals("Success")) {
+                JSONArray array = obj.getJSONArray("data");
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject objdata = array.getJSONObject(i);
+                    periodDate = objdata.getString("testDate");      //日期(X軸)
+                    periodDegree = objdata.getString("temperature"); //體溫(y軸)
+
+                    menstruation = new Menstruation(); //實體化
+
+                    //時間:年月日
+                    String[] str = periodDate.split("-");
+                    String day = str[2];  //只需日期當X軸
+                    menstruation.setTestDate(day);
+                    menstruation.setTemperature(Double.parseDouble(periodDegree));
+                    menstruationArray.add(menstruation);
+
+                    ArrayList<String> label = new ArrayList<>();    //X軸(時間)
+                    ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
+
+                    for (int j = 0; j < menstruationArray.size(); j++ ) {
+                        String xValues = menstruationArray.get(j).getTestDate();
+                        double yValues = menstruationArray.get(j).getTemperature();
+                        entries.add(new Entry(j, (float) yValues));
+                        label.add(xValues);
+
+                        LineDataSet lineDataSet = new LineDataSet(entries, "");
+                        lineDataSet.setColor(Color.RED);  //軸線顏色
+                        LineData data = new LineData(lineDataSet);
+                        lineChart.setData(data);
+
+                        XAxis xAxis = lineChart.getXAxis(); //取得X軸
+                        xAxis.setValueFormatter(new IndexAxisValueFormatter(label)); //x軸放入自定義的時間
+                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //日期顯示在底層
+                        xAxis.setGranularity(1f);                      //x軸最小間隔
+                        xAxis.setLabelCount(label.size());             //X軸的數量來自資料集
+                        xAxis.setGridColor(Color.BLACK);               //設置X軸的網格線的顏色
+                        xAxis.setAxisLineColor(Color.BLACK);
+                        xAxis.enableGridDashedLine(10f, 10f, 0f); //X軸格線虛線
+
+                        YAxis rightAxis = lineChart.getAxisRight();         //獲取右側的Y軸
+                        rightAxis.setEnabled(false);                        //不顯示右側Y軸
+                        YAxis leftAxis = lineChart.getAxisLeft();           //獲取左側的Y軸線
+                        leftAxis.setDrawGridLines(false);                   //隱藏Y軸的格線
+
+                        leftAxis.setLabelCount(7);    //體溫最多7階
+                        xAxis.setLabelCount(10);      //日期做多10階
+
+                        lineChart.getLegend().setEnabled(false);            //隱藏圖例
+                        lineChart.getDescription().setEnabled(false);       //隱藏描述
+                        lineChart.invalidate();                             //重新刷圖表
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    //讀取local json file
+    public String loadJSONFromAsset(String fileName)
+    {
+        String json;
+        try
+        {
+            InputStream is = getApplicationContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnSwitchCalendar: //月曆
+                calendar.setBackgroundResource(R.drawable.rectangle_button);
+                chart.setBackgroundResource(R.drawable.relative_shape);
+                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
+                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                scrollViewLayout.setVisibility(View.VISIBLE);
+                chartLayout.setVisibility(View.GONE);
+                break;
+            case R.id.btnSwitchChart:  //圖表
+                calendar.setBackgroundResource(R.drawable.relative_shape);
+                chart.setBackgroundResource(R.drawable.rectangle_button);
+                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
+                scrollViewLayout.setVisibility(View.GONE);
+                chartLayout.setVisibility(View.VISIBLE);
+                initChartData(); //獲取數據
+                break;
+            case R.id.btnBack:
+                onBackPressed();
+                break;
+            case R.id.btnPeriodSetting:  //經期設定
+                showPeriod(onClickDay); //日期格式:2021-01-04
+                break;
+            case R.id.btnPeriodEdit:     //經期編輯
+                periodEdit(onClickDay);  //日期格式:2021-01-04
+                break;
+            case R.id.imgPreMonth:    //上一個月
+//                LocalDate date = LocalDate.parse(firstDayOfThisMonth);
+//                LocalDate lastDayFirst = date.plusDays(-30);
+//                Log.d(TAG, "上一個月: " + lastDayFirst);
+                break;
+            case R.id.imgNextMonth:   //下一個月
+//                Toast.makeText(this, "沒有資料", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }

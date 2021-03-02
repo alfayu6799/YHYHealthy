@@ -1,0 +1,145 @@
+{
+  "status": "Success",
+  "data": [
+	{
+      "testDate": "2021-02-01",
+      "temperature": 35.52,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021-02-02",
+      "temperature": 35.83,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021-02-03",
+      "temperature": 39.31,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021-02-04",
+      "temperature": 36.95,
+      "cycleStatus": 6
+    },
+    {
+      "testDate": "2021-02-05",
+      "temperature": 39.68,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2021-02-06",
+      "temperature": 39.13,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2021-02-07",
+      "temperature": 38.04,
+      "cycleStatus": 7
+    },
+    {
+      "testDate": "2021-02-08",
+      "temperature": 41.91,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-09",
+      "temperature": 40.89,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-10",
+      "temperature": 39.68,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-11",
+      "temperature": 38.43,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-12",
+      "temperature": 38.98,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-13",
+      "temperature": 39.51,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-14",
+      "temperature": 35.56,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-15",
+      "temperature": 41.31,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-16",
+      "temperature": 39.47,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-17",
+      "temperature": 36.39,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-18",
+      "temperature": 39.76,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2021-02-19",
+      "temperature": 36.39,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2021-02-20",
+      "temperature": 36.82,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2021-02-21",
+      "temperature": 37.45,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021-02-22",
+      "temperature": 36.53,
+      "cycleStatus": 5
+    },
+    {
+      "testDate": "2021-02-23",
+      "temperature": 36.71,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021-02-24",
+      "temperature": 36.58,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021-02-25",
+      "temperature": 40.71,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021-02-26",
+      "temperature": 38.98,
+      "cycleStatus": 1
+    },
+    {
+      "testDate": "2021-02-27",
+      "temperature": 39.00,
+      "cycleStatus": 0
+    },
+    {
+      "testDate": "2021-02-28",
+      "temperature": 40.68,
+      "cycleStatus": 0
+    }
+  ]
+}
