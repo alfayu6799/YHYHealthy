@@ -33,6 +33,7 @@ public class Math {
         this.date = date;
     }
 
+    /**** 日期 *****/
     public CalendarDay getDateData(){
         String dateStr = date.getTestDate();
         List<String> items = Arrays.asList(dateStr.split("-"));
@@ -42,6 +43,8 @@ public class Math {
         return CalendarDay.from(dYear, dMonth, dDay);
     }
 
+
+    /***  圖例 ***/
     @SuppressLint({"UseCompatLoadingForDrawables", "NewApi"})
     public Drawable getCalenderDrawable()
     {
