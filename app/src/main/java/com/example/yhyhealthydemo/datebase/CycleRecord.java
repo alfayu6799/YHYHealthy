@@ -50,6 +50,14 @@ public class CycleRecord {
         public List<Integer> getCycleStatus() {
             return cycleStatus;
         }
+
+        public void setTestDate(String testDate) {
+            this.testDate = testDate;
+        }
+
+        public void setTemperature(double temperature) {
+            this.temperature = temperature;
+        }
     }
 
     /**

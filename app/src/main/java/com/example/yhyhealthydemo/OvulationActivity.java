@@ -33,25 +33,18 @@ import com.example.yhyhealthydemo.calendar.MyEventDecorator;
 import com.example.yhyhealthydemo.calendar.MySelectorDecorator;
 import com.example.yhyhealthydemo.calendar.OneDayDecorator;
 import com.example.yhyhealthydemo.datebase.CycleRecord;
-import com.example.yhyhealthydemo.datebase.Menstruation;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.MPAChartManager;
 import com.example.yhyhealthydemo.tools.Math;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.joda.time.DateTime;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
@@ -60,11 +53,9 @@ import org.threeten.bp.temporal.TemporalAdjusters;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -105,9 +96,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private Math math;
 
     //圖表
-    private LineChart lineChart;
-    private TextView periodRangDate;
-    private ImageView preMonth, nextMonth;
+    private LineChart lineChart;            //折線圖
+    private TextView periodRangDate;        //查詢日期範圍
+    private ImageView preMonth, nextMonth;  //上個月&下個月
 
     //api
     private MenstruationRecord record; //dataBean
@@ -198,11 +189,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //經期月曆 (起始日&結束日)
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
 
-        //顯示今天是周期的第幾天
-        checkPeriodDayOfThisMonth(LocalDate.now());
-
         //自動檢查今天是否有資料 2021/02/25
         checkTodayInfo(String.valueOf(LocalDate.now()));
+
+        //顯示今天是周期的第幾天
+        checkPeriodDayOfThisMonth(LocalDate.now());
 
         //監聽月曆滑動
         monthListener();
@@ -656,7 +647,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         cycleRecord = CycleRecord.newInstance(result.toString());
         Log.d(TAG, "parser週期: " + cycleRecord.toJSONString());
 
-        dataList = cycleRecord.getSuccess();
+        List<String> list = new ArrayList<>(); //經期第一天陣列用
+
+        dataList = cycleRecord.getSuccess(); //獲取數據
 
         for (int i = 0; i < dataList.size(); i ++){
 
@@ -666,24 +659,24 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             if (math.getCalenderDrawable() != null)
                 widget.addDecorator(new MyEventDecorator(math.getCalenderDrawable(), Collections.singletonList(math.getDateData())));
 
-            //2021/03/04
+            //經期第一天
             boolean isFirstDay = dataList.get(i).isFirstDay();
-            if (isFirstDay) { //經期第一天
-                List<String> list = Collections.singletonList(dataList.get(i).getTestDate());
-                String dateStr = list.get(0);
-                Log.d(TAG, "parserCycleData: " + dateStr);
+            if (isFirstDay){
+                String day = dataList.get(i).getTestDate();
+                list.add(day);
             }
 
             //圖表
-//            double degree = math.getTemperature();
-//            CalendarDay testDay = math.getDateData();
-//            Log.d(TAG, "parserCycleData: " + testDay + ", temperature:" + degree);
-
+            MPAChartManager chartManager = new MPAChartManager(lineChart);
+            chartManager.showLineChart(dataList, Color.BLUE);
         }
 
+        if(list.get(0) != null){
+            //經期第一天寫入sharePref
+            SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+            pref.edit().putString("BEGIN", list.get(0)).apply();
+        }
     }
-
-
 
     //日期被選到時的動作 2021/02/25
     @Override
@@ -737,96 +730,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    //圖表資料顯示
+    //圖表資料顯示 2021/03/05 redesign
     @SuppressLint("SetTextI18n")
     private void initChartData() {
-
         //經期顯示期間
         periodRangDate.setText(firstDayOfThisMonth + " ~ " + lastDayOfThisMonth);
-
-        ArrayList<Menstruation> menstruationArray = new ArrayList<>();
-
-        String myJSONStr = loadJSONFromAsset("menstruation_02.json");
-        try {
-            JSONObject obj = new JSONObject(myJSONStr);
-            JSONArray array = obj.getJSONArray("data");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject objdata = array.getJSONObject(i);
-                    String periodDate = objdata.getString("testDate");      //日期(X軸)
-                    String periodDegree = objdata.getString("temperature"); //體溫(y軸)
-
-                    Menstruation menstruation = new Menstruation(); //實體化
-
-                    //時間:年月日
-                    String[] str = periodDate.split("-");
-                    String day = str[2];  //只需日期當X軸
-                    menstruation.setTestDate(day);
-                    menstruation.setTemperature(Double.parseDouble(periodDegree));
-                    menstruationArray.add(menstruation);
-
-                    ArrayList<String> label = new ArrayList<>();    //X軸(時間)
-                    ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
-
-                    for (int j = 0; j < menstruationArray.size(); j++ ) {
-                        String xValues = menstruationArray.get(j).getTestDate();
-                        double yValues = menstruationArray.get(j).getTemperature();
-                        entries.add(new Entry(j, (float) yValues));
-                        label.add(xValues);
-
-                        LineDataSet lineDataSet = new LineDataSet(entries, "");
-                        lineDataSet.setColor(Color.RED);  //軸線顏色
-                        LineData data = new LineData(lineDataSet);
-                        lineChart.setData(data);
-
-                        XAxis xAxis = lineChart.getXAxis(); //取得X軸
-                        xAxis.setValueFormatter(new IndexAxisValueFormatter(label)); //x軸放入自定義的時間
-                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //日期顯示在底層
-                        xAxis.setGranularity(1f);                      //x軸最小間隔
-                        xAxis.setLabelCount(label.size());             //X軸的數量來自資料集
-                        xAxis.setGridColor(Color.BLACK);               //設置X軸的網格線的顏色
-                        xAxis.setAxisLineColor(Color.BLACK);
-                        xAxis.enableGridDashedLine(10f, 10f, 0f); //X軸格線虛線
-
-                        YAxis rightAxis = lineChart.getAxisRight();         //獲取右側的Y軸
-                        rightAxis.setEnabled(false);                        //不顯示右側Y軸
-                        YAxis leftAxis = lineChart.getAxisLeft();           //獲取左側的Y軸線
-                        leftAxis.setDrawGridLines(false);                   //隱藏Y軸的格線
-
-                        leftAxis.setLabelCount(7);    //體溫最多7階
-                        xAxis.setLabelCount(10);      //日期做多10階
-
-                        lineChart.getLegend().setEnabled(false);            //隱藏圖例
-                        lineChart.getDescription().setEnabled(false);       //隱藏描述
-                        lineChart.invalidate();                             //重新刷圖表
-                    }
-                }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
-
-    //讀取local json file
-    public String loadJSONFromAsset(String fileName)
-    {
-        String json;
-        try
-        {
-            InputStream is = getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

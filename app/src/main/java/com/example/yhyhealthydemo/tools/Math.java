@@ -43,7 +43,6 @@ public class Math {
         return CalendarDay.from(dYear, dMonth, dDay);
     }
 
-
     /***  圖例 ***/
     @SuppressLint({"UseCompatLoadingForDrawables", "NewApi"})
     public Drawable getCalenderDrawable()

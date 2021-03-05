@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
-import static android.content.ContentValues.TAG;
+import java.util.List;
 
 /*********************************
  * 排卵月曆-資料結構DataBean
@@ -13,37 +13,65 @@ import static android.content.ContentValues.TAG;
 public class Menstruation {
 
     /**
-     * testDate : 2020/08/01
-     * temperature : 37.82
-     * cycleStatus : 1
+     * errorCode : 0
+     * success : [{"cycleStatus":[1,4],"firstDay":true,"temperature":35.05,"testDate":"2021-02-05"},{"cycleStatus":[1,4],"firstDay":false,"temperature":35.05,"testDate":"2021-02-06"},{"cycleStatus":[1,4],"firstDay":false,"temperature":35.02,"testDate":"2021-02-07"},{"cycleStatus":[1,4],"firstDay":false,"temperature":35.03,"testDate":"2021-02-08"},{"cycleStatus":[1,4],"firstDay":false,"temperature":35.02,"testDate":"2021-02-09"},{"cycleStatus":[5],"firstDay":false,"temperature":35.92,"testDate":"2021-02-14"},{"cycleStatus":[5],"firstDay":false,"temperature":35.05,"testDate":"2021-02-15"},{"cycleStatus":[5],"firstDay":false,"temperature":35.04,"testDate":"2021-02-16"},{"cycleStatus":[6],"firstDay":false,"temperature":34,"testDate":"2021-02-17"},{"cycleStatus":[6],"firstDay":false,"temperature":33,"testDate":"2021-02-18"},{"cycleStatus":[6],"firstDay":false,"temperature":34,"testDate":"2021-02-19"},{"cycleStatus":[5],"firstDay":false,"temperature":36,"testDate":"2021-02-20"},{"cycleStatus":[5],"firstDay":false,"temperature":36.08,"testDate":"2021-02-21"},{"cycleStatus":[5],"firstDay":false,"temperature":36.9,"testDate":"2021-02-22"},{"cycleStatus":[5],"firstDay":false,"temperature":36.23,"testDate":"2021-02-23"},{"cycleStatus":[4],"firstDay":true,"temperature":35.5,"testDate":"2021-02-24"},{"cycleStatus":[4],"firstDay":false,"temperature":35.4,"testDate":"2021-02-28"}]
      */
 
-    private String testDate;
-    private double temperature;
-    private int cycleStatus;
+    private int errorCode;
+    private List<SuccessBean> success;
 
-    public String getTestDate() {
-        return testDate;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public void setTestDate(String testDate) {
-        this.testDate = testDate;
+    public List<SuccessBean> getSuccess() {
+        return success;
     }
 
-    public double getTemperature() {
-        return temperature;
-    }
+    public static class SuccessBean {
+        /**
+         * cycleStatus : [1,4]
+         * firstDay : true
+         * temperature : 35.05
+         * testDate : 2021-02-05
+         */
 
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
+        private boolean firstDay;
+        private double temperature;
+        private String testDate;
+        private List<Integer> cycleStatus;
 
-    public int getCycleStatus() {
-        return cycleStatus;
-    }
+        public boolean isFirstDay() {
+            return firstDay;
+        }
 
-    public void setCycleStatus(int cycleStatus) {
-        this.cycleStatus = cycleStatus;
+        public void setFirstDay(boolean firstDay) {
+            this.firstDay = firstDay;
+        }
+
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(double temperature) {
+            this.temperature = temperature;
+        }
+
+        public String getTestDate() {
+            return testDate;
+        }
+
+        public void setTestDate(String testDate) {
+            this.testDate = testDate;
+        }
+
+        public List<Integer> getCycleStatus() {
+            return cycleStatus;
+        }
+
+        public void setCycleStatus(List<Integer> cycleStatus) {
+            this.cycleStatus = cycleStatus;
+        }
     }
 
     /**
