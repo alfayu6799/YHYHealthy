@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * 使用者設定:
@@ -21,6 +22,8 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     ImageView PregnancyInfo, MenstruationInfo;
     ImageView basicInfo, marriageInfo;
 
+    TextView  tvPregnancyInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,9 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
         basicInfo = findViewById(R.id.ivUserBasicInfo);
         MenstruationInfo = findViewById(R.id.ivMenstruationSetting);
         PregnancyInfo = findViewById(R.id.ivPregnancySetting);
+        tvPregnancyInfo = findViewById(R.id.textView32);
+        tvPregnancyInfo.setVisibility(View.INVISIBLE);
+        PregnancyInfo.setVisibility(View.INVISIBLE);
         marriageInfo = findViewById(R.id.ivMarriageSetting);
 
         back.setOnClickListener(this);

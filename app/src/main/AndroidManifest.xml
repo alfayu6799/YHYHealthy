@@ -62,7 +62,7 @@
         </provider>
 
         <service
-            android:name=".tools.yhyBleService"
+            android:name=".yhyBleService"
             android:enabled="true"
             android:exported="true" />
     </application>

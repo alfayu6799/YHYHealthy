@@ -329,6 +329,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
                             characteristic = gattService.getCharacteristic(TEMPERATURE_NOTIF_UUID); //獲取64e0003服務通知
                             if (characteristic != null){
                                 for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()){
+                                    Log.d(TAG, "onServicesDiscovered : descriptor : " + descriptor);
                                     descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);  //啟動notif通知
                                     boolean sucess = gatt.writeDescriptor(descriptor);
                                     Log.d(TAG, "onServicesDiscovered : writeDescriptor = " + sucess);

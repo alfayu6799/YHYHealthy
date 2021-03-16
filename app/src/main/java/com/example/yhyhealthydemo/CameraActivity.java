@@ -102,7 +102,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
         mParameters.setPictureFormat(PixelFormat.JPEG);
         mParameters.setPictureSize(1280, 960);
         camera.setParameters(mParameters);
-//        mParameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+
         try {
             camera.setPreviewDisplay(surfaceView.getHolder());
             camera.setDisplayOrientation(90); //鏡頭需旋轉90度
@@ -119,7 +119,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
         if ((path = saveImage(data)) != null) {
             Intent it = new Intent(CameraActivity.this, PeriodRecordActivity.class);
             it.putExtra("path", path);
-            startActivity(it);
+            startActivity(it);//
             finish();
         }
     }

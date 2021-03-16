@@ -1,5 +1,6 @@
 package com.example.yhyhealthydemo;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,8 +37,11 @@ import com.example.yhyhealthydemo.datebase.CycleRecord;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.MPAChartCreator;
 import com.example.yhyhealthydemo.tools.MPAChartManager;
 import com.example.yhyhealthydemo.tools.Math;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -50,10 +54,6 @@ import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.ChronoUnit;
 import org.threeten.bp.temporal.TemporalAdjusters;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,7 +78,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //月曆
     private MaterialCalendarView widget;
-    private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
+    private OneDayDecorator oneDayDecorator;
     private TextView menstruationPeriodDay;        //週期顯示TextView
     private String onClickDay;
     private String firstDayOfThisMonth;
@@ -96,7 +96,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private Math math;
 
     //圖表
-    private LineChart lineChart;            //折線圖
+    private CombinedChart combinedChart;     //折線圖+長條圖
     private TextView periodRangDate;        //查詢日期範圍
     private ImageView preMonth, nextMonth;  //上個月&下個月
 
@@ -132,6 +132,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         record = new MenstruationRecord();
         cycleRecord = new CycleRecord();
         proxy = ApiProxy.getInstance();
+
+        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //起始日-5天
+        lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
+
+        oneDayDecorator = new OneDayDecorator(this);
     }
 
     private void initView() {
@@ -162,7 +167,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         widget.setSelectedDate(instance);
 
         //圖表
-        lineChart = findViewById(R.id.lineChart);
+//        lineChart = findViewById(R.id.lineChart);
+//        barChart = findViewById(R.id.barChart);
+        combinedChart = findViewById(R.id.chart);
         periodRangDate = findViewById(R.id.tvMMDD);   //經期範圍
         preMonth = findViewById(R.id.imgPreMonth);    //前一個月
         nextMonth = findViewById(R.id.imgNextMonth);  //後一個月
@@ -178,13 +185,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //初始化日曆
     private void initCalendar() {
 
-        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //起始日-5天
-        lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
+        Log.d(TAG, "初始化日曆fxn: initCalendar");
 
-        widget.addDecorators(
-                new MySelectorDecorator(this), //點擊日期後的背景
-                oneDayDecorator
-        );
+//        widget.addDecorators(
+//                new MySelectorDecorator(OvulationActivity.this), //點擊日期後的背景
+//                oneDayDecorator
+//        );
+
+        widget.addDecorator(oneDayDecorator);
 
         //經期月曆 (起始日&結束日)
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
@@ -209,9 +217,10 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 String lastDay = String.valueOf(LocalDate.from(date.getDate()).with(TemporalAdjusters.lastDayOfMonth()).plusDays(+5));
                 firstDayOfThisMonth = firstDay;
                 lastDayOfThisMonth = lastDay;
-                Log.d(TAG, "onMonthChanged: " + firstDayOfThisMonth + " end:" + lastDayOfThisMonth);
+
                 setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);  //read 週期資料
-                widget.removeDecorators();    //
+                widget.removeDecorators();            //清掉所有的makerDay不然圖層會累積跑版
+                widget.addDecorator(oneDayDecorator); //重新繪製
             }
         });
 
@@ -593,7 +602,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "startDate: " + startDay + " endDate:" + endDay);
+        Log.d(TAG, "startDate: " + startDay + " endDate:" + endDay);
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -666,10 +675,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 list.add(day);
             }
 
-            //圖表
-            MPAChartManager chartManager = new MPAChartManager(lineChart);
-            chartManager.showLineChart(dataList, Color.BLUE);
         }
+
+        //圖表
+        MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
+        chartManager.showCombinedChart(dataList);
 
         if(list.get(0) != null){
             //經期第一天寫入sharePref
@@ -778,13 +788,22 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     }
 
     @SuppressLint("SimpleDateFormat")
-    private void nextMonthListener() {
-        Log.d(TAG, "PreMonthListener: " + lastDayOfThisMonth);
+    private void nextMonthListener() { //下個月
+        String endNextMonth = String.valueOf(LocalDate.parse(lastDayOfThisMonth).plusDays(30));
+        String startNextMonth = String.valueOf(LocalDate.parse(endNextMonth).plusDays(-40));
+        lastDayOfThisMonth = endNextMonth;
+        firstDayOfThisMonth = startNextMonth;
+        initChartData();    //圖表範圍顯示
+        widget.goToNext();  //下個月月曆
     }
 
-    private void PreMonthListener() {
-
-        Log.d(TAG, "PreMonthListener: " + firstDayOfThisMonth);
+    private void PreMonthListener() { //上個月
+        String startLastMonth = String.valueOf(LocalDate.parse(firstDayOfThisMonth).plusDays(-30));
+        String endLastMonth = String.valueOf(LocalDate.parse(startLastMonth).plusDays(40));
+        firstDayOfThisMonth = startLastMonth;
+        lastDayOfThisMonth = endLastMonth;
+        initChartData();         //圖表範圍顯示
+        widget.goToPrevious();  //上個月月曆
     }
 
 

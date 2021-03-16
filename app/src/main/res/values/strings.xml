@@ -90,8 +90,9 @@
     <string name="ble_start_scanner">藍芽開始搜尋</string>
     <string name="ble_stop_scanner">藍芽停止搜尋</string>
     <string name="ble_stop_in_10">超時10秒停止掃描</string>
+    <string name="ble_stop_in_5">超時5秒停止掃描</string>
     <string name="not_connect_yet">尚未連接</string>
-    <string name="ble_connect_status">設備已連線</string>
+    <string name="ble_connect_status">已連線</string>
     <string name="ble_is_not_connect">藍芽設備已斷開</string>
     <string name="no_suo_bluetooth">設備不支援低功率藍芽</string>
     <string name="ble_rssi">訊號強度</string>
@@ -228,4 +229,6 @@
     <string name="delete_really_day">做刪除</string>
     <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
     <string name="period_day_is_empty">沒有週期資料</string>
+    <string name="function_only_today">此功能僅限今日</string>
+    <string name="ble_is_release">釋放藍芽資源</string>
 </resources>

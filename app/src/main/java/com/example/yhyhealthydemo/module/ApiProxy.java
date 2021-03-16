@@ -57,6 +57,9 @@ public class ApiProxy {
     //重發驗證碼
     public static String COMP_CODE_REQUEST = "allUser/ext/code";
 
+    //更新token
+    public static String RENEW_TOKEN = "allUser/ext/renew";
+
     //查詢用戶資訊api
     public static String USER_INFO = "allUser/users/info";
 
@@ -72,38 +75,38 @@ public class ApiProxy {
     //更新驗證方式
     public static String CHANGE_VERIFICATION_STYLE = "allUser/users/sendType";
 
-    //查詢經期設定資訊api
-    public static String MENSTRUAL_RECORD_INFO = "allAiniita/aplus/MenstrualRecordInfo";
-
-    //更新經期設定api
-    public static String MENSTRUAL_RECORD_UPDATE = "allAiniita/aplus/MenstrualRecord";
-
-    //週期狀態api(月曆與圖表)
-    public static String CYCLE_RECORD = "allAiniita/aplus/CycleRecord";
-
-    //排卵紀錄查詢api
-    public static String RECORD_INFO = "allAiniita/aplus/RecordInfo";
-
-    //排卵紀錄更新api
-    public static String RECORD_UPDATE = "allAiniita/aplus/Record";
-
-    //唾液圖片辨識api
-    public static String IMAGE_DETECTION = "allAiniita/aplus/ImgDetection";
-
-    //實際經期設定api(更新)
-    public static String PERIOD_UPDATE = "allAiniita/aplus/Period";
-
-    //刪除實際經期設定api
-    public static String PERIOD_DELETE = "allAiniita/aplus/DelPeriod";
-
     //查詢婚姻狀況api
-    public static String MARRIAGE_INFO = "allAiniita/aplus/MarriageInfo";
+    public static String MARRIAGE_INFO = "allUser/users/marriageInfo";
 
     //更新婚姻狀況api
-    public static String MARRIAGE = "allAiniita/aplus/Marriage";
+    public static String MARRIAGE_UPDATE = "allUser/users/marriage";
+
+    //查詢經期設定資訊api
+    public static String MENSTRUAL_RECORD_INFO = "allApp/aplus/MenstrualRecordInfo";
+
+    //更新經期設定api
+    public static String MENSTRUAL_RECORD_UPDATE = "allApp/aplus/MenstrualRecord";
+
+    //週期狀態api(月曆與圖表用)
+    public static String CYCLE_RECORD = "allApp/aplus/CycleRecord";
+
+    //排卵紀錄查詢api
+    public static String RECORD_INFO = "allApp/aplus/RecordInfo";
+
+    //排卵紀錄更新api
+    public static String RECORD_UPDATE = "allApp/aplus/Record";
+
+    //唾液圖片辨識api
+    public static String IMAGE_DETECTION = "allApp/aplus/ImgDetection";
+
+    //實際經期設定api(更新)
+    public static String PERIOD_UPDATE = "allApp/aplus/Period";
+
+    //刪除實際經期設定api
+    public static String PERIOD_DELETE = "allApp/aplus/DelPeriod";
 
     //衛教IP網址
-    private static String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";
+    private static final String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";
 
     //衛教文章分類api
     public static String EDU_ART_CATALOG = "article/getNewItemAttr";
@@ -224,6 +227,7 @@ public class ApiProxy {
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, REGISTER_AUTH_CODE);
         request.addHeader(DEFAULTLAN, language);  //不能省略
+        request.addHeader("system","6"); //後台要求要增加系統ID
         buildRequest(request.build(), listener);
     }
 
@@ -234,7 +238,7 @@ public class ApiProxy {
         request.url(URL + action);
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, "xxx");
-        request.addHeader("system","6");
+        request.addHeader("system","6"); //後台要求要增加系統ID
         buildRequest(request.build(), listener);
     }
 

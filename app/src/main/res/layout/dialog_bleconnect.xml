@@ -13,8 +13,8 @@
         android:layout_marginLeft="20dp"
         android:textSize="18sp"
         android:text="可配對裝置"/>
-    <ListView
-        android:id="@+id/listview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBleScanView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginLeft="20dp"

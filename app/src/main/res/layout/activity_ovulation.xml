@@ -413,8 +413,8 @@
                 android:layout_marginLeft="4dp"
                 android:text="排卵期"/>
         </LinearLayout>
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginLeft="4dp"

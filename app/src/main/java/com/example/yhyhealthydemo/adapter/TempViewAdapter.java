@@ -31,11 +31,13 @@ public class TempViewAdapter extends RecyclerView.Adapter<TempViewAdapter.ViewHo
     public void OnItemClick(TempViewAdapter.OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
+
     /**清除搜尋到的裝置列表*/
     public void clearDevice(){
         this.arrayList.clear();
         notifyDataSetChanged();
     }
+
     /**若有不重複的裝置出現，則加入列表中*/
     public void addDevice(List<ScannedData> arrayList){
         this.arrayList = arrayList;
@@ -54,9 +56,13 @@ public class TempViewAdapter extends RecyclerView.Adapter<TempViewAdapter.ViewHo
         holder.tvName.setText(arrayList.get(position).getDeviceName());
         holder.tvAddress.setText(arrayList.get(position).getAddress());
         holder.tvRssi.setText("rssi "+ arrayList.get(position).getRssi());
-        holder.itemView.setOnClickListener(v -> {
-            onItemClick.onItemClick(arrayList.get(position));
-            Log.d(TAG, "從TempViewAdapter得到使用者點擊的訊息(Address) : " + arrayList.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClick.onItemClick(arrayList.get(position));
+                Log.d(TAG, "從TempViewAdapter得到使用者點擊的訊息(Address) : " + arrayList.get(position));
+            }
         });
     }
 

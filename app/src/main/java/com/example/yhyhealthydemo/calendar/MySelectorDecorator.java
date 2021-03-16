@@ -11,7 +11,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 public class MySelectorDecorator implements DayViewDecorator {
 
-    private Drawable drawable;
+    private final Drawable drawable;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public MySelectorDecorator(Activity context) {

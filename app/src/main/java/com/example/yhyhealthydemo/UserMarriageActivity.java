@@ -1,7 +1,6 @@
 package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,18 +11,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.datebase.ChangeUserMarriageApi;
 import com.example.yhyhealthydemo.datebase.MarriageData;
 import com.example.yhyhealthydemo.module.ApiProxy;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import es.dmoral.toasty.Toasty;
-
-import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_UPDATE;
 
 /***  ****************
  * 設定 - 個人 - 婚姻狀態
@@ -187,7 +182,7 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
     //寫回後台
     private void updateToApi() {
 
-        proxy.buildPOST(MARRIAGE, changeUserMarriageApi.toJSONString(), changeMarriageListener);
+        proxy.buildPOST(MARRIAGE_UPDATE, changeUserMarriageApi.toJSONString(), changeMarriageListener);
     }
     private ApiProxy.OnApiListener changeMarriageListener = new ApiProxy.OnApiListener() {
         @Override

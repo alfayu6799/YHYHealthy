@@ -157,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d(TAG, "Register upDataToApi: " + json.toString() + " DefaultLan:" + defaultLen);
         //註冊專用(須帶手機語系defaultLen)
         proxy.buildRegister(REGISTER, json.toString(), defaultLen, registerListener);
     }
