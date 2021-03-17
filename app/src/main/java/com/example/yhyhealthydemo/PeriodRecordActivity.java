@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -99,18 +100,20 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //藍芽
     private yhyBleService mBluetoothLeService;
+    private BluetoothGatt mBluetoothGatt;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BroadcastReceiver mBleReceiver;
     private TempViewAdapter mDeviceListAdapter;
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
     private Handler mHandler;
-    private String deviceName =""; //藍芽裝置名稱
+    private String deviceName ="";   //藍芽裝置名稱
+    private String deviceAddress = ""; //藍芽MAC
 
     //使用者自行輸入區
     MyGridView gridViewColor, gridViewTaste, gridViewType, gridViewSymptom;
     private EditText   editWeight;    //體重
-    private TextView   textBodyTemp; //體溫
+    private TextView   textBodyTemp;  //體溫
 
     private Switch bleeding, breastPain, intercourse;
 
@@ -229,19 +232,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 break;
             case R.id.btnStartMeasure: //開始量測
                 sendCommand();
-//                if (characteristic != null) { //確保write uuid要有資料才能寫資料
-//                    characteristic = gattService.getCharacteristic(TEMPERATURE_WRITE_DATA); //AIDO寫入uuid : 64e00002
-//                    Log.d(TAG, "onClicked: characteristic");
-//                    String request = "AIDO,0"; //詢問溫度command
-//                    byte[] messageBytes = new byte[0];
-//                    try {
-//                        messageBytes = request.getBytes("UTF-8"); //Sting to byte
-//                    } catch (UnsupportedEncodingException e) {
-//                        Log.e(TAG, "Failed to convert message string to byte array");
-//                    }
-//                    characteristic.setValue(messageBytes);    //詢問溫度Command
-//                    gatt.writeCharacteristic(characteristic);
-//                }
                 break;
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台Onclick
                 checkBeforeUpdate();  //上傳至後台先檢查資訊是否齊全fxn
@@ -769,8 +759,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
             //裝置名稱
             deviceName = selectedDevice.getDeviceName();
-            textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
-            textBleStatus.setTextColor(Color.RED);
+            deviceAddress = selectedDevice.getAddress();
 
             //啟動BLE背景連線
             mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
@@ -786,11 +775,15 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
+
+            //auto connect to the device upon successful start-up init
+            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService = null;
+//            mBluetoothLeService = null;
+            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
     };
 
@@ -808,6 +801,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
         filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
+        filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         mBleReceiver = new BleReceiver();
         registerReceiver(mBleReceiver, filter);
@@ -826,23 +820,28 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             }
             switch (action) {
                 case yhyBleService.ACTION_GATT_CONNECTED:
-                    Toast.makeText(PeriodRecordActivity.this, "藍芽已連接", Toast.LENGTH_SHORT).show();
-                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
-                    textBleStatus.setTextColor(Color.RED);
+                    Toasty.info(PeriodRecordActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
                     break;
 
                 case yhyBleService.ACTION_GATT_DISCONNECTED:
                     Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT).show();
+                    mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-                    textBleStatus.setText(getString(R.string.ble_is_not_connect));
+                    //updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
-                    textBleStatus.setText(getString(R.string.ble_is_not_connect));
+                    //updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     break;
 
+                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
+                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
+                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
+                    textBleStatus.setTextColor(Color.RED);
+                    searchBLE.setVisibility(View.INVISIBLE);
+                    break;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
@@ -857,27 +856,41 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
     }
 
+    /*** 顯示現在藍芽連線狀態 *****/
+    private void updateConnectionStatus(String bleStatus){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textBleStatus.setText(bleStatus);
+            }
+        });
+    }
+
     //量測command 2021/03/16
     private void sendCommand(){
-        String request = "AIDO,0"; //詢問溫度command
+        String request = "AIDO,0"; //詢問溫度command/@3mins
         byte[] messageBytes = new byte[0];
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
             boolean success = mBluetoothLeService.sendData(messageBytes);
-            Log.d(TAG, "傳送command結果: " + success);
+            if (success)
+                startMeasure.setText(getString(R.string.ble_connecting_measure));
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume:" + deviceAddress);
         //註冊藍芽信息接受器
         registerBleReceiver();
+
     }
 
-    @Override
+        @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");

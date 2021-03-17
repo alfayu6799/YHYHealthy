@@ -231,4 +231,6 @@
     <string name="period_day_is_empty">沒有週期資料</string>
     <string name="function_only_today">此功能僅限今日</string>
     <string name="ble_is_release">釋放藍芽資源</string>
+    <string name="autocode_update_success">授權碼更新成功</string>
+    <string name="ble_connecting_measure">量測中</string>
 </resources>

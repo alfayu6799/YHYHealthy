@@ -154,7 +154,7 @@ public class MPAChartManager {
             String[] str = dataList.get(i).getTestDate().split("-");
             String testDay = str[2];
 
-            if (degree > 0)
+            //if (degree > 0)
             entries.add(new Entry(i, (float) degree));
 
             label.add(testDay);

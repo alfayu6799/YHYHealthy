@@ -1,6 +1,5 @@
 package com.example.yhyhealthydemo;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,12 +8,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,25 +30,19 @@ import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.calendar.MyEventDecorator;
-import com.example.yhyhealthydemo.calendar.MySelectorDecorator;
 import com.example.yhyhealthydemo.calendar.OneDayDecorator;
 import com.example.yhyhealthydemo.datebase.CycleRecord;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
 import com.example.yhyhealthydemo.datebase.PeriodData;
 import com.example.yhyhealthydemo.module.ApiProxy;
-import com.example.yhyhealthydemo.tools.MPAChartCreator;
 import com.example.yhyhealthydemo.tools.MPAChartManager;
 import com.example.yhyhealthydemo.tools.Math;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
-
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,6 +105,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
 
+    //ble
+    private yhyBleService mBluetoothLeService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,8 +165,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         widget.setSelectedDate(instance);
 
         //圖表
-//        lineChart = findViewById(R.id.lineChart);
-//        barChart = findViewById(R.id.barChart);
         combinedChart = findViewById(R.id.chart);
         periodRangDate = findViewById(R.id.tvMMDD);   //經期範圍
         preMonth = findViewById(R.id.imgPreMonth);    //前一個月
@@ -747,7 +743,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         periodRangDate.setText(firstDayOfThisMonth + " ~ " + lastDayOfThisMonth);
     }
 
-
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -806,5 +801,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         widget.goToPrevious();  //上個月月曆
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
 }

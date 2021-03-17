@@ -73,4 +73,16 @@
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toTopOf="@+id/textBleDetail"
         android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSettingBleList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline15"
+        app:layout_constraintTop_toBottomOf="@+id/textBleDetail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

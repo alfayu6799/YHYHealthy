@@ -43,13 +43,40 @@ public class ApiProxy {
     private static ApiProxy INSTANCE = null;
 
     //Api網址
-    private static String URL = "http://192.168.1.108:8080/";
+    private static final String URL = "http://192.168.1.108:8080/";
+
+    //使用者api目錄
+    private static final String USER_API = "allUser/users/";
 
     //註冊用api
-    public static String REGISTER = "allUser/users/register";
+    public static String REGISTER = USER_API + "register";
 
     //登入api
-    public static String LOGIN = "allUser/users/login";
+    public static String LOGIN = USER_API + "login";
+
+    //查詢用戶資訊api
+    public static String USER_INFO = USER_API + "info";
+
+    //更新用戶資訊api
+    public static String USER_UPDATE = USER_API + "update";
+
+    //忘記密碼api
+    public static String FORGET_PASSWORD = USER_API + "forget";
+
+    //更新密碼api
+    public static String CHANGE_PASSWORD = USER_API + "change";
+
+    //更新驗證方式
+    public static String CHANGE_VERIFICATION_STYLE = USER_API + "sendType";
+
+    //查詢婚姻狀況api
+    public static String MARRIAGE_INFO = USER_API + "marriageInfo";
+
+    //更新婚姻狀況api
+    public static String MARRIAGE_UPDATE = USER_API + "marriage";
+
+    //App版本api
+    public static String APP_VER = "allUser/ext/ver";
 
     //驗證碼比對api
     public static String COMP = "allUser/ext/comp";
@@ -60,50 +87,38 @@ public class ApiProxy {
     //更新token
     public static String RENEW_TOKEN = "allUser/ext/renew";
 
-    //查詢用戶資訊api
-    public static String USER_INFO = "allUser/users/info";
-
-    //更新用戶資訊api
-    public static String USER_UPDATE = "allUser/users/update";
-
-    //忘記密碼api
-    public static String FORGET_PASSWORD = "allUser/users/forget";
-
-    //更新密碼api
-    public static String CHANGE_PASSWORD = "allUser/users/change";
-
-    //更新驗證方式
-    public static String CHANGE_VERIFICATION_STYLE = "allUser/users/sendType";
-
-    //查詢婚姻狀況api
-    public static String MARRIAGE_INFO = "allUser/users/marriageInfo";
-
-    //更新婚姻狀況api
-    public static String MARRIAGE_UPDATE = "allUser/users/marriage";
+    //經期行事曆api目錄
+    public static final String MENSTRUAL_API = "allApp/aplus/";
 
     //查詢經期設定資訊api
-    public static String MENSTRUAL_RECORD_INFO = "allApp/aplus/MenstrualRecordInfo";
+    public static String MENSTRUAL_RECORD_INFO = MENSTRUAL_API + "MenstrualRecordInfo";
 
     //更新經期設定api
-    public static String MENSTRUAL_RECORD_UPDATE = "allApp/aplus/MenstrualRecord";
+    public static String MENSTRUAL_RECORD_UPDATE = MENSTRUAL_API + "MenstrualRecord";
 
     //週期狀態api(月曆與圖表用)
-    public static String CYCLE_RECORD = "allApp/aplus/CycleRecord";
+    public static String CYCLE_RECORD = MENSTRUAL_API + "CycleRecord";
 
     //排卵紀錄查詢api
-    public static String RECORD_INFO = "allApp/aplus/RecordInfo";
+    public static String RECORD_INFO = MENSTRUAL_API + "RecordInfo";
 
     //排卵紀錄更新api
-    public static String RECORD_UPDATE = "allApp/aplus/Record";
+    public static String RECORD_UPDATE = MENSTRUAL_API + "Record";
 
     //唾液圖片辨識api
-    public static String IMAGE_DETECTION = "allApp/aplus/ImgDetection";
+    public static String IMAGE_DETECTION = MENSTRUAL_API + "ImgDetection";
 
     //實際經期設定api(更新)
-    public static String PERIOD_UPDATE = "allApp/aplus/Period";
+    public static String PERIOD_UPDATE = MENSTRUAL_API + "Period";
 
     //刪除實際經期設定api
-    public static String PERIOD_DELETE = "allApp/aplus/DelPeriod";
+    public static String PERIOD_DELETE = MENSTRUAL_API + "DelPeriod";
+
+    //排卵儀序號驗證api
+    public static String SERIAL_NO_EXISTS = "allApp/ext/SerialNoExists";
+
+    //更新用戶排卵儀序號api
+    public static String SERIAL_NO_EXISTS_UPDATE = "allApp/ext/UpdateSerialNo";
 
     //衛教IP網址
     private static final String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";
@@ -120,19 +135,37 @@ public class ApiProxy {
     //衛教影片api網址
     public static String VIDEO_LIST = "video/getNewList";
 
+    //藍芽體溫api目錄
+    public static final String BLE_TEMPERATURE_API = "allApp/aido/";
+
+    //新增體溫量測資料
+    public static String BLE_USER_ADD_VALUE = "addValues";
+
+    //查詢當前區間體溫量測資料
+
+    //查詢遠端(本機)授權碼
+    public static String MONITOR_CODE = BLE_TEMPERATURE_API + "monitorCode";
+
+    //更新遠端(本機)授權碼 ??
+    public static String MONITOR_CODE_RENEW = BLE_TEMPERATURE_API + "renewCode";
+
     //
     private static final String AUTHORIZATION = "Authorization";
     private static final String SCEPTER = "Scepter";
     private static final String DEFAULTLAN = "DefaultLan";
+    private static final String SYSTEM = "system";
     private static String authToken;
     private static String scepterToken;
 
     //註冊專用Authorization token
     private static final String REGISTER_AUTH_CODE = "$2a$10$x42hx/UBe.PxFEoAk0RyuO0ImZ4h71hptmgvIF1sRZxA1HFqjJUAK";
+
     //忘記密碼專用Authorization token
     private static final String FORGET_AUTH_CODE = "$2a$10$yXAkhpwHtBm6Ws0dYohU5OzcjpkWW5QOCW7d6LOnVFPjDbnCjeciO";
+
     //驗證碼專用Authorization token
     private static final String VERIFICATION_CODE = "$2a$10$Ymh9oITzzZN3KZVDzajXZODBZqHXBrCexz1I3P5nhRL14cDDOZxH6";
+
     //發送驗證碼專用
     private static final String REQUEST_COMP_CODE = "$2a$10$jBSbzD.JToYeHV7jH8TWXeePdGcFd0bCyOSn4VhsGlqZ/KC61e/qK";
 
@@ -227,7 +260,7 @@ public class ApiProxy {
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, REGISTER_AUTH_CODE);
         request.addHeader(DEFAULTLAN, language);  //不能省略
-        request.addHeader("system","6"); //後台要求要增加系統ID
+        request.addHeader(SYSTEM,"6"); //後台要求要增加系統ID
         buildRequest(request.build(), listener);
     }
 
@@ -238,7 +271,7 @@ public class ApiProxy {
         request.url(URL + action);
         request.post(requestBody);
         request.addHeader(AUTHORIZATION, "xxx");
-        request.addHeader("system","6"); //後台要求要增加系統ID
+        request.addHeader(SYSTEM,"6"); //後台要求要增加系統ID
         buildRequest(request.build(), listener);
     }
 

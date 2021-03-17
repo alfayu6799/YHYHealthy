@@ -8,7 +8,9 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -24,7 +26,11 @@ public class yhyBleService extends Service {
 
     private static final String TAG = "yhyBleService";
 
+    private Context context;
+
     private BluetoothGatt mBluetoothGatt;
+    private BluetoothManager mBluetoothManager;
+    private BluetoothAdapter mBluetoothAdapter;
 
     // 蓝牙连接状态
     private int mConnectionState = 0;
@@ -41,6 +47,8 @@ public class yhyBleService extends Service {
     public final static String ACTION_GATT_DISCONNECTED = "com.example.yhyhealthydemo.ACTION_GATT_DISCONNECTED";
     // 发现GATT服务
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.example.yhyhealthydemo.ACTION_GATT_SERVICES_DISCOVERED";
+    // 啟動通知服務    Notification
+    public final static String ACTION_NOTIFICATION_SUCCESS = "com.example.yhyhealthydemo.ACTION_NOTIFICATION_SUCCESS";
     // 收到蓝牙数据
     public final static String ACTION_DATA_AVAILABLE = "com.example.yhyhealthydemo.ACTION_DATA_AVAILABLE";
     // 连接失败
@@ -77,6 +85,28 @@ public class yhyBleService extends Service {
         return super.onUnbind(intent);
     }
 
+    /** Service建立完成後 , 執行此區塊 , 建立藍芽連線所需物件 **/
+    public boolean initialize(Context context){
+
+        if (mBluetoothManager == null){
+            mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            if (mBluetoothManager == null)
+                return false;
+        }
+
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null)
+            return false;
+
+        if (!mBluetoothAdapter.isEnabled())
+            mBluetoothAdapter.enable(); //自動啟動藍芽
+
+        this.context = context;
+
+        return true;
+    }
+
+
     /**
      * 藍牙操作callback
      * 藍牙有連接狀態才會callback
@@ -85,6 +115,7 @@ public class yhyBleService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
+                Log.d(TAG, "onConnectionStateChange: 藍牙已連接");
                 // 藍牙已連接
                 mConnectionState = STATE_CONNECTED;
                 sendBleBroadcast(ACTION_GATT_CONNECTED);
@@ -92,6 +123,7 @@ public class yhyBleService extends Service {
                 mBluetoothGatt.discoverServices();
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                Log.d(TAG, "onConnectionStateChange: 藍牙斷開連接");
                 // 藍牙斷開連接
                 mConnectionState = STATE_DISCONNECTED;
                 sendBleBroadcast(ACTION_GATT_DISCONNECTED);
@@ -122,6 +154,7 @@ public class yhyBleService extends Service {
         @Override  //接受到手機端的command後藍芽回覆的資料
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
+            Log.d(TAG, "接受到手機端的command後藍芽回覆的資料 ");
             if (characteristic.getValue() != null){
                 sendBleBroadcast(ACTION_DATA_AVAILABLE, characteristic);
             }
@@ -137,6 +170,7 @@ public class yhyBleService extends Service {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
             Log.d(TAG, "開啟通知模式成功: ");
+            sendBleBroadcast(ACTION_NOTIFICATION_SUCCESS);
         }
     };
 
@@ -180,7 +214,7 @@ public class yhyBleService extends Service {
         if (device == null) {
             return false;
         }
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+        mBluetoothGatt = device.connectGatt(this, true, mGattCallback);
         mConnectionState = STATE_CONNECTING;
         return true;
     }
