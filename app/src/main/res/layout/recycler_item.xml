@@ -49,6 +49,7 @@
         android:layout_toRightOf="@id/ivUserShot"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="50dp"/>
+
     <ImageView
         android:id="@+id/imgBleChart"
         android:layout_width="30dp"
@@ -56,31 +57,36 @@
         android:layout_toRightOf="@id/tvBleUserDegree"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_insert_chart_black_24dp"/>
+
     <TextView
         android:id="@+id/tvBleStatus"
         android:layout_width="150dp"
         android:layout_height="30dp"
-        android:layout_toRightOf="@id/ivUserShot"
-        android:layout_marginTop="52dp"
-        android:textSize="16sp"
+        android:maxEms="10"
         android:layout_marginLeft="40dp"
-        android:text="未連線"/>
+        android:layout_marginTop="52dp"
+        android:layout_toRightOf="@id/ivUserShot"
+        android:text="未連線"
+        android:textColor="@color/red"
+        android:textSize="16sp" />
+
     <ImageView
         android:id="@+id/imgBleConnect"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_toRightOf="@id/tvBleStatus"
         android:layout_below="@id/imgBleChart"
-        android:layout_marginTop="10dp"
         android:layout_alignParentTop="@+id/tvBleStatus"
-        android:src="@drawable/ic_add_black_24dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/tvBleStatus"
+        android:src="@drawable/ic_add_black_24dp" />
+
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_battery_std_black_24dp"
-        android:layout_toRightOf="@id/ivUserShot"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="90dp"/>
+        android:layout_marginTop="95dp"
+        android:layout_toRightOf="@id/ivUserShot"
+        android:src="@drawable/ic_battery_std_black_24dp" />
     <TextView
         android:id="@+id/tvBleBattery"
         android:layout_width="150dp"
@@ -98,4 +104,5 @@
         android:layout_below="@+id/imgBleConnect"
         android:layout_marginTop="15dp"
         android:src="@drawable/ic_delete_black_24dp"/>
+
 </RelativeLayout>

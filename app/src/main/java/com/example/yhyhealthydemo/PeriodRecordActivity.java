@@ -100,7 +100,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //藍芽
     private yhyBleService mBluetoothLeService;
-    private BluetoothGatt mBluetoothGatt;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BroadcastReceiver mBleReceiver;
     private TempViewAdapter mDeviceListAdapter;
@@ -227,7 +226,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 if (strDay.equals(todayStr)){    //限當日可以量體溫
                     openBleFunction();
                 }else {
-                    Toasty.info(PeriodRecordActivity.this,getString(R.string.camera_only_today), Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(PeriodRecordActivity.this,getString(R.string.ble_only_today), Toast.LENGTH_SHORT, true).show();
                 }
                 break;
             case R.id.btnStartMeasure: //開始量測

@@ -13,13 +13,23 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -31,6 +41,7 @@ import com.example.yhyhealthydemo.data.ScannedData;
 import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
 import com.example.yhyhealthydemo.datebase.Member;
+import com.example.yhyhealthydemo.tools.ByteUtils;
 import com.example.yhyhealthydemo.tools.RecyclerViewListener;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 import com.google.gson.Gson;
@@ -46,7 +57,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class TemperatureActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewListener {
+import es.dmoral.toasty.Toasty;
+
+public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, RecyclerViewListener {
 
     private final static String TAG = "TemperatureActivity";
 
@@ -58,7 +71,6 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
     private RecyclerViewAdapter mAdapter;
     private List<Member> members;
     private String name;
-    private Double degree = 00.00;
     private Member user1; //假資料
     private Member user2; //假資料
     private Member user3; //假資料
@@ -76,33 +88,30 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    private BluetoothGattService gattService;
-    private BluetoothGatt gatt;
-    private BluetoothGattCharacteristic characteristic;
-    private static final int REQUEST_FINE_LOCATION_PERMISSION = 102;
-    private static final int REQUEST_ENABLE_BT = 2;
+    private yhyBleService mBluetoothLeService;
+    private BroadcastReceiver mBleReceiver;
+    private BluetoothGatt mBluetoothGatt;
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
-    private RecyclerView bleRecycleView;
     private TempViewAdapter tempAdapter;
-    private Handler mHandler;                    //Handler用來搜尋Devices10秒後，自動停止搜尋
-    //藍芽服務UUID設置
-    private static final UUID TEMPERATURE_SERVICE_UUID = UUID
-            .fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
-    private static final UUID TEMPERATURE_NOTIF_UUID = UUID
-            .fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
-    private static final UUID TEMPERATURE_WRITE_DATA = UUID
-            .fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+    private Handler mHandler;
+    private AlertDialog alertDialog;
+    private String deviceName = "";     //裝置名稱
+    private String deviceAddress = "";  //裝置mac
 
+    //圖表dialog
     private ChartDialog chartDialog;
-    //將資料寫到sharepreferences
+
+    //將資料寫到sharePreferences
     private SharedPreferences temperatureInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature);
-        Log.d(TAG, "onCreate: ");
+
+        //休眠禁止
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //init sharepreferences
         temperatureInfo = getSharedPreferences("temperature", MODE_PRIVATE); //只允許本應用程式內存取
@@ -121,8 +130,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
-        bleRecycleView = findViewById(R.id.rvSignUser);
-        remoteRecycle = findViewById(R.id.rvRomoteUser);
+        remoteRecycle = findViewById(R.id.rvRomoteUser);  //遠端
 
         setInfo();       //觀測者初始化資訊
         setRemote();     //監控者初始化資訊
@@ -158,42 +166,71 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         remotes.add(remote2);
     }
 
-    ///////////////////////////藍芽/////////////////////////////////////////////////////////////////////
+    /**** 藍芽 2021/03/18 *****/
     private void initBle() {
         /**啟用藍牙適配器*/
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (mBluetoothAdapter == null) return;
+
+        if (!mBluetoothAdapter.isEnabled())
+            mBluetoothAdapter.enable();   //自動啟動藍芽
+
         /**開始掃描*/
-        mBluetoothAdapter.startLeScan(mLeScanCallback);
-        Log.d(TAG, "initBle: first start scan !!");
-        isScanning = true;
+        dialogBleConnect();
+    }
+
+    private void dialogBleConnect(){
+        alertDialog = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.dialog_bleconnect, null);
+        RecyclerView bleRecyclerView = view.findViewById(R.id.rvBleScanView);
+
         /**設置Recyclerview列表*/
         tempAdapter = new TempViewAdapter();
-        bleRecycleView.setAdapter(tempAdapter);
-        bleRecycleView.setHasFixedSize(true);
-        bleRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        bleRecyclerView.setAdapter(tempAdapter);
+        bleRecyclerView.setHasFixedSize(true);
+        bleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        alertDialog.setView(view);
+        alertDialog.setCancelable(true);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        tempAdapter.OnItemClick(itemClick);
+
+        isScanning = true;
         mHandler = new Handler();
-        if (isScanning){  //開始掃描
+        if (isScanning){
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     isScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);//停止搜尋
-                    Toast.makeText(TemperatureActivity.this, getString(R.string.ble_stop_in_5secs), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "initBle: 5秒時間到停止掃描");
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    Log.d(TAG, "5秒停止搜尋: ");
                 }
-            },10 *500);
+            }, 5000);
             isScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
             findDevice.clear();
             tempAdapter.clearDevice();
-            Log.d(TAG, "initBle: 開始掃描");
         }else {
             isScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);//停止搜尋
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
+
+        Button btnCancel = view.findViewById(R.id.btnBleCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                Log.d(TAG, "使用者自行取消搜尋功能 ");
+                alertDialog.dismiss(); //關閉視窗
+            }
+        });
+
+        alertDialog.show();
     }
 
     /**顯示掃描到物件*/
@@ -254,141 +291,20 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         @Override
         public void onItemClick(ScannedData selectedDevice) {
 
-            String bleAddress = selectedDevice.getAddress();
-            Log.d(TAG, "選擇的藍芽裝置: " + bleAddress);
+            mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
 
-            /** 觀測者 layout顯示 , 而藍芽layout隱藏 */
-            recyclerView.setVisibility(View.VISIBLE);
-            addTemperatureUser.setVisibility(View.VISIBLE);
-            bleRecycleView.setVisibility(View.GONE);
+            deviceName = selectedDevice.getDeviceName();
+            deviceAddress = selectedDevice.getAddress();
 
-            //獲取設備
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(bleAddress);
-            //藍芽gett開始連線
-            gatt = device.connectGatt(TemperatureActivity.this, false, mGattCallback);
+            //啟動ble server連線
+            mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
+
+            //關閉視窗
+            if (alertDialog.isShowing())
+                alertDialog.dismiss();
         }
     };
 
-    //gatt連上線
-   private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-       @Override
-       public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-           super.onConnectionStateChange(gatt, status, newState);
-           Log.d(TAG, "onConnectionStateChange: status " + status + " newStatus =" + newState);
-           switch(status){
-               case BluetoothGatt.GATT_SUCCESS:
-                   Log.w(TAG,"BluetoothGatt.GATT_SUCCESS");
-                   break;
-               case BluetoothGatt.GATT_FAILURE:
-                   Log.w(TAG,"BluetoothGatt.GATT_FAILURE");
-                   break;
-               case BluetoothGatt.GATT_CONNECTION_CONGESTED:
-                   Log.w(TAG,"BluetoothGatt.GATT_CONNECTION_CONGESTED");
-                   break;
-               case BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION:
-                   Log.w(TAG,"BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION");
-                   break;
-               case BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION:
-                   Log.w(TAG,"BluetoothGatt.GATT_INSUFFICIENT_ENCRYPTION");
-                   break;
-               case BluetoothGatt.GATT_INVALID_OFFSET:
-                   Log.w(TAG,"BluetoothGatt.GATT_INVALID_OFFSET");
-                   break;
-               case BluetoothGatt.GATT_READ_NOT_PERMITTED:
-                   Log.w(TAG,"BluetoothGatt.GATT_READ_NOT_PERMITTED");
-                   break;
-               case BluetoothGatt.GATT_REQUEST_NOT_SUPPORTED:
-                   Log.w(TAG,"BluetoothGatt.GATT_REQUEST_NOT_SUPPORTED");
-                   break;
-           }
-
-           if (newState == BluetoothGatt.STATE_CONNECTED){
-               Log.d(TAG, "連結成功 : 跑到discoverServices");
-               gatt.discoverServices();  //啟動服務
-           }else if (newState == BluetoothGatt.STATE_DISCONNECTED){
-               Log.d(TAG, "斷開連結並釋放資源");
-               gatt.close();
-               update(); //20201210 刷新RecyclerView
-           }else if (newState == BluetoothGatt.STATE_CONNECTING){
-               Log.d(TAG, "正在連結.." );
-
-           }else if (newState == BluetoothGatt.STATE_DISCONNECTING){
-               Log.d(TAG, "正在斷開..");
-           }
-       }
-
-       @Override
-       public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-           Log.d(TAG, String.format("onServicesDiscovered:%s,%s", gatt.getDevice().getName(), status));
-           if (status == gatt.GATT_SUCCESS) { //發現BLE服務成功
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        gattService = gatt.getService(TEMPERATURE_SERVICE_UUID); //獲取64e0001服務
-                        if (gattService != null){
-                            characteristic = gattService.getCharacteristic(TEMPERATURE_NOTIF_UUID); //獲取64e0003服務通知
-                            if (characteristic != null){
-                                for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()){
-                                    Log.d(TAG, "onServicesDiscovered : descriptor : " + descriptor);
-                                    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);  //啟動notif通知
-                                    boolean sucess = gatt.writeDescriptor(descriptor);
-                                    Log.d(TAG, "onServicesDiscovered : writeDescriptor = " + sucess);
-                                }
-                                gatt.setCharacteristicNotification(characteristic, true); //notif listener
-                                Log.d(TAG, "onServicesDiscovered的通知啟動成功");
-                                //要顯示"已連線"的訊息在RecyclerView's 項目
-                                updateStatus(name);
-                            }
-                        }
-                    }
-                });
-           }
-       }
-
-       @Override
-       public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-           super.onCharacteristicRead(gatt, characteristic, status);
-           Log.d(TAG, "onCharacteristicRead: ");
-       }
-
-       @Override
-       public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-           super.onCharacteristicWrite(gatt, characteristic, status);
-           Log.d(TAG, "onCharacteristicWrite: this is onCharacteristicWrite !!");
-       }
-
-       //接受到手機端的command後藍芽回覆的資料
-       @Override
-       public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-           super.onCharacteristicChanged(gatt, characteristic);
-           if (characteristic.getValue() != null){
-               String result = new String(characteristic.getValue());
-               String[] str = result.split(","); //以","切割
-               String temp = str[2];
-               degree = Double.parseDouble(temp)/100;  //25.0
-               Log.d(TAG, "onCharacteristicChanged: Characteristic get value : " + degree);  //result : AIDO,0,2500,100
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       update(); //更新  20201216
-                   }
-               });
-
-           }
-       }
-
-       @Override
-       public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-           super.onDescriptorRead(gatt, descriptor, status);
-           Log.d(TAG, "onDescriptorRead: ");
-       }
-
-       @Override
-       public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-           super.onDescriptorWrite(gatt, descriptor, status);
-           Log.d(TAG, "onDescriptorWrite: success");
-       }
-   };
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //RecyclerView's Item 填入Data
@@ -446,8 +362,6 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnRefresh:       //發送藍芽command
                 Log.d(TAG, "按下發送藍芽的command : ");
-                supervise.setEnabled(true);  //取消觀測Button禁用
-                remote.setEnabled(true);     //取消遠端Button禁用
 
                 //計時5分鐘送一次command
                 requestTemp.run();
@@ -456,15 +370,16 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void updateStatus(String name){
-        //使用者手動按下啟用5分鐘讀取一次藍芽體溫資料
-        refresh.setVisibility(View.VISIBLE); //20201218
+    private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
+        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + "裝置Address:" + deviceAddress);
         //改更藍芽狀態的文字顯示
         if(this.name != null){
             for (int j = 0; j < members.size(); j++){
                 if (members.get(j).getName().equals(name)){
                     Member user = members.get(j);
-                    user.setStatus("已連線");
+                    user.setStatus(deviceName + bleStatus);
+                    user.setDeviceName(deviceName);
+                    user.setMac(deviceAddress);
                     members.set(j, user);
                     mAdapter.updateItem(user, j);
                 }
@@ -473,22 +388,16 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
-    private void update(){
-        String currentDateTime;
-        currentDateTime = sdf.format(new Date());  // 目前時間
+    private void updateBleData(double degree, double battery) {
+        String currentDateTime = sdf.format(new Date());  // 目前時間
 
-        //如果有量到體溫的話按鈕隱藏
-        if (degree != 0.0){
-            refresh.setVisibility(View.GONE);
-        }
-
+        //姓名不為空
         if (name != null){
             for(int i = 0; i < members.size(); i++){
-                Log.d(TAG, "update: " + name + " time: " + currentDateTime + " degree :" + degree);
-                if (members.get(i).getName().equals(name)) {
+                if (members.get(i).getName().equals(name)){
                     Member user = members.get(i);
                     user.setDegree(degree, currentDateTime);
-                    user.setBattery("100%");
+                    user.setBattery(String.valueOf(battery)+"%");
                     members.set(i, user);
                     mAdapter.updateItem(user, i);
 
@@ -500,33 +409,36 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         }
-
-        //寫入sharePreferences
-        if (degree != 00.00){
-            Gson gson = new Gson();
-            Type listOfMemberObject = new TypeToken<List<Member>>(){}.getType();
-            String s = gson.toJson(members, listOfMemberObject);   //20201215
-            //寫入Local端  20201215
-            temperatureInfo.edit().putString("degree", s).apply();
-            //寫回Api
-//            temperatureToApi();
-        }
     }
 
-    private void sendCommand() {
-        if (characteristic != null) { //確保write uuid要有資料才能寫資料
-            characteristic = gattService.getCharacteristic(TEMPERATURE_WRITE_DATA); //AIDO寫入uuid : 64e00002
-            String request = "AIDO,0"; //詢問溫度command
-            byte[] messageBytes = new byte[0];
-            try {
-                messageBytes = request.getBytes("UTF-8"); //Sting to byte
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, "Failed to convert message string to byte array");
-            }
-            characteristic.setValue(messageBytes);    //詢問溫度Command
-            boolean success = gatt.writeCharacteristic(characteristic);
+    //更新收到體溫的訊息給RecyclerView的項目
+    private void update(){
+//        //寫入sharePreferences
+//        if (degree != 00.00){
+//            Gson gson = new Gson();
+//            Type listOfMemberObject = new TypeToken<List<Member>>(){}.getType();
+//            String s = gson.toJson(members, listOfMemberObject);   //20201215
+//            //寫入Local端  20201215
+//            temperatureInfo.edit().putString("degree", s).apply();
+//            //寫回Api
+//            updateToApi();
+//        }
+    }
 
-            Log.d(TAG, "sendCommand 2: " + success);
+    //寫回Api
+    private void updateToApi() {
+        Log.d(TAG, "updateToApi:寫回Api");
+    }
+
+    //command
+    private void sendCommand() {
+        String request = "AIDO,0"; //詢問溫度command/@3mins
+        byte[] messageBytes = new byte[0];
+        try {
+            messageBytes = request.getBytes("UTF-8"); //Sting to byte
+            mBluetoothLeService.sendData(messageBytes);
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Failed to convert message string to byte array");
         }
     }
 
@@ -536,7 +448,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         public void run() {
             Log.d(TAG, "requestTemp start: @5mins");
             sendCommand();
-            mHandler.postDelayed(this, 1000 * 60 * 1);    //5mins
+            mHandler.postDelayed(this, 1000 * 60 * 3);    //5mins
         }
     };
 
@@ -550,30 +462,109 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
+        //註冊藍芽接受器
+        registerBleReceiver();
+    }
+
+    //註冊藍芽接受器
+    private void registerBleReceiver() {
+        Log.d(TAG, "註冊藍芽接受器");
+
+        /** 綁定後台服務 ***/
+        Intent intent = new Intent(this, yhyBleService.class);
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
+        filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
+        filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
+        filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
+        filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
+        mBleReceiver = new BleReceiver();
+        registerReceiver(mBleReceiver, filter);
+    }
+
+    /** ble背景服務 **/
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
+
+            //auto connect to the device upon successful start-up init
+//            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+//            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
+        }
+    };
+
+    /**
+     * 藍牙信息接收器
+     */
+    private class BleReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (TextUtils.isEmpty(action)) {
+                return;
+            }
+            switch (action) {
+                case yhyBleService.ACTION_GATT_CONNECTED:
+                    Toasty.info(TemperatureActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
+                    break;
+
+                case yhyBleService.ACTION_GATT_DISCONNECTED:
+                    Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
+                    mBluetoothLeService.disconnect();
+                    mBluetoothLeService.release();
+                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    break;
+
+                case yhyBleService.ACTION_CONNECTING_FAIL:
+                    Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
+                    mBluetoothLeService.disconnect();
+                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    break;
+
+                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
+                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功:");
+                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_connect_status)); //更新
+                    break;
+                    
+                case yhyBleService.ACTION_DATA_AVAILABLE:
+                    byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
+                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data));
+                    String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
+                    String degreeStr = str[2];
+                    String batteryStr = str[3];
+                    double degree = Double.parseDouble(degreeStr)/100;
+                    double battery = Double.parseDouble(batteryStr);
+                    updateBleData(degree, battery); //更新體溫跟電量
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: gatt close!!");
-        if (mHandler != null) {
-            mHandler.removeCallbacks(requestTemp);
-            Log.d(TAG, "onDestroy: remove Handler");
+        Log.d(TAG, "onDestroy:");
+        if (mBluetoothLeService != null){
+            unregisterReceiver(mBleReceiver);
+            mBleReceiver = null;
+            mBluetoothLeService.disconnect();
+            mBluetoothLeService.release();
         }
-        if(isScanning){
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-        }
-        gattClose(); //斷開藍芽
-    }
-
-    //斷開藍芽
-    private void gattClose() {
-        if (gatt == null) {
-            return;
-        }
-        gatt.close();
-        gatt = null;
-        Toast.makeText(TemperatureActivity.this, getString(R.string.ble_is_not_connect), Toast.LENGTH_SHORT).show();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
     }
 
     ////////////////////////////////////////////// Dialog fxn ////////////////////////////////////////////////////
@@ -632,13 +623,12 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         name = member.getName();  //取得使用者名稱
         //初始化及相關搜尋
         initBle();
-        tempAdapter.OnItemClick(itemClick);
-        /** 觀測者 layout隱藏 , 而藍芽layout顯示 */
-        recyclerView.setVisibility(View.GONE);
-        addTemperatureUser.setVisibility(View.GONE);
-        bleRecycleView.setVisibility(View.VISIBLE);
-        supervise.setEnabled(false);  //禁用觀測Button
-        remote.setEnabled(false);     //禁用遠端Button
+    }
+
+    //啟動ble量測
+    @Override
+    public void onBleMeasuring(Member member) {
+        requestTemp.run(); //5分鐘command一次
     }
 
     //刪除使用者
@@ -656,10 +646,7 @@ public class TemperatureActivity extends AppCompatActivity implements View.OnCli
         chartDialog.show();
     }
 
-    @Override
-    public void onBleMeasuring(Member member) { //啟動ble量測
-        sendCommand();
-    }
+
 }
 
 

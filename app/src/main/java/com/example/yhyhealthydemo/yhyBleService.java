@@ -214,7 +214,7 @@ public class yhyBleService extends Service {
         if (device == null) {
             return false;
         }
-        mBluetoothGatt = device.connectGatt(this, true, mGattCallback);
+        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         mConnectionState = STATE_CONNECTING;
         return true;
     }

@@ -13,19 +13,15 @@ import java.util.List;
 
 public class Member {
 
-    private int image;
-    private String name;
-    private double degree; //體溫
-    private String Status; //連線狀態
-    private String battery;  //電量
-    private String mac;      //ble's mac
+    private int image;           //大頭貼
+    private String name;         //姓名
+    private double degree;       //體溫
+    private String Status;       //連線狀態
+    private String battery;      //電量
+    private String mac;         //ble's mac
+    private String deviceName;  //ble's name
 
     private List<Degree> degreeList = new ArrayList<>();
-
-//    public Member(int image, String name) {
-//        this.image = image;
-//        this.name = name;
-//    }
 
     public Member(int image, String name, String status) {
         this.image = image;
@@ -89,5 +85,13 @@ public class Member {
 
     public void setMac(String mac) {
         this.mac = mac;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 }

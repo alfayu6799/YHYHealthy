@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,17 +70,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textBleStatus.setText(member.getStatus());
         holder.textBleBattery.setText(member.getBattery());
 
+        Log.d(TAG, "onBindViewHolder: " + member.getBattery());
+
+        if(member.getStatus().contains("已連線")) {
+            holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+            holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onBleMeasuring(member); //量測
+                }
+            });
+        }else if (member.getBattery() != null) {
+            Log.d(TAG, "onBindViewHolder: ????");
+        }else {
+            holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onBleConnect(member);  //搜尋
+                }
+            });
+        }
+
         holder.bleMeasuring.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onBleMeasuring(member);
-            }
-        });
-
-        holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onBleConnect(member);
             }
         });
 
@@ -111,6 +126,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textDegree;
         TextView textBleStatus;
         TextView textBleBattery;
+        TextView textBleDeviceName;
         ImageView bleConnect, delUser, bleChart;
         ImageView bleMeasuring;
 

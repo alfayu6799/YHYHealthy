@@ -83,17 +83,17 @@
         android:layout_marginTop="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSignUser"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lybleScan"
-        android:background="@drawable/shape_ble"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="10dp"
-        android:visibility="invisible"/>
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rvSignUser"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@+id/lybleScan"-->
+<!--        android:background="@drawable/shape_ble"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_marginLeft="8dp"-->
+<!--        android:layout_marginRight="8dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:visibility="invisible"/>-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRomoteUser"
         android:layout_width="match_parent"

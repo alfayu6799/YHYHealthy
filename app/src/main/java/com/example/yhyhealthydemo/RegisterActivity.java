@@ -211,6 +211,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }else if (errorCode == 2){  //帳號已經存在
                 Toasty.error(RegisterActivity.this, getString(R.string.account_has_already), Toast.LENGTH_SHORT, true).show();
+            }else if (errorCode == 28){ //信箱已存在
+                Toasty.error(RegisterActivity.this, getString(R.string.email_already_existed), Toast.LENGTH_SHORT, true).show();
             }
 
         } catch (JSONException e) {
