@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -31,21 +33,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.yhyhealthydemo.adapter.DegreeAdapter;
 import com.example.yhyhealthydemo.adapter.RecyclerViewAdapter;
 import com.example.yhyhealthydemo.adapter.RemoteViewAdapter;
 import com.example.yhyhealthydemo.adapter.TempViewAdapter;
 import com.example.yhyhealthydemo.data.Remote;
 import com.example.yhyhealthydemo.data.ScannedData;
+import com.example.yhyhealthydemo.datebase.DegreeUserData;
 import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
 import com.example.yhyhealthydemo.datebase.Member;
+import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
 import com.example.yhyhealthydemo.tools.RecyclerViewListener;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -59,6 +68,9 @@ import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
+import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
+
 public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, RecyclerViewListener {
 
     private final static String TAG = "TemperatureActivity";
@@ -71,6 +83,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private RecyclerViewAdapter mAdapter;
     private List<Member> members;
     private String name;
+
+    private DegreeAdapter degreeAdapter;
+    private List<DegreeUserData.SuccessBean> degreeUserDataList;
     private Member user1; //假資料
     private Member user2; //假資料
     private Member user3; //假資料
@@ -84,7 +99,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private List<Remote> remotes;
     private Remote remote1;  //假資料
     private Remote remote2;  //假資料
-    private Button refresh;  //啟動量測
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -105,6 +119,12 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //將資料寫到sharePreferences
     private SharedPreferences temperatureInfo;
 
+    //api
+    ApiProxy proxy;
+
+    //進度條
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +136,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         //init sharepreferences
         temperatureInfo = getSharedPreferences("temperature", MODE_PRIVATE); //只允許本應用程式內存取
 
+        proxy = ApiProxy.getInstance();
+
         initView();
     }
 
@@ -124,9 +146,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         remote = (Button) findViewById(R.id.bt_select_remote);
         addTemperatureUser = (Button) findViewById(R.id.bt_add_temp);
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
-
-        refresh = findViewById(R.id.btnRefresh);
-        refresh.setOnClickListener(this);
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
@@ -310,18 +329,24 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //RecyclerView's Item 填入Data
     private void setInfo() {
         int spacingInPixels = 10;  //設定item間距的距離
+
+        degreeUserDataList = new ArrayList<>();
+
         members = new ArrayList<>();
 
         setMemberDate(); //填入資料
 
         mAdapter = new RecyclerViewAdapter(this, members, this);
+        //degreeAdapter = new DegreeAdapter(this, degreeUserDataList);
         recyclerView.setAdapter(mAdapter);
+        //recyclerView.setAdapter(degreeAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
     }
 
     private void setMemberDate() {  //日後要從api拉回照片跟姓名等資料
+        //proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
 
         user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
         user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
@@ -332,6 +357,62 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         members.add(user2);
         members.add(user3);
         members.add(user4);
+    }
+
+    private ApiProxy.OnApiListener bleUserListListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(TemperatureActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserJson(result);
+                        }else if (errorCode == 6){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.no_date), Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //解析後台回來的資料
+    private void parserJson(JSONObject result) {
+        Log.d(TAG, "解析後台回來的資料: " + result.toString());
+
+        DegreeUserData degreeUserData = DegreeUserData.newInstance(result.toString());
+
+        degreeUserDataList = degreeUserData.getSuccess();
+
+        for (int i = 0; i < degreeUserDataList.size(); i++){
+
+//            String name = degreeUserData.getSuccess().get(i).getName();
+            degreeUserDataList.add(i, degreeUserData.getSuccess().get(i));
+        }
     }
 
     @Override
@@ -354,18 +435,12 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 recyclerView.setVisibility(View.GONE);
                 remoteRecycle.setVisibility(View.VISIBLE);
                 break;
-            case R.id.bt_add_temp:       //新增觀測者Button
-                dialogTemperature();
+            case R.id.bt_add_temp:       //新增觀測者onClick
+//                dialogTemperature();
+                startActivity(new Intent(this, TemperatureAddActivity.class));
                 break;
-            case R.id.bt_add_remote:     //新增遠端者Button
+            case R.id.bt_add_remote:     //新增遠端者onClick
                 dialogRemote();
-                break;
-            case R.id.btnRefresh:       //發送藍芽command
-                Log.d(TAG, "按下發送藍芽的command : ");
-
-                //計時5分鐘送一次command
-                requestTemp.run();
-
                 break;
         }
     }
@@ -409,25 +484,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 }
             }
         }
-    }
-
-    //更新收到體溫的訊息給RecyclerView的項目
-    private void update(){
-//        //寫入sharePreferences
-//        if (degree != 00.00){
-//            Gson gson = new Gson();
-//            Type listOfMemberObject = new TypeToken<List<Member>>(){}.getType();
-//            String s = gson.toJson(members, listOfMemberObject);   //20201215
-//            //寫入Local端  20201215
-//            temperatureInfo.edit().putString("degree", s).apply();
-//            //寫回Api
-//            updateToApi();
-//        }
-    }
-
-    //寫回Api
-    private void updateToApi() {
-        Log.d(TAG, "updateToApi:寫回Api");
     }
 
     //command
@@ -569,7 +625,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     ////////////////////////////////////////////// Dialog fxn ////////////////////////////////////////////////////
 
-    //新增觀測者Dioalog
+    //新增觀測者Dialog
     private void dialogTemperature() {
         //自定義 一個TemperatureDialog繼承dialog
         AddTemperatureDialog addTemperatureDialog = new AddTemperatureDialog(this, R.style.Theme_AppCompat_Dialog, new AddTemperatureDialog.PriorityListener() {
@@ -592,6 +648,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         remoteDialog.setView(remoteView);
         remoteDialog.setCancelable(false); //禁用非視窗區
 
+        EditText account = remoteView.findViewById(R.id.edtOtherAccount);
+        EditText authCode = remoteView.findViewById(R.id.edtAuthorization);
+
         Button cancel = remoteView.findViewById(R.id.btnRemoteCancel);
         Button submit = remoteView.findViewById(R.id.btnRemoteSend);
 
@@ -605,15 +664,67 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //送資料到後台
-                //RemoteApi();
-                remoteDialog.dismiss();
+                //檢查資料是否齊全
+               if (TextUtils.isEmpty(account.getText().toString()))
+                   return;
+               if (TextUtils.isEmpty(authCode.getText().toString()))
+                   return;
+
+               //傳送到後台
+                updateRemoteToApi(account, authCode);
+
             }
         });
 
         remoteDialog.show();
     }
 
+    //後台新增遠端觀測者資料 2021/03/19
+    private void updateRemoteToApi(EditText account, EditText authCode) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", account.getText().toString());
+            json.put("monitorCode", authCode.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildPOST(REMOTE_USER_ADD,"", remoteAddListener);
+    }
+
+    private ApiProxy.OnApiListener remoteAddListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            try {
+                JSONObject object = new JSONObject(result.toString());
+                int errorCode = object.getInt("errorCode");
+                if (errorCode == 0){
+                    boolean success = object.getBoolean("success");
+                    if (success)
+                        Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                }else {
+                    Log.d(TAG, "新增觀測者結果後台回覆碼:" + errorCode);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     ///////////////////////////來自Adapter的callBack////////////////////////////////////
 

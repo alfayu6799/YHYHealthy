@@ -139,15 +139,25 @@ public class ApiProxy {
     public static final String BLE_TEMPERATURE_API = "allApp/aido/";
 
     //新增體溫量測資料
-    public static String BLE_USER_ADD_VALUE = "addValues";
+    public static String BLE_USER_ADD_VALUE = BLE_TEMPERATURE_API + "addValues";
 
-    //查詢當前區間體溫量測資料
+    //新增觀測對象
+    public static String BLE_USER_ADD = BLE_TEMPERATURE_API + "processTarget";
+
+    //修改觀測對象資料
+    public static String BLE_USER_EDIT = BLE_TEMPERATURE_API + "updateTarget";
+
+    //查詢觀測對象列表
+    public static String BLE_USER_LIST = BLE_TEMPERATURE_API + "target";
 
     //查詢遠端(本機)授權碼
     public static String MONITOR_CODE = BLE_TEMPERATURE_API + "monitorCode";
 
     //更新遠端(本機)授權碼 ??
     public static String MONITOR_CODE_RENEW = BLE_TEMPERATURE_API + "renewCode";
+
+    //新增遠端觀測帳號
+    public static String REMOTE_USER_ADD = BLE_TEMPERATURE_API + "addGoal";
 
     //
     private static final String AUTHORIZATION = "Authorization";

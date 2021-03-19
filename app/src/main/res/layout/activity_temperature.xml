@@ -66,15 +66,15 @@
         android:paddingTop="8dp"
         android:visibility="gone"
         android:text="@string/remote_new_user"/>
-    <Button
-        android:id="@+id/btnRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_toRightOf="@+id/bt_add_temp"
-        android:layout_marginLeft="50dp"
-        android:visibility="invisible"
-        android:text="開始測量(@5min)"/>
+<!--    <Button-->
+<!--        android:id="@+id/btnRefresh"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="120dp"-->
+<!--        android:layout_toRightOf="@+id/bt_add_temp"-->
+<!--        android:layout_marginLeft="50dp"-->
+<!--        android:visibility="invisible"-->
+<!--        android:text="開始測量(@5min)"/>-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTempUser"
         android:layout_width="match_parent"

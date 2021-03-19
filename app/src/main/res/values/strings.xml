@@ -236,4 +236,6 @@
     <string name="ble_connecting_measure">量測中</string>
     <string name="ble_only_today">藍芽體溫量測僅限今天</string>
     <string name="email_already_existed">此信箱已經註冊過</string>
+    <string name="camera_not_action">未做任何拍攝</string>
+    <string name="no_date">沒有資料</string>
 </resources>
