@@ -688,7 +688,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        proxy.buildPOST(REMOTE_USER_ADD,"", remoteAddListener);
+
+        proxy.buildPOST(REMOTE_USER_ADD, json.toString(), remoteAddListener);
     }
 
     private ApiProxy.OnApiListener remoteAddListener = new ApiProxy.OnApiListener() {
