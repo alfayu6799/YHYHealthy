@@ -57,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.degree_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -91,12 +91,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
         }
 
-        holder.bleMeasuring.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onBleMeasuring(member);
-            }
-        });
+//        holder.bleMeasuring.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                listener.onBleMeasuring(member);
+//            }
+//        });
 
         holder.delUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textBleBattery;
         TextView textBleDeviceName;
         ImageView bleConnect, delUser, bleChart;
-        ImageView bleMeasuring;
+//        ImageView bleMeasuring;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -142,7 +142,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             bleConnect = itemView.findViewById(R.id.imgBleConnect);
             delUser = itemView.findViewById(R.id.imgDeleteUser);
             bleChart = itemView.findViewById(R.id.imgBleChart);
-            bleMeasuring = itemView.findViewById(R.id.ivBleMeasuring);
+//            bleMeasuring = itemView.findViewById(R.id.ivBleMeasuring);
         }
     }
 }

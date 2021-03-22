@@ -74,13 +74,13 @@ public class TemperatureData {
 
     //後台api
     private int errorCode;
-    private List<DegreeUserData.SuccessBean> success;
+    private List<TemperatureData.SuccessBean> success;
 
     public int getErrorCode() {
         return errorCode;
     }
 
-    public List<DegreeUserData.SuccessBean> getSuccess() {
+    public List<TemperatureData.SuccessBean> getSuccess() {
         return success;
     }
 

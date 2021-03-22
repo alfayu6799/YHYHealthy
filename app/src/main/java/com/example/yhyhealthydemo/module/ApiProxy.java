@@ -145,7 +145,7 @@ public class ApiProxy {
     public static String BLE_USER_ADD = BLE_TEMPERATURE_API + "processTarget";
 
     //修改觀測對象資料
-    public static String BLE_USER_EDIT = BLE_TEMPERATURE_API + "updateTarget";
+    public static String BLE_USER_UPDATE = BLE_TEMPERATURE_API + "updateTarget";
 
     //查詢觀測對象列表
     public static String BLE_USER_LIST = BLE_TEMPERATURE_API + "target";

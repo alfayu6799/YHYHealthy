@@ -2,7 +2,6 @@ package com.example.yhyhealthydemo;
 
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,10 +9,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -34,6 +29,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.adapter.DegreeAdapter;
@@ -50,25 +46,20 @@ import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
 import com.example.yhyhealthydemo.tools.RecyclerViewListener;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
-import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
 
 public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, RecyclerViewListener {
@@ -77,6 +68,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     private Button supervise, remote;
     private Button addTemperatureUser, addRemoteUser;
+    private TextView txtUserInfoEdit;
+    private Button selectedAccount;
 
     //使用者
     private RecyclerView recyclerView;
@@ -146,6 +139,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         remote = (Button) findViewById(R.id.bt_select_remote);
         addTemperatureUser = (Button) findViewById(R.id.bt_add_temp);
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
+        txtUserInfoEdit = findViewById(R.id.tvEdit);
+        selectedAccount = findViewById(R.id.btnChoseAccount);
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
@@ -158,10 +153,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         remote.setOnClickListener(this);
         addTemperatureUser.setOnClickListener(this);
         addRemoteUser.setOnClickListener(this);
+        txtUserInfoEdit.setOnClickListener(this);
+        selectedAccount.setOnClickListener(this);
 
         supervise.setBackgroundResource(R.drawable.rectangle_button); //先顯示觀測Button
     }
 
+    //遠端監控者
     private void setRemote() {
         int spacingInPixels = 10;  //設定item間距的距離
         remotes = new ArrayList<>();
@@ -178,11 +176,11 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     private void setRemoteUser() {
         //日後要從後台拿取資料
-        remote1 = new Remote(R.mipmap.imageview, "Matt Bomer", 38.50);
-        remote2 = new Remote(R.mipmap.imageview2, "Brad Pitt", 35.55);
-
-        remotes.add(remote1);
-        remotes.add(remote2);
+//        remote1 = new Remote(R.mipmap.imageview, "Matt Bomer", 38.50);
+//        remote2 = new Remote(R.mipmap.imageview2, "Brad Pitt", 35.55);
+//
+//        remotes.add(remote1);
+//        remotes.add(remote2);
     }
 
     /**** 藍芽 2021/03/18 *****/
@@ -404,15 +402,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private void parserJson(JSONObject result) {
         Log.d(TAG, "解析後台回來的資料: " + result.toString());
 
-        DegreeUserData degreeUserData = DegreeUserData.newInstance(result.toString());
 
-        degreeUserDataList = degreeUserData.getSuccess();
-
-        for (int i = 0; i < degreeUserDataList.size(); i++){
-
-//            String name = degreeUserData.getSuccess().get(i).getName();
-            degreeUserDataList.add(i, degreeUserData.getSuccess().get(i));
-        }
     }
 
     @Override
@@ -426,6 +416,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 addRemoteUser.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 remoteRecycle.setVisibility(View.GONE);
+                selectedAccount.setVisibility(View.GONE);
                 break;
             case R.id.bt_select_remote:    //遠端Button
                 remote.setBackgroundResource(R.drawable.rectangle_button);
@@ -434,6 +425,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 addRemoteUser.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
                 remoteRecycle.setVisibility(View.VISIBLE);
+                selectedAccount.setVisibility(View.VISIBLE);
                 break;
             case R.id.bt_add_temp:       //新增觀測者onClick
 //                dialogTemperature();
@@ -442,7 +434,18 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             case R.id.bt_add_remote:     //新增遠端者onClick
                 dialogRemote();
                 break;
+            case R.id.tvEdit:           //編輯使用者資訊
+                startActivity(new Intent(this, TemperEditListActivity.class));
+                break;
+            case R.id.btnChoseAccount:   //遠端監控者-選擇帳號
+                dialogAccount();
+                break;
         }
+    }
+
+    //
+    private void dialogAccount() {
+        Log.d(TAG, "dialogAccount: ");
     }
 
     private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){

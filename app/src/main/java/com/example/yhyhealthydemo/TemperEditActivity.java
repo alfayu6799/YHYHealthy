@@ -2,14 +2,13 @@ package com.example.yhyhealthydemo;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -17,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ImageUtils;
 
@@ -36,25 +34,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
 import es.dmoral.toasty.Toasty;
 
-import static android.Manifest.permission.CAMERA;
-import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD;
+import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_UPDATE;
 
-public class TemperatureAddActivity extends DeviceBaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class TemperEditActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
-    private static final String TAG = "TemperatureAddActivity";
+    private static final String TAG = "TemperEditActivity";
 
-    private ImageView cancel;     //回上一頁
-    private ImageView takePhoto;  //拍照
-    private ImageView photoShow;  //照片顯示
-    private EditText  userName;   //使用者名稱
+    private ImageView back;        //回上一頁
+    private ImageView takePhoto;   //拍照
+    private ImageView photoShow;   //照片顯示
+    private EditText  userName;    //使用者名稱
     private EditText  userHeight, userWeight; //使用者身高體重
     private EditText  userBirthday; //使用者生日
 
@@ -64,36 +64,66 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
     private Button btnSave;       //存檔上傳到後台
 
     private String mPath = "";  //照片位址全域宣告
+    private String name = "";
+    private String gender = "";
+    private String birthday = "";
+    private String weight = "";
+    private String height= "";
 
     //api
     private ApiProxy proxy;
 
+    //進度條
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_temperature_add);
+        setContentView(R.layout.activity_temper_edit);
 
-        proxy = ApiProxy.getInstance();
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null){
+            name = bundle.getString("name");
+            gender = bundle.getString("gender");
+            birthday = bundle.getString("birthday");
+            weight = bundle.getString("weight");
+            height = bundle.getString("height");
+        }
 
         initView();
+
+        initData();
+    }
+
+    private void initData() {
+        userName.setText(name);
+        userBirthday.setText(birthday);
+        userHeight.setText(height);
+        userWeight.setText(weight);
+        if(gender.equals("F")){
+            rdGroup.check(R.id.rdFemale1);
+        }else {
+            rdGroup.check(R.id.rdMale1);
+        }
+
     }
 
     private void initView() {
-        userName = findViewById(R.id.edtInputName);
-        photoShow = findViewById(R.id.circularImageView);
-        takePhoto = findViewById(R.id.ivTakePhoto);
-        userHeight = findViewById(R.id.edtInputHeight);  //身高
-        userWeight = findViewById(R.id.edtInputWeight);  //體重
-        cancel = findViewById(R.id.imageCancel);  //取消
-        btnSave = findViewById(R.id.btnAddUser);   //存檔
-        userBirthday = findViewById(R.id.edtInputBirthay); //生日
+        userName = findViewById(R.id.edtInputName1);
+        photoShow = findViewById(R.id.circularImageView1);
+        takePhoto = findViewById(R.id.ivTakePhoto1);
+        userHeight = findViewById(R.id.edtInputHeight1);  //身高
+        userWeight = findViewById(R.id.edtInputWeight1);  //體重
+        back = findViewById(R.id.imageCancel1);  //取消
+        btnSave = findViewById(R.id.btnEditUser1);   //存檔
+        userBirthday = findViewById(R.id.edtInputBirthday1); //生日
 
-        rdGroup = findViewById(R.id.rdGroup);  //性別
+        rdGroup = findViewById(R.id.rdGroup1);  //性別
         rdGroup.setOnCheckedChangeListener(this);
 
         takePhoto.setOnClickListener(this);
         userBirthday.setOnClickListener(this);
-        cancel.setOnClickListener(this);
+        back.setOnClickListener(this);
         btnSave.setOnClickListener(this);
     }
 
@@ -101,26 +131,89 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.imageCancel:
-                finish(); //回上一頁
+            case R.id.imageCancel1:
+                finish();  //回上一頁
                 break;
-            case R.id.ivTakePhoto:
-                if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    openCamera(); //開啟相機
-                }else {
-                    requestPermission(); //要求權限
-                }
+            case R.id.ivTakePhoto1:
+                openCamera();   //啟動相機
                 break;
-            case R.id.edtInputBirthay:   //日期選擇
-                showDatePickerDialog();
+            case R.id.edtInputBirthday1:
+                showDatePickerDialog();  //日期
                 break;
-            case R.id.btnAddUser:  //上傳
-                checkBeforeUpdate();
+            case R.id.btnEditUser1:
+                updateToApi();  //update to 後台
                 break;
         }
     }
 
-    //日期的設定
+    //更新到後台
+    private void updateToApi() {
+        proxy = ApiProxy.getInstance();
+
+        String base64Str = ImageUtils.imageToBase64(mPath);   //照片
+        String Name = userName.getText().toString().trim();  //名稱
+        String Birthday = userBirthday.getText().toString(); //生日
+        String Height = userHeight.getText().toString();     //身高
+        String Weight = userWeight.getText().toString();     //體重
+        Log.d(TAG, "updateToApi: 姓名:" + Name + " 性別:"+ Gender + " 生日:" +Birthday + " 身高:" + Height + " 體重:" + Weight + "照片路徑:"+ mPath);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("name", Name);
+            json.put("gender", Gender);
+            json.put("birthday",Birthday);
+            json.put("height", Height);
+            json.put("weight", Weight);
+            json.put("headShot", base64Str);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "updateToApi: " + json.toString());
+        proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
+    }
+
+    private ApiProxy.OnApiListener updateListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(TemperEditActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "run: " + result.toString());
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(TemperEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                        }else {
+                            Toasty.error(TemperEditActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //日期選擇
     private void showDatePickerDialog() {
         //設定初始日期
         final Calendar c = Calendar.getInstance();
@@ -147,84 +240,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         return RValue;
     }
 
-    //上傳前先檢查資料是否齊全
-    private void checkBeforeUpdate() {
-
-        if(TextUtils.isEmpty(userName.getText().toString().trim())){
-            Toasty.error(this, R.string.please_input_name, Toast.LENGTH_SHORT,true).show();
-        }else if(TextUtils.isEmpty(userBirthday.getText().toString())){
-            Toasty.error(this, R.string.please_input_birthday, Toast.LENGTH_SHORT,true).show();
-        }else if(TextUtils.isEmpty(userHeight.getText().toString())) {
-            Toasty.error(this, R.string.please_input_height, Toast.LENGTH_SHORT,true).show();
-        }else if(TextUtils.isEmpty(userWeight.getText().toString())) {
-            Toasty.error(this, R.string.please_input_weight, Toast.LENGTH_SHORT,true).show();
-        }else{
-            updateToApi();  //update to 後台
-        }
-    }
-
-    //傳資料給後台
-    private void updateToApi() {
-        String base64Str = ImageUtils.imageToBase64(mPath);   //照片
-        String Name = userName.getText().toString().trim();  //名稱
-        String Birthday = userBirthday.getText().toString(); //生日
-        String Height = userHeight.getText().toString();     //身高
-        String Weight = userWeight.getText().toString();     //體重
-        Log.d(TAG, "updateToApi: 姓名:" + Name + " 生日:" + " 性別:"+ Gender + " 生日:" +Birthday + " 身高:" + Height + " 體重:" + Weight);
-
-        JSONObject json = new JSONObject();
-        try {
-            json.put("name", Name);
-            json.put("gender", Gender);
-            json.put("birthday", Birthday);
-            json.put("height", Height);
-            json.put("weight", Weight);
-            json.put("headShot", base64Str);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        proxy.buildPOST(BLE_USER_ADD, json.toString(), addUserListener);
-    }
-
-    private ApiProxy.OnApiListener addUserListener = new ApiProxy.OnApiListener() {
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public void onSuccess(JSONObject result) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        JSONObject object = new JSONObject(result.toString());
-                        int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
-                            Toasty.success(TemperatureAddActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                            finish();
-                        }else {
-                            Toasty.error(TemperatureAddActivity.this, getString(R.string.json_error_code), Toast.LENGTH_SHORT, true).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onFailure(String message) {
-            Log.d(TAG, "onFailure: " + message);
-        }
-
-        @Override
-        public void onPostExecute() {
-
-        }
-    };
-
-    //呼叫原生相機
+    //原生相機
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //呼叫原生相機
         File imageFile = getImageFile(); //取得相片位置
@@ -233,7 +249,6 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         Uri imageUri = FileProvider.getUriForFile(this,"com.example.yhyhealthydemo.fileprovider", imageFile);
         //通知相機照片儲存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        //將照片帶回
         startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
     }
 
@@ -251,7 +266,15 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         }
     }
 
-    //取得照片回傳
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+        if(checkedId == R.id.rdMale1){
+            Gender = "M";
+        }else{
+            Gender = "F";
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -274,18 +297,8 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                             .into(photoShow);
                 });
             }).start();
-
-        } else {
-            Toasty.info(TemperatureAddActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-        if(checkedId == R.id.rdMale){
-            Gender = "M";
-        }else{
-            Gender = "F";
+        }else {
+            Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
         }
     }
 }
