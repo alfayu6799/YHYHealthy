@@ -32,13 +32,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.yhyhealthydemo.adapter.DegreeAdapter;
 import com.example.yhyhealthydemo.adapter.RecyclerViewAdapter;
 import com.example.yhyhealthydemo.adapter.RemoteViewAdapter;
 import com.example.yhyhealthydemo.adapter.TempViewAdapter;
 import com.example.yhyhealthydemo.data.Remote;
 import com.example.yhyhealthydemo.data.ScannedData;
-import com.example.yhyhealthydemo.datebase.DegreeUserData;
 import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
 import com.example.yhyhealthydemo.datebase.Member;
@@ -77,21 +75,12 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private List<Member> members;
     private String name;
 
-    private DegreeAdapter degreeAdapter;
-    private List<DegreeUserData.SuccessBean> degreeUserDataList;
-    private Member user1; //假資料
-    private Member user2; //假資料
-    private Member user3; //假資料
-    private Member user4; //假資料
-
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm"); //日期格式
 
     //遠端
     private RecyclerView remoteRecycle;
     private RemoteViewAdapter remoteAdapter;
     private List<Remote> remotes;
-    private Remote remote1;  //假資料
-    private Remote remote2;  //假資料
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -176,8 +165,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     private void setRemoteUser() {
         //日後要從後台拿取資料
-//        remote1 = new Remote(R.mipmap.imageview, "Matt Bomer", 38.50);
-//        remote2 = new Remote(R.mipmap.imageview2, "Brad Pitt", 35.55);
+//        Remote remote1 = new Remote(R.mipmap.imageview, "Matt Bomer", 38.50);
+//        Remote remote2 = new Remote(R.mipmap.imageview2, "Brad Pitt", 35.55);
 //
 //        remotes.add(remote1);
 //        remotes.add(remote2);
@@ -328,16 +317,12 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private void setInfo() {
         int spacingInPixels = 10;  //設定item間距的距離
 
-        degreeUserDataList = new ArrayList<>();
-
         members = new ArrayList<>();
 
         setMemberDate(); //填入資料
 
         mAdapter = new RecyclerViewAdapter(this, members, this);
-        //degreeAdapter = new DegreeAdapter(this, degreeUserDataList);
         recyclerView.setAdapter(mAdapter);
-        //recyclerView.setAdapter(degreeAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
@@ -346,10 +331,10 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private void setMemberDate() {  //日後要從api拉回照片跟姓名等資料
         //proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
 
-        user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
-        user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
-        user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
-        user4 = new Member(R.mipmap.image4, "Emma Watson", "未連線");
+        Member user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
+        Member user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
+        Member user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
+        Member user4 = new Member(R.mipmap.image4, "Emma Watson", "未連線");
 
         members.add(user1);
         members.add(user2);
