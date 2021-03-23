@@ -43,7 +43,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     }
 
     //更新項目
-    public void updateItem(TemperatureData.SuccessBean data, int pos){
+    public void updateItem(TempDataApi.SuccessBean data, int pos){
 
     }
 

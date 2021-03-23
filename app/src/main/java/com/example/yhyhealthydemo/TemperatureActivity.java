@@ -450,21 +450,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         if (this.name != null){
            memberBean.setStatus(deviceName+bleStatus);
            tAdapter.updateItem(memberBean, pos);
-
         }
-//        //改更藍芽狀態的文字顯示
-//        if(this.name != null){
-//            for (int j = 0; j < members.size(); j++){
-//                if (members.get(j).getName().equals(name)){
-//                    Member user = members.get(j);
-//                    user.setStatus(deviceName + bleStatus);
-//                    user.setDeviceName(deviceName);
-//                    user.setMac(deviceAddress);
-//                    members.set(j, user);
-//                    mAdapter.updateItem(user, j);
-//                }
-//            }
-//        }
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
