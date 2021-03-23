@@ -24,6 +24,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     private List<TemperatureData.SuccessBean> dataList;
     private TemperatureEditAdapter.TemperatureEditListener listener;
 
+    //建構子
     public TemperatureEditAdapter(Context context, List<TemperatureData.SuccessBean> dataList, TemperatureEditListener listener) {
         this.context = context;
         this.dataList = dataList;

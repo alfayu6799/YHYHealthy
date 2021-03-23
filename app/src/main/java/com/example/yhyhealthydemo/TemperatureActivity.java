@@ -32,17 +32,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yhyhealthydemo.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthydemo.adapter.RecyclerViewAdapter;
 import com.example.yhyhealthydemo.adapter.RemoteViewAdapter;
-import com.example.yhyhealthydemo.adapter.TempViewAdapter;
+import com.example.yhyhealthydemo.adapter.TemperMainAdapter;
 import com.example.yhyhealthydemo.data.Remote;
 import com.example.yhyhealthydemo.data.ScannedData;
+import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
 import com.example.yhyhealthydemo.datebase.Member;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
-import com.example.yhyhealthydemo.tools.RecyclerViewListener;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
 import org.json.JSONException;
@@ -58,9 +59,10 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
 
-public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, RecyclerViewListener {
+public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
 
     private final static String TAG = "TemperatureActivity";
 
@@ -74,6 +76,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private RecyclerViewAdapter mAdapter;
     private List<Member> members;
     private String name;
+
+    //new
+    private List<TempDataApi.SuccessBean> dataList;
+    private TemperMainAdapter tAdapter;
+    private int pos;
+    private TempDataApi.SuccessBean memberBean;
+
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm"); //日期格式
 
@@ -89,7 +98,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private BluetoothGatt mBluetoothGatt;
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
-    private TempViewAdapter tempAdapter;
+    private BluetoothLeAdapter tempAdapter;
     private Handler mHandler;
     private AlertDialog alertDialog;
     private String deviceName = "";     //裝置名稱
@@ -195,7 +204,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         RecyclerView bleRecyclerView = view.findViewById(R.id.rvBleScanView);
 
         /**設置Recyclerview列表*/
-        tempAdapter = new TempViewAdapter();
+        tempAdapter = new BluetoothLeAdapter();
         bleRecyclerView.setAdapter(tempAdapter);
         bleRecyclerView.setHasFixedSize(true);
         bleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -293,7 +302,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     }
 
     /**取得欲連線之裝置後跳轉頁面*/
-    private TempViewAdapter.OnItemClick itemClick = new TempViewAdapter.OnItemClick() {
+    private BluetoothLeAdapter.OnItemClick itemClick = new BluetoothLeAdapter.OnItemClick() {
         @Override
         public void onItemClick(ScannedData selectedDevice) {
 
@@ -313,33 +322,27 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //RecyclerView's Item 填入Data
+    //觀測者 Item 填入Data
     private void setInfo() {
-        int spacingInPixels = 10;  //設定item間距的距離
 
-        members = new ArrayList<>();
+        proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
 
-        setMemberDate(); //填入資料
-
-        mAdapter = new RecyclerViewAdapter(this, members, this);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
-    }
-
-    private void setMemberDate() {  //日後要從api拉回照片跟姓名等資料
-        //proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
-
-        Member user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
-        Member user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
-        Member user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
-        Member user4 = new Member(R.mipmap.image4, "Emma Watson", "未連線");
-
-        members.add(user1);
-        members.add(user2);
-        members.add(user3);
-        members.add(user4);
+        //塞入假資料
+//        members = new ArrayList<>();
+//
+//        Member user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
+//        Member user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
+//        Member user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
+//
+//        members.add(user1);
+//        members.add(user2);
+//        members.add(user3);
+//
+//        mAdapter = new RecyclerViewAdapter(this, members, this);
+//        recyclerView.setAdapter(mAdapter);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.addItemDecoration(new SpacesItemDecoration(10)); //設定item間距
     }
 
     private ApiProxy.OnApiListener bleUserListListener = new ApiProxy.OnApiListener() {
@@ -385,9 +388,18 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     //解析後台回來的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "解析後台回來的資料: " + result.toString());
+        TempDataApi tempDataApi = TempDataApi.newInstance(result.toString());
+        dataList = tempDataApi.getSuccess();
 
+        //將資料配置到Adapter並顯示出來
+        tAdapter = new TemperMainAdapter(this, dataList, this);
 
+        //設定item間距的距離
+        int spacingInPixels = 10;
+        recyclerView.setAdapter(tAdapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
     }
 
     @Override
@@ -434,20 +446,25 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     }
 
     private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
-        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + "裝置Address:" + deviceAddress);
-        //改更藍芽狀態的文字顯示
-        if(this.name != null){
-            for (int j = 0; j < members.size(); j++){
-                if (members.get(j).getName().equals(name)){
-                    Member user = members.get(j);
-                    user.setStatus(deviceName + bleStatus);
-                    user.setDeviceName(deviceName);
-                    user.setMac(deviceAddress);
-                    members.set(j, user);
-                    mAdapter.updateItem(user, j);
-                }
-            }
+        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + "裝置Address:" + deviceAddress + "pos:" + pos);
+        if (this.name != null){
+           memberBean.setStatus(deviceName+bleStatus);
+           tAdapter.updateItem(memberBean, pos);
+
         }
+//        //改更藍芽狀態的文字顯示
+//        if(this.name != null){
+//            for (int j = 0; j < members.size(); j++){
+//                if (members.get(j).getName().equals(name)){
+//                    Member user = members.get(j);
+//                    user.setStatus(deviceName + bleStatus);
+//                    user.setDeviceName(deviceName);
+//                    user.setMac(deviceAddress);
+//                    members.set(j, user);
+//                    mAdapter.updateItem(user, j);
+//                }
+//            }
+//        }
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
@@ -717,34 +734,53 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     ///////////////////////////來自Adapter的callBack////////////////////////////////////
 
-    //呼叫藍芽
     @Override
-    public void onBleConnect(Member member) {
-        name = member.getName();  //取得使用者名稱
-        //初始化及相關搜尋
+    public void onBleConnect(TempDataApi.SuccessBean data, int position) {
+        //呼叫藍芽
+        name = data.getName();
+        pos = position;
+        memberBean = data;
         initBle();
     }
 
-    //啟動ble量測
     @Override
-    public void onBleMeasuring(Member member) {
-        requestTemp.run(); //5分鐘command一次
+    public void onBleChart(TempDataApi.SuccessBean data) {
+        //呼叫圖表
     }
 
-    //刪除使用者
     @Override
-    public void onDelUser(Member member) {
+    public void onDelUser() {
 
     }
 
-    //呼叫圖表
-    @Override
-    public void onBleChart(Member member) {
-        //客製Dialog圖表
-        chartDialog = new ChartDialog(this, member);
-        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
-        chartDialog.show();
-    }
+//    //呼叫藍芽
+//    @Override
+//    public void onBleConnect(Member member) {
+//        name = member.getName();  //取得使用者名稱
+//        //初始化及相關搜尋
+//        initBle();
+//    }
+//
+//    //啟動ble量測
+//    @Override
+//    public void onBleMeasuring(Member member) {
+//        requestTemp.run(); //5分鐘command一次
+//    }
+//
+//    //刪除使用者
+//    @Override
+//    public void onDelUser(Member member) {
+//
+//    }
+//
+//    //呼叫圖表
+//    @Override
+//    public void onBleChart(Member member) {
+//        //客製Dialog圖表
+//        chartDialog = new ChartDialog(this, member);
+//        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
+//        chartDialog.show();
+//    }
 
 
 }

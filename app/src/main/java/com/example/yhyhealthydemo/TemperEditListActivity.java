@@ -25,9 +25,15 @@ import java.util.List;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 
-/**
- *  體溫列表編輯
- * */
+/** ******* ***
+ *  體溫列表編輯(多對象)
+ *  配適器:TemperatureEditAdapter
+ *  資料來源:TemperatureData.SuccessBean
+ *  介面:
+ *     編輯onEditClick
+ *     刪除onRemoveClick
+ *  Create date : 2021/03/22
+ * * ***************/
 
 public class TemperEditListActivity extends AppCompatActivity implements View.OnClickListener, TemperatureEditAdapter.TemperatureEditListener {
 
@@ -143,6 +149,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         Intent intent = new Intent();
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putInt("targetId", data.getTargetId());
         bundle.putString("name", data.getName());
         bundle.putString("gender", data.getGender());
         bundle.putString("birthday", data.getBirthday());

@@ -46,7 +46,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_UPDATE;
-
+/***
+ * 觀測者對象編輯(單一個體)
+ * */
 public class TemperEditActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private static final String TAG = "TemperEditActivity";
@@ -64,6 +66,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     private Button btnSave;       //存檔上傳到後台
 
     private String mPath = "";  //照片位址全域宣告
+    private Integer targetId;
     private String name = "";
     private String gender = "";
     private String birthday = "";
@@ -88,6 +91,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             birthday = bundle.getString("birthday");
             weight = bundle.getString("weight");
             height = bundle.getString("height");
+            targetId = bundle.getInt("targetId");
         }
 
         initView();
@@ -153,11 +157,12 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         String base64Str = ImageUtils.imageToBase64(mPath);   //照片
         String Name = userName.getText().toString().trim();  //名稱
         String Birthday = userBirthday.getText().toString(); //生日
-        String Height = userHeight.getText().toString();     //身高
-        String Weight = userWeight.getText().toString();     //體重
-        Log.d(TAG, "updateToApi: 姓名:" + Name + " 性別:"+ Gender + " 生日:" +Birthday + " 身高:" + Height + " 體重:" + Weight + "照片路徑:"+ mPath);
+        float Height = Float.parseFloat(userHeight.getText().toString()); //身高
+        float Weight = Float.parseFloat(userWeight.getText().toString()); //體重
+
         JSONObject json = new JSONObject();
         try {
+            json.put("targetId", targetId);
             json.put("name", Name);
             json.put("gender", Gender);
             json.put("birthday",Birthday);
@@ -167,7 +172,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "updateToApi: " + json.toString());
+        Log.d(TAG, "上傳資料到後台:" + json.toString());
+
         proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
     }
 

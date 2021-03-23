@@ -1,6 +1,5 @@
 package com.example.yhyhealthydemo.adapter;
 
-import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +20,14 @@ import java.util.List;
  * DATA from ScanneData
  * layout : device_list
 * *********************/
-public class TempViewAdapter extends RecyclerView.Adapter<TempViewAdapter.ViewHolder>{
+public class BluetoothLeAdapter extends RecyclerView.Adapter<BluetoothLeAdapter.ViewHolder>{
 
-    private final static String TAG = "TempViewAdapter";
+    private final static String TAG = "BluetoothLeAdapter";
 
-    private TempViewAdapter.OnItemClick onItemClick;
+    private BluetoothLeAdapter.OnItemClick onItemClick;
     private List<ScannedData> arrayList = new ArrayList<>();
 
-    public void OnItemClick(TempViewAdapter.OnItemClick onItemClick) {
+    public void OnItemClick(BluetoothLeAdapter.OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
     }
 

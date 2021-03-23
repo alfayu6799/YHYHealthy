@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -38,11 +37,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthydemo.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthydemo.adapter.ColorAdapter;
 import com.example.yhyhealthydemo.adapter.SecretionTypeAdapter;
 import com.example.yhyhealthydemo.adapter.SymptomAdapter;
 import com.example.yhyhealthydemo.adapter.TasteAdapter;
-import com.example.yhyhealthydemo.adapter.TempViewAdapter;
 import com.example.yhyhealthydemo.data.ScannedData;
 import com.example.yhyhealthydemo.datebase.ChangeRecord;
 import com.example.yhyhealthydemo.datebase.MenstruationRecord;
@@ -102,7 +102,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private yhyBleService mBluetoothLeService;
     private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BroadcastReceiver mBleReceiver;
-    private TempViewAdapter mDeviceListAdapter;
+    private BluetoothLeAdapter mDeviceListAdapter;
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
     private Handler mHandler;
@@ -639,7 +639,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         View view = inflater.inflate(R.layout.dialog_bleconnect, null);
         RecyclerView bleDialog = view.findViewById(R.id.rvBleScanView);
 
-        mDeviceListAdapter = new TempViewAdapter();
+        mDeviceListAdapter = new BluetoothLeAdapter();
         bleDialog.setAdapter(mDeviceListAdapter);
         bleDialog.setHasFixedSize(true);
         bleDialog.setLayoutManager(new LinearLayoutManager(this));
@@ -750,7 +750,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     }
 
     /**** 取得欲連線之裝置後跳轉頁面 ***/
-    private TempViewAdapter.OnItemClick itemClick = new TempViewAdapter.OnItemClick() {
+    private BluetoothLeAdapter.OnItemClick itemClick = new BluetoothLeAdapter.OnItemClick() {
         @Override
         public void onItemClick(ScannedData selectedDevice) {
             //關閉搜尋
