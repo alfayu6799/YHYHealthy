@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
-import com.example.yhyhealthydemo.datebase.TemperatureData;
 
 
 import java.util.List;
@@ -44,7 +44,10 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
     //更新項目
     public void updateItem(TempDataApi.SuccessBean data, int pos){
-
+        if (dataList.size() != 0){
+            dataList.set(pos, data);
+            notifyItemChanged(pos);
+        }
     }
 
     @NonNull
@@ -58,24 +61,45 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TempDataApi.SuccessBean data = dataList.get(position);
         //holder.imagePhoto...... 等後台給予Url,不然解base64太耗時間了...
-        holder.textName.setText(data.getName());                     //姓名
+        holder.textName.setText(data.getUserName());                     //姓名
         holder.textBleStatus.setText(data.getStatus());              //連線狀態
         holder.textBleBattery.setText(data.getBattery());            //電量
         holder.textDegree.setText(String.valueOf(data.getDegree())); //體溫
 
-        //藍芽連線
-        holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onBleConnect(data, position);
+        //根據藍芽連線Status變更icon跟功能
+        if (data.getStatus() != null){
+            if (data.getStatus().contains("已連線")){
+                holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onBleMeasuring(data, position);
+                    }
+                });
+            }else if (data.getStatus().contains("已斷開")){
+                holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
+                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onBleConnect(data, position);
+                    }
+                });
             }
-        });
+        }else {
+
+            holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onBleConnect(data, position);
+                }
+            });
+        }
 
         //圖表
         holder.bleChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onBleChart(data);
+                listener.onBleChart(data, position);
             }
         });
     }
@@ -87,8 +111,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);
-        void onBleChart(TempDataApi.SuccessBean data);
-        void onDelUser();
+        void onBleChart(TempDataApi.SuccessBean data, int position);
+        void onBleMeasuring(TempDataApi.SuccessBean data, int position);
+        //void onDelUser(TempDataApi.SuccessBean data, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

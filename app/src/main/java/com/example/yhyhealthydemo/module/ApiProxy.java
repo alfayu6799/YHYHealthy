@@ -147,6 +147,9 @@ public class ApiProxy {
     //修改觀測對象資料
     public static String BLE_USER_UPDATE = BLE_TEMPERATURE_API + "updateTarget";
 
+    //刪除觀測對象
+    public static String BLE_USER_DELETE = BLE_TEMPERATURE_API + "delTarget";
+
     //查詢觀測對象列表
     public static String BLE_USER_LIST = BLE_TEMPERATURE_API + "target";
 
@@ -159,7 +162,9 @@ public class ApiProxy {
     //新增遠端觀測帳號
     public static String REMOTE_USER_ADD = BLE_TEMPERATURE_API + "addGoal";
 
-    //
+    //查詢遠端觀測帳號
+    public static String REMOTE_USER_LIST = BLE_TEMPERATURE_API + "findGoal";
+
     private static final String AUTHORIZATION = "Authorization";
     private static final String SCEPTER = "Scepter";
     private static final String DEFAULTLAN = "DefaultLan";

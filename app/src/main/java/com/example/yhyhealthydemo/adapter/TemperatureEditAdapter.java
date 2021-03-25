@@ -1,7 +1,6 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onRemoveClick(data);
+                listener.onRemoveClick(data, position);
             }
         });
 
@@ -73,7 +72,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
 
     public interface TemperatureEditListener{
         void onEditClick(TemperatureData.SuccessBean data);
-        void onRemoveClick(TemperatureData.SuccessBean data);
+        void onRemoveClick(TemperatureData.SuccessBean data, int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

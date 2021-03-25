@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.yhyhealthydemo.R;
+import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.tools.DateUtil;
 import com.example.yhyhealthydemo.datebase.Degree;
 import com.example.yhyhealthydemo.datebase.Member;
@@ -46,18 +47,20 @@ public class ChartDialog extends Dialog {
     private TextView endDateTime;          //結束時間
     private ImageView closeDialog;         //結束此Dialog
 
-    private Member member;                 //使用者DataBean
-    private ArrayList<Degree> DataArray;   //體溫DataBean
+    private Member member;                      //使用者DataBean
+    private TempDataApi.SuccessBean data;   //使用者DataBean
+    private ArrayList<Degree> DataArray;        //體溫DataBean
 
-    private String date;
+    private String correctDate;
     private Double degree;
 
     //圖表
     private TargetZoneLineChart bleLineChart;
 
-    public ChartDialog(@NonNull Context context, Member member) {
+    //建構子
+    public ChartDialog(@NonNull Context context, TempDataApi.SuccessBean data) {
         super(context);
-        this.member = member;
+        this.data = data;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ChartDialog extends Dialog {
 
         //圖表
         bleLineChart = findViewById(R.id.lineChartBle);
-        //
+
         bleUserImage = findViewById(R.id.imgBleUserShot);
         bleUserName = findViewById(R.id.tvBleUserName);
         bleUserDegree = findViewById(R.id.tvUserDegree);
@@ -82,21 +85,19 @@ public class ChartDialog extends Dialog {
         });
 
         //塞入相對的資料
-        bleUserName.setText(member.getName());
-        bleUserImage.setImageResource(member.getImage());
-        bleUserDegree.setText(String.valueOf(member.getDegree()));
+        bleUserName.setText(data.getUserName());
+        //bleUserImage.setImageResource(Integer.parseInt(data.getHeadShot())); //目前解base64太耗時間,等後台變更為url
+        bleUserDegree.setText(String.valueOf(data.getDegree()));
 
         DataArray = new ArrayList<>();
 
         //避免沒有量測時按下圖表功能造成閃退
-        if (member != null && member.getDegreeList().size() > 0) {
-            firstDateTime.setText(member.getDegreeList().get(0).getDate());
-            endDateTime.setText(member.getDegreeList().get(member.getDegreeList().size()-1).getDate());
-            for (int i = 0; i < member.getDegreeList().size(); i++) {
-                Log.d(TAG, "onCreate: first setup chart");
-                date = DateUtil.fromDateToTime(member.getDegreeList().get(i).getDate());
-                degree = member.getDegree();
-
+        if (data != null && data.getDegreeList().size() > 0){
+            firstDateTime.setText(data.getDegreeList().get(0).getDate());
+            endDateTime.setText(data.getDegreeList().get(data.getDegreeList().size()-1).getDate());
+            for (int i = 0; i < data.getDegreeList().size(); i++){
+                correctDate = DateUtil.fromDateToTime(data.getDegreeList().get(i).getDate());
+                degree = data.getDegree();
                 setChart();
             }
         }
@@ -104,7 +105,7 @@ public class ChartDialog extends Dialog {
 
     private void setChart() {
 
-         DataArray.add(new Degree(degree, date));
+         DataArray.add(new Degree(degree, correctDate));
 
          ArrayList<String> label;    //X軸(時間)
          ArrayList<Entry> entries;   //Y軸(體溫)
@@ -171,9 +172,17 @@ public class ChartDialog extends Dialog {
     public void update (Member newMember){
         bleUserDegree.setText(String.valueOf(newMember.getDegree()));      //更新溫度
         endDateTime.setText(newMember.getDegreeList().get(newMember.getDegreeList().size()-1).getDate()); //更新結束時間
-        date = DateUtil.fromDateToTime(newMember.getDegreeList().get(newMember.getDegreeList().size()-1).getDate()); //最新的時間=結束時間
+        correctDate = DateUtil.fromDateToTime(newMember.getDegreeList().get(newMember.getDegreeList().size()-1).getDate()); //最新的時間=結束時間
         degree = newMember.getDegree();
         setChart();
     }
 
+    //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新
+    public void update(TempDataApi.SuccessBean newMemberBean) {
+        bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
+        endDateTime.setText(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
+        correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
+        degree = newMemberBean.getDegree();
+        setChart();
+    }
 }

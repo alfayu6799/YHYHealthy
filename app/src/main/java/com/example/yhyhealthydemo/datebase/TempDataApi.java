@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TempDataApi {
 
+//    @SerializedName("success")
     private int errorCode;
     private List<TempDataApi.SuccessBean> success;
 
@@ -21,10 +22,12 @@ public class TempDataApi {
         return success;
     }
 
-    //@SerializedName("success")
     public static class SuccessBean {
         private int targetId;
-        private String name;      //使用者姓名
+
+        @SerializedName("name")
+        private String userName;      //使用者姓名
+
         private String gender;
         private String birthday;
         private double height;
@@ -39,12 +42,12 @@ public class TempDataApi {
             this.targetId = targetId;
         }
 
-        public String getName() {
-            return name;
+        public String getUserName() {
+            return userName;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setUserName(String userName) {
+            this.userName = userName;
         }
 
         public String getGender() {

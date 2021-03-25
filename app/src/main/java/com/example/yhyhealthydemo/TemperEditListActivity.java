@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.yhyhealthydemo.adapter.TemperatureEditAdapter;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
@@ -23,6 +24,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_DELETE;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 
 /** ******* ***
@@ -45,6 +49,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private RecyclerView rv;
     private TemperatureEditAdapter adapter;
     private List<TemperatureData.SuccessBean> list;
+    private int pos;
 
     //api
     private ApiProxy proxy;
@@ -160,8 +165,61 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         startActivity(intent);
     }
 
+    //刪除
     @Override
-    public void onRemoveClick(TemperatureData.SuccessBean data) {
-        //刪除
+    public void onRemoveClick(TemperatureData.SuccessBean data, int position) {
+        pos = position;  //取得使用者在RecyclerView Item的位置
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("targetId", data.getTargetId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildPOST(BLE_USER_DELETE, json.toString(), deleteListener);
     }
+
+    private ApiProxy.OnApiListener deleteListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(TemperEditListActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(TemperEditListActivity.this, getString(R.string.delete_success) + errorCode , Toast.LENGTH_SHORT, true).show();
+                            //移除RecyclerView的Item項目
+                            list.remove(pos);
+                            adapter.notifyItemRemoved(pos);
+                        }else {
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.json_error_code) + errorCode , Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
 }

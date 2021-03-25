@@ -74,12 +74,16 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         boolean marriageStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MARRIAGE", false);
         //經期設定
         boolean menstrualStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MENSTRUAL", false);
+        //個人資料設定
+        boolean userInfoStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("USERSET", false);
 
         //判斷進入排卵功能必需的元素是否齊全
         if (!marriageStatus) {  //婚姻狀態不齊全
             startActivity(new Intent(getActivity(), UserMarriageActivity.class));
-        } else if (!menstrualStatus){ //經期設定不齊全
+        } else if (!menstrualStatus) { //經期設定不齊全
             startActivity(new Intent(getActivity(), UserPeriodActivity.class));
+        }else if (!userInfoStatus){  //個人資料設定不齊全
+            startActivity(new Intent(getActivity(), UserBasicActivity.class));
         }else {
             startActivity(new Intent(getActivity(), OvulationActivity.class));
         }

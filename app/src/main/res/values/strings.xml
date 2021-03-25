@@ -239,4 +239,7 @@
     <string name="camera_not_action">未做任何拍攝</string>
     <string name="no_date">沒有資料</string>
     <string name="remove">移除</string>
+    <string name="nothing">您沒有新增任何資料</string>
+    <string name="please_select_one_account">請選擇一組帳號</string>
+    <string name="update">更新</string>
 </resources>

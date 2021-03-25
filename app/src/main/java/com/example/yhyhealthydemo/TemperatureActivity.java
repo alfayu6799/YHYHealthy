@@ -1,10 +1,11 @@
 package com.example.yhyhealthydemo;
 
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,12 +14,14 @@ import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,6 +30,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,11 +50,15 @@ import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
+import org.joda.time.DateTime;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
@@ -59,8 +67,10 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
+import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_LIST;
 
 public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
 
@@ -82,6 +92,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private TemperMainAdapter tAdapter;
     private int pos;
     private TempDataApi.SuccessBean memberBean;
+    private int targetId;
 
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm"); //日期格式
@@ -90,6 +101,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private RecyclerView remoteRecycle;
     private RemoteViewAdapter remoteAdapter;
     private List<Remote> remotes;
+    private ArrayAdapter<String> arrayAdapter;
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -108,13 +120,17 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private ChartDialog chartDialog;
 
     //將資料寫到sharePreferences
-    private SharedPreferences temperatureInfo;
+    private SharedPreferences temperatureWrite;
 
     //api
     ApiProxy proxy;
 
     //進度條
     private ProgressDialog progressDialog;
+
+    //Other
+    boolean isFirstDegreeValue = false;
+    boolean isBleList = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +141,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //init sharepreferences
-        temperatureInfo = getSharedPreferences("temperature", MODE_PRIVATE); //只允許本應用程式內存取
+        temperatureWrite = getSharedPreferences("temperature", MODE_PRIVATE); //只允許本應用程式內存取
 
         proxy = ApiProxy.getInstance();
 
@@ -144,8 +160,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         recyclerView = findViewById(R.id.rvTempUser);
         remoteRecycle = findViewById(R.id.rvRomoteUser);  //遠端
 
-        setInfo();       //觀測者初始化資訊
-        setRemote();     //監控者初始化資訊
+        setInfo();        //觀測者初始化資訊
+        setRemote();      //監控者初始化資訊
 
         supervise.setOnClickListener(this);
         remote.setOnClickListener(this);
@@ -414,6 +430,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 recyclerView.setVisibility(View.VISIBLE);
                 remoteRecycle.setVisibility(View.GONE);
                 selectedAccount.setVisibility(View.GONE);
+                isBleList = true;
                 break;
             case R.id.bt_select_remote:    //遠端Button
                 remote.setBackgroundResource(R.drawable.rectangle_button);
@@ -423,28 +440,90 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 recyclerView.setVisibility(View.GONE);
                 remoteRecycle.setVisibility(View.VISIBLE);
                 selectedAccount.setVisibility(View.VISIBLE);
+                isBleList = false;
+                setAccountInfo();           //選擇帳號初始化  2021/03/25
                 break;
             case R.id.bt_add_temp:       //新增觀測者onClick
-//                dialogTemperature();
-                startActivity(new Intent(this, TemperatureAddActivity.class));
+                Intent intent = new Intent(this, TemperatureAddActivity.class);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.bt_add_remote:     //新增遠端者onClick
                 dialogRemote();
                 break;
             case R.id.tvEdit:           //編輯使用者資訊
-                startActivity(new Intent(this, TemperEditListActivity.class));
+                if(isBleList) {
+                    startActivity(new Intent(this, TemperEditListActivity.class));
+                }else {
+                    startActivity(new Intent(this, RemoteEditListActivity.class));
+                }
                 break;
             case R.id.btnChoseAccount:   //遠端監控者-選擇帳號
-                dialogAccount();
+                showAccountDialog();
                 break;
         }
     }
 
+    //查詢遠端帳號-選擇帳號
+    private void setAccountInfo() {
+        proxy.buildPOST(REMOTE_USER_LIST, "" , requestListener);
+    }
+    private ApiProxy.OnApiListener requestListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            new Thread(){
+                @Override
+                public void run() {
+                    arrayAdapter = new ArrayAdapter<String>(TemperatureActivity.this, android.R.layout.select_dialog_item);
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            JSONArray array = object.getJSONArray("success");
+                            for (int i = 0; i < array.length(); i++){
+                                arrayAdapter.add(array.getString(i));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
     //
-    private void dialogAccount() {
-        Log.d(TAG, "dialogAccount: ");
+    private void showAccountDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_select_one_account));
+
+        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                Log.d(TAG, "你選擇的帳號: " + arrayAdapter.getItem(position));
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
+
+    //更新藍芽連線狀態
     private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
         Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + "裝置Address:" + deviceAddress + "pos:" + pos);
         if (this.name != null){
@@ -458,23 +537,15 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         String currentDateTime = sdf.format(new Date());  // 目前時間
 
         //姓名不為空
-        if (name != null){
-            for(int i = 0; i < members.size(); i++){
-                if (members.get(i).getName().equals(name)){
-                    Member user = members.get(i);
-                    user.setDegree(degree, currentDateTime);
-                    user.setBattery(String.valueOf(battery)+"%");
-                    members.set(i, user);
-                    mAdapter.updateItem(user, i);
-
-                    //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog 20201218
-                    if (chartDialog != null && chartDialog.isShowing())
-                    {
-                        chartDialog.update(user);
-                    }
-                }
-            }
+        if (this.name != null){
+            memberBean.setDegree(degree, currentDateTime); //塞入溫度跟時間
+            memberBean.setBattery(battery +"%");
+            tAdapter.updateItem(memberBean, pos);
+            //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
+            if (chartDialog != null && chartDialog.isShowing())
+                chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
         }
+        updateDegreeValueToApi(degree);
     }
 
     //command
@@ -489,13 +560,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         }
     }
 
-    //每5分鐘執行一次
+    //每3分鐘執行一次
     private Runnable requestTemp = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "requestTemp start: @5mins");
+            Log.d(TAG, "requestTemp start: @3mins");
             sendCommand();
-            mHandler.postDelayed(this, 1000 * 60 * 3);    //5mins
+            mHandler.postDelayed(this, 1000 * 60 * 3);    //3mins
         }
     };
 
@@ -570,12 +641,16 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
                     updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    if(mHandler != null)
+                        mHandler.removeCallbacks(requestTemp);
+                    Log.d(TAG, "移除3分鐘跑一次");
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
+
                     break;
 
                 case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
@@ -600,6 +675,74 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         }
     }
 
+    //2021/03/25 update觀測者之體溫量測資料給後端
+    private void updateDegreeValueToApi(double degree){
+        DateTime dt1 = new DateTime();
+        String degreeMeasureStr = dt1.toString("yyyy-MM-dd,HH:mm:ss");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("targetId", targetId);
+            jsonObject.put("celsius", degree);
+            jsonObject.put("measuredTime",degreeMeasureStr);
+            jsonObject.put("isFirst", false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("infos", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
+        //temperatureWrite.edit().putString("DegreeInfo",object.toString()).apply();
+
+        proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
+    }
+
+    private ApiProxy.OnApiListener addBleValueListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                        }else {
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode , Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -612,6 +755,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         }
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+
+        if(mHandler != null)
+            mHandler.removeCallbacks(requestTemp);
     }
 
     ////////////////////////////////////////////// Dialog fxn ////////////////////////////////////////////////////
@@ -723,52 +869,40 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     @Override
     public void onBleConnect(TempDataApi.SuccessBean data, int position) {
         //呼叫藍芽
-        name = data.getName();
-        pos = position;
-        memberBean = data;
+        name = data.getUserName();      //取得使用者姓名
+        targetId = data.getTargetId();  //取得使用者targetID,上傳溫度給後台時需要此Key
+        pos = position;                 //取得使用者在RecyclerView項目位置
+        memberBean = data;              //在把data內的資料丟給memberBean;
         initBle();
     }
 
     @Override
-    public void onBleChart(TempDataApi.SuccessBean data) {
+    public void onBleChart(TempDataApi.SuccessBean data, int position) {
         //呼叫圖表
+        //客製Dialog圖表
+        chartDialog = new ChartDialog(this, data);
+        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
+        chartDialog.show();
     }
 
     @Override
-    public void onDelUser() {
-
+    public void onBleMeasuring(TempDataApi.SuccessBean data, int position) {
+        requestTemp.run(); //5分鐘command一次
     }
 
-//    //呼叫藍芽
-//    @Override
-//    public void onBleConnect(Member member) {
-//        name = member.getName();  //取得使用者名稱
-//        //初始化及相關搜尋
-//        initBle();
-//    }
-//
-//    //啟動ble量測
-//    @Override
-//    public void onBleMeasuring(Member member) {
-//        requestTemp.run(); //5分鐘command一次
-//    }
-//
-//    //刪除使用者
-//    @Override
-//    public void onDelUser(Member member) {
-//
-//    }
-//
-//    //呼叫圖表
-//    @Override
-//    public void onBleChart(Member member) {
-//        //客製Dialog圖表
-//        chartDialog = new ChartDialog(this, member);
-//        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
-//        chartDialog.show();
-//    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    @Override //新增觀測者資料返回 2021/03/24
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            if (resultCode == RESULT_OK){  //新增觀測者資料成功
+                setInfo(); //跟後台要資料刷新RecyclerView
+            }else if (resultCode == RESULT_CANCELED){  //取消新增觀測者資料
+                Toasty.info(this, getString(R.string.nothing), Toast.LENGTH_SHORT, true).show();
+            }
+        }
+    }
 }
 
 
