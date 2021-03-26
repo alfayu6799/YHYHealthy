@@ -82,12 +82,4 @@ public class ImageUtils {
         }
     }
 
-    /***  encode Bitmap in Base64 ***/
-    private String BitmapToBase64(Bitmap bm){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
-        byte[] b = baos.toByteArray();
-        String encImage = Base64.encodeToString(b, Base64.NO_WRAP);
-        return encImage;
-    }
 }

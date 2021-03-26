@@ -156,14 +156,23 @@ public class ApiProxy {
     //查詢遠端(本機)授權碼
     public static String MONITOR_CODE = BLE_TEMPERATURE_API + "monitorCode";
 
-    //更新遠端(本機)授權碼 ??
+    //更新遠端(本機)授權碼
     public static String MONITOR_CODE_RENEW = BLE_TEMPERATURE_API + "renewCode";
+
+    //更新遠端觀測帳號之授權碼
+    public static String MONITOR_CODE_UPDATE = BLE_TEMPERATURE_API + "updCode";
 
     //新增遠端觀測帳號
     public static String REMOTE_USER_ADD = BLE_TEMPERATURE_API + "addGoal";
 
     //查詢遠端觀測帳號
     public static String REMOTE_USER_LIST = BLE_TEMPERATURE_API + "findGoal";
+
+    //刪除遠端觀測帳號
+    public static String REMOTE_USER_DELETE = BLE_TEMPERATURE_API + "delGoal";
+
+    //遠端帳號底下觀測帳號之量測資料
+    public static String REMOTE_USER_UNDER_LIST = BLE_TEMPERATURE_API + "goalValue";
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String SCEPTER = "Scepter";

@@ -89,6 +89,15 @@
         android:layout_marginLeft="150dp"
         android:visibility="invisible"
         android:text="選擇帳號"/>
+    <TextView
+        android:id="@+id/tvAccountShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="250dp"
+        android:textSize="22dp"
+        android:visibility="invisible"
+        android:text="account"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTempUser"
         android:layout_width="match_parent"
@@ -97,17 +106,6 @@
         android:layout_marginTop="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"/>
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/rvSignUser"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@+id/lybleScan"-->
-<!--        android:background="@drawable/shape_ble"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:layout_marginLeft="8dp"-->
-<!--        android:layout_marginRight="8dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:visibility="invisible"/>-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRomoteUser"
         android:layout_width="match_parent"

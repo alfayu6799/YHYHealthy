@@ -198,7 +198,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             Toasty.success(TemperEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-
+                            //回上一頁並更新RecyclerView?
                         }else {
                             Toasty.error(TemperEditActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }

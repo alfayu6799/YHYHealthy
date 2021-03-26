@@ -11,9 +11,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yhyhealthydemo.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RemoteEditListAdapter extends RecyclerView.Adapter<RemoteEditListAdapter.ViewHolder>{
 
     private Context context;
+    private List<String> dataList = new ArrayList<String>();
+    private RemoteEditListAdapter.RemoteEditListListener listener;
+
+    //建構子
+
+
+    public RemoteEditListAdapter(Context context, List<String> dataList, RemoteEditListListener listener) {
+        this.context = context;
+        this.dataList = dataList;
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -24,17 +38,33 @@ public class RemoteEditListAdapter extends RecyclerView.Adapter<RemoteEditListAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+           holder.accountInfo.setText(dataList.get(position));
 
+           //更新
+           holder.accountUpdate.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   listener.onUpdateClick(dataList.get(position), position);
+               }
+           });
+
+           //移除
+            holder.accountDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onDeleteClick(dataList.get(position), position);
+                }
+            });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataList.size();
     }
 
     public interface RemoteEditListListener{
-        void onUpdateClick();
-        void onDeleteClick();
+        void onUpdateClick(String dataStr, int position);
+        void onDeleteClick(String dataStr, int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

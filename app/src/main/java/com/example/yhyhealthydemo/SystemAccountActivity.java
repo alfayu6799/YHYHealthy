@@ -31,10 +31,11 @@ import static com.example.yhyhealthydemo.module.ApiProxy.MONITOR_CODE_RENEW;
 
 /** **  *****
  *  設定 - 帳戶設定
- *  密碼變更
+ *  密碼變更   UserChangePassActivity
  *  遠端授權碼 dialog
- *  驗證方式
- *  裝置序號  dialog
+ *  驗證方式  UserChangeVerifiActivity
+ *  裝置序號  UserDeviceActivity
+ *  create 2021/03/01
  * *** ****/
 
 public class SystemAccountActivity extends AppCompatActivity implements View.OnClickListener {
@@ -97,15 +98,10 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
             case R.id.ivUserAuthorizationCode:  //授權碼
                 dialogAuthCode();
                 break;
-            case R.id.ivUserDeviceNo:
-                dialogDevice();             //裝置序號
+            case R.id.ivUserDeviceNo:  //裝置序號
+                startActivity(new Intent(this, UserDeviceActivity.class));
                 break;
         }
-    }
-
-    //裝置序號採用彈跳視窗
-    private void dialogDevice() {
-        Log.d(TAG, "dialogDevice: ");
     }
 
     //授權碼採用彈跳視窗
@@ -165,7 +161,7 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
-                            Toasty.success(SystemAccountActivity.this, getString(R.string.autocode_update_success), Toast.LENGTH_SHORT, true).show();
+                            Toasty.success(SystemAccountActivity.this, getString(R.string.auth_code_update_success), Toast.LENGTH_SHORT, true).show();
                             getAuthCodeFromApi(); //重新取得授權碼
                         }
                     } catch (JSONException e) {

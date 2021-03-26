@@ -142,7 +142,7 @@
     <string name="setting_user_marriage">已婚/未婚</string>
     <string name="setting_for_contraception">是否避孕</string>
     <string name="setting_for_child">小孩(無/有)</string>
-    <string name="setting_for_device">裝置序號</string>
+    <string name="setting_for_device">裝置管理</string>
     <string name="setting_for_Observation">觀測者編輯</string>
     <string name="setting_temperature_unit">溫度單位</string>
     <string name="setting_for_ble">藍芽連線</string>
@@ -232,7 +232,7 @@
     <string name="period_day_is_empty">沒有週期資料</string>
     <string name="function_only_today">此功能僅限今日</string>
     <string name="ble_is_release">釋放藍芽資源</string>
-    <string name="autocode_update_success">授權碼更新成功</string>
+    <string name="auth_code_update_success">授權碼更新成功</string>
     <string name="ble_connecting_measure">量測中</string>
     <string name="ble_only_today">藍芽體溫量測僅限今天</string>
     <string name="email_already_existed">此信箱已經註冊過</string>
@@ -242,4 +242,11 @@
     <string name="nothing">您沒有新增任何資料</string>
     <string name="please_select_one_account">請選擇一組帳號</string>
     <string name="update">更新</string>
+    <string name="add">新增</string>
+    <string name="you_select_account_is_no_data">你選擇的帳號底下無資料</string>
+    <string name="remote_account_auth_code_error">遠端授權碼錯誤</string>
+    <string name="title_remote_account">新增監控帳號</string>
+    <string name="please_update_auth_code">更新遠端帳號授權碼</string>
+    <string name="please_input_serial_no">請輸入裝置序號</string>
+    <string name="deviceRegister">已註冊之裝置</string>
 </resources>

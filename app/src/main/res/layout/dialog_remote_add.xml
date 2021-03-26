@@ -7,6 +7,7 @@
     android:background="@drawable/shape_ble">
 
     <TextView
+        android:id="@+id/titleRemote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

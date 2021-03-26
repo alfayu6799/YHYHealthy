@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.data.Remote;
+import com.example.yhyhealthydemo.datebase.RemoteAccountApi;
 
 import java.util.List;
 
 public class RemoteViewAdapter extends RecyclerView.Adapter<RemoteViewAdapter.ViewHolder>{
-    private Context context;
-    private List<Remote> remoteList;
 
-    public RemoteViewAdapter(Context context, List<Remote> remoteList) {
+    private Context context;
+    private List<RemoteAccountApi.SuccessBean> dataList;
+
+    //建構子
+    public RemoteViewAdapter(Context context, List<RemoteAccountApi.SuccessBean> dataList) {
         this.context = context;
-        this.remoteList = remoteList;
+        this.dataList = dataList;
     }
 
     @NonNull
@@ -32,15 +37,21 @@ public class RemoteViewAdapter extends RecyclerView.Adapter<RemoteViewAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Remote remote = remoteList.get(position);
-        holder.imageView.setImageResource(remote.getImage());
-        holder.textName.setText(remote.getName());
-        holder.textDegree.setText(String.valueOf(remote.getDegree()));
+        RemoteAccountApi.SuccessBean data = dataList.get(position);
+        holder.textName.setText(data.getRemoteName());
+        holder.textMeasureTime.setText(data.getMeasuredTime());
+        holder.textDegree.setText(String.valueOf(data.getRemoteCelsius())); //攝氏
+
+        //base64解碼並載入Glide Lib顯示在imageView
+        Glide.with(context)
+                .asBitmap()
+                .load(Base64.decode(data.getRemoteHeadShot(), Base64.DEFAULT))
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return remoteList.size();
+        return dataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -48,6 +59,7 @@ public class RemoteViewAdapter extends RecyclerView.Adapter<RemoteViewAdapter.Vi
         ImageView imageView;
         TextView textName;
         TextView textDegree;
+        TextView textMeasureTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,7 +67,7 @@ public class RemoteViewAdapter extends RecyclerView.Adapter<RemoteViewAdapter.Vi
             imageView = itemView.findViewById(R.id.ivRemoteShot);
             textName = itemView.findViewById(R.id.tvRemoteUserName);
             textDegree = itemView.findViewById(R.id.tvRemoteUserDegree);
-
+            textMeasureTime = itemView.findViewById(R.id.tvMeasuredTime);
         }
     }
 }

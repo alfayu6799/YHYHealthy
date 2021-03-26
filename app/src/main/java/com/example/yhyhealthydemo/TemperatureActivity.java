@@ -2,7 +2,6 @@ package com.example.yhyhealthydemo;
 
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +20,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -35,42 +33,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.yhyhealthydemo.adapter.BluetoothLeAdapter;
-import com.example.yhyhealthydemo.adapter.RecyclerViewAdapter;
 import com.example.yhyhealthydemo.adapter.RemoteViewAdapter;
 import com.example.yhyhealthydemo.adapter.TemperMainAdapter;
-import com.example.yhyhealthydemo.data.Remote;
 import com.example.yhyhealthydemo.data.ScannedData;
+import com.example.yhyhealthydemo.datebase.RemoteAccountApi;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
-import com.example.yhyhealthydemo.datebase.Member;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
-
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import es.dmoral.toasty.Toasty;
-
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_LIST;
+import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
 public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
 
@@ -79,29 +69,27 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private Button supervise, remote;
     private Button addTemperatureUser, addRemoteUser;
     private TextView txtUserInfoEdit;
-    private Button selectedAccount;
+    private Button   selectedAccount;
+    private TextView accountSelected;
 
-    //使用者
+    //觀測者
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter mAdapter;
-    private List<Member> members;
-    private String name;
-
-    //new
     private List<TempDataApi.SuccessBean> dataList;
+    private TempDataApi.SuccessBean memberBean;
     private TemperMainAdapter tAdapter;
     private int pos;
-    private TempDataApi.SuccessBean memberBean;
+    private String name;
     private int targetId;
 
-
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm"); //日期格式
+    //日期格式
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
 
     //遠端
     private RecyclerView remoteRecycle;
     private RemoteViewAdapter remoteAdapter;
-    private List<Remote> remotes;
+    private List<RemoteAccountApi.SuccessBean> remoteList;
     private ArrayAdapter<String> arrayAdapter;
+    private String accountInfoClicked;
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -155,13 +143,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
         txtUserInfoEdit = findViewById(R.id.tvEdit);
         selectedAccount = findViewById(R.id.btnChoseAccount);
+        accountSelected = findViewById(R.id.tvAccountShow);
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
         remoteRecycle = findViewById(R.id.rvRomoteUser);  //遠端
 
         setInfo();        //觀測者初始化資訊
-        setRemote();      //監控者初始化資訊
 
         supervise.setOnClickListener(this);
         remote.setOnClickListener(this);
@@ -171,30 +159,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         selectedAccount.setOnClickListener(this);
 
         supervise.setBackgroundResource(R.drawable.rectangle_button); //先顯示觀測Button
-    }
-
-    //遠端監控者
-    private void setRemote() {
-        int spacingInPixels = 10;  //設定item間距的距離
-        remotes = new ArrayList<>();
-
-        setRemoteUser();  //填入資料
-
-        remoteAdapter = new RemoteViewAdapter(this, remotes);
-
-        remoteRecycle.setAdapter(remoteAdapter);
-        remoteRecycle.setHasFixedSize(true);
-        remoteRecycle.setLayoutManager(new LinearLayoutManager(this));
-        remoteRecycle.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
-    }
-
-    private void setRemoteUser() {
-        //日後要從後台拿取資料
-//        Remote remote1 = new Remote(R.mipmap.imageview, "Matt Bomer", 38.50);
-//        Remote remote2 = new Remote(R.mipmap.imageview2, "Brad Pitt", 35.55);
-//
-//        remotes.add(remote1);
-//        remotes.add(remote2);
     }
 
     /**** 藍芽 2021/03/18 *****/
@@ -340,25 +304,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //觀測者 Item 填入Data
     private void setInfo() {
-
         proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
-
-        //塞入假資料
-//        members = new ArrayList<>();
-//
-//        Member user1 = new Member(R.mipmap.imageview, "Matt Bomer", "未連線");
-//        Member user2 = new Member(R.mipmap.imageview2, "Brad Pitt", "未連線");
-//        Member user3 = new Member(R.mipmap.imageview3, "Anne Hathaway", "未連線");
-//
-//        members.add(user1);
-//        members.add(user2);
-//        members.add(user3);
-//
-//        mAdapter = new RecyclerViewAdapter(this, members, this);
-//        recyclerView.setAdapter(mAdapter);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.addItemDecoration(new SpacesItemDecoration(10)); //設定item間距
     }
 
     private ApiProxy.OnApiListener bleUserListListener = new ApiProxy.OnApiListener() {
@@ -430,7 +376,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 recyclerView.setVisibility(View.VISIBLE);
                 remoteRecycle.setVisibility(View.GONE);
                 selectedAccount.setVisibility(View.GONE);
+                accountSelected.setVisibility(View.GONE);
                 isBleList = true;
+                setInfo();
                 break;
             case R.id.bt_select_remote:    //遠端Button
                 remote.setBackgroundResource(R.drawable.rectangle_button);
@@ -458,6 +406,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 }
                 break;
             case R.id.btnChoseAccount:   //遠端監控者-選擇帳號
+                setAccountInfo();        //先呼叫
                 showAccountDialog();
                 break;
         }
@@ -514,7 +463,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int position) {
-                Log.d(TAG, "你選擇的帳號: " + arrayAdapter.getItem(position));
+                getAccountInfoFromApi(arrayAdapter.getItem(position));
+                accountInfoClicked = arrayAdapter.getItem(position);
             }
         });
 
@@ -522,6 +472,83 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         dialog.show();
     }
 
+
+    //取得監控帳戶底下觀測者的資料列表　　2021/03/26
+    private void getAccountInfoFromApi(String accountNo) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", accountNo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildPOST(REMOTE_USER_UNDER_LIST, json.toString(), remoteUnderListener);
+    }
+
+    private ApiProxy.OnApiListener remoteUnderListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(TemperatureActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserRemoteData(result);
+                        }else if (errorCode == 6){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.you_select_account_is_no_data), Toast.LENGTH_SHORT, true).show();
+                        }else if (errorCode == 32){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.remote_account_auth_code_error), Toast.LENGTH_SHORT, true).show();
+                        }else {
+                            Log.d(TAG, "後台回復之錯誤代碼:" + errorCode);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //顯示監控者底下觀測者量測的資料  2021/03/26
+    private void parserRemoteData(JSONObject result) {
+        RemoteAccountApi remoteData = RemoteAccountApi.newInstance(result.toString());
+        remoteList = remoteData.getSuccess();
+
+        //將資料配置到RecyclerView並顯示出來
+        remoteAdapter = new RemoteViewAdapter(this, remoteList);
+        remoteRecycle.setAdapter(remoteAdapter);
+        remoteRecycle.setHasFixedSize(true);
+        remoteRecycle.setLayoutManager(new LinearLayoutManager(this));
+
+        //設定item間距的距離
+        int spacingInPixels = 10;
+        remoteRecycle.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
+
+        //顯示選擇的帳號
+        accountSelected.setVisibility(View.VISIBLE);
+        accountSelected.setTextColor(Color.RED);
+        accountSelected.setText(accountInfoClicked);
+    }
 
     //更新藍芽連線狀態
     private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
@@ -545,6 +572,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             if (chartDialog != null && chartDialog.isShowing())
                 chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
         }
+        //上傳後端 2021/03/26
         updateDegreeValueToApi(degree);
     }
 
@@ -685,7 +713,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             jsonObject.put("targetId", targetId);
             jsonObject.put("celsius", degree);
             jsonObject.put("measuredTime",degreeMeasureStr);
-            jsonObject.put("isFirst", false);
+            jsonObject.put("first", false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -699,10 +727,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
-        //temperatureWrite.edit().putString("DegreeInfo",object.toString()).apply();
-
         proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
@@ -844,6 +868,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     boolean success = object.getBoolean("success");
                     if (success)
                         Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                        setAccountInfo();
                 }else {
                     Log.d(TAG, "新增觀測者結果後台回覆碼:" + errorCode);
                 }

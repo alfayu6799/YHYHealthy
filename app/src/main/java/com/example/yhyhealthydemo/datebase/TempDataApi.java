@@ -10,7 +10,6 @@ import java.util.List;
 
 public class TempDataApi {
 
-//    @SerializedName("success")
     private int errorCode;
     private List<TempDataApi.SuccessBean> success;
 

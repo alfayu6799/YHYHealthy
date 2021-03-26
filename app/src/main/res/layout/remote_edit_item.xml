@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@mipmap/yhy_background">
+    android:background="@drawable/corners_bg">
 
     <TextView
         android:id="@+id/textView57"
@@ -34,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textColor="@color/colorPrimaryDark"
         android:text="@string/update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline35"
@@ -44,7 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/delete"
+        android:textColor="@color/red"
+        android:text="@string/remove"
         app:layout_constraintEnd_toEndOf="@+id/tvRemoteUpdate"
         app:layout_constraintStart_toStartOf="@+id/tvRemoteUpdate"
         app:layout_constraintTop_toBottomOf="@+id/tvRemoteUpdate" />

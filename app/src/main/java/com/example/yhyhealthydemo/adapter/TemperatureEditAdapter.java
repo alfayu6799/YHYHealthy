@@ -1,6 +1,9 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
+import com.example.yhyhealthydemo.tools.ImageUtils;
 
 import java.util.List;
 
@@ -49,6 +53,11 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         }
 
         holder.birthday.setText(data.getBirthday());
+
+        //base64解碼大頭貼
+        byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
+        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+        holder.editPhoto.setImageBitmap(decodedImage);
 
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
