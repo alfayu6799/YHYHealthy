@@ -47,14 +47,19 @@ public class yhyBleService extends Service {
     public final static String ACTION_GATT_DISCONNECTED = "com.example.yhyhealthydemo.ACTION_GATT_DISCONNECTED";
     // 发现GATT服务
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.example.yhyhealthydemo.ACTION_GATT_SERVICES_DISCOVERED";
-    // 啟動通知服務    Notification
-    public final static String ACTION_NOTIFICATION_SUCCESS = "com.example.yhyhealthydemo.ACTION_NOTIFICATION_SUCCESS";
+
     // 收到蓝牙数据
     public final static String ACTION_DATA_AVAILABLE = "com.example.yhyhealthydemo.ACTION_DATA_AVAILABLE";
     // 连接失败
     public final static String ACTION_CONNECTING_FAIL = "com.example.yhyhealthydemo.ACTION_CONNECTING_FAIL";
     // 蓝牙数据
     public final static String EXTRA_DATA = "com.example.yhyhealthydemo.EXTRA_DATA";
+
+    //藍芽mac  2021/03/29
+    public final static String EXTRA_MAC = "com.example.yhyhealthydemo.EXTRA_MAC";
+
+    // 啟動通知服務    Notification
+    public final static String ACTION_NOTIFICATION_SUCCESS = "com.example.yhyhealthydemo.ACTION_NOTIFICATION_SUCCESS";
 
     // 服务标识
     private final UUID SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
@@ -116,17 +121,17 @@ public class yhyBleService extends Service {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d(TAG, "onConnectionStateChange: 藍牙已連接");
-                // 藍牙已連接
+
                 mConnectionState = STATE_CONNECTED;
-                sendBleBroadcast(ACTION_GATT_CONNECTED);
+                broadcastUpdate(ACTION_GATT_CONNECTED, gatt);  //2021/03/29
+
                 // 搜尋GATT服務
                 mBluetoothGatt.discoverServices();
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.d(TAG, "onConnectionStateChange: 藍牙斷開連接");
-                // 藍牙斷開連接
                 mConnectionState = STATE_DISCONNECTED;
-                sendBleBroadcast(ACTION_GATT_DISCONNECTED);
+                broadcastUpdate(ACTION_GATT_DISCONNECTED, gatt);  //2021/03/29
             }
         }
 
@@ -141,8 +146,8 @@ public class yhyBleService extends Service {
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead: 收到數據");
-            // 收到數據
-            sendBleBroadcast(ACTION_DATA_AVAILABLE, characteristic);
+
+            broadcastUpdate(ACTION_DATA_AVAILABLE, gatt, characteristic); //2021/03/29
         }
 
         @Override  //寫資料
@@ -156,7 +161,7 @@ public class yhyBleService extends Service {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.d(TAG, "接受到手機端的command後藍芽回覆的資料 ");
             if (characteristic.getValue() != null){
-                sendBleBroadcast(ACTION_DATA_AVAILABLE, characteristic);
+                broadcastUpdate(ACTION_DATA_AVAILABLE, gatt, characteristic); //2021/03/29
             }
         }
 
@@ -170,9 +175,38 @@ public class yhyBleService extends Service {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
             Log.d(TAG, "開啟通知模式成功: ");
-            sendBleBroadcast(ACTION_NOTIFICATION_SUCCESS);
+            broadcastUpdate(ACTION_NOTIFICATION_SUCCESS, gatt);  //2021/03/29
         }
     };
+
+    /**
+     * 更新通知  2021/03/29
+     *
+     * @param action 廣播Action
+     * @param gatt   藍芽detail
+     */
+    private void broadcastUpdate(String action, BluetoothGatt gatt){
+        final Intent intent = new Intent(action);
+        intent.putExtra(EXTRA_MAC , gatt.getDevice().getAddress());
+        sendBroadcast(intent);
+    }
+
+    /**
+     * 更新通知  2021/03/29
+     *
+     * @param action 廣播Action
+     * @param gatt   藍芽detail
+     * @param characteristic 數據
+     */
+    private void broadcastUpdate(String action, BluetoothGatt gatt, BluetoothGattCharacteristic characteristic){
+        final Intent intent = new Intent(action);
+        if (CHARACTERISTIC_READ_UUID.equals(characteristic.getUuid())){
+            intent.putExtra(EXTRA_DATA, characteristic.getValue());
+            intent.putExtra(EXTRA_MAC , gatt.getDevice().getAddress());
+        }
+        sendBroadcast(intent);
+    }
+
 
     /**
      * 發送通知

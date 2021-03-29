@@ -49,9 +49,11 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:ems="8"
+            android:singleLine="true"
+            android:maxLines="17"
+            android:imeOptions="actionDone"
             android:hint="@string/please_input_serial_no"
-            android:inputType="numberPassword"
+            android:inputType="textCapCharacters"
             android:padding="10dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -66,6 +68,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputDeviceNo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDeviceList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView61" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

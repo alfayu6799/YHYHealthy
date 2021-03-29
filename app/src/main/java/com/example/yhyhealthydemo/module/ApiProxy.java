@@ -75,6 +75,15 @@ public class ApiProxy {
     //更新婚姻狀況api
     public static String MARRIAGE_UPDATE = USER_API + "marriage";
 
+    //裝置列表
+    public static String PRODUCTS_NO = USER_API + "products";
+
+    //綁定裝置(新增)
+    public static String PRODUCTS_BIND = USER_API + "modifyProduct";
+
+    //解除綁定裝置
+    public static String PRODUCTS_BIND_REMOVE = USER_API + "delProduct";
+
     //App版本api
     public static String APP_VER = "allUser/ext/ver";
 
@@ -113,12 +122,6 @@ public class ApiProxy {
 
     //刪除實際經期設定api
     public static String PERIOD_DELETE = MENSTRUAL_API + "DelPeriod";
-
-    //排卵儀序號驗證api
-    public static String SERIAL_NO_EXISTS = "allApp/ext/SerialNoExists";
-
-    //更新用戶排卵儀序號api
-    public static String SERIAL_NO_EXISTS_UPDATE = "allApp/ext/UpdateSerialNo";
 
     //衛教IP網址
     private static final String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";

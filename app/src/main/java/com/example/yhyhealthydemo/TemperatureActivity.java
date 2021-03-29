@@ -95,7 +95,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private yhyBleService mBluetoothLeService;
     private BroadcastReceiver mBleReceiver;
-    private BluetoothGatt mBluetoothGatt;
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
     private BluetoothLeAdapter tempAdapter;
@@ -117,7 +116,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private ProgressDialog progressDialog;
 
     //Other
-    boolean isFirstDegreeValue = false;
     boolean isBleList = true;
 
     @Override
@@ -177,6 +175,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         dialogBleConnect();
     }
 
+    /**BLE開始掃描*/
     private void dialogBleConnect(){
         alertDialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -620,6 +619,11 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         Intent intent = new Intent(this, yhyBleService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
+        mBleReceiver = new BleReceiver();
+        registerReceiver(mBleReceiver, makeGattUpdateIntentFilter());
+    }
+
+    public static IntentFilter makeGattUpdateIntentFilter(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
         filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
@@ -627,8 +631,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
         filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
-        mBleReceiver = new BleReceiver();
-        registerReceiver(mBleReceiver, filter);
+        filter.addAction(yhyBleService.EXTRA_MAC);
+        return filter;
     }
 
     /** ble背景服務 **/
@@ -678,7 +682,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
-
                     break;
 
                 case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
@@ -687,8 +690,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     break;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
+                    String address = intent.getStringExtra(yhyBleService.EXTRA_MAC);
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
-                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data));
+                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + address);
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
                     String degreeStr = str[2];
                     String batteryStr = str[3];

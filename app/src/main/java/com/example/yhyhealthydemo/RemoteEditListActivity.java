@@ -237,7 +237,7 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
         DeleteDateToApi(accountInfo);
     }
 
-    //刪除後端帳號
+    //刪除遠端帳號
     private void DeleteDateToApi(String accountInfo) {
         JSONObject json = new JSONObject();
         try {

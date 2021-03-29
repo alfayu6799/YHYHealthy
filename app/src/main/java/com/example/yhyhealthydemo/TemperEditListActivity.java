@@ -154,6 +154,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         Intent intent = new Intent();
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
+
         bundle.putInt("targetId", data.getTargetId());
         bundle.putString("name", data.getName());
         bundle.putString("gender", data.getGender());
