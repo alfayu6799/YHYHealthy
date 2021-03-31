@@ -311,6 +311,10 @@ public class yhyBleService extends Service {
         }
     }
 
+    /***
+     *  藍芽連接
+     *
+     * **/
     public synchronized void writeDataToDevice(byte[] data, String address){
         BluetoothGatt mBluetoothGatt = gattArrayMap.get(address);
         if (mBluetoothGatt == null) return;

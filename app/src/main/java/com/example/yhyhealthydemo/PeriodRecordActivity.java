@@ -230,7 +230,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 }
                 break;
             case R.id.btnStartMeasure: //開始量測
-                sendCommand();
+                sendCommand(deviceAddress);
                 break;
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台Onclick
                 checkBeforeUpdate();  //上傳至後台先檢查資訊是否齊全fxn
@@ -637,7 +637,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         alertDialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.dialog_bleconnect, null);
-        RecyclerView bleDialog = view.findViewById(R.id.rvBleScanView);
+        RecyclerView bleDialog = view.findViewById(R.id.rvBleScanView);  //放置掃描到的藍芽設備List
 
         mDeviceListAdapter = new BluetoothLeAdapter();
         bleDialog.setAdapter(mDeviceListAdapter);
@@ -758,10 +758,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
             //裝置名稱
             deviceName = selectedDevice.getDeviceName();
-            deviceAddress = selectedDevice.getAddress();
 
             //啟動BLE背景連線
-            //mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
+            mBluetoothLeService.connect(selectedDevice.getAddress());
 
             //關閉視窗
             if (alertDialog.isShowing())
@@ -800,8 +799,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
         filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
-        //filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
+        filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
+        filter.addAction(yhyBleService.EXTRA_MAC);
         mBleReceiver = new BleReceiver();
         registerReceiver(mBleReceiver, filter);
     }
@@ -835,12 +835,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     //updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     break;
 
-//                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
-//                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
-//                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
-//                    textBleStatus.setTextColor(Color.RED);
-//                    searchBLE.setVisibility(View.INVISIBLE);
-//                    break;
+                case yhyBleService.ACTION_NOTIFY_ON:
+                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
+                    deviceAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
+                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
+                    textBleStatus.setTextColor(Color.RED);
+                    searchBLE.setVisibility(View.INVISIBLE);
+                    break;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
@@ -866,14 +867,15 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     }
 
     //量測command 2021/03/16
-    private void sendCommand(){
+    private void sendCommand(String deviceAddress){
         String request = "AIDO,0"; //詢問溫度command/@3mins
         byte[] messageBytes = new byte[0];
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
-            boolean success = mBluetoothLeService.sendData(messageBytes);
-            if (success)
-                startMeasure.setText(getString(R.string.ble_connecting_measure));
+            mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);
+//            boolean success = mBluetoothLeService.sendData(messageBytes);
+//            if (success)
+//                startMeasure.setText(getString(R.string.ble_connecting_measure));
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }

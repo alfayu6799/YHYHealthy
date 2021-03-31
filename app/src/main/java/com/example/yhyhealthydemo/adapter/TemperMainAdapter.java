@@ -92,7 +92,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 });
             }
         }else {
-
+            //啟動量測
             holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -119,7 +119,6 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         void onBleConnect(TempDataApi.SuccessBean data, int position);
         void onBleChart(TempDataApi.SuccessBean data, int position);
         void onBleMeasuring(TempDataApi.SuccessBean data, int position);
-        //void onDelUser(TempDataApi.SuccessBean data, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -129,7 +128,6 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         TextView textDegree;
         TextView textBleStatus;
         TextView textBleBattery;
-        TextView textBleDeviceName;
         ImageView bleConnect, delUser, bleChart;
 
         public ViewHolder(@NonNull View itemView) {

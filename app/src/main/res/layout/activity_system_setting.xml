@@ -54,7 +54,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:textSize="24dp"
-        android:text="@string/setting_for_ble"
+        android:text="@string/setting_ble_device_changeName"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toBottomOf="@+id/textDegreeUnit" />
 
@@ -74,15 +74,40 @@
         app:layout_constraintTop_toTopOf="@+id/textBleDetail"
         android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSettingBleList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <EditText
+        android:id="@+id/editBleName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:maxLines="10"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:visibility="invisible"
+        android:text="Name"
         app:layout_constraintStart_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toBottomOf="@+id/textBleDetail" />
+
+    <ImageView
+        android:id="@+id/ivToUnitSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline16"
+        app:layout_constraintTop_toTopOf="@+id/textDegreeUnit"
+        android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
+
+    <TextView
+        android:id="@+id/tvUnitShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        android:textSize="18dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/textDegreeUnit"
+        app:layout_constraintStart_toEndOf="@+id/textDegreeUnit"
+        app:layout_constraintTop_toTopOf="@+id/textDegreeUnit" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,11 @@
         <item>懷孕紀錄</item>
         <item>呼吸監測</item>
     </string-array>
+
+    <string-array name="unit_arr">
+        <item>@string/celsius</item>
+        <item>@string/fahrenheit</item>
+    </string-array>
     
     <string-array name="secretions_colors">
         <item>none</item>

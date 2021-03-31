@@ -127,7 +127,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
         initView();
 
-        requestTemp.run();
+        requestTemp.run(); //體溫定時器
 
     }
 
@@ -192,7 +192,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         tempAdapter.OnItemClick(itemClick);
 
         isScanning = true;
-//        mHandler = new Handler();
         if (isScanning){
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -287,7 +286,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             deviceName = selectedDevice.getDeviceName();
 
             //啟動ble server連線
-//            mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
             mBluetoothLeService.connect(selectedDevice.getAddress());  //2021/03/30
 
             //關閉視窗
@@ -589,26 +587,17 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             Log.e(TAG, "Failed to convert message string to byte array");
         }
     }
-    
-    private Runnable test = new Runnable() {
-        @Override
-        public void run() {
-            Log.d(TAG, "run: test?????");
-            mHandler.postDelayed(this, 1000 * 60);
-        }
-    };
 
     //每3分鐘執行一次
     private Runnable requestTemp = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "每3分鐘執行一次: ????");
+            Log.d(TAG, "每3分鐘執行一次:");
             if (!bleOnClickList.isEmpty()) {
                 for (int i = 0 ; i < bleOnClickList.size(); i++){
                     sendCommand(bleOnClickList.get(i));
                 }
             }
-
             mHandler.postDelayed(this, 1000 * 60);    
         }
     };
@@ -651,7 +640,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         return filter;
     }
 
-    /** ble背景服務 **/
+    /** ble Service 背景服務 **/
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {

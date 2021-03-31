@@ -249,4 +249,10 @@
     <string name="please_update_auth_code">更新遠端帳號授權碼</string>
     <string name="please_input_serial_no">請輸入裝置序號</string>
     <string name="deviceRegister">已註冊之裝置</string>
+    <string name="setting_ble_device_changeName">藍芽設備更名</string>
+    <string name="please_chose_unit">請選擇單位</string>
+    <string name="celsius">攝氏</string>
+    <string name="fahrenheit">華氏</string>
+    <string name="your_chose_unit_is_celsius">你選擇使用攝氏單位</string>
+    <string name="your_chose_unit_is_fahrenheit">你選擇使用華氏單位</string>
 </resources>

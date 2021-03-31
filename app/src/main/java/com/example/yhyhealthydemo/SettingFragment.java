@@ -16,6 +16,16 @@ import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import es.dmoral.toasty.Toasty;
 
+/**  *************
+ * 設定首頁
+ *  系統設定
+ *  個人設定
+ *  帳戶設定
+ *  教學影片
+ *  使用條款
+ *  登出
+ * **************/
+
 public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private View view;
@@ -32,14 +42,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         ImageView userAccount = view.findViewById(R.id.imgSystemAccount);
         ImageView video = view.findViewById(R.id.imgSystemVedio);
         ImageView provision = view.findViewById(R.id.imgSystemProvision);
-        ImageView observation = view.findViewById(R.id.imgSystemObser);
         TextView  version = view.findViewById(R.id.tvVersion);
         TextView  logout = view.findViewById(R.id.tvLogout);
 
         setting.setOnClickListener(this);
         UserSetting.setOnClickListener(this);
         userAccount.setOnClickListener(this);
-        observation.setOnClickListener(this);
         video.setOnClickListener(this);
         provision.setOnClickListener(this);
         logout.setOnClickListener(this);
@@ -58,9 +66,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.imgSystemAccount:      //帳戶設定
                 startActivity(new Intent(getActivity(), SystemAccountActivity.class));
-                break;
-            case R.id.imgSystemObser:       //觀測者編輯
-                startActivity(new Intent(getActivity(), SysObservationActivity.class));
                 break;
             case R.id.imgSystemVedio:       //教學影片
                 startActivity(new Intent(getActivity(), SystemVideoActivity.class));
