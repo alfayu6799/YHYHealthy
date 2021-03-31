@@ -98,16 +98,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private boolean isScanning = false;
     private ArrayList<ScannedData> findDevice = new ArrayList<>();
     private BluetoothLeAdapter tempAdapter;
-    private Handler mHandler;
+    private Handler mHandler = new Handler();
     private AlertDialog alertDialog;
     private String deviceName = "";     //裝置名稱
-    private String deviceAddress = "";  //裝置mac
+    private List<String> bleOnClickList = new ArrayList<>();
 
     //圖表dialog
     private ChartDialog chartDialog;
-
-    //將資料寫到sharePreferences
-    private SharedPreferences temperatureWrite;
 
     //api
     ApiProxy proxy;
@@ -126,12 +123,12 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         //休眠禁止
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        //init sharepreferences
-        temperatureWrite = getSharedPreferences("temperature", MODE_PRIVATE); //只允許本應用程式內存取
-
         proxy = ApiProxy.getInstance();
 
         initView();
+
+        requestTemp.run();
+
     }
 
     private void initView(){
@@ -195,7 +192,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         tempAdapter.OnItemClick(itemClick);
 
         isScanning = true;
-        mHandler = new Handler();
+//        mHandler = new Handler();
         if (isScanning){
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -288,10 +285,10 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
 
             deviceName = selectedDevice.getDeviceName();
-            deviceAddress = selectedDevice.getAddress();
 
             //啟動ble server連線
-            mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
+//            mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
+            mBluetoothLeService.connect(selectedDevice.getAddress());  //2021/03/30
 
             //關閉視窗
             if (alertDialog.isShowing())
@@ -551,9 +548,11 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     //更新藍芽連線狀態
     private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
-        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + "裝置Address:" + deviceAddress + "pos:" + pos);
+
+        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + " mac:" + deviceAddress);
         if (this.name != null){
            memberBean.setStatus(deviceName+bleStatus);
+           memberBean.setMac(deviceAddress);
            tAdapter.updateItem(memberBean, pos);
         }
     }
@@ -575,25 +574,42 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         updateDegreeValueToApi(degree);
     }
 
+
     //command
-    private void sendCommand() {
+    private void sendCommand(String deviceAddress) {
         String request = "AIDO,0"; //詢問溫度command/@3mins
         byte[] messageBytes = new byte[0];
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
-            mBluetoothLeService.sendData(messageBytes);
+
+            mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);  //2021/03/30
+            Log.d(TAG, "sendCommand: " + messageBytes + " device:" + deviceAddress);
+
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }
     }
+    
+    private Runnable test = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "run: test?????");
+            mHandler.postDelayed(this, 1000 * 60);
+        }
+    };
 
     //每3分鐘執行一次
     private Runnable requestTemp = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "requestTemp start: @3mins");
-            sendCommand();
-            mHandler.postDelayed(this, 1000 * 60 * 3);    //3mins
+            Log.d(TAG, "每3分鐘執行一次: ????");
+            if (!bleOnClickList.isEmpty()) {
+                for (int i = 0 ; i < bleOnClickList.size(); i++){
+                    sendCommand(bleOnClickList.get(i));
+                }
+            }
+
+            mHandler.postDelayed(this, 1000 * 60);    
         }
     };
 
@@ -626,10 +642,10 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     public static IntentFilter makeGattUpdateIntentFilter(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
-        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);  //斷開
         filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
-        filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
+        filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         filter.addAction(yhyBleService.EXTRA_MAC);
         return filter;
@@ -664,6 +680,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 return;
             }
             switch (action) {
+
                 case yhyBleService.ACTION_GATT_CONNECTED:
                     Toasty.info(TemperatureActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
                     break;
@@ -672,33 +689,37 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
-                    if(mHandler != null)
-                        mHandler.removeCallbacks(requestTemp);
-                    Log.d(TAG, "移除3分鐘跑一次");
+                    updateStatus(name , deviceName , "",getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    mHandler.removeCallbacks(requestTemp);
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
-                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    updateStatus(name , deviceName , "",getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    mHandler.removeCallbacks(requestTemp);
                     break;
 
-                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
-                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功:");
-                    updateStatus(name , deviceName , deviceAddress, getString(R.string.ble_connect_status)); //更新
+                case yhyBleService.ACTION_NOTIFY_ON:  //03/30
+                    String deviceAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
+                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功: " + deviceAddress);
+                    updateStatus(name , deviceName, deviceAddress, getString(R.string.ble_connect_status)); //更新
+
                     break;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
-                    String address = intent.getStringExtra(yhyBleService.EXTRA_MAC);
+                    String macAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
-                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + address);
+
+                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + macAddress);
+
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
                     String degreeStr = str[2];
                     String batteryStr = str[3];
                     double degree = Double.parseDouble(degreeStr)/100;
                     double battery = Double.parseDouble(batteryStr);
                     updateBleData(degree, battery); //更新體溫跟電量
+
                     break;
 
                 default:
@@ -786,23 +807,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
         if(mHandler != null)
             mHandler.removeCallbacks(requestTemp);
-    }
-
-    ////////////////////////////////////////////// Dialog fxn ////////////////////////////////////////////////////
-
-    //新增觀測者Dialog
-    private void dialogTemperature() {
-        //自定義 一個TemperatureDialog繼承dialog
-        AddTemperatureDialog addTemperatureDialog = new AddTemperatureDialog(this, R.style.Theme_AppCompat_Dialog, new AddTemperatureDialog.PriorityListener() {
-            @Override
-            public void setActivity(String username, String usergender, String userbirthday, String userweight, String userheight) {
-                //data from dialog
-                Log.d(TAG, "setActivity: " + username + "/" + usergender + "/" + userbirthday + "/" + userweight + "/" + userheight);
-
-            }
-        });
-        addTemperatureDialog.setCancelable(false);
-        addTemperatureDialog.show();
     }
 
     //遠端帳號新增彈跳視窗
@@ -914,9 +918,15 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         chartDialog.show();
     }
 
-    @Override
+    @Override  //2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data, int position) {
-        requestTemp.run(); //5分鐘command一次
+        memberBean = data;              //在把data內的資料丟給memberBean;
+        pos = position;                 //取得使用者在RecyclerView項目位置
+
+        bleOnClickList.add(data.getMac());
+
+        sendCommand(data.getMac());
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -761,7 +761,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             deviceAddress = selectedDevice.getAddress();
 
             //啟動BLE背景連線
-            mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
+            //mBluetoothLeService.connect(mBluetoothAdapter, selectedDevice.getAddress());
 
             //關閉視窗
             if (alertDialog.isShowing())
@@ -776,13 +776,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
 
             //auto connect to the device upon successful start-up init
-            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
+            //mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
 //            mBluetoothLeService = null;
-            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
+            //mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
     };
 
@@ -800,7 +800,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
         filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
-        filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
+        //filter.addAction(yhyBleService.ACTION_NOTIFICATION_SUCCESS);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         mBleReceiver = new BleReceiver();
         registerReceiver(mBleReceiver, filter);
@@ -835,12 +835,12 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     //updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     break;
 
-                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
-                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
-                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
-                    textBleStatus.setTextColor(Color.RED);
-                    searchBLE.setVisibility(View.INVISIBLE);
-                    break;
+//                case yhyBleService.ACTION_NOTIFICATION_SUCCESS:
+//                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
+//                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
+//                    textBleStatus.setTextColor(Color.RED);
+//                    searchBLE.setVisibility(View.INVISIBLE);
+//                    break;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
