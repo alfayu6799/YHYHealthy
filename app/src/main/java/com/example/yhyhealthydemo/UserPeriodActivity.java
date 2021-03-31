@@ -27,6 +27,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,7 +68,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
         initView();
         initData();
-
     }
 
     private void initView() {
@@ -89,6 +90,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         proxy = ApiProxy.getInstance();
         changeUserPeriodApi = new ChangeUserPeriodApi(); //變更經期設定Api
 
+        period = new PeriodData();
+
         proxy.buildPOST(MENSTRUAL_RECORD_INFO, "", periodListener);
     }
 
@@ -109,9 +112,11 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        int erCode = object.getInt("errorCode");
-                        if (erCode == 0){
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
                             parserJson(result); //解析後台來的資料
+                        }else if(errorCode == 6){  //新人沒有資料
+                            setInfo();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -131,10 +136,20 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
+    private void setInfo() {
+        String today = String.valueOf(LocalDate.now()); //today
+        cycleLength.setText("");
+        periodLength.setText("");
+        firstDay.setText(today);
+        endDay.setText(today);
+    }
+
     //解析後台來的資料
     private void parserJson(JSONObject result) {
-        period = PeriodData.newInstance(result.toString());
         Log.d(TAG, "經期設定JSON解析: " + result.toString());
+
+        period = PeriodData.newInstance(result.toString());
+
         //週期長度
         String periodSize = String.valueOf(period.getSuccess().getCycle());
         cycleLength.setText(periodSize);
@@ -256,8 +271,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
     //上傳前檢查欄位是否都有填寫
     private void checkBeforeUpdate() {
 
-        Log.d(TAG, "起始日: " + firstDay.getText().toString() +" 結束日:" + endDay.getText().toString());
-
         //判斷上次經期開始日是否有填寫
         if(TextUtils.isEmpty(firstDay.getText().toString())){
             Toasty.error(UserPeriodActivity.this, getString(R.string.start_is_not_empty), Toast.LENGTH_SHORT, true).show();
@@ -290,12 +303,19 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
     //後台更新資料
     private void updateToApi() {
-        //週期
-        changeUserPeriodApi.setCycle(Integer.parseInt(cycleLength.getText().toString()));
-        changeUserPeriodApi.setPeriod(Integer.parseInt(periodLength.getText().toString()));
+        JSONObject json = new JSONObject();
+        try {
+            json.put("cycle", cycleLength.getText().toString());
+            json.put("period",periodLength.getText().toString());
+            json.put("lastDate",firstDay.getText().toString());
+            json.put("endDate", endDay.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        Log.d(TAG, "updateToApi: " + json.toString());
         //執行後台更新
-        proxy.buildPOST(MENSTRUAL_RECORD_UPDATE, changeUserPeriodApi.toJSONString(), changePeriodListener);
+        //proxy.buildPOST(MENSTRUAL_RECORD_UPDATE, json.toString(), changePeriodListener);
     }
 
     private ApiProxy.OnApiListener changePeriodListener = new ApiProxy.OnApiListener() {

@@ -186,7 +186,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         bleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         alertDialog.setView(view);
-        alertDialog.setCancelable(true);
+        alertDialog.setCancelable(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tempAdapter.OnItemClick(itemClick);

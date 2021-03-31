@@ -181,7 +181,6 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
 
     //寫回後台
     private void updateToApi() {
-
         proxy.buildPOST(MARRIAGE_UPDATE, changeUserMarriageApi.toJSONString(), changeMarriageListener);
     }
     private ApiProxy.OnApiListener changeMarriageListener = new ApiProxy.OnApiListener() {
@@ -197,11 +196,14 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                 public void run() {
                     try {
                         JSONObject jsonObject = new JSONObject(result.toString());
-                        String str = jsonObject.getString("success");
-                        if(str.equals("true")){
+                        int errorCode = jsonObject.getInt("errorCode");
+                        if (errorCode == 0){
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
+                        }else {
+                            Log.d(TAG, "後端錯誤回復碼: " + errorCode);
                         }
+//
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
