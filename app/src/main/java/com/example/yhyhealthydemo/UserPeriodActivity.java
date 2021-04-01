@@ -56,9 +56,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
     //api
     ApiProxy proxy;
     PeriodData period;
-    ChangeUserPeriodApi changeUserPeriodApi;
 
-    //
+    //進度條
     private ProgressDialog progressDialog;
 
     @Override
@@ -86,11 +85,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         save.setOnClickListener(this);
     }
 
-    private void initData() {
+    private void initData() { //查詢
         proxy = ApiProxy.getInstance();
-        changeUserPeriodApi = new ChangeUserPeriodApi(); //變更經期設定Api
-
-        period = new PeriodData();
 
         proxy.buildPOST(MENSTRUAL_RECORD_INFO, "", periodListener);
     }
@@ -116,7 +112,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                         if (errorCode == 0){
                             parserJson(result); //解析後台來的資料
                         }else if(errorCode == 6){  //新人沒有資料
-                            setInfo();
+                            setInit();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -127,7 +123,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
@@ -136,7 +132,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
-    private void setInfo() {
+    private void setInit() {
         String today = String.valueOf(LocalDate.now()); //today
         cycleLength.setText("");
         periodLength.setText("");
@@ -153,6 +149,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         //週期長度
         String periodSize = String.valueOf(period.getSuccess().getCycle());
         cycleLength.setText(periodSize);
+        cycleLength.setSelection(periodSize.length()); //游標出現在字尾
 
         //經期長度
         String cycleSize = String.valueOf(period.getSuccess().getPeriod());
@@ -161,12 +158,11 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         //開始時間
         String startDay = period.getSuccess().getLastDate();
         firstDay.setText(startDay);
-        changeUserPeriodApi.setLastDate(startDay); //存到JavaBean
 
         //結束時間
         String endingDay = period.getSuccess().getEndDate();
         endDay.setText(endingDay);
-        changeUserPeriodApi.setEndDate(endingDay); //存到JavaBean
+
     }
 
     //
@@ -265,7 +261,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
         int days = Days.daysBetween(d1,d2).getDays() + 1 ;
         periodLength.setText(String.valueOf(days));
-        changeUserPeriodApi.setPeriod(days); //存到JavaBean
     }
 
     //上傳前檢查欄位是否都有填寫
@@ -312,10 +307,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.d(TAG, "updateToApi: " + json.toString());
         //執行後台更新
-        //proxy.buildPOST(MENSTRUAL_RECORD_UPDATE, json.toString(), changePeriodListener);
+        proxy.buildPOST(MENSTRUAL_RECORD_UPDATE, json.toString(), changePeriodListener);
     }
 
     private ApiProxy.OnApiListener changePeriodListener = new ApiProxy.OnApiListener() {
@@ -333,13 +326,14 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject jsonObject = null;
                     try {
-                        jsonObject = new JSONObject(result.toString());
-                        String str = jsonObject.getString("success");
-                        if(str.equals("true")){
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        int errorCode = jsonObject.getInt("errorCode");
+                        if (errorCode == 0){
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
+                        }else {
+                            Log.d(TAG, "資料上傳沒有成功的錯誤代碼: " + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -378,7 +372,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                 Calendar start = Calendar.getInstance();
                 start.set(year, month, dayOfMonth);
                 firstDay.setText(df.format(start.getTime()));
-                changeUserPeriodApi.setLastDate(firstDay.getText().toString());
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         pickerDialog.show();
@@ -394,7 +387,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                 Calendar start = Calendar.getInstance();
                 start.set(year, month, dayOfMonth);
                 endDay.setText(df.format(start.getTime()));
-                changeUserPeriodApi.setEndDate(endDay.getText().toString());
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         pickerDialog.show();
