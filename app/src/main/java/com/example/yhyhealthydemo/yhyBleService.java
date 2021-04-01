@@ -52,11 +52,13 @@ public class yhyBleService extends Service {
     public final static String ACTION_DATA_AVAILABLE = "com.example.bluetoothletest.ACTION_DATA_AVAILABLE";
     // 连接失败
     public final static String ACTION_CONNECTING_FAIL = "com.example.bluetoothletest.ACTION_CONNECTING_FAIL";
-    // 蓝牙数据
+    // 藍芽數據
     public final static String EXTRA_DATA = "com.example.bluetoothletest.EXTRA_DATA";
-    //藍芽位置
+    // 藍芽MAC
     public final static String EXTRA_MAC = "com.example.bluetoothletest.EXTRA_MAC";
-    //藍芽通知
+    // 藍芽名稱
+    public final static String EXTRA_DEVICE_NAME = "com.example.bluetoothletest.EXTRA_DEVICE_NAME";
+    // 藍芽通知
     public final static String ACTION_NOTIFY_ON = "com.example.bluetoothletest.ACTION_NOTIFY_ON";
 
     // 服务标识
@@ -79,7 +81,7 @@ public class yhyBleService extends Service {
         mBluetoothAdapter = bluetoothManager.getAdapter();
     }
 
-    // 服务相关
+    // 服務相關
     private final IBinder mBinder = new LocalBinder();
 
     public class LocalBinder extends Binder {
@@ -100,15 +102,14 @@ public class yhyBleService extends Service {
     }
 
     /**
-     * 蓝牙操作回调
-     * 蓝牙连接状态才会回调
+     * 藍芽操作回調
+     * 藍芽有連接狀態才會回調
      * 當連接狀態發生改變時一定會回調這個方法
      */
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
 
-//            String address = gatt.getDevice().getAddress();
             BluetoothDevice device = gatt.getDevice();
             String address = device.getAddress();
 
@@ -183,66 +184,37 @@ public class yhyBleService extends Service {
     };
 
     /**
-     * 发送通知
+     * 發送通知
      *
-     * @param action 广播Action
+     * @param action 廣播Action
      */
-    private void sendBleBroadcast(String action) {
-        Intent intent = new Intent(action);
-        sendBroadcast(intent);
-    }
-
     private void broadcastUpdate(String action, BluetoothGatt gatt){
         final Intent intent = new Intent(action);
         intent.putExtra(EXTRA_MAC, gatt.getDevice().getAddress());
+        intent.putExtra(EXTRA_DEVICE_NAME, gatt.getDevice().getName());
         sendBroadcast(intent);
     }
 
+    /**
+     * 發送通知
+     *
+     * @param action 廣播Action
+     * @param characteristic 數據
+     */
     private void broadcastUpdate(String action, BluetoothGatt gatt, BluetoothGattCharacteristic characteristic){
         final Intent intent = new Intent(action);
         if (CHARACTERISTIC_READ_UUID.equals(characteristic.getUuid())) {
             intent.putExtra(EXTRA_DATA, characteristic.getValue());
             intent.putExtra(EXTRA_MAC, gatt.getDevice().getAddress());
-        }
-        sendBroadcast(intent);
-    }
-    /**
-     * 发送通知
-     *
-     * @param action         广播Action
-     * @param characteristic 数据
-     */
-    private void sendBleBroadcast(String action, BluetoothGattCharacteristic characteristic) {
-        Intent intent = new Intent(action);
-        if (CHARACTERISTIC_READ_UUID.equals(characteristic.getUuid())) {
-
-            intent.putExtra(EXTRA_DATA, characteristic.getValue());
-
-            Log.d(TAG, "sendBleBroadcast: ????????");
+            intent.putExtra(EXTRA_DEVICE_NAME, gatt.getDevice().getName());
         }
         sendBroadcast(intent);
     }
 
     /**
-     * 发送通知
+     * 藍牙連接
      *
-     * @param action         广播Action
-     * @param characteristic 数据
-     */
-    private void sendBleBroadcast(String action, BluetoothGattCharacteristic characteristic, BluetoothGatt gatt) {
-        Intent intent = new Intent(action);
-        if (CHARACTERISTIC_READ_UUID.equals(characteristic.getUuid())) {
-
-            intent.putExtra(EXTRA_DATA, characteristic.getValue());
-            Log.d(TAG, "sendBleBroadcast: ????????");
-        }
-        sendBroadcast(intent);
-    }
-    /**
-     * 蓝牙连接
-     *
-     * @param address          设备mac地址
-     * @return true：成功 false：
+     * @param address      藍芽MAC
      */
     public synchronized void connect(final String address) {
         BluetoothGatt gatt = gattArrayMap.get(address);
@@ -263,7 +235,7 @@ public class yhyBleService extends Service {
 
 
     /**
-     * 蓝牙断开连接
+     * 藍牙斷開連接
      */
     public void disconnect() {
         if (mBluetoothGatt == null) {
@@ -273,10 +245,10 @@ public class yhyBleService extends Service {
     }
 
     /**
-     * 释放相关资源
+     * 釋放相關資源
      */
     public void release() {
-        Log.d(TAG, "释放相关资源: ");
+        Log.d(TAG, "釋放相關資源: ");
         if (mBluetoothGatt == null) {
             return;
         }
@@ -285,13 +257,10 @@ public class yhyBleService extends Service {
     }
 
     /**
-     * 设置蓝牙设备在数据改变时，通知App
+     * 設置藍牙設備在數據改變時，通知App
      */
-//
-
     private void setBleNotification(){
-
-        //1.获取蓝牙设备的服务
+        //1.獲取藍牙設備的服務
         BluetoothGattService gattService = mBluetoothGatt.getService(SERVICE_UUID);
         if (gattService != null){
             BluetoothGattCharacteristic gattCharacteristic = gattService.getCharacteristic(DESCRIPTOR_UUID);
@@ -311,10 +280,12 @@ public class yhyBleService extends Service {
         }
     }
 
-    /***
-     *  藍芽連接
+    /***   ****
+     *  藍芽發送訊息
+     * @param data 數據
+     * @param address 藍芽位置
      *
-     * **/
+     * **  **********/
     public synchronized void writeDataToDevice(byte[] data, String address){
         BluetoothGatt mBluetoothGatt = gattArrayMap.get(address);
         if (mBluetoothGatt == null) return;
@@ -335,40 +306,5 @@ public class yhyBleService extends Service {
     public void onDestroy() {
         gattArrayMap.clear();
         super.onDestroy();
-    }
-
-    /**
-     * 发送数据
-     *
-     * @param data 数据
-     * @return true：发送成功 false：发送失败
-     */
-    public boolean sendData(byte[] data) {
-        //Log.d(TAG, "sendData: " + ByteUtils.byteArrayToHexString(data)); //4149444F2C30
-        // 获取蓝牙设备的服务
-        BluetoothGattService gattService = null;
-        if (mBluetoothGatt != null) {
-            gattService = mBluetoothGatt.getService(SERVICE_UUID);
-        }
-        if (gattService == null) {
-            return false;
-        }
-
-        // 获取蓝牙设备的特征
-        BluetoothGattCharacteristic gattCharacteristic = gattService.getCharacteristic(CHARACTERISTIC_WRITE_UUID);
-        if (gattCharacteristic == null) {
-            return false;
-        }
-
-        // 发送数据
-        gattCharacteristic.setValue(data);
-
-//        BluetoothGatt mBluetoothGatt = connectionQueue.get(address);
-//        if (mBluetoothGatt != null)
-//        {
-//            mBluetoothGatt.writeCharacteristic(gattCharacteristic);
-//        }
-
-        return mBluetoothGatt.writeCharacteristic(gattCharacteristic);
     }
 }

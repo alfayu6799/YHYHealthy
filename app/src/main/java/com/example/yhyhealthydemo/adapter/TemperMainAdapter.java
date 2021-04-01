@@ -44,8 +44,8 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     }
 
     //更新項目
-    public void updateItem(TempDataApi.SuccessBean data, int pos){
-        if (dataList.size() != 0){
+    public void updateItem(TempDataApi.SuccessBean data, int pos) {
+        if (dataList.size() != 0) {
             dataList.set(pos, data);
             notifyItemChanged(pos);
         }

@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,8 @@ import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
+
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
@@ -75,11 +78,16 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //觀測者
     private RecyclerView recyclerView;
     private List<TempDataApi.SuccessBean> dataList;
-    private TempDataApi.SuccessBean memberBean;
     private TemperMainAdapter tAdapter;
-    private int pos;
-    private String name;
+
+    //
+    private TempDataApi.SuccessBean memberBean;         //for ble溫度使用
+    private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
+    private int pos;                                    //for ble溫度使用位置
+    private int statusPos;                              //for ble連線狀態用位置
     private int targetId;
+    private String bleUserName;
+    private ArrayMap<String, Integer> userMap = new ArrayMap<>();
 
     //日期格式
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
@@ -100,7 +108,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private BluetoothLeAdapter tempAdapter;
     private Handler mHandler = new Handler();
     private AlertDialog alertDialog;
-    private String deviceName = "";     //裝置名稱
     private List<String> bleOnClickList = new ArrayList<>();
 
     //圖表dialog
@@ -282,8 +289,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         public void onItemClick(ScannedData selectedDevice) {
 
             mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
-
-            deviceName = selectedDevice.getDeviceName();
 
             //啟動ble server連線
             mBluetoothLeService.connect(selectedDevice.getAddress());  //2021/03/30
@@ -545,34 +550,35 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     }
 
     //更新藍芽連線狀態
-    private void updateStatus(String name, String deviceName, String deviceAddress, String bleStatus){
+    private void updateStatus(String name,String deviceName, String deviceAddress, String bleStatus){
 
-        Log.d(TAG, "updateStatus: 姓名:" + name + " 裝置名稱:" + deviceName + " 裝置狀態:" + bleStatus + " mac:" + deviceAddress);
-        if (this.name != null){
-           memberBean.setStatus(deviceName+bleStatus);
-           memberBean.setMac(deviceAddress);
-           tAdapter.updateItem(memberBean, pos);
+        Log.d(TAG, "updateStatus: 裝置名稱:" + deviceName + " ,裝置狀態:" + bleStatus + " ,mac:" + deviceAddress + " ,position:" + statusPos + " 使用者:" + name);
+        if (deviceName != null){
+            statusMemberBean.setMac(deviceAddress);
+            statusMemberBean.setStatus(deviceName+bleStatus);
+            tAdapter.updateItem(statusMemberBean, statusPos);
         }
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
-    private void updateBleData(double degree, double battery) {
+    private void updateBleData(double degree, double battery, String macAddress) {
         String currentDateTime = sdf.format(new Date());  // 目前時間
 
-        //姓名不為空
-        if (this.name != null){
+        //溫度不為空
+        if (degree != 0){
+            Log.d(TAG, "updateBleData: 溫度:" + degree + " 裝置MAC:" + macAddress + " position:" + userMap.get(macAddress));
             memberBean.setDegree(degree, currentDateTime); //塞入溫度跟時間
             memberBean.setBattery(battery +"%");
-            tAdapter.updateItem(memberBean, pos);
+            tAdapter.updateItem(memberBean, userMap.get(macAddress));
+
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
                 chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
         }
-        //上傳後端 2021/03/26
+//        //上傳後端 2021/03/26
         updateDegreeValueToApi(degree);
     }
-
-
+    
     //command
     private void sendCommand(String deviceAddress) {
         String request = "AIDO,0"; //詢問溫度command/@3mins
@@ -588,7 +594,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         }
     }
 
-    //每3分鐘執行一次
+    //每2分鐘執行一次
     private Runnable requestTemp = new Runnable() {
         @Override
         public void run() {
@@ -598,7 +604,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     sendCommand(bleOnClickList.get(i));
                 }
             }
-            mHandler.postDelayed(this, 1000 * 60);    
+            mHandler.postDelayed(this, 1000 * 60 *2);
         }
     };
 
@@ -637,6 +643,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         filter.addAction(yhyBleService.EXTRA_MAC);
+        filter.addAction(yhyBleService.EXTRA_DEVICE_NAME);
         return filter;
     }
 
@@ -668,6 +675,11 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             if (TextUtils.isEmpty(action)) {
                 return;
             }
+
+            String deviceName = intent.getStringExtra(yhyBleService.EXTRA_DEVICE_NAME);
+            String macAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
+            byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
+
             switch (action) {
 
                 case yhyBleService.ACTION_GATT_CONNECTED:
@@ -678,28 +690,23 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-                    updateStatus(name , deviceName , "",getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
                     mHandler.removeCallbacks(requestTemp);
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
-                    updateStatus(name , deviceName , "",getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
                     mHandler.removeCallbacks(requestTemp);
                     break;
 
                 case yhyBleService.ACTION_NOTIFY_ON:  //03/30
-                    String deviceAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
-                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功: " + deviceAddress);
-                    updateStatus(name , deviceName, deviceAddress, getString(R.string.ble_connect_status)); //更新
-
+                    Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功: " + macAddress + "裝置名稱:" + deviceName);
+                    updateStatus(bleUserName,deviceName, macAddress, getString(R.string.ble_connect_status)); //更新
                     break;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
-                    String macAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
-                    byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
-
                     Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + macAddress);
 
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
@@ -707,8 +714,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     String batteryStr = str[3];
                     double degree = Double.parseDouble(degreeStr)/100;
                     double battery = Double.parseDouble(batteryStr);
-                    updateBleData(degree, battery); //更新體溫跟電量
-
+                    updateBleData(degree, battery, macAddress); //更新體溫跟電量
                     break;
 
                 default:
@@ -801,8 +807,8 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //遠端帳號新增彈跳視窗
     private void dialogRemote() {
         AlertDialog remoteDialog = new AlertDialog.Builder(this).create();
-        LayoutInflater remotelayout = LayoutInflater.from(this);
-        View remoteView = remotelayout.inflate(R.layout.dialog_remote_add, null);
+        LayoutInflater remoteLayout = LayoutInflater.from(this);
+        View remoteView = remoteLayout.inflate(R.layout.dialog_remote_add, null);
         remoteDialog.setView(remoteView);
         remoteDialog.setCancelable(false); //禁用非視窗區
 
@@ -830,7 +836,6 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
                //傳送到後台
                 updateRemoteToApi(account, authCode);
-
             }
         });
 
@@ -862,17 +867,14 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                 JSONObject object = new JSONObject(result.toString());
                 int errorCode = object.getInt("errorCode");
                 if (errorCode == 0){
-                    boolean success = object.getBoolean("success");
-                    if (success)
-                        Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                        setAccountInfo();
+                    Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                    setAccountInfo();
                 }else {
                     Log.d(TAG, "新增觀測者結果後台回覆碼:" + errorCode);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
 
         @Override
@@ -886,39 +888,35 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         }
     };
 
-    ///////////////////////////來自Adapter的callBack////////////////////////////////////
-
-    @Override
+    @Override   //藍芽連線interface
     public void onBleConnect(TempDataApi.SuccessBean data, int position) {
         //呼叫藍芽
-        name = data.getUserName();      //取得使用者姓名
+        bleUserName = data.getUserName();
         targetId = data.getTargetId();  //取得使用者targetID,上傳溫度給後台時需要此Key
-        pos = position;                 //取得使用者在RecyclerView項目位置
-        memberBean = data;              //在把data內的資料丟給memberBean;
+        statusPos = position;           //取得使用者在RecyclerView項目位置
+        statusMemberBean = data;        //在把data內的資料丟給memberBean;
         initBle();
     }
 
-    @Override
-    public void onBleChart(TempDataApi.SuccessBean data, int position) {
-        //呼叫圖表
-        //客製Dialog圖表
-        chartDialog = new ChartDialog(this, data);
-        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
-        chartDialog.show();
-    }
-
-    @Override  //2021/03/30
+    @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data, int position) {
         memberBean = data;              //在把data內的資料丟給memberBean;
         pos = position;                 //取得使用者在RecyclerView項目位置
 
         bleOnClickList.add(data.getMac());
+        userMap.put(data.getMac(),position);
 
         sendCommand(data.getMac());
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override   //呼叫圖表interface
+    public void onBleChart(TempDataApi.SuccessBean data, int position) {
+        //客製Dialog圖表
+        chartDialog = new ChartDialog(this, data);
+        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
+        chartDialog.show();
+    }
 
     @Override //新增觀測者資料返回 2021/03/24
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
