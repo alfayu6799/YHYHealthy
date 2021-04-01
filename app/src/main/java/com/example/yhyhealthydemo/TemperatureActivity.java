@@ -578,7 +578,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 //        //上傳後端 2021/03/26
         updateDegreeValueToApi(degree);
     }
-    
+
     //command
     private void sendCommand(String deviceAddress) {
         String request = "AIDO,0"; //詢問溫度command/@3mins
