@@ -1,4 +1,4 @@
-package com.example.yhyhealthydemo;
+ package com.example.yhyhealthydemo;
 
 
 import androidx.annotation.Nullable;
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -17,14 +16,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +37,6 @@ import com.example.yhyhealthydemo.adapter.TemperMainAdapter;
 import com.example.yhyhealthydemo.data.ScannedData;
 import com.example.yhyhealthydemo.datebase.RemoteAccountApi;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
-import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.dialog.ChartDialog;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ByteUtils;
@@ -50,13 +46,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.BlockingDeque;
 
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD_VALUE;
@@ -81,16 +74,10 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private TemperMainAdapter tAdapter;
 
     //
-    private TempDataApi.SuccessBean memberBean;         //for ble溫度使用
-    private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
-    private int pos;                                    //for ble溫度使用位置
+    private TempDataApi.SuccessBean statusMemberBean;   //for ble連線狀態用
     private int statusPos;                              //for ble連線狀態用位置
-    private int targetId;
     private String bleUserName;
-    private ArrayMap<String, Integer> userMap = new ArrayMap<>();
-
-    //日期格式
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
+    //private ArrayMap<String, Integer> userMap = new ArrayMap<>();
 
     //遠端
     private RecyclerView remoteRecycle;
@@ -552,31 +539,36 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //更新藍芽連線狀態
     private void updateStatus(String name,String deviceName, String deviceAddress, String bleStatus){
 
-        Log.d(TAG, "updateStatus: 裝置名稱:" + deviceName + " ,裝置狀態:" + bleStatus + " ,mac:" + deviceAddress + " ,position:" + statusPos + " 使用者:" + name);
+        Log.d(TAG, "updateStatus: 裝置名稱:" + deviceName + " ,裝置狀態:" + bleStatus + " ,mac:" + deviceAddress
+                + " ,position:" + statusPos + " 使用者:" + name);
+        
         if (deviceName != null){
             statusMemberBean.setMac(deviceAddress);
             statusMemberBean.setStatus(deviceName+bleStatus);
+            statusMemberBean.setUserName(name);
+            statusMemberBean.setDeviceName(deviceName);
             tAdapter.updateItem(statusMemberBean, statusPos);
         }
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
     private void updateBleData(double degree, double battery, String macAddress) {
-        String currentDateTime = sdf.format(new Date());  // 目前時間
+
 
         //溫度不為空
         if (degree != 0){
-            Log.d(TAG, "updateBleData: 溫度:" + degree + " 裝置MAC:" + macAddress + " position:" + userMap.get(macAddress));
-            memberBean.setDegree(degree, currentDateTime); //塞入溫度跟時間
-            memberBean.setBattery(battery +"%");
-            tAdapter.updateItem(memberBean, userMap.get(macAddress));
+            Log.d(TAG, "updateItemByMac: 溫度:" + degree + " 裝置MAC:" + macAddress);
+                //將溫度電量及mac傳到Adapter
+                tAdapter.updateItemByMac(degree, battery, macAddress);
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
-            if (chartDialog != null && chartDialog.isShowing())
-                chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
+           // if (chartDialog != null && chartDialog.isShowing())
+           //     chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
         }
+
+
 //        //上傳後端 2021/03/26
-        updateDegreeValueToApi(degree);
+        //updateDegreeValueToApi(degree);
     }
 
     //command
@@ -587,7 +579,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
 
             mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);  //2021/03/30
-            Log.d(TAG, "sendCommand: " + messageBytes + " device:" + deviceAddress);
+            //Log.d(TAG, "sendCommand: " + messageBytes + " device:" + deviceAddress);
 
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
@@ -598,10 +590,11 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     private Runnable requestTemp = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "每3分鐘執行一次:");
+
             if (!bleOnClickList.isEmpty()) {
                 for (int i = 0 ; i < bleOnClickList.size(); i++){
                     sendCommand(bleOnClickList.get(i));
+                    Log.d(TAG, "每2分鐘執行一次:" + bleOnClickList.get(i));
                 }
             }
             mHandler.postDelayed(this, 1000 * 60 *2);
@@ -724,13 +717,13 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     }
 
     //2021/03/25 update觀測者之體溫量測資料給後端
-    private void updateDegreeValueToApi(double degree){
+    private void updateDegreeValueToApi(double degree, int targetId){
         DateTime dt1 = new DateTime();
         String degreeMeasureStr = dt1.toString("yyyy-MM-dd,HH:mm:ss");
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("targetId", targetId);
+            jsonObject.put("targetId",targetId);
             jsonObject.put("celsius", degree);
             jsonObject.put("measuredTime",degreeMeasureStr);
             jsonObject.put("first", false);
@@ -747,6 +740,7 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
         proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
@@ -892,22 +886,30 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     public void onBleConnect(TempDataApi.SuccessBean data, int position) {
         //呼叫藍芽
         bleUserName = data.getUserName();
-        targetId = data.getTargetId();  //取得使用者targetID,上傳溫度給後台時需要此Key
         statusPos = position;           //取得使用者在RecyclerView項目位置
         statusMemberBean = data;        //在把data內的資料丟給memberBean;
         initBle();
     }
 
     @Override  //啟動量測 interface 2021/03/30
-    public void onBleMeasuring(TempDataApi.SuccessBean data, int position) {
-        memberBean = data;              //在把data內的資料丟給memberBean;
-        pos = position;                 //取得使用者在RecyclerView項目位置
+    public void onBleMeasuring(TempDataApi.SuccessBean data) {
 
         bleOnClickList.add(data.getMac());
-        userMap.put(data.getMac(),position);
 
         sendCommand(data.getMac());
 
+    }
+
+    @Override  //症狀input
+    public void onSymptomRecord(TempDataApi.SuccessBean data, int position) {
+        Log.d(TAG, "onSymptomRecord: clicked " + data.getMac() + ",position:" + position );
+
+    }
+
+    @Override  //更新數據到後台
+    public void passTarget(int targetId, double degree) {
+        //Log.d(TAG, "passTarget: " + targetId + ",degree:" + degree);
+        updateDegreeValueToApi(degree, targetId);
     }
 
     @Override   //呼叫圖表interface

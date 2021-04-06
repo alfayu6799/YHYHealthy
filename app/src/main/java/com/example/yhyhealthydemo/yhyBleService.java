@@ -165,7 +165,7 @@ public class yhyBleService extends Service {
                 String[] str = result.split(","); //以,切割
                 String temp = str[2];
                 double degree = Double.parseDouble(temp)/100;  //25.0
-                Log.d(TAG, "onCharacteristicChanged: " + degree + " device mac:" + gatt.getDevice().getAddress());
+                //Log.d(TAG, "onCharacteristicChanged: " + degree + " device mac:" + gatt.getDevice().getAddress());
                 broadcastUpdate(ACTION_DATA_AVAILABLE, gatt, characteristic);
             }
         }

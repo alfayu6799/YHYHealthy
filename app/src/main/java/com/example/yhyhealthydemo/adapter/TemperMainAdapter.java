@@ -1,8 +1,8 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,8 @@ import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /***  *****************
@@ -29,6 +31,7 @@ import java.util.List;
  * ************************/
 
 public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.ViewHolder>{
+    private static final String TAG = "TemperMainAdapter";
 
     private Context context;
 
@@ -48,6 +51,39 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         if (dataList.size() != 0) {
             dataList.set(pos, data);
             notifyItemChanged(pos);
+        }
+    }
+
+    //更新溫度與電量 2021/04/06
+    public void updateItemByMac(double degree, double battery, String mac){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
+        String currentDateTime = sdf.format(new Date());  // 目前時間
+        if (dataList.size() != 0){
+            for(int i = 0; i < dataList.size();i++){
+               TempDataApi.SuccessBean data = dataList.get(i);
+               if(!TextUtils.isEmpty(data.getMac())){
+                    if (data.getMac().equals(mac)) {
+                        data.setBattery(String.valueOf(battery) + "%");
+                        data.setDegree(degree, currentDateTime);
+                        notifyItemChanged(i); //刷新
+                        updateBefore(mac);
+                    }
+               }
+            }
+        }
+    }
+
+    //將需要上傳資料的key:targetId傳回MAin
+    public void updateBefore(String mac){
+        for(int i = 0; i < dataList.size();i++){
+            TempDataApi.SuccessBean data = dataList.get(i);
+            if(!TextUtils.isEmpty(data.getMac())){
+                if (data.getMac().equals(mac)){
+                    int targetId = data.getTargetId();
+                    double degree = data.getDegree();
+                    listener.passTarget(targetId, degree);
+                }
+            }
         }
     }
 
@@ -77,9 +113,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             if (data.getStatus().contains("已連線")){
                 holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
                 holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                    @Override
+                    @Override  //開始量測
                     public void onClick(View view) {
-                        listener.onBleMeasuring(data, position);
+                        listener.onBleMeasuring(data);
                     }
                 });
             }else if (data.getStatus().contains("已斷開")){
@@ -92,7 +128,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 });
             }
         }else {
-            //啟動量測
+            //啟動藍芽連線
             holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -108,6 +144,14 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 listener.onBleChart(data, position);
             }
         });
+
+        //症狀
+        holder.textSymptom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onSymptomRecord(data, position);
+            }
+        });
     }
 
     @Override
@@ -118,7 +162,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);
         void onBleChart(TempDataApi.SuccessBean data, int position);
-        void onBleMeasuring(TempDataApi.SuccessBean data, int position);
+        void onBleMeasuring(TempDataApi.SuccessBean data);
+        void onSymptomRecord(TempDataApi.SuccessBean data, int position);
+        void passTarget(int targetId, double degree);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -128,7 +174,8 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         TextView textDegree;
         TextView textBleStatus;
         TextView textBleBattery;
-        ImageView bleConnect, delUser, bleChart;
+        ImageView bleConnect, bleChart;
+        TextView textSymptom;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,8 +187,8 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             textBleBattery = itemView.findViewById(R.id.tvBleBattery);
 
             bleConnect = itemView.findViewById(R.id.imgBleConnect);
-            delUser = itemView.findViewById(R.id.imgDeleteUser);
             bleChart = itemView.findViewById(R.id.imgBleChart);
+            textSymptom = itemView.findViewById(R.id.tvSym);
         }
     }
 }
