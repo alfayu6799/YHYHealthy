@@ -2,14 +2,18 @@ package com.example.yhyhealthydemo.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.tools.DateUtil;
@@ -47,8 +51,7 @@ public class ChartDialog extends Dialog {
     private TextView endDateTime;          //結束時間
     private ImageView closeDialog;         //結束此Dialog
 
-    private Member member;                      //使用者DataBean
-    private TempDataApi.SuccessBean data;   //使用者DataBean
+    private TempDataApi.SuccessBean data;       //使用者DataBean
     private ArrayList<Degree> DataArray;        //體溫DataBean
 
     private String correctDate;
@@ -86,7 +89,12 @@ public class ChartDialog extends Dialog {
 
         //塞入相對的資料
         bleUserName.setText(data.getUserName());
-        //bleUserImage.setImageResource(Integer.parseInt(data.getHeadShot())); //目前解base64太耗時間,等後台變更為url
+
+        //base64解碼大頭貼
+        byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
+        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+        bleUserImage.setImageBitmap(decodedImage);
+
         bleUserDegree.setText(String.valueOf(data.getDegree()));
 
         DataArray = new ArrayList<>();
@@ -166,15 +174,6 @@ public class ChartDialog extends Dialog {
          bleLineChart.getLegend().setEnabled(false);            //隱藏圖例
          bleLineChart.getDescription().setEnabled(false);       //隱藏描述
          bleLineChart.invalidate();                             //重新刷圖表
-    }
-
-    //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新
-    public void update (Member newMember){
-        bleUserDegree.setText(String.valueOf(newMember.getDegree()));      //更新溫度
-        endDateTime.setText(newMember.getDegreeList().get(newMember.getDegreeList().size()-1).getDate()); //更新結束時間
-        correctDate = DateUtil.fromDateToTime(newMember.getDegreeList().get(newMember.getDegreeList().size()-1).getDate()); //最新的時間=結束時間
-        degree = newMember.getDegree();
-        setChart();
     }
 
     //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新

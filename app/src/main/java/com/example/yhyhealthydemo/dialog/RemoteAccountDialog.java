@@ -88,7 +88,6 @@ public class RemoteAccountDialog extends Dialog {
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result.toString());
             new Thread(){
                 @Override
                 public void run() {

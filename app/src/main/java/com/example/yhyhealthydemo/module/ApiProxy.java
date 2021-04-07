@@ -177,6 +177,12 @@ public class ApiProxy {
     //遠端帳號底下觀測帳號之量測資料
     public static String REMOTE_USER_UNDER_LIST = BLE_TEMPERATURE_API + "goalValue";
 
+    //取得初始症狀物件
+    public static String SYMPTOM_LIST = BLE_TEMPERATURE_API + "defaultSymptom";
+
+    //新增症狀
+    public static String SYMPTOM_ADD = BLE_TEMPERATURE_API + "addAidoSymptom";
+
     private static final String AUTHORIZATION = "Authorization";
     private static final String SCEPTER = "Scepter";
     private static final String DEFAULTLAN = "DefaultLan";

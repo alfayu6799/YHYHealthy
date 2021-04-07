@@ -77,6 +77,10 @@
     <string name="hot">灼熱感</string>
     <string name="pain">痛</string>
 
+    <string name="green">綠色</string>
+    <string name="rusty">鐵鏽色</string>
+    <string name="gray_black">灰黑色</string>
+
     <string name="email">信箱</string>
     <string name="phone">簡訊</string>
     <string name="privacy_confirm">確認</string>
@@ -255,4 +259,8 @@
     <string name="fahrenheit">華氏</string>
     <string name="your_chose_unit_is_celsius">你選擇使用攝氏單位</string>
     <string name="your_chose_unit_is_fahrenheit">你選擇使用華氏單位</string>
+    <string name="symptomRecord">症狀紀錄</string>
+    <string name="foamy">泡沫狀</string>
+    <string name="bloodshot">血絲血痰</string>
+    <string name="slimy">黏液狀</string>
 </resources>

@@ -57,8 +57,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
+import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
-public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
+ public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
 
     private final static String TAG = "TemperatureActivity";
 
@@ -554,21 +555,15 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
     //更新收到體溫的訊息給RecyclerView的項目
     private void updateBleData(double degree, double battery, String macAddress) {
 
-
         //溫度不為空
         if (degree != 0){
-            Log.d(TAG, "updateItemByMac: 溫度:" + degree + " 裝置MAC:" + macAddress);
-                //將溫度電量及mac傳到Adapter
-                tAdapter.updateItemByMac(degree, battery, macAddress);
+            //將溫度電量及mac傳到Adapter
+            tAdapter.updateItemByMac(degree, battery, macAddress);
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
-           // if (chartDialog != null && chartDialog.isShowing())
-           //     chartDialog.update(memberBean);  //更新Dialog內的溫度圖表
+            if (chartDialog != null && chartDialog.isShowing())
+                chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
         }
-
-
-//        //上傳後端 2021/03/26
-        //updateDegreeValueToApi(degree);
     }
 
     //command
@@ -685,12 +680,14 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
                     mBluetoothLeService.release();
                     updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
                     mHandler.removeCallbacks(requestTemp);
+                    bleOnClickList.remove(macAddress);
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    bleOnClickList.remove(macAddress);
                     mHandler.removeCallbacks(requestTemp);
                     break;
 
@@ -900,15 +897,9 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
 
     }
 
-    @Override  //症狀input
-    public void onSymptomRecord(TempDataApi.SuccessBean data, int position) {
-        Log.d(TAG, "onSymptomRecord: clicked " + data.getMac() + ",position:" + position );
-
-    }
-
     @Override  //更新數據到後台
     public void passTarget(int targetId, double degree) {
-        //Log.d(TAG, "passTarget: " + targetId + ",degree:" + degree);
+
         updateDegreeValueToApi(degree, targetId);
     }
 
@@ -920,7 +911,22 @@ public class TemperatureActivity extends DeviceBaseActivity implements View.OnCl
         chartDialog.show();
     }
 
-    @Override //新增觀測者資料返回 2021/03/24
+     @Override  //症狀
+     public void onSymptomRecord(TempDataApi.SuccessBean data, int position) {
+        int targetId = data.getTargetId();
+
+        Intent intent = new Intent();
+        //intent.setClass(this, SymptomActivity.class);
+         intent.setClass(this, DiseaseActivity.class);
+
+        Bundle bundle  = new Bundle();
+        bundle.putInt("targetId", targetId);
+        bundle.putInt("position", position);
+        intent.putExtras(bundle);
+        startActivity(intent);
+     }
+
+     @Override //新增觀測者資料返回 2021/03/24
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1){

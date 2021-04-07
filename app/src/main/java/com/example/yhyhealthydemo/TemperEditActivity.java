@@ -286,6 +286,13 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
+//            Bundle getImage = data.getExtras();
+//            Bitmap lowImage = (Bitmap) getImage.get("data");
+//            Glide.with(this)
+//                    .load(lowImage)
+//                    .centerCrop()
+//                    .into(photoShow);
+
             new Thread(() -> {
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
                 AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
@@ -304,6 +311,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                             .into(photoShow);
                 });
             }).start();
+
         }else {
             Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
         }
