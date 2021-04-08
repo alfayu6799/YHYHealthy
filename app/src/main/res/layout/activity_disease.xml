@@ -306,7 +306,7 @@
                 <com.example.yhyhealthydemo.tools.MyGridView
                     android:id="@+id/gvSputumType"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="80dp"
                     android:focusable="true"
                     android:numColumns="2"
                     android:padding="8dp"/>
@@ -342,7 +342,31 @@
                 <com.example.yhyhealthydemo.tools.MyGridView
                     android:id="@+id/gvNoseColor"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="150dp"
+                    android:focusable="true"
+                    android:numColumns="2"
+                    android:padding="8dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="型態"
+                    android:textSize="22dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <com.example.yhyhealthydemo.tools.MyGridView
+                    android:id="@+id/gvNoseType"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
                     android:focusable="true"
                     android:numColumns="2"
                     android:padding="8dp"/>

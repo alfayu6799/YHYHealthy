@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -10,12 +11,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.yhyhealthydemo.adapter.DiseaseAdapter;
+import com.example.yhyhealthydemo.adapter.CheckBoxAdapter;
+import com.example.yhyhealthydemo.adapter.SwitchItemAdapter;
+import com.example.yhyhealthydemo.datebase.SymptomData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
@@ -30,8 +36,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
     private static final String TAG = "SymptomActivity";
 
     private ImageView back;
-    private RecyclerView viewSymptom;
-    private DiseaseAdapter adapter;
+    private RecyclerView viewSymptomSW, viewSymptomCH;
 
     private int targetId;
     private int position;
@@ -67,7 +72,8 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
         update = findViewById(R.id.btnUpdate);
         back = findViewById(R.id.ivBackBlePage);
 
-        viewSymptom = findViewById(R.id.rvSymptom);
+        viewSymptomSW = findViewById(R.id.rvSymptomUp);
+        viewSymptomCH = findViewById(R.id.rvSymptomDown);
 
         update.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -117,31 +123,37 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
 
     //症狀初始化 2021/04/07
     private void initSymptom(JSONObject result) {
-        Log.d(TAG, "initSymptom: " + result.toString());
+
         try {
             JSONObject object = new JSONObject(result.toString());
             JSONArray array = object.getJSONArray("success");
             for (int i = 0; i < array.length(); i++){
                 JSONObject newObject = array.getJSONObject(i);
-//                String keyStr = newObject.getString("key");
-//                Object value = newObject.get("value");
-//                if (value instanceof String){
-//                    String valueString = value.toString();
-//                }else if(value instanceof Boolean){
-//                    Boolean valueBoolean = (Boolean) value;
-//                }
-
+                String key = newObject.getString("key");
+                Object value = newObject.get("value");
+                if (value instanceof Boolean){
+                    //Log.d(TAG, "switch: key:" + key + ",value:" + value);
+                }else if (value instanceof JSONArray){
+                    //Log.d(TAG, "checkBox: key:" + key + ",value:" + value);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //解析出來的資料傳到Adapter
-//        adapter = new DiseaseAdapter(SymptomActivity.this, dataList);
-//        viewSymptom.setAdapter(adapter);
-//        viewSymptom.setLayoutManager(new LinearLayoutManager(this));
-//        viewSymptom.setHasFixedSize(true);
-//        viewSymptom.addItemDecoration(new SpacesItemDecoration(10));
+        //解析出來的布林資料傳到Switch的Adapter
+        SwitchItemAdapter switchItemAdapter = new SwitchItemAdapter(this);
+        viewSymptomSW.setAdapter(switchItemAdapter);
+        viewSymptomSW.setHasFixedSize(true);
+        viewSymptomSW.setLayoutManager(new LinearLayoutManager(this));
+        viewSymptomSW.addItemDecoration(new SpacesItemDecoration(10));
+
+        //解析出來的陣列資料傳到checkbox的Adapter
+        CheckBoxAdapter checkBoxAdapter = new CheckBoxAdapter(SymptomActivity.this);
+        viewSymptomCH.setAdapter(checkBoxAdapter);
+        viewSymptomCH.setHasFixedSize(true);
+        viewSymptomCH.setLayoutManager(new LinearLayoutManager(this));
+        viewSymptomCH.addItemDecoration(new SpacesItemDecoration(10));
     }
 
     //更新上傳到後台

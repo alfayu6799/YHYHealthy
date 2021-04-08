@@ -911,13 +911,13 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
         chartDialog.show();
     }
 
-     @Override  //症狀
+     @Override  //症狀 2021/04/08
      public void onSymptomRecord(TempDataApi.SuccessBean data, int position) {
         int targetId = data.getTargetId();
 
         Intent intent = new Intent();
-        //intent.setClass(this, SymptomActivity.class);
-         intent.setClass(this, DiseaseActivity.class);
+        intent.setClass(this, SymptomActivity.class);
+//         intent.setClass(this, DiseaseActivity.class);
 
         Bundle bundle  = new Bundle();
         bundle.putInt("targetId", targetId);

@@ -14,31 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yhyhealthydemo.R;
 
 /**   *** ***
- * 症狀配適器
+ * 症狀-switch配適器
  * create 2021/04/07
  * *  *****/
 
-public class DiseaseAdapter extends RecyclerView.Adapter<DiseaseAdapter.ViewHolder>{
-    private static final String TAG = "DiseaseAdapter";
-
+public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.ViewHolder>{
     private Context context;
 
-    public DiseaseAdapter(Context context) {
+    public SwitchItemAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.disease_item, parent, false);
-        return new DiseaseAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.disease_switch_item, parent, false);
+        return new SwitchItemAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-            holder.headName.setText("頭痛");
-            holder.symptom.setChecked(false);
+        holder.textName.setText("頭痛");
+        holder.aSwitch.setChecked(false);
     }
 
     @Override
@@ -46,17 +43,16 @@ public class DiseaseAdapter extends RecyclerView.Adapter<DiseaseAdapter.ViewHold
         return 1;
     }
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView headName;
-        Switch   symptom;
+        TextView textName;
+        Switch aSwitch;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            headName = itemView.findViewById(R.id.tvSymptomItem);
-            symptom = itemView.findViewById(R.id.swSymptom);
+            textName = itemView.findViewById(R.id.tvSymptomItem);
+            aSwitch = itemView.findViewById(R.id.swSymptom);
         }
     }
 }

@@ -263,4 +263,9 @@
     <string name="foamy">泡沫狀</string>
     <string name="bloodshot">血絲血痰</string>
     <string name="slimy">黏液狀</string>
+    <string name="transparent">透明無色</string>
+    <string name="pink">粉紅色</string>
+    <string name="black">黑色</string>
+    <string name="Sticky">沾黏狀</string>
+    <string name="blood_water">流血水樣</string>
 </resources>
