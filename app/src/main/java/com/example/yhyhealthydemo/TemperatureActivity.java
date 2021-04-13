@@ -612,7 +612,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
     //註冊藍芽接受器
     private void registerBleReceiver() {
-        Log.d(TAG, "註冊藍芽接受器");
+        Log.d(TAG, "註冊藍芽接受器+綁定後台服務");
 
         /** 綁定後台服務 ***/
         Intent intent = new Intent(this, yhyBleService.class);
@@ -688,7 +688,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
                     mBluetoothLeService.disconnect();
                     updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
                     bleOnClickList.remove(macAddress);
-                    mHandler.removeCallbacks(requestTemp);
+//                    mHandler.removeCallbacks(requestTemp);
                     break;
 
                 case yhyBleService.ACTION_NOTIFY_ON:  //03/30
@@ -917,7 +917,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
         Intent intent = new Intent();
         intent.setClass(this, SymptomActivity.class);
-//         intent.setClass(this, DiseaseActivity.class);
 
         Bundle bundle  = new Bundle();
         bundle.putInt("targetId", targetId);

@@ -108,40 +108,8 @@ public class DeviceBaseActivity extends AppCompatActivity {
                     }
 
                 }
-                //取得權限後開始啟動藍芽背景服務
-                //bleConnectFxn();
                 break;
         }
-    }
-
-    private void bleConnectFxn() {
-        /** 綁定 BLE Server  背景服務 **/
-        Intent gettIntent = new Intent(this, yhyBleService.class);
-        bindService(gettIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        startService(gettIntent);
-    }
-
-    /** ble背景服務 **/
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            bleService = ((yhyBleService.LocalBinder) service).getService();
-            
-//            bleService.initialize(DeviceBaseActivity.this)) connect();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            bleService = null;
-        }
-    };
-    
-    /**** 選擇藍芽裝置時 callback ****/
-
-    protected void selectDeviceAndConnect(String mac){
-        deviceMac = mac;
-        Log.d(TAG, "selectDeviceAndConnect: " + mac);
-
     }
 
 }

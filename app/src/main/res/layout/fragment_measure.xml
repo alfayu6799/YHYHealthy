@@ -76,7 +76,7 @@
             android:layout_marginLeft="8dp"
             app:srcCompat="@mipmap/shopping" />
         <ImageView
-            android:id="@+id/guid"
+            android:id="@+id/ivGuid"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_weight="1"

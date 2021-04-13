@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /****
  * 首頁
@@ -23,6 +24,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private View view;
 
     private Button ovulation, temperature, pregnancy, monitor;
+
+    private ImageView guid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,10 +41,13 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         monitor = view.findViewById(R.id.bt_monitor);
         monitor.setVisibility(View.INVISIBLE);
 
+        guid = view.findViewById(R.id.ivGuid);
+
         ovulation.setOnClickListener(this);
         temperature.setOnClickListener(this);
         pregnancy.setOnClickListener(this);
         monitor.setOnClickListener(this);
+        guid.setOnClickListener(this);
 
         return view;
     }
@@ -64,7 +70,15 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             case R.id.bt_monitor:
 
                 break;
+            case R.id.ivGuid:
+                gotoTeachingVideo();
+                break;
         }
+    }
+
+    //教學影片 2021/04/09
+    private void gotoTeachingVideo() {
+
     }
 
     //檢查婚姻狀況與經期設定是否有設定完成

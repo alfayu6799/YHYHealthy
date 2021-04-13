@@ -183,6 +183,9 @@ public class ApiProxy {
     //新增症狀
     public static String SYMPTOM_ADD = BLE_TEMPERATURE_API + "addAidoSymptom";
 
+    //教學影片
+    public static String TEACHING_VIDEO = URL + "allPush/tutorial/video";
+
     private static final String AUTHORIZATION = "Authorization";
     private static final String SCEPTER = "Scepter";
     private static final String DEFAULTLAN = "DefaultLan";

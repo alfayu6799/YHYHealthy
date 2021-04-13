@@ -8,16 +8,25 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yhyhealthydemo.R;
+import com.example.yhyhealthydemo.datebase.SymptomData;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.ViewHolder>{
 
     private Context context;
+    private List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
 
-    public CheckBoxAdapter(Context context) {
+    public CheckBoxAdapter(Context context, List<SymptomData.CheckBoxGroup> checkBoxGroupList) {
         this.context = context;
+        this.checkBoxGroupList = checkBoxGroupList;
     }
 
     @NonNull
@@ -29,28 +38,47 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.tvTitle.setText("痰");
-            holder.tvTitleSub.setText("顏色");
+        Dictionary dictionary = getDictionary();
 
+        String[] str = checkBoxGroupList.get(position).getKey().split(",");
+        String title = str[0];
+        String titleSub = str[1];
+
+        holder.tvTitle.setText((CharSequence) dictionary.get(title));
+        holder.tvTitleSub.setText((CharSequence) dictionary.get(titleSub));
+
+        CheckBoxSubAdapter adapter = new CheckBoxSubAdapter(context, checkBoxGroupList.get(position).getValue());
+        holder.subRecycler.setAdapter(adapter);
+        holder.subRecycler.setHasFixedSize(true);
+        holder.subRecycler.setLayoutManager(new GridLayoutManager(context,2));
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return checkBoxGroupList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvTitle;
         TextView tvTitleSub;
-        CheckBox checkBox;
+        RecyclerView subRecycler;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvSympTitlle);
             tvTitleSub = itemView.findViewById(R.id.tvSympSub);
-            checkBox = itemView.findViewById(R.id.chkSymptom);
+            subRecycler = itemView.findViewById(R.id.rvSub);
         }
+    }
+
+    private Dictionary getDictionary(){
+        Dictionary dictionary = new Hashtable();
+        dictionary.put("sputum","痰");
+        dictionary.put("nose","鼻涕");
+        dictionary.put("color","顏色");
+        dictionary.put("type","型態");
+        return dictionary;
     }
 }

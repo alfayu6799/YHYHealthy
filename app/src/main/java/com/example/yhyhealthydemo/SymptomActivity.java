@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
@@ -124,6 +125,10 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
     //症狀初始化 2021/04/07
     private void initSymptom(JSONObject result) {
 
+        //初始化
+        List<SymptomData.SwitchItemBean> switchItemBeanList = new ArrayList<>();
+        List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
+
         try {
             JSONObject object = new JSONObject(result.toString());
             JSONArray array = object.getJSONArray("success");
@@ -131,10 +136,19 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                 JSONObject newObject = array.getJSONObject(i);
                 String key = newObject.getString("key");
                 Object value = newObject.get("value");
+
+                //因為value有兩種不同的dataType型態
                 if (value instanceof Boolean){
-                    //Log.d(TAG, "switch: key:" + key + ",value:" + value);
+                    boolean booleanValue = newObject.getBoolean("value");
+                    switchItemBeanList.add(new SymptomData.SwitchItemBean(key, booleanValue));
+
                 }else if (value instanceof JSONArray){
-                    //Log.d(TAG, "checkBox: key:" + key + ",value:" + value);
+                    JSONArray jsonValue = newObject.getJSONArray("value");
+                    List<String> listData = new ArrayList<>();
+                    for (int j =0; j < jsonValue.length(); j++){
+                        listData.add(jsonValue.getString(j));
+                    }
+                    checkBoxGroupList.add(new SymptomData.CheckBoxGroup(key, listData));
                 }
             }
         } catch (JSONException e) {
@@ -142,14 +156,14 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         //解析出來的布林資料傳到Switch的Adapter
-        SwitchItemAdapter switchItemAdapter = new SwitchItemAdapter(this);
+        SwitchItemAdapter switchItemAdapter = new SwitchItemAdapter(this, switchItemBeanList);
         viewSymptomSW.setAdapter(switchItemAdapter);
         viewSymptomSW.setHasFixedSize(true);
         viewSymptomSW.setLayoutManager(new LinearLayoutManager(this));
         viewSymptomSW.addItemDecoration(new SpacesItemDecoration(10));
 
         //解析出來的陣列資料傳到checkbox的Adapter
-        CheckBoxAdapter checkBoxAdapter = new CheckBoxAdapter(SymptomActivity.this);
+        CheckBoxAdapter checkBoxAdapter = new CheckBoxAdapter(this, checkBoxGroupList);
         viewSymptomCH.setAdapter(checkBoxAdapter);
         viewSymptomCH.setHasFixedSize(true);
         viewSymptomCH.setLayoutManager(new LinearLayoutManager(this));

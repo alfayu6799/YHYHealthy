@@ -268,4 +268,6 @@
     <string name="black">黑色</string>
     <string name="Sticky">沾黏狀</string>
     <string name="blood_water">流血水樣</string>
+    <string name="off">No</string>
+    <string name="on">Yes</string>
 </resources>
