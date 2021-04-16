@@ -1,8 +1,10 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
+import com.example.yhyhealthydemo.TemperEditActivity;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
 import com.example.yhyhealthydemo.tools.ImageUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,7 +62,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         //base64解碼大頭貼
         byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
         Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
-        holder.editPhoto.setImageBitmap(decodedImage);
+        holder.editPhoto.setImageBitmap(decodedImage);  //載入大頭貼
 
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +74,19 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         holder.revise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onEditClick(data);
+                Intent intent = new Intent();
+                intent.setClass(context, TemperEditActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("targetId", data.getTargetId());
+//                bundle.putString("name", data.getName());
+//                bundle.putString("gender", data.getGender());
+//                bundle.putString("birthday", data.getBirthday());
+//                bundle.putString("height", String.valueOf(data.getHeight()));
+//                bundle.putString("weight", String.valueOf(data.getWeight()));
+//                bundle.putParcelable("HeadShot", decodedImage);
+////                bundle.getString("HeadShot", data.getHeadShot());
+//                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
     }
@@ -80,7 +97,6 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     }
 
     public interface TemperatureEditListener{
-        void onEditClick(TemperatureData.SuccessBean data);
         void onRemoveClick(TemperatureData.SuccessBean data, int position);
     }
 

@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.ViewHolder>{
+    private static final String TAG = "CheckBoxAdapter";
 
     private Context context;
     private List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
@@ -41,16 +43,14 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.ViewHo
         Dictionary dictionary = getDictionary();
 
         String[] str = checkBoxGroupList.get(position).getKey().split(",");
-        String title = str[0];
-        String titleSub = str[1];
+        holder.tvTitle.setText((CharSequence) dictionary.get(str[0]));
+        holder.tvTitleSub.setText((CharSequence) dictionary.get(str[1]));
 
-        holder.tvTitle.setText((CharSequence) dictionary.get(title));
-        holder.tvTitleSub.setText((CharSequence) dictionary.get(titleSub));
-
-        CheckBoxSubAdapter adapter = new CheckBoxSubAdapter(context, checkBoxGroupList.get(position).getValue());
+        //checkBox資料傳到adapter
+        CheckBoxSubAdapter adapter = new CheckBoxSubAdapter(context, checkBoxGroupList.get(position).getValue(),position, checkBoxGroupList);
         holder.subRecycler.setAdapter(adapter);
         holder.subRecycler.setHasFixedSize(true);
-        holder.subRecycler.setLayoutManager(new GridLayoutManager(context,2));
+        holder.subRecycler.setLayoutManager(new GridLayoutManager(context, 2));
     }
 
     @Override

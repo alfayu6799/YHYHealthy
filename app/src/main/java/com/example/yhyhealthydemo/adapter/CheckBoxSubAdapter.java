@@ -1,28 +1,39 @@
 package com.example.yhyhealthydemo.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yhyhealthydemo.R;
+import com.example.yhyhealthydemo.datebase.SymptomData;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
 public class CheckBoxSubAdapter extends RecyclerView.Adapter<CheckBoxSubAdapter.ViewHolder>{
 
-    private Context context;
-    private List<String> listData;
+    private static final String TAG = "CheckBoxSubAdapter";
 
-    public CheckBoxSubAdapter(Context context, List<String> listData) {
+    private Context context;
+    private List<String> value;
+    private int subPos;
+
+    private List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
+
+    public CheckBoxSubAdapter(Context context, List<String> value, int subPos, List<SymptomData.CheckBoxGroup> checkBoxGroupList) {
         this.context = context;
-        this.listData = listData;
+        this.value = value;
+        this.subPos = subPos;
+        this.checkBoxGroupList = checkBoxGroupList;
     }
 
     @NonNull
@@ -36,12 +47,18 @@ public class CheckBoxSubAdapter extends RecyclerView.Adapter<CheckBoxSubAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Dictionary dictionary = getDictionary();
 
-        holder.checkBox.setText((CharSequence) dictionary.get(listData.get(position)));
+        holder.checkBox.setText((CharSequence) dictionary.get(value.get(position)));
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                checkBoxGroupList.get(subPos).setChecked(value.get(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return checkBoxGroupList.get(subPos).getValue().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

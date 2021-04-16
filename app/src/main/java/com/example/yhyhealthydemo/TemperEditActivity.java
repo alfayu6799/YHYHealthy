@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -72,6 +73,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     private String birthday = "";
     private String weight = "";
     private String height= "";
+    private String HeadShot="";
+    private Bitmap bitmap;
 
     //api
     private ApiProxy proxy;
@@ -84,6 +87,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temper_edit);
 
+        bitmap = getIntent().getParcelableExtra("HeadShot");
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             name = bundle.getString("name");
@@ -92,6 +96,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             weight = bundle.getString("weight");
             height = bundle.getString("height");
             targetId = bundle.getInt("targetId");
+            //HeadShot = bundle.getString("HeadShot");
         }
 
         initView();
@@ -109,6 +114,10 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }else {
             rdGroup.check(R.id.rdMale1);
         }
+
+        //byte[] imageByteArray = Base64.decode(HeadShot, Base64.DEFAULT);
+        //Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+        photoShow.setImageBitmap(bitmap);
 
     }
 
@@ -286,12 +295,6 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
-//            Bundle getImage = data.getExtras();
-//            Bitmap lowImage = (Bitmap) getImage.get("data");
-//            Glide.with(this)
-//                    .load(lowImage)
-//                    .centerCrop()
-//                    .into(photoShow);
 
             new Thread(() -> {
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片

@@ -10,13 +10,19 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.yhyhealthydemo.adapter.CheckBoxAdapter;
 import com.example.yhyhealthydemo.adapter.SwitchItemAdapter;
 import com.example.yhyhealthydemo.datebase.SymptomData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +30,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_ADD;
 import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
 /****  ***********
@@ -46,6 +55,10 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
 
     //api
     private ApiProxy proxy;
+
+    //
+   private List<SymptomData.SwitchItemBean> switchItemBeanList = new ArrayList<>();
+   private List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,30 +138,23 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
     //症狀初始化 2021/04/07
     private void initSymptom(JSONObject result) {
 
-        //初始化
-        List<SymptomData.SwitchItemBean> switchItemBeanList = new ArrayList<>();
-        List<SymptomData.CheckBoxGroup> checkBoxGroupList = new ArrayList<>();
-
         try {
-            JSONObject object = new JSONObject(result.toString());
-            JSONArray array = object.getJSONArray("success");
+            JSONObject jsonObject = new JSONObject(result.toString());
+            JSONArray array = jsonObject.getJSONArray("success");
             for (int i = 0; i < array.length(); i++){
                 JSONObject newObject = array.getJSONObject(i);
                 String key = newObject.getString("key");
                 Object value = newObject.get("value");
-
-                //因為value有兩種不同的dataType型態
                 if (value instanceof Boolean){
                     boolean booleanValue = newObject.getBoolean("value");
                     switchItemBeanList.add(new SymptomData.SwitchItemBean(key, booleanValue));
-
                 }else if (value instanceof JSONArray){
                     JSONArray jsonValue = newObject.getJSONArray("value");
                     List<String> listData = new ArrayList<>();
-                    for (int j =0; j < jsonValue.length(); j++){
-                        listData.add(jsonValue.getString(j));
+                    for (int k = 0; k < jsonValue.length(); k++){
+                        listData.add(jsonValue.getString(k));
                     }
-                    checkBoxGroupList.add(new SymptomData.CheckBoxGroup(key, listData));
+                    checkBoxGroupList.add(new SymptomData.CheckBoxGroup(key,listData));
                 }
             }
         } catch (JSONException e) {
@@ -170,11 +176,6 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
         viewSymptomCH.addItemDecoration(new SpacesItemDecoration(10));
     }
 
-    //更新上傳到後台
-    private void updateToApi(){
-
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -186,4 +187,90 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
+    //更新上傳到後台
+    private void updateToApi(){
+        DateTime dt1 = new DateTime();
+        String SymptomRecordTime = dt1.toString("yyyy-MM-dd,HH:mm:ss");
+
+        JSONArray array = new JSONArray();
+
+        //switch
+        for(int i=0; i < switchItemBeanList.size(); i++){
+            JSONObject objectSwitch = new JSONObject();
+            try {
+                objectSwitch.put("key", switchItemBeanList.get(i).getKey());
+                objectSwitch.put("value",switchItemBeanList.get(i).isValue());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            array.put(objectSwitch);
+        }
+
+        //checkBox
+        for(int j = 0; j < checkBoxGroupList.size(); j++){
+            JSONObject objectCheckBox = new JSONObject();
+            try {
+                objectCheckBox.put("key", checkBoxGroupList.get(j).getKey());
+
+                //List<String> list = checkBoxGroupList.get(j).getChecked();
+                objectCheckBox.put("value", new JSONArray(checkBoxGroupList.get(j).getChecked()));
+                //objectCheckBox.put("value", list);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            array.put(objectCheckBox);
+        }
+
+        JSONObject finalObject = new JSONObject();
+        try {
+            finalObject.put("targetId", targetId);
+            finalObject.put("createDate", SymptomRecordTime);
+            finalObject.put("symptoms", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //Log.d(TAG, "updateToApi: " + finalObject.toString());
+        proxy.buildPOST(SYMPTOM_ADD, finalObject.toString(), addListener);
+    }
+
+    private ApiProxy.OnApiListener addListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(SymptomActivity.this, R.string.update_success, Toast.LENGTH_SHORT,true).show();
+                            finish(); //返回上一頁
+                        }else {
+                            Log.d(TAG, "新增症狀後台傳回錯誤碼: " + errorCode);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 }

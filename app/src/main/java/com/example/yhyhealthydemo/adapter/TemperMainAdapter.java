@@ -146,7 +146,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         });
 
         //症狀
-        holder.textSymptom.setOnClickListener(new View.OnClickListener() {
+        holder.SymptomIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onSymptomRecord(data, position);
@@ -175,7 +175,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         TextView textBleStatus;
         TextView textBleBattery;
         ImageView bleConnect, bleChart;
-        TextView textSymptom;
+        ImageView SymptomIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -188,7 +188,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
             bleConnect = itemView.findViewById(R.id.imgBleConnect);
             bleChart = itemView.findViewById(R.id.imgBleChart);
-            textSymptom = itemView.findViewById(R.id.tvSym);
+            SymptomIcon = itemView.findViewById(R.id.ivSymIcon);
         }
     }
 }

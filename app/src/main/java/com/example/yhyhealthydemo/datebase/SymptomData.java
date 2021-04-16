@@ -1,6 +1,12 @@
 package com.example.yhyhealthydemo.datebase;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**  **************
  * 症狀專用DataBean
@@ -10,13 +16,11 @@ import java.util.List;
 
 public class SymptomData {
 
-    private static final String TAG = "TestData";
-
     private int errorCode;
 
-    private List<SwitchItemBean> switchItemList; //上半部
+    private List<SwitchItemBean> switchItemList;
 
-    private List<CheckBoxGroup> checkBoxGroupList;  //下半部
+    private List<CheckBoxGroup> checkBoxGroupList;
 
     public static class SwitchItemBean {
         private String key;
@@ -30,18 +34,51 @@ public class SymptomData {
             return value;
         }
 
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public void setValue(boolean value) {
+            this.value = value;
+        }
+
         public SwitchItemBean(String key, boolean value){
             this.key = key;
             this.value = value;
         }
+
     }
 
     public static class CheckBoxGroup {
+        @Expose(serialize = true)
+        @SerializedName("key")
         private String key;
-        private List<String > value;
+
+        @Expose(serialize = false, deserialize = false)
+        private List<String> value;
+
+        @Expose(serialize = true)
+        @SerializedName("value")
+        private Set<String> checked = new HashSet<>();
 
         public String getKey() {
             return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public List<String> getChecked() {
+            return Arrays.asList(checked.toArray(new String[checked.size()]));
+        }
+
+        public void setChecked(String checked) {
+            if (this.checked.contains(checked)){
+                this.checked.remove(checked);
+            }else {
+                this.checked.add(checked);
+            }
         }
 
         public List<String> getValue() {

@@ -147,25 +147,6 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         }
     }
 
-
-    @Override
-    public void onEditClick(TemperatureData.SuccessBean data) {
-        //編輯:
-        Intent intent = new Intent();
-        intent.setClass(this, TemperEditActivity.class);
-        Bundle bundle = new Bundle();
-
-        bundle.putInt("targetId", data.getTargetId());
-        bundle.putString("name", data.getName());
-        bundle.putString("gender", data.getGender());
-        bundle.putString("birthday", data.getBirthday());
-        bundle.putString("height", String.valueOf(data.getHeight()));
-        bundle.putString("weight", String.valueOf(data.getWeight()));
-        //bundle.putString("headShot", data.getHeadShot());
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
     //刪除
     @Override
     public void onRemoveClick(TemperatureData.SuccessBean data, int position) {

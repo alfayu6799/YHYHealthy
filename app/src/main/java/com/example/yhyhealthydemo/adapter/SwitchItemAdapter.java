@@ -32,6 +32,7 @@ public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.Vi
     private Context context;
     private List<SymptomData.SwitchItemBean> dataList = new ArrayList<>();
 
+    //建構子
     public SwitchItemAdapter(Context context, List<SymptomData.SwitchItemBean> dataList) {
         this.context = context;
         this.dataList = dataList;
@@ -47,18 +48,20 @@ public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Dictionary dictionary = getDictionary();
+
         holder.textName.setText((CharSequence) dictionary.get(dataList.get(position).getKey()));
 
         holder.aSwitch.setChecked(dataList.get(position).isValue());
-        holder.aSwitch.setText("No");
+        holder.aSwitch.setText(R.string.off);
         holder.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked){
-                    Log.d(TAG, "onCheckedChanged: " + dataList.get(position).getKey());
-                    holder.aSwitch.setText("Yes");
+                    dataList.get(position).setValue(true);  //有選擇才會變成true
+                    holder.aSwitch.setText(R.string.on);
                 }else {
-                    holder.aSwitch.setText("No");
+                    dataList.get(position).setValue(false);
+                    holder.aSwitch.setText(R.string.off);
                 }
             }
         });
