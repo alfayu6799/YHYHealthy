@@ -28,9 +28,16 @@ public class TempDataApi {
         private String userName;      //使用者姓名
 
         private String gender;
-        private String birthday;
-        private double height;
-        private double weight;
+
+        @SerializedName("birthday")
+        private String TempBirthday;
+
+        @SerializedName("height")
+        private double TempHeight;
+
+        @SerializedName("weight")
+        private double TempWeight;
+
         private String headShot;  //使用者大頭貼
 
         public int getTargetId() {
@@ -57,28 +64,28 @@ public class TempDataApi {
             this.gender = gender;
         }
 
-        public String getBirthday() {
-            return birthday;
+        public String getTempBirthday() {
+            return TempBirthday;
         }
 
-        public void setBirthday(String birthday) {
-            this.birthday = birthday;
+        public void setTempBirthday(String tempBirthday) {
+            TempBirthday = tempBirthday;
         }
 
-        public double getHeight() {
-            return height;
+        public double getTempHeight() {
+            return TempHeight;
         }
 
-        public void setHeight(double height) {
-            this.height = height;
+        public void setTempHeight(double tempHeight) {
+            TempHeight = tempHeight;
         }
 
-        public double getWeight() {
-            return weight;
+        public double getTempWeight() {
+            return TempWeight;
         }
 
-        public void setWeight(double weight) {
-            this.weight = weight;
+        public void setTempWeight(double tempWeight) {
+            TempWeight = tempWeight;
         }
 
         public String getHeadShot() {

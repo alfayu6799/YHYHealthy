@@ -47,6 +47,11 @@ import es.dmoral.toasty.Toasty;
 import static android.Manifest.permission.CAMERA;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD;
 
+/**
+ * 新增觀測者
+ * Camera權限
+ * create 2021/03/20
+ * **/
 public class TemperatureAddActivity extends DeviceBaseActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private static final String TAG = "TemperatureAddActivity";
@@ -261,6 +266,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
             new Thread(() -> {
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
                 AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+
                 Matrix matrix = new Matrix();
                 //matrix.setRotate(90f);//轉90度
                 getHighImage.set(Bitmap.createBitmap(getHighImage.get()

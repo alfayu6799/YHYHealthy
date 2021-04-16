@@ -18,22 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.TemperEditActivity;
+import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
 import com.example.yhyhealthydemo.tools.ImageUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**  ******
+ * 體溫列表編輯配適器
+ * 資料來源:TempDataApi.SuccessBean
+ * 介面
+ *     刪除onRemoveClick
+ * create 2021/04/10
+ * * **************** *********/
 public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEditAdapter.ViewHolder>{
 
-    private static final String TAG = "TemperatureEditAdapter";
-
     private Context context;
-    private List<TemperatureData.SuccessBean> dataList;
+    private List<TempDataApi.SuccessBean> dataList;
     private TemperatureEditAdapter.TemperatureEditListener listener;
 
     //建構子
-    public TemperatureEditAdapter(Context context, List<TemperatureData.SuccessBean> dataList, TemperatureEditListener listener) {
+    public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList, TemperatureEditListener listener) {
         this.context = context;
         this.dataList = dataList;
         this.listener = listener;
@@ -48,8 +54,8 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TemperatureData.SuccessBean data = dataList.get(position);
-        holder.name.setText(data.getName());
+        TempDataApi.SuccessBean data = dataList.get(position);
+        holder.name.setText(data.getUserName());
 
         if (data.getGender().equals("F")) {
             holder.gender.setText(R.string.female);
@@ -57,7 +63,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
             holder.gender.setText(R.string.male);
         }
 
-        holder.birthday.setText(data.getBirthday());
+        holder.birthday.setText(data.getTempBirthday());
 
         //base64解碼大頭貼
         byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
@@ -97,7 +103,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     }
 
     public interface TemperatureEditListener{
-        void onRemoveClick(TemperatureData.SuccessBean data, int position);
+        void onRemoveClick(TempDataApi.SuccessBean data, int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

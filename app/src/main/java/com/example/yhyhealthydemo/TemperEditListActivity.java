@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.yhyhealthydemo.adapter.TemperatureEditAdapter;
+import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
@@ -32,9 +33,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
 /** ******* ***
  *  體溫列表編輯(多對象)
  *  配適器:TemperatureEditAdapter
- *  資料來源:TemperatureData.SuccessBean
- *  介面:
- *     編輯onEditClick
+ *  資料來源:TempDataApi.SuccessBean
+ *  實做:
  *     刪除onRemoveClick
  *  Create date : 2021/03/22
  * * ***************/
@@ -48,7 +48,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     private RecyclerView rv;
     private TemperatureEditAdapter adapter;
-    private List<TemperatureData.SuccessBean> list;
+    private List<TempDataApi.SuccessBean> list;
     private int pos;
 
     //api
@@ -122,8 +122,8 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     //解析後台回來的資料
     private void parserJsonData(JSONObject result) {
-        TemperatureData temperatureData = TemperatureData.newInstance(result.toString());
-        list = temperatureData.getSuccess();
+        TempDataApi tempDataApi = TempDataApi.newInstance(result.toString());
+        list = tempDataApi.getSuccess();
 
         //將資料配置到Adapter並顯示出來
         adapter = new TemperatureEditAdapter(this, list, this);
@@ -149,7 +149,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     //刪除
     @Override
-    public void onRemoveClick(TemperatureData.SuccessBean data, int position) {
+    public void onRemoveClick(TempDataApi.SuccessBean data, int position) {
         pos = position;  //取得使用者在RecyclerView Item的位置
 
         JSONObject json = new JSONObject();
