@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
+import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ImageUtils;
 
@@ -41,6 +43,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -67,17 +70,14 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     private Button btnSave;       //存檔上傳到後台
 
     private String mPath = "";  //照片位址全域宣告
-    private Integer targetId;
-    private String name = "";
-    private String gender = "";
-    private String birthday = "";
-    private String weight = "";
-    private String height= "";
-    private String HeadShot="";
-    private Bitmap bitmap;
+
+    //更新使用者需要targetId
+    private int targetId = 0;
+    private File file;
 
     //api
     private ApiProxy proxy;
+
 
     //進度條
     private ProgressDialog progressDialog;
@@ -87,24 +87,24 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temper_edit);
 
-        bitmap = getIntent().getParcelableExtra("HeadShot");
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle != null){
-            name = bundle.getString("name");
-            gender = bundle.getString("gender");
-            birthday = bundle.getString("birthday");
-            weight = bundle.getString("weight");
-            height = bundle.getString("height");
-            targetId = bundle.getInt("targetId");
-            //HeadShot = bundle.getString("HeadShot");
-        }
-
         initView();
 
-        initData();
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null){
+            targetId = bundle.getInt("targetId");
+            String degreeName = bundle.getString("name");
+            String degreeGender = bundle.getString("gender");
+            String degreeBirthday = bundle.getString("birthday");
+            String degreeWeight = bundle.getString("weight");
+            String degreeHeight = bundle.getString("height");
+            String degreeHeadShot = bundle.getString("HeadShot");
+
+            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot);
+        }
+
     }
 
-    private void initData() {
+    private void initData(String name, String gender, String birthday, String weight, String height, String headShot) {
         userName.setText(name);
         userBirthday.setText(birthday);
         userHeight.setText(height);
@@ -115,9 +115,15 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             rdGroup.check(R.id.rdMale1);
         }
 
-        //byte[] imageByteArray = Base64.decode(HeadShot, Base64.DEFAULT);
-        //Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
-        photoShow.setImageBitmap(bitmap);
+        if(headShot != null){
+            //照片顯示
+            file = new File(headShot);
+            Uri imageUri = Uri.fromFile(file);
+            Glide.with(this)
+                    .load(imageUri)
+                    .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
+                    .into(photoShow);
+        }
 
     }
 
@@ -201,13 +207,13 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, "run: " + result.toString());
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             Toasty.success(TemperEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                            //回上一頁並更新RecyclerView?
+                            setResult(RESULT_OK); //回到上一頁
+                            finish();  //關閉此頁
                         }else {
                             Toasty.error(TemperEditActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -318,5 +324,12 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }else {
             Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //如果檔案存在就要砍掉
+        if(file.exists()) file.delete();
     }
 }

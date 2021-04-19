@@ -1,12 +1,15 @@
 package com.example.yhyhealthydemo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,11 +21,16 @@ import com.example.yhyhealthydemo.adapter.TemperatureEditAdapter;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.datebase.TemperatureData;
 import com.example.yhyhealthydemo.module.ApiProxy;
+import com.example.yhyhealthydemo.tools.ImageUtils;
 import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -50,6 +58,10 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private TemperatureEditAdapter adapter;
     private List<TempDataApi.SuccessBean> list;
     private int pos;
+    private String tmpPhoto; //圖片路徑全域
+
+    //
+    private static final int EDIT_CODE = 1;
 
     //api
     private ApiProxy proxy;
@@ -133,6 +145,31 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         rv.addItemDecoration(new SpacesItemDecoration(10));
    }
 
+    //圖檔存至本地端
+    private void saveBitmap(Bitmap bitmap){
+        FileOutputStream fOut;
+        try {
+            File dir = new File("/sdcard/demo/");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            tmpPhoto = "/sdcard/demo/takePicture.jpg";
+            fOut = new FileOutputStream(tmpPhoto);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+
+            try {
+                fOut.flush();
+                fOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -142,9 +179,32 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.btnAddDegreeUser: //新增監控者
                 startActivity(new Intent(this, TemperatureAddActivity.class));
-                finish();//關閉此頁面,因為重新刷新後base64太耗時間...帶後台改成url再取消
+                finish();//關閉此頁面
                 break;
         }
+    }
+
+    //編輯
+    @Override
+    public void onEditClick(TempDataApi.SuccessBean data, int position) {
+        //大頭貼轉成bitmap格式
+        Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
+        //存到本機端記憶卡內
+        if(bitmap != null)
+            saveBitmap(bitmap);
+
+        Intent intent = new Intent();
+        intent.setClass(this, TemperEditActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("targetId", data.getTargetId());
+        bundle.putString("name", data.getUserName());
+        bundle.putString("gender", data.getGender());
+        bundle.putString("birthday", data.getTempBirthday());
+        bundle.putString("height", String.valueOf(data.getTempHeight()));
+        bundle.putString("weight", String.valueOf(data.getTempWeight()));
+        bundle.putString("HeadShot", tmpPhoto);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, EDIT_CODE);
     }
 
     //刪除
@@ -204,4 +264,12 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
             progressDialog.dismiss();
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_CODE && resultCode == -1) {
+            initData();
+        }
+    }
 }

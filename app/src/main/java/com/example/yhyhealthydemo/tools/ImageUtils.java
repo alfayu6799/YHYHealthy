@@ -179,4 +179,9 @@ public class ImageUtils {
         return compressImage(bitmap);// 壓縮好比例大小後再進行質量壓縮
         //return bitmap;
     }
+
+    public static Bitmap bast64toBitmap(String base64){
+        byte[] imageByteArray = Base64.decode(base64.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+    }
 }

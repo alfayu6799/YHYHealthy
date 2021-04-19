@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,10 @@ import com.example.yhyhealthydemo.datebase.TemperatureData;
 import com.example.yhyhealthydemo.tools.ImageUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**  ******
@@ -34,9 +40,13 @@ import java.util.List;
  * * **************** *********/
 public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEditAdapter.ViewHolder>{
 
+    private static final String TAG = "TemperatureEditAdapter";
+
     private Context context;
     private List<TempDataApi.SuccessBean> dataList;
     private TemperatureEditAdapter.TemperatureEditListener listener;
+
+    private String tmpPhoto = "";
 
     //建構子
     public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList, TemperatureEditListener listener) {
@@ -66,8 +76,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         holder.birthday.setText(data.getTempBirthday());
 
         //base64解碼大頭貼
-        byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
-        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+        Bitmap decodedImage = ImageUtils.bast64toBitmap(data.getHeadShot());
         holder.editPhoto.setImageBitmap(decodedImage);  //載入大頭貼
 
         holder.remove.setOnClickListener(new View.OnClickListener() {
@@ -77,22 +86,11 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
             }
         });
 
+        ///依據使用者點擊的position取得單一個體編輯
         holder.revise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(context, TemperEditActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("targetId", data.getTargetId());
-//                bundle.putString("name", data.getName());
-//                bundle.putString("gender", data.getGender());
-//                bundle.putString("birthday", data.getBirthday());
-//                bundle.putString("height", String.valueOf(data.getHeight()));
-//                bundle.putString("weight", String.valueOf(data.getWeight()));
-//                bundle.putParcelable("HeadShot", decodedImage);
-////                bundle.getString("HeadShot", data.getHeadShot());
-//                intent.putExtras(bundle);
-                context.startActivity(intent);
+                    listener.onEditClick(data,position);
             }
         });
     }
@@ -103,6 +101,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     }
 
     public interface TemperatureEditListener{
+        void onEditClick(TempDataApi.SuccessBean data, int position);
         void onRemoveClick(TempDataApi.SuccessBean data, int position);
     }
 
