@@ -40,13 +40,9 @@ import java.util.List;
  * * **************** *********/
 public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEditAdapter.ViewHolder>{
 
-    private static final String TAG = "TemperatureEditAdapter";
-
     private Context context;
     private List<TempDataApi.SuccessBean> dataList;
     private TemperatureEditAdapter.TemperatureEditListener listener;
-
-    private String tmpPhoto = "";
 
     //建構子
     public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList, TemperatureEditListener listener) {
@@ -75,10 +71,13 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
 
         holder.birthday.setText(data.getTempBirthday());
 
-        //base64解碼大頭貼
-        Bitmap decodedImage = ImageUtils.bast64toBitmap(data.getHeadShot());
-        holder.editPhoto.setImageBitmap(decodedImage);  //載入大頭貼
+        //base64解碼並顯示在imageView
+        Glide.with(context)
+                .asBitmap()
+                .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
+                .into(holder.editPhoto);
 
+        //依據使用者點擊的position刪除單一個體
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,11 +85,11 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
             }
         });
 
-        ///依據使用者點擊的position取得單一個體編輯
+        //依據使用者點擊的position取得單一個體編輯
         holder.revise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    listener.onEditClick(data,position);
+                    listener.onEditClick(data);
             }
         });
     }
@@ -101,7 +100,7 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     }
 
     public interface TemperatureEditListener{
-        void onEditClick(TempDataApi.SuccessBean data, int position);
+        void onEditClick(TempDataApi.SuccessBean data);
         void onRemoveClick(TempDataApi.SuccessBean data, int position);
     }
 

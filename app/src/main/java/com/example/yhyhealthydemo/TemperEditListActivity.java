@@ -186,7 +186,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     //編輯
     @Override
-    public void onEditClick(TempDataApi.SuccessBean data, int position) {
+    public void onEditClick(TempDataApi.SuccessBean data) {
         //大頭貼轉成bitmap格式
         Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
         //存到本機端記憶卡內

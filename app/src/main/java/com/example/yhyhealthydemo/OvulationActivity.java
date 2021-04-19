@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -104,6 +105,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //Other
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
+    private static final int PERIOD_RECORD = 1;
 
     //ble
     private yhyBleService mBluetoothLeService;
@@ -326,7 +328,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         Bundle bundle = new Bundle();
         bundle.putString("DAY" , strDay);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivityForResult(intent, PERIOD_RECORD);
     }
 
     //經期設定對話框
@@ -799,6 +801,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         lastDayOfThisMonth = endLastMonth;
         initChartData();         //圖表範圍顯示
         widget.goToPrevious();  //上個月月曆
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PERIOD_RECORD && resultCode == -1){
+            initCalendar();
+        }
     }
 
     @Override

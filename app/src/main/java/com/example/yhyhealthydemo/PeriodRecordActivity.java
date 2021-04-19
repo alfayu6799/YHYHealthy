@@ -1,5 +1,6 @@
 package com.example.yhyhealthydemo;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,6 +67,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.concurrent.BlockingDeque;
 
 import es.dmoral.toasty.Toasty;
 
@@ -135,12 +137,15 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //進度
     private ProgressDialog progressDialog;
 
+    //
+    private static final int CAMERA_RECORD = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_period);
 
-        photoPath = getIntent().getStringExtra("path");      //照相回來的參數
+        //photoPath = getIntent().getStringExtra("path");      //照相回來的參數
 
         //init
         initView();
@@ -196,11 +201,11 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         gridViewSymptom = findViewById(R.id.gvSymptom);
 
         //拍完相機回來的資料 2021/02/19
-        if(photoPath != null){
-            photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
-            takePhoto.setText(R.string.re_camera);     //2021/02/19
-            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
-        }
+//        if(photoPath != null){
+//            photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
+//            takePhoto.setText(R.string.re_camera);     //2021/02/19
+//            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+//        }
 
         takePhoto.setOnClickListener(this);
         searchBLE.setOnClickListener(this);
@@ -346,8 +351,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private void openCamera() {
         if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
             Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class); //自定義Camera功能
-            startActivity(camera);
-            finish();
+            startActivityForResult(camera, CAMERA_RECORD);
         }else {
             requestPermission();
         }
@@ -402,6 +406,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 boolean success = jsonObject.getBoolean("success");
                 if (success){
                     Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                    setResult(RESULT_OK);
                     finish(); //回到前一頁
                 }
             }
@@ -773,15 +778,11 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
-
-            //auto connect to the device upon successful start-up init
-            //mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-//            mBluetoothLeService = null;
-            //mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
+            mBluetoothLeService = null;
         }
     };
 
@@ -873,13 +874,23 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
             mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);
-//            boolean success = mBluetoothLeService.sendData(messageBytes);
-//            if (success)
-//                startMeasure.setText(getString(R.string.ble_connecting_measure));
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CAMERA_RECORD){
+            photoPath = data.getStringExtra("path");
+            if(photoPath != null){
+                photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
+                takePhoto.setText(R.string.re_camera);     //2021/02/19
+                photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+            }
+        }
     }
 
     @Override

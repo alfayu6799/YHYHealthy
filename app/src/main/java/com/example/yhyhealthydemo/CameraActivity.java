@@ -119,7 +119,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
         if ((path = saveImage(data)) != null) {
             Intent it = new Intent(CameraActivity.this, PeriodRecordActivity.class);
             it.putExtra("path", path);
-            startActivity(it);//
+            setResult(2, it);
             finish();
         }
     }

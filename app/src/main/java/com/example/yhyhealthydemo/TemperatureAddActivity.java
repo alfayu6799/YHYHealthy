@@ -266,7 +266,6 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
             new Thread(() -> {
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
                 AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
-
                 Matrix matrix = new Matrix();
                 //matrix.setRotate(90f);//轉90度
                 getHighImage.set(Bitmap.createBitmap(getHighImage.get()

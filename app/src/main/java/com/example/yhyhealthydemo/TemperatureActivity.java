@@ -447,16 +447,20 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.please_select_one_account));
 
-        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int position) {
-                getAccountInfoFromApi(arrayAdapter.getItem(position));
-                accountInfoClicked = arrayAdapter.getItem(position);
-            }
-        });
+        if(arrayAdapter.isEmpty()) {
+            Toasty.info(this, R.string.no_date, Toast.LENGTH_SHORT, true).show();
+        }else {
+            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+               @Override
+                public void onClick(DialogInterface dialogInterface, int position) {
+                    getAccountInfoFromApi(arrayAdapter.getItem(position));
+                    accountInfoClicked = arrayAdapter.getItem(position);
+                }
+            });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
 
@@ -894,12 +898,10 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
         bleOnClickList.add(data.getMac());
 
         sendCommand(data.getMac());
-
     }
 
     @Override  //更新數據到後台
     public void passTarget(int targetId, double degree) {
-
         updateDegreeValueToApi(degree, targetId);
     }
 
@@ -928,12 +930,10 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
      @Override //新增觀測者資料返回 2021/03/24
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            if (resultCode == RESULT_OK){  //新增觀測者資料成功
-                setInfo(); //跟後台要資料刷新RecyclerView
-            }else if (resultCode == RESULT_CANCELED){  //取消新增觀測者資料
-                Toasty.info(this, getString(R.string.nothing), Toast.LENGTH_SHORT, true).show();
-            }
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            setInfo(); //跟後台要資料並刷新RecyclerView
+        }else {
+            Toasty.info(this, getString(R.string.nothing), Toast.LENGTH_SHORT, true).show();
         }
     }
 }
