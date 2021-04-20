@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +19,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.InputType;
@@ -35,6 +39,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -140,12 +146,16 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //
     private static final int CAMERA_RECORD = 2;
 
+    //量測進度
+    private ProgressBar measureProgress;
+    private MyCountDownTimer myCountDownTimer;
+    private LinearLayout linearLayout;
+
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_period);
-
-        //photoPath = getIntent().getStringExtra("path");      //照相回來的參數
 
         //init
         initView();
@@ -166,6 +176,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         textRecordDate = findViewById(R.id.tvRecordDate);
@@ -178,6 +189,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         textBleStatus = findViewById(R.id.tvBLEConnectStatus);  //顯示藍芽連線狀態
         textBodyTemp = findViewById(R.id.tvBodyTemp);           //顯示體溫
         textAnalysis = findViewById(R.id.tvAnalysis);           //顯示分析結果
+
+        linearLayout = findViewById(R.id.ly_progressBar);       //量測進度Layout
+        measureProgress = findViewById(R.id.progressBar);       //量測進度條
+        measureProgress.setProgressTintList(ColorStateList.valueOf(Color.BLUE)); //量測進度條顏色
 
         bleeding = findViewById(R.id.swBleeding);               //出血
         breastPain = findViewById(R.id.swBreastPain);           //脹痛
@@ -235,7 +250,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 }
                 break;
             case R.id.btnStartMeasure: //開始量測
-                sendCommand(deviceAddress);
+                startCountDownTime();
                 break;
             case R.id.btnSaveSetting: //將資料收集完後上傳至後台Onclick
                 checkBeforeUpdate();  //上傳至後台先檢查資訊是否齊全fxn
@@ -244,6 +259,14 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 upPhotoToApi();
                 break;
         }
+    }
+
+    private void startCountDownTime(){
+        myCountDownTimer = new MyCountDownTimer(180000, 1000); //總計3分鐘,每10秒執行一次onTick方法
+        myCountDownTimer.start();  //計時開始
+        startMeasure.setVisibility(View.INVISIBLE); //量測按鈕隱藏
+        linearLayout.setVisibility(View.VISIBLE);   //進度條顯示
+        sendCommand(deviceAddress);
     }
 
     //2021/02/19 照片辨識
@@ -841,7 +864,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     deviceAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
                     textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
                     textBleStatus.setTextColor(Color.RED);
-                    searchBLE.setVisibility(View.INVISIBLE);
+                    searchBLE.setVisibility(View.INVISIBLE);    //搜尋藍芽按鈕隱藏
+                    startMeasure.setVisibility(View.VISIBLE);  //測量按鈕顯示
                     break;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
@@ -899,7 +923,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         Log.d(TAG, "onResume:" + deviceAddress);
         //註冊藍芽信息接受器
         registerBleReceiver();
-
     }
 
         @Override
@@ -908,11 +931,34 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         Log.d(TAG, "onDestroy: ");
         if (mBluetoothLeService != null){
             unregisterReceiver(mBleReceiver);
-            mBleReceiver = null;
-            //mBluetoothLeService.disconnect();
-            //mBluetoothLeService.release();
+            mBleReceiver = null; mBluetoothLeService.disconnect();
+            mBluetoothLeService.release();
+
         }
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+    }
+
+    public class MyCountDownTimer extends CountDownTimer {
+
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            int progress = (int) (millisUntilFinished/1000);
+
+            measureProgress.setProgress(measureProgress.getMax()-progress);
+        }
+
+        @Override
+        public void onFinish() {
+            Toasty.info(PeriodRecordActivity.this, R.string.measure_done, Toast.LENGTH_SHORT, true).show();
+            sendCommand(deviceAddress);                //詢問溫度command
+            startMeasure.setVisibility(View.VISIBLE);  //量測按鈕顯示
+            linearLayout.setVisibility(View.INVISIBLE);   //進度條隱藏
+        }
     }
 }

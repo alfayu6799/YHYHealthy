@@ -89,8 +89,10 @@ public class MPAChartManager {
 
         //繪製X軸線
         xAxis.setDrawAxisLine(false);
+
     }
 
+    //顯示混合圖
     public void showCombinedChart(List<CycleRecord.SuccessBean> dataList) {
         CombinedData combinedData = new CombinedData();
 
@@ -99,6 +101,13 @@ public class MPAChartManager {
 
         combinedChart.setData(combinedData);
         combinedChart.invalidate();
+
+        //MarkerView
+        combinedChart.setDrawMarkers(true);
+        combinedChart.setMarker(new CustomMarker(context, dataList));
+//        LineChartMarkView mv = new LineChartMarkView(context, xAxis.getValueFormatter());
+//        mv.setChartView(combinedChart);
+//        combinedChart.setMarker(mv);
     }
 
     //長條圖

@@ -9,24 +9,24 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -106,6 +106,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
     private static final int PERIOD_RECORD = 1;
+    private PopupWindow popupWindow;
+    private LinearLayout linearLayout;
 
     //ble
     private yhyBleService mBluetoothLeService;
@@ -675,12 +677,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         }
 
-        //圖表
+        //圖表初始化
         MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
         chartManager.showCombinedChart(dataList);
 
+        //經期第一天寫入sharePref
         if(list.get(0) != null){
-            //經期第一天寫入sharePref
             SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
             pref.edit().putString("BEGIN", list.get(0)).apply();
         }
@@ -765,6 +767,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 scrollViewLayout.setVisibility(View.GONE);
                 chartLayout.setVisibility(View.VISIBLE);
                 initChartData(); //獲取數據
+                //pupWindows();
                 break;
             case R.id.btnBack:
                 onBackPressed();
@@ -782,6 +785,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 nextMonthListener();
                 break;
         }
+    }
+
+    private void pupWindows() {
+        LayoutInflater layoutInflater = (LayoutInflater) OvulationActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = layoutInflater.inflate(R.layout.popup, null);
+        popupWindow = new PopupWindow(customView);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(false);
+        popupWindow.showAtLocation(customView, Gravity.NO_GRAVITY, 100, 600);
     }
 
     @SuppressLint("SimpleDateFormat")

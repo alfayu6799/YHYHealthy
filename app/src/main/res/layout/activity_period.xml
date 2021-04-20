@@ -138,6 +138,40 @@
             <View
                 android:layout_height="1px"
                 android:background="#000000"
+                android:layout_width="wrap_content">
+            </View>
+            <LinearLayout
+                android:id="@+id/ly_progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:visibility="invisible"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:text="量測中"/>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:indeterminate="false"
+                    android:progress="10"
+                    android:max="100"
+                    android:minHeight="40dp"
+                    android:minWidth="280dp"/>
+            </LinearLayout>
+            <View
+                android:layout_height="1px"
+                android:background="#000000"
                 android:layout_width="wrap_content"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,6 +199,7 @@
                     android:paddingRight="40dp"
                     android:background="@drawable/shape_268e9f"
                     android:textColor="@color/white"
+                    android:visibility="invisible"
                     android:text="開始測量"/>
             </LinearLayout>
             <View

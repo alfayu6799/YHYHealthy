@@ -1,39 +1,42 @@
 package com.example.yhyhealthydemo.tools;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 
 import com.example.yhyhealthydemo.R;
+import com.example.yhyhealthydemo.datebase.CycleRecord;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 
-/** ***************
- * 自定義 MakerView
- * ** *************/
+import java.util.List;
 
-public class LineChartMarkView extends MarkerView {
+/**   ***************
+ * 圖表MakerView客製
+ * create 2021/04/20
+ * * *****************  **/
+public class CustomMarker extends MarkerView {
+
     private TextView tvDate;
     private TextView tvValue;
-    private IAxisValueFormatter xAxisValueFormatter;
+    private List<CycleRecord.SuccessBean> dataList;
 
-    public LineChartMarkView(Context context, IAxisValueFormatter xAxisValueFormatter) {
+    public CustomMarker(Context context, List<CycleRecord.SuccessBean> dataList) {
+        //布局文件
         super(context, R.layout.layout_markview);
-        this.xAxisValueFormatter = xAxisValueFormatter;
-
+        this.dataList = dataList;
         tvDate = findViewById(R.id.tv_date);
         tvValue = findViewById(R.id.tv_value);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-//        String dateStr = xAxisValueFormatter.getFormattedValue(e.getX(), null);
-        tvDate.setText(xAxisValueFormatter.getFormattedValue(e.getX(), null));  //日期
-//        tvDate.setText("" + dateStr);\
+        CycleRecord.SuccessBean item = dataList.get((int) e.getX());
+        String[] dateStr = item.getTestDate().split("-");
+        String testDay = dateStr[1]+"/"+dateStr[2];  //2021/04/20 加上月/日 markerView
+//        tvDate.setText(item.getTestDate());
+        tvDate.setText(testDay);                     //日期
         tvValue.setText("" + e.getY() + "\u2103");  //溫度
         super.refreshContent(e, highlight);
     }
