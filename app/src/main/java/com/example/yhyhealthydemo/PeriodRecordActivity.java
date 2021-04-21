@@ -850,7 +850,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-                    //updateConnectionStatus(getString(R.string.ble_is_not_connect));
+                    updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
