@@ -8,10 +8,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,12 +35,14 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ImageUtils;
+import com.example.yhyhealthydemo.tools.RotateTransformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -69,7 +74,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
     private Button btnSave;       //存檔上傳到後台
 
-    private String mPath = "";  //照片位址全域宣告
+    private String mPath = "";         //原照片位址全域宣告
+    private File tmpPhoto;
 
     //更新使用者需要targetId
     private int targetId = 0;
@@ -167,8 +173,10 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     //更新到後台
     private void updateToApi() {
         proxy = ApiProxy.getInstance();
-
-        String base64Str = ImageUtils.imageToBase64(mPath);   //照片
+        String base64Str = ImageUtils.imageToBase64(file.toString());
+        //可能存在空指针須使用null判断
+        if(tmpPhoto != null )
+            base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
 
         String Name = userName.getText().toString().trim();   //名稱
         String Birthday = userBirthday.getText().toString();  //生日
@@ -187,9 +195,9 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "上傳資料到後台:" + json.toString());
-
-        proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
+        Log.d(TAG, "updateToApi: " + json.toString());
+        //執行上傳到後台
+        //proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
     }
 
     private ApiProxy.OnApiListener updateListener = new ApiProxy.OnApiListener() {
@@ -212,6 +220,10 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             Toasty.success(TemperEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+
+                            if(tmpPhoto.exists()) //如果檔案存在就刪除
+                                tmpPhoto.delete();
+
                             setResult(RESULT_OK); //回到上一頁
                             finish();  //關閉此頁
                         }else {
@@ -303,6 +315,18 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
 
             new Thread(() -> {
+                //取得旋轉度
+                int rotate = readPictureDegree(mPath);
+
+                //取得bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+
+                if(rotate == 0){  //不用旋轉的照片則直接存檔  2021/04/23
+                    saveBitmap(bitmap);
+                }else {
+                    rotateBitmap(bitmap);
+                }
+
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
                 AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath)); //實例化
                 Matrix matrix = new Matrix();
@@ -310,21 +334,70 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                 //圖片重建
                 getHighImage.set(Bitmap.createBitmap(getHighImage.get()
                         , 0, 0
-                        , 400
-                        , 400
+                        , getHighImage.get().getWidth()
+                        , getHighImage.get().getHeight()
                         , matrix, true));
                 runOnUiThread(() -> {
                     //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
                     Glide.with(this)
                             .load(getHighImage.get())
                             .centerCrop()
+                            .transform(new RotateTransformation(this,rotate))
                             .into(photoShow);
                 });
             }).start();
-
         }else {
             Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
         }
+    }
+
+    //旋轉圖片
+    private void rotateBitmap(Bitmap rotateOrg) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(readPictureDegree(mPath));
+        Bitmap rotateAfter = Bitmap.createBitmap(rotateOrg,0,0, rotateOrg.getWidth(), rotateOrg.getHeight(), matrix, true);
+        saveBitmap(rotateAfter);
+    }
+
+    //圖檔存至本地端
+    private void saveBitmap(Bitmap bitmap){
+        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/6,bitmap.getHeight()/6,true);
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE); //放照片的目錄
+        tmpPhoto = new File(directory, "newPicture" + ".jpg");
+        FileOutputStream fOut;
+        try {
+            fOut = new FileOutputStream(tmpPhoto);
+            newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //獲取圖片旋轉角度
+    private static int readPictureDegree(String path){
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation){
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     @Override

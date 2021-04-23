@@ -8,10 +8,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -58,7 +63,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private TemperatureEditAdapter adapter;
     private List<TempDataApi.SuccessBean> list;
     private int pos;
-    private String tmpPhoto; //圖片路徑全域
+    private File tmpPhoto; //圖片路徑全域
 
     //
     private static final int EDIT_CODE = 1;
@@ -147,25 +152,16 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     //圖檔存至本地端
     private void saveBitmap(Bitmap bitmap){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE); //放照片的目錄
+        tmpPhoto = new File(directory, "takePicture" + ".jpg");
         FileOutputStream fOut;
         try {
-            File dir = new File("/sdcard/demo/");
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-
-            tmpPhoto = "/sdcard/demo/takePicture.jpg";
             fOut = new FileOutputStream(tmpPhoto);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-
-            try {
-                fOut.flush();
-                fOut.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        } catch (FileNotFoundException e) {
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -202,7 +198,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         bundle.putString("birthday", data.getTempBirthday());
         bundle.putString("height", String.valueOf(data.getTempHeight()));
         bundle.putString("weight", String.valueOf(data.getTempWeight()));
-        bundle.putString("HeadShot", tmpPhoto);
+        bundle.putString("HeadShot", tmpPhoto.toString());
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_CODE);
     }

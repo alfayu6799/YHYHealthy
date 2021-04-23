@@ -366,7 +366,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
                 selectedAccount.setVisibility(View.GONE);
                 accountSelected.setVisibility(View.GONE);
                 isBleList = true;
-                setInfo();
+                setInfo();           //觀測者列表初始化
                 break;
             case R.id.bt_select_remote:    //遠端Button
                 remote.setBackgroundResource(R.drawable.rectangle_button);
@@ -377,7 +377,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
                 remoteRecycle.setVisibility(View.VISIBLE);
                 selectedAccount.setVisibility(View.VISIBLE);
                 isBleList = false;
-                setAccountInfo();           //選擇帳號初始化  2021/03/25
+                setAccountInfo();           //遠端監控帳號初始化  2021/03/25
                 break;
             case R.id.bt_add_temp:       //新增觀測者onClick
                 Intent intent = new Intent(this, TemperatureAddActivity.class);
