@@ -78,7 +78,6 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     //api
     private ApiProxy proxy;
 
-
     //進度條
     private ProgressDialog progressDialog;
 
@@ -170,8 +169,9 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         proxy = ApiProxy.getInstance();
 
         String base64Str = ImageUtils.imageToBase64(mPath);   //照片
-        String Name = userName.getText().toString().trim();  //名稱
-        String Birthday = userBirthday.getText().toString(); //生日
+
+        String Name = userName.getText().toString().trim();   //名稱
+        String Birthday = userBirthday.getText().toString();  //生日
         float Height = Float.parseFloat(userHeight.getText().toString()); //身高
         float Weight = Float.parseFloat(userWeight.getText().toString()); //體重
 
@@ -304,13 +304,14 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
             new Thread(() -> {
                 //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
-                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath)); //實例化
                 Matrix matrix = new Matrix();
-                //matrix.setRotate(90f);//轉90度
+                matrix.setScale(0.5f, 0.5f);
+                //圖片重建
                 getHighImage.set(Bitmap.createBitmap(getHighImage.get()
                         , 0, 0
-                        , getHighImage.get().getWidth()
-                        , getHighImage.get().getHeight()
+                        , 400
+                        , 400
                         , matrix, true));
                 runOnUiThread(() -> {
                     //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)

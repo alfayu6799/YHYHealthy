@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -300,6 +301,18 @@ public class yhyBleService extends Service {
         gattCharacteristic.setValue(data);
 
         mBluetoothGatt.writeCharacteristic(gattCharacteristic);
+    }
+
+    public static IntentFilter makeIntentFilter(){
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
+        filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
+        filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
+        filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
+        filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
+        filter.addAction(yhyBleService.EXTRA_MAC);
+        return filter;
     }
 
     @Override

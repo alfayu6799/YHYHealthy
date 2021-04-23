@@ -257,6 +257,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
                         if(errorCode == 0){
+                            Log.d(TAG, "解析: " + result.toString());
                             parserJson(result);  //2021/01/13 leona
                         }else {
                             Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
@@ -654,7 +655,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void parserCycleData(JSONObject result) {
         cycleRecord = CycleRecord.newInstance(result.toString());
-        Log.d(TAG, "parser週期: " + cycleRecord.toJSONString());
+        //Log.d(TAG, "parser週期: " + cycleRecord.toJSONString());
 
         List<String> list = new ArrayList<>(); //經期第一天陣列用
 
@@ -820,6 +821,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PERIOD_RECORD && resultCode == -1){
+            widget.removeDecorators();
             initCalendar();
         }
     }

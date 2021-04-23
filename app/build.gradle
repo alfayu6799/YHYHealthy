@@ -10,7 +10,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     //https://github.com/psinetron/slycalendarview 第三方套件lib
     implementation 'com.github.psinetron:slycalendarview:0.0.9'

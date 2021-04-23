@@ -76,18 +76,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="300dp" />
+        app:layout_constraintGuide_begin="254dp" />
 
     <Button
         android:id="@+id/btnUpdatePassWD"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:textColor="@color/white"
         android:text="@string/slycalendar_save"

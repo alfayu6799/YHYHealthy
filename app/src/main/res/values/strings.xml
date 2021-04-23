@@ -98,7 +98,7 @@
     <string name="not_connect_yet">尚未連接</string>
     <string name="ble_connect_status">已連線</string>
     <string name="ble_unconnected">已斷開</string>
-    <string name="ble_is_not_connect">藍芽設備已斷開</string>
+    <string name="ble_is_not_connect">設備已斷開</string>
     <string name="no_suo_bluetooth">設備不支援低功率藍芽</string>
     <string name="ble_rssi">訊號強度</string>
     <string name="ble_stop_in_5secs">五秒時間到停止搜尋</string>
@@ -185,7 +185,7 @@
     <string name="account_has_already">帳號已存在</string>
     <string name="account_is_no_data">查無資料</string>
     <string name="update_to_api">儲存</string>
-    <string name="remind">此資訊與排卵預測相關,請務必填寫正確並儲存</string>
+    <string name="remind">此資訊與排卵預測相關,\n請務必填寫正確並儲存</string>
     <string name="progress">資料讀取中</string>
     <string name="register_success">註冊成功,請至信箱取得授權碼登入</string>
     <string name="access_success">驗證成功,請再次登入</string>
@@ -271,4 +271,9 @@
     <string name="off">No</string>
     <string name="on">Yes</string>
     <string name="measure_done">量測完畢</string>
+    <string name="degree_alarm">37.5°C - 38°C\n(99.5°F -100.4°F):\n除去過多衣物、被子、\n多喝水或補充電解水，\n30分鐘後再進行檢測\n體溫</string>
+    <string name="degree_eng">37.5°C - 38°C\n(99.5°F -100.4°F):\nRemove extra clothing, \nblankets,offer plenty of\nwater or oral electrolyte\nsolutions.Wait for 30\nminutes,then take the\ntemperature again.</string>
+    <string name="ble_fail">連結失敗</string>
+    <string name="fever_alarm">您發燒了!!!</string>
+    <string name="fever_degree_is">您目前體溫是:</string>
 </resources>

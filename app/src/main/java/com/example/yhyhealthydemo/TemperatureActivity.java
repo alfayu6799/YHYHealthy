@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.yhyhealthydemo.adapter.BluetoothLeAdapter;
@@ -557,7 +558,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
-    private void updateBleData(double degree, double battery, String macAddress) {
+    private void updateBleData(String userName, String receive, String macAddress) {
+        String[] str = receive.split(","); //以,分割
+        String degreeStr = str[2];
+        String batteryStr = str[3];
+        double degree = Double.parseDouble(degreeStr)/100;
+        double battery = Double.parseDouble(batteryStr);
 
         //溫度不為空
         if (degree != 0){
@@ -567,10 +573,37 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
                 chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
+
+            if(degree > 30)
+                feverDialog(userName, degree);
         }
     }
 
-    //command
+    //發燒警告
+     private void feverDialog(String bleUserName, double degree) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.fever_dialog, null);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+
+        TextView feverName = view.findViewById(R.id.tvFeverName);
+        feverName.setText(bleUserName);  //顯示發燒者
+
+        TextView feverDegree = view.findViewById(R.id.tvFeverDegree);
+        feverDegree.setText(getString(R.string.fever_degree_is) + String.valueOf(degree));  //顯示體溫
+
+        ImageView close = view.findViewById(R.id.ivClosefever);
+        close.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 dialog.dismiss();
+             }
+        });
+
+        dialog.show();
+     }
+
+     //command
     private void sendCommand(String deviceAddress) {
         String request = "AIDO,0"; //詢問溫度command/@3mins
         byte[] messageBytes = new byte[0];
@@ -644,15 +677,11 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
-
-            //auto connect to the device upon successful start-up init
-//            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
-//            mBluetoothLeService.connect(mBluetoothAdapter, deviceAddress);
         }
     };
 
@@ -683,14 +712,14 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
                     updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
-                    mHandler.removeCallbacks(requestTemp);
+                    //mHandler.removeCallbacks(requestTemp);
                     bleOnClickList.remove(macAddress);
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
-                    Toasty.info(TemperatureActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(TemperatureActivity.this, "藍芽連結失敗", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
-                    updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_unconnected));  //藍芽設備已斷開
+                    updateStatus(bleUserName,deviceName , macAddress,getString(R.string.ble_fail));  //藍芽連結失敗
                     bleOnClickList.remove(macAddress);
 //                    mHandler.removeCallbacks(requestTemp);
                     break;
@@ -702,13 +731,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + macAddress);
-
-                    String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
-                    String degreeStr = str[2];
-                    String batteryStr = str[3];
-                    double degree = Double.parseDouble(degreeStr)/100;
-                    double battery = Double.parseDouble(batteryStr);
-                    updateBleData(degree, battery, macAddress); //更新體溫跟電量
+                    String receiveInfo = ByteUtils.byteArrayToString(data);
+                    updateBleData(bleUserName, receiveInfo, macAddress);
                     break;
 
                 default:
@@ -741,7 +765,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
+
         proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
@@ -895,12 +919,22 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
 
-        bleOnClickList.add(data.getMac());
+        bleOnClickList.add(data.getMac());  //將address放到list<String>內
 
-        sendCommand(data.getMac());
+        sendCommand(data.getMac());  //command
     }
 
-    @Override  //更新數據到後台
+     @Override  //停止量測 interface 2021/04/22
+     public void onBleStopConnect(TempDataApi.SuccessBean data, int position) {
+        mBluetoothLeService.disconnect(); //斷線
+        mBluetoothLeService.release();    //釋放藍芽資源
+        statusPos = position;
+        updateStatus(data.getUserName(), data.getDeviceName(), data.getMac(), getString(R.string.ble_unconnected));
+        //移除佇列
+        bleOnClickList.remove(data.getMac());
+     }
+
+     @Override  //更新數據到後台
     public void passTarget(int targetId, double degree) {
         updateDegreeValueToApi(degree, targetId);
     }

@@ -22,6 +22,8 @@
     <color name="color_period_7">#D5AD45</color>
 
     <color name="translucent">#00000000</color>
+    
+    <color name="fever_color">#DC9B70</color>
 
 
 </resources>

@@ -3,6 +3,7 @@ package com.example.yhyhealthydemo.adapter;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,13 +112,23 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         //根據藍芽連線Status變更icon跟功能
         if (data.getStatus() != null){
             if (data.getStatus().contains("已連線")){
-                holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
-                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                    @Override  //開始量測
-                    public void onClick(View view) {
-                        listener.onBleMeasuring(data);
-                    }
-                });
+//                if (data.getBattery() != null){
+//                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
+//                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+//                        @Override  //停止量測
+//                        public void onClick(View view) {
+//                            listener.onBleStopConnect(data, position);
+//                        }
+//                    });
+//                }else {
+                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                        @Override  //開始量測
+                        public void onClick(View view) {
+                            listener.onBleMeasuring(data);
+                        }
+                    });
+//                }
             }else if (data.getStatus().contains("已斷開")){
                 holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
                 holder.bleConnect.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +174,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         void onBleConnect(TempDataApi.SuccessBean data, int position);
         void onBleChart(TempDataApi.SuccessBean data, int position);
         void onBleMeasuring(TempDataApi.SuccessBean data);
+        void onBleStopConnect(TempDataApi.SuccessBean data, int position);
         void onSymptomRecord(TempDataApi.SuccessBean data, int position);
         void passTarget(int targetId, double degree);
     }

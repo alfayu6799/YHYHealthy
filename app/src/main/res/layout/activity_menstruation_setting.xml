@@ -129,10 +129,11 @@
     <Button
         android:id="@+id/btnSaveToApi3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_268e9f"
+        android:textColor="@color/white"
         android:text="@string/update_to_api"
         app:layout_constraintBottom_toBottomOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"

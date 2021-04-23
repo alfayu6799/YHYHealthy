@@ -30,12 +30,13 @@
         <Button
             android:id="@+id/btnSaveToApi"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/slycalendar_save"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="25dp"
+            android:textColor="@color/white"
+            android:text="@string/update_to_api"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/shape_268e9f"/>
     </LinearLayout>
     <ScrollView

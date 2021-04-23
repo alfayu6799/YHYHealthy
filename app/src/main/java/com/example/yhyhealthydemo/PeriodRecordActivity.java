@@ -426,13 +426,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             JSONObject jsonObject = new JSONObject(result.toString());
             int errorCode = jsonObject.getInt("errorCode");
             if (errorCode == 0){
-                boolean success = jsonObject.getBoolean("success");
-                if (success){
                     Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                     setResult(RESULT_OK);
                     finish(); //回到前一頁
                 }
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -515,10 +512,15 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //解析後台資料
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
-        Log.d(TAG, "解析後台資料: " + record.toJSONString());
+        Log.d(TAG, "排X編輯解析後台資料: " + record.toJSONString());
         //體重
         String userWeight = String.valueOf(record.getSuccess().getMeasure().getWeight());
         editWeight.setText(userWeight);
+
+        //辨識結果
+        textAnalysis.setText(record.getSuccess().getMeasure().getParamName());
+        //2021/04/21
+        changeRecord.getMeasure().setParam(record.getSuccess().getMeasure().getParam());
 
         //體溫
         String userTemperature = String.valueOf(record.getSuccess().getMeasure().getTemperature());
@@ -818,16 +820,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         bindService(gettIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
         startService(gettIntent);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
-        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);
-        filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
-        filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
-        filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
-        filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
-        filter.addAction(yhyBleService.EXTRA_MAC);
         mBleReceiver = new BleReceiver();
-        registerReceiver(mBleReceiver, filter);
+        registerReceiver(mBleReceiver, mBluetoothLeService.makeIntentFilter());
     }
 
     /**
@@ -841,6 +835,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             if (TextUtils.isEmpty(action)) {
                 return;
             }
+
+            byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
+
             switch (action) {
                 case yhyBleService.ACTION_GATT_CONNECTED:
                     Toasty.info(PeriodRecordActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
@@ -851,12 +848,17 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
                     updateConnectionStatus(getString(R.string.ble_is_not_connect));
+                    searchBLE.setVisibility(View.VISIBLE);         //搜尋藍芽按鈕顯示
+                    myCountDownTimer.cancel();                    //定時功能取消
+                    linearLayout.setVisibility(View.INVISIBLE);  //定時進度條隱藏
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
-                    updateConnectionStatus(getString(R.string.ble_is_not_connect));
+                    searchBLE.setVisibility(View.VISIBLE);        //搜尋藍芽按鈕顯示
+                    myCountDownTimer.cancel();                    //定時功能取消
+                    linearLayout.setVisibility(View.INVISIBLE);   //定時進度條隱藏
                     break;
 
                 case yhyBleService.ACTION_NOTIFY_ON:
@@ -868,7 +870,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     startMeasure.setVisibility(View.VISIBLE);  //測量按鈕顯示
                     break;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
-                    byte[] data = intent.getByteArrayExtra(yhyBleService.EXTRA_DATA);
                     String[] str = ByteUtils.byteArrayToString(data).split(","); //以,分割
                     String degreeStr = str[2];
                     double degree = Double.parseDouble(degreeStr)/100;
@@ -931,7 +932,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         Log.d(TAG, "onDestroy: ");
         if (mBluetoothLeService != null){
             unregisterReceiver(mBleReceiver);
-            mBleReceiver = null; mBluetoothLeService.disconnect();
+            mBleReceiver = null;
+            mBluetoothLeService.disconnect();
             mBluetoothLeService.release();
 
         }
