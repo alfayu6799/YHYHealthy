@@ -110,8 +110,8 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        boolean success = object.getBoolean("success");
-                        if(success){
+                        int errorCode = object.getInt("errorCode");
+                        if(errorCode == 0){
                             Toasty.success(UserChangePassActivity.this, getString(R.string.change_password_success), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
                             finish();

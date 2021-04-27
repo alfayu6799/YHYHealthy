@@ -175,7 +175,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         String Birthday = userBirthday.getText().toString(); //生日
         String Height = userHeight.getText().toString();     //身高
         String Weight = userWeight.getText().toString();     //體重
-        Log.d(TAG, "updateToApi: 姓名:" + Name + " 生日:" + " 性別:"+ Gender + " 生日:" +Birthday + " 身高:" + Height + " 體重:" + Weight);
+
 
         JSONObject json = new JSONObject();
         try {
@@ -188,6 +188,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //Log.d(TAG, "updateToApi: " + json.toString());
         proxy.buildPOST(BLE_USER_ADD, json.toString(), addUserListener);
     }
 

@@ -303,9 +303,9 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void run() {
                     try {
-                        JSONObject jsonObject = new JSONObject(result.toString());
-                        boolean success = jsonObject.getBoolean("success");
-                        if(success){
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {

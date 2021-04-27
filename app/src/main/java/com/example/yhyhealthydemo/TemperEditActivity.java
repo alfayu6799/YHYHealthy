@@ -173,10 +173,11 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     //更新到後台
     private void updateToApi() {
         proxy = ApiProxy.getInstance();
-        String base64Str = ImageUtils.imageToBase64(file.toString());
-        //可能存在空指针須使用null判断
+
+        String base64Str = null;
+        //可能存在空指针須使用null判断  2021/04/25
         if(tmpPhoto != null )
-            base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
+           base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
 
         String Name = userName.getText().toString().trim();   //名稱
         String Birthday = userBirthday.getText().toString();  //生日
@@ -195,9 +196,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "updateToApi: " + json.toString());
         //執行上傳到後台
-        //proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
+        proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
     }
 
     private ApiProxy.OnApiListener updateListener = new ApiProxy.OnApiListener() {
@@ -300,7 +300,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    @Override
+    @Override  //性別顯示
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
         if(checkedId == R.id.rdMale1){
             Gender = "M";
@@ -309,7 +309,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    @Override
+    @Override  //拍照後回傳
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {

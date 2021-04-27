@@ -506,8 +506,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         public void onSuccess(JSONObject result) {
             try {
                 JSONObject object = new JSONObject(result.toString());
-                boolean success = object.getBoolean("success");
-                if(success){
+                int errorCode = object.getInt("errorCode");
+                if(errorCode ==0){
                     Toasty.success(OvulationActivity.this,getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
 
                     //砍掉SharedPreferences內的內容
@@ -563,8 +563,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        boolean success = object.getBoolean("success");
-                        if(success) {
+                        int errorCode = object.getInt("errorCode");
+                        if(errorCode == 0){
                             Toasty.success(OvulationActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
 
                             //重刷資料前先清除之前的mark

@@ -55,6 +55,19 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
+    public void updateDeviceStatusItem(String bleUserName, String deviceName, String deviceAddress, String bleStatus){
+        if(dataList.size() != 0){
+            for (int j = 0; j < dataList.size(); j++){
+                TempDataApi.SuccessBean data = dataList.get(j);
+                if(data.getUserName().equals(bleUserName)){
+                    data.setMac(deviceAddress);
+                    data.setStatus(deviceName+bleStatus);
+                    notifyItemChanged(j); //刷新
+                }
+            }
+        }
+    }
+
     //更新溫度與電量 2021/04/06
     public void updateItemByMac(double degree, double battery, String mac){
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
@@ -111,30 +124,38 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
         //根據藍芽連線Status變更icon跟功能
         if (data.getStatus() != null){
-            if (data.getStatus().contains("已連線")){
-//                if (data.getBattery() != null){
-//                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
-//                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-//                        @Override  //停止量測
-//                        public void onClick(View view) {
-//                            listener.onBleStopConnect(data, position);
-//                        }
-//                    });
-//                }else {
+            
+            String bleConnect = context.getString(R.string.ble_connect_status);
+            String bleUnConnect = context.getString(R.string.ble_unconnected);
+
+            //已連線
+            if (data.getStatus().contains(bleConnect)){
+                if(holder.textBleBattery.getText().toString().isEmpty()) {
                     holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                        @Override  //開始量測
+                        @Override  //開始量測(play icon show)
                         public void onClick(View view) {
-                            listener.onBleMeasuring(data);
+                            listener.onBleMeasuring(data, position);
                         }
                     });
-//                }
-            }else if (data.getStatus().contains("已斷開")){
+                }else {  //disconnect icon show
+                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
+                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //listener.onBleStopConnect(data, position);
+                        }
+                    });
+                }
+            }else if(data.getStatus().contains(bleUnConnect)){  //已斷開 (add icon show)
+                holder.textBleBattery.setText(""); //清除電池顯示 2021/04/26
+                holder.textDegree.setText("");     //清除溫度顯示 2021/04/26
+                data.setBattery("");               //清除電池data 2021/04/26 for 判斷icon用
                 holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
                 holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.onBleConnect(data, position);
+                        listener.onBleConnect(data, position); //藍芽連線
                     }
                 });
             }
@@ -173,7 +194,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);
         void onBleChart(TempDataApi.SuccessBean data, int position);
-        void onBleMeasuring(TempDataApi.SuccessBean data);
+        void onBleMeasuring(TempDataApi.SuccessBean data, int position);
         void onBleStopConnect(TempDataApi.SuccessBean data, int position);
         void onSymptomRecord(TempDataApi.SuccessBean data, int position);
         void passTarget(int targetId, double degree);
