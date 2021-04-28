@@ -55,6 +55,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
+    //更新藍芽連線狀態
     public void updateDeviceStatusItem(String bleUserName, String deviceName, String deviceAddress, String bleStatus){
         if(dataList.size() != 0){
             for (int j = 0; j < dataList.size(); j++){
@@ -66,6 +67,37 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 }
             }
         }
+    }
+
+    //斷線刷新 2021/04/28
+    public void disconnectedDevice(String devMac, String devStatus, String devName){
+        if(dataList.size() != 0){
+            for(int i = 0; i < dataList.size(); i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                    if(data.getMac().equals(devMac)){
+                        Log.d(TAG, "disconnectedDevice: devMac:" + devMac +",deviceName:" + devName + ",status:" + devStatus);
+                        data.setStatus(devName+devStatus);
+                        notifyItemChanged(i);
+                    }
+                }
+            }
+        }
+    }
+
+    //找出adapter內的name 2021/04/28
+    public String findNameByMac(String bleMac){
+        if (dataList.size() != 0){
+            for(int i = 0; i < dataList.size();i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                   if(data.getMac().equals(bleMac)){
+                       return data.getUserName();
+                   }
+                }
+            }
+        }
+            return null;
     }
 
     //更新溫度與電量 2021/04/06
@@ -143,7 +175,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //listener.onBleStopConnect(data, position);
+                            listener.onBleDisConnected(data, position);
                         }
                     });
                 }
@@ -195,7 +227,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         void onBleConnect(TempDataApi.SuccessBean data, int position);
         void onBleChart(TempDataApi.SuccessBean data, int position);
         void onBleMeasuring(TempDataApi.SuccessBean data, int position);
-        void onBleStopConnect(TempDataApi.SuccessBean data, int position);
+        void onBleDisConnected(TempDataApi.SuccessBean data, int position);
         void onSymptomRecord(TempDataApi.SuccessBean data, int position);
         void passTarget(int targetId, double degree);
     }

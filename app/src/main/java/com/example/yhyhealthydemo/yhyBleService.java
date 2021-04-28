@@ -24,6 +24,8 @@ import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
+import static android.text.TextUtils.isEmpty;
+
 public class yhyBleService extends Service {
 
     private static final String TAG = "yhyBleService";
@@ -61,6 +63,9 @@ public class yhyBleService extends Service {
     public final static String EXTRA_DEVICE_NAME = "com.example.bluetoothletest.EXTRA_DEVICE_NAME";
     // 藍芽通知
     public final static String ACTION_NOTIFY_ON = "com.example.bluetoothletest.ACTION_NOTIFY_ON";
+    // 藍芽斷開指定的設備
+    public final static String ACTION_GATT_DISCONNECTED_SPECIFIC = "com.example.bluetoothletest.ACTION_GATT_DISCONNECTED_SPECIFIC";
+
 
     // 服务标识
     private final UUID SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
@@ -255,6 +260,19 @@ public class yhyBleService extends Service {
         }
         mBluetoothGatt.close(); //關閉gatt避免資源浪費
         mBluetoothGatt = null;
+    }
+
+    /***
+     * 手動針對mac進行斷線處理
+     * 2021/04/28
+     * **/
+    public void closeGatt(String mac){
+        if (!isEmpty(mac) && gattArrayMap.containsKey(mac)){
+            BluetoothGatt mBluetoothGatt = gattArrayMap.get(mac);
+            mBluetoothGatt.disconnect();
+            mBluetoothGatt.close();      //關閉gatt避免資源浪費
+            broadcastUpdate(ACTION_GATT_DISCONNECTED_SPECIFIC, mBluetoothGatt);
+        }
     }
 
     /**

@@ -21,6 +21,10 @@ import org.json.JSONObject;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.VIDEO_LIST;
 
+/**  **********
+ *  影片列表
+ *  配適器 : VideoListAdapter
+ * ** ***********/
 public class VideoDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "VideoDetailActivity";
@@ -122,8 +126,9 @@ public class VideoDetailActivity extends AppCompatActivity {
         }
     };
 
+    //解析後台回來的資料並傳到adapter去顯示
     private void parserJson(JSONObject result) {
-        listData = VideoListData.newInstance(result.toString());
+        listData = VideoListData.newInstance(result.toString()); //result物件化
         VideoListAdapter adapter = new VideoListAdapter(this, listData.getVideoList());
         recyclerView.setAdapter(adapter);
     }

@@ -12,6 +12,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 import org.jetbrains.annotations.NotNull;
 
+/***
+ * 影片播放
+ * 第三方套件 YouTubePlayerView
+ * */
 public class VideoShowActivity extends AppCompatActivity {
 
     private static final String TAG = "VideoShowActivity";

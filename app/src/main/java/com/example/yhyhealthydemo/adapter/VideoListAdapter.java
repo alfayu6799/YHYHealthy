@@ -19,6 +19,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**  ************
+ * 影片列表配適器
+ * ** ***********/
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoListViewHolder>{
 
     private static final String TAG = "VideoListAdapter";

@@ -75,10 +75,13 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private List<TempDataApi.SuccessBean> dataList;
     private TemperMainAdapter tAdapter;
 
-    //
+    //藍芽連線
     private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
-    private int statusPos;                              //for ble連線狀態用位置
-    private String bleUserName;
+    private int statusPosition;
+
+    //藍芽斷線
+    private String disUseName;
+
     private ArrayMap<String, Integer> userMap = new ArrayMap<>();
 
     //遠端
@@ -542,15 +545,32 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         accountSelected.setText(accountInfoClicked);
     }
 
+    //斷線狀態回傳給adapter
+     private void updateDisconnectedStatus(String deviceName, String deviceAddress, String bleStatus){
+        if(deviceAddress != null){
+            if(tAdapter.findNameByMac(deviceAddress) != null){
+                tAdapter.disconnectedDevice(deviceAddress, bleStatus, deviceName);
+                //移除佇列 2021/04/28
+                bleOnClickList.remove(deviceAddress);
+            }else {
+                Toasty.info(TemperatureActivity.this, "藍芽連接失敗,請重新連接", Toast.LENGTH_SHORT, true).show();
+            }
+
+        }
+     }
+
     //連線成功後回傳參數給adapter
     private void updateConnectedStatus(String deviceName, String deviceAddress, String bleStatus){
         if (deviceAddress != null){
-            tAdapter.updateDeviceStatusItem(bleUserName,deviceName,deviceAddress, bleStatus);
+            statusMemberBean.setMac(deviceAddress);
+            statusMemberBean.setStatus(deviceName+bleStatus);
+            tAdapter.updateItem(statusMemberBean, statusPosition);
+            //tAdapter.updateDeviceStatusItem(userName,deviceName,deviceAddress, bleStatus);
         }
     }
 
     //更新收到體溫的訊息給RecyclerView的項目
-    private void updateBleData(String userName, String receive, String macAddress) {
+    private void updateBleData(String receive, String macAddress) {
         String[] str = receive.split(","); //以,分割
         String degreeStr = str[2];
         String batteryStr = str[3];
@@ -563,11 +583,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             tAdapter.updateItemByMac(degree, battery, macAddress);
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
-//            if (chartDialog != null && chartDialog.isShowing())
-                //chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
+            if (chartDialog != null && chartDialog.isShowing())
+                chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
 
-            if(degree > 30) //發燒到37.5會出現警告彈跳視窗
-                feverDialog(userName, degree);
+            //發燒到37.5會出現警告彈跳視窗
+            if(degree > 30)
+                feverDialog(tAdapter.findNameByMac(macAddress), degree); //藉由mac取得adapter使用者名稱
         }
     }
 
@@ -654,13 +675,14 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     public static IntentFilter makeGattUpdateIntentFilter(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
-        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);  //斷開
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);         //全部斷開
         filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
         filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
         filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         filter.addAction(yhyBleService.EXTRA_MAC);
         filter.addAction(yhyBleService.EXTRA_DEVICE_NAME);
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC); //針對mac斷開
         return filter;
     }
 
@@ -703,31 +725,25 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-//                    updateStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
-
-                    //mHandler.removeCallbacks(requestTemp);
-                    bleOnClickList.remove(macAddress);
+                    updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
                     Toasty.info(TemperatureActivity.this, "藍芽連結失敗", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
-//                    updateStatus(deviceName, macAddress, getString(R.string.ble_fail));
-
-                    bleOnClickList.remove(macAddress);
-//                    mHandler.removeCallbacks(requestTemp);
                     break;
-
-                case yhyBleService.ACTION_NOTIFY_ON:  //03/30
+                case yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC:
+                    Toasty.info(TemperatureActivity.this, "藍芽設備" + deviceName +"已斷開", Toast.LENGTH_SHORT, true).show();
+                    updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
+                    break;
+                case yhyBleService.ACTION_NOTIFY_ON:
                     Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功: " + macAddress + "裝置名稱:" + deviceName);
                     updateConnectedStatus(deviceName, macAddress, getString(R.string.ble_connect_status));
-                    //userMap.put(macAddress, statusPos);
                     break;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
-                    Log.d(TAG, "onReceive: 體溫原始資料:" + ByteUtils.byteArrayToString(data) + " mac:" + macAddress);
                     String receiveInfo = ByteUtils.byteArrayToString(data);
-                    updateBleData(bleUserName, receiveInfo, macAddress);
+                    updateBleData(receiveInfo, macAddress);
                     break;
 
                 default:
@@ -816,6 +832,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         if(mHandler != null)
             mHandler.removeCallbacks(requestTemp);
+
+        bleOnClickList.clear(); //移除所有ble設備佇列 2021/04/28
     }
 
     //遠端帳號新增彈跳視窗
@@ -904,11 +922,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override   //藍芽連線interface
     public void onBleConnect(TempDataApi.SuccessBean data, int position) {
-        //呼叫藍芽
-        Log.d(TAG, "onBleConnect: " + data.getMac());
-        bleUserName = data.getUserName();
-        //statusPos = position;           //取得使用者在RecyclerView項目位置
-        //statusMemberBean = data;        //在把data內的資料丟給memberBean;
+        statusPosition = position;      //RecyclerView's position給予全域變數
+        statusMemberBean = data;        //在把data內的資料丟給全域變數statusMemberBean;
+        //初始化藍芽
         initBle();
     }
 
@@ -921,13 +937,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     }
 
      @Override  //停止量測 interface 2021/04/22
-     public void onBleStopConnect(TempDataApi.SuccessBean data, int position) {
-        mBluetoothLeService.disconnect(); //斷線
-        mBluetoothLeService.release();    //釋放藍芽資源
-//        statusPos = position;
-//        updateStatus(data.getUserName(), data.getDeviceName(), data.getMac(), getString(R.string.ble_unconnected));
-        //移除佇列
-        bleOnClickList.remove(data.getMac());
+     public void onBleDisConnected(TempDataApi.SuccessBean data, int position) {
+        Log.d(TAG, "onBleStopConnect: " + data.getMac() + ",status:" + data.getStatus());
+
+         mBluetoothLeService.closeGatt(data.getMac());
+
+        bleOnClickList.remove(data.getMac());   //移除佇列
      }
 
      @Override  //更新數據到後台
