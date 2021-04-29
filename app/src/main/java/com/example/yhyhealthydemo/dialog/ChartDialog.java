@@ -57,7 +57,7 @@ public class ChartDialog extends Dialog {
     private String correctDate;
     private Double degree;
 
-    //圖表
+    //圖表:折線圖
     private TargetZoneLineChart bleLineChart;
 
     //建構子
@@ -79,11 +79,16 @@ public class ChartDialog extends Dialog {
         bleUserDegree = findViewById(R.id.tvUserDegree);
         firstDateTime = findViewById(R.id.tvStartDate);
         endDateTime = findViewById(R.id.tvEndDate);
+
         closeDialog = findViewById(R.id.imgCloseDialog);
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                //需要clear舊資料 2021/04/29
+                if (!DataArray.isEmpty()){
+                    DataArray.clear();
+                }
+                dismiss(); //關閉視窗
             }
         });
 
@@ -95,14 +100,14 @@ public class ChartDialog extends Dialog {
         Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
         bleUserImage.setImageBitmap(decodedImage);
 
-        bleUserDegree.setText(String.valueOf(data.getDegree()));
+        bleUserDegree.setText(String.valueOf(data.getDegree())); //使用者目前體溫
 
         DataArray = new ArrayList<>();
 
         //避免沒有量測時按下圖表功能造成閃退
         if (data != null && data.getDegreeList().size() > 0){
-            firstDateTime.setText(data.getDegreeList().get(0).getDate());
-            endDateTime.setText(data.getDegreeList().get(data.getDegreeList().size()-1).getDate());
+            firstDateTime.setText(data.getDegreeList().get(0).getDate());   //開始時間
+            endDateTime.setText(data.getDegreeList().get(data.getDegreeList().size()-1).getDate());  //結束時間
             for (int i = 0; i < data.getDegreeList().size(); i++){
                 correctDate = DateUtil.fromDateToTime(data.getDegreeList().get(i).getDate());
                 degree = data.getDegree();

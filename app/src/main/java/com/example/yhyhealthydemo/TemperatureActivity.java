@@ -587,7 +587,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
 
             //發燒到37.5會出現警告彈跳視窗
-            if(degree > 30)
+            if(degree > 37.5)
                 feverDialog(tAdapter.findNameByMac(macAddress), degree); //藉由mac取得adapter使用者名稱
         }
     }
@@ -718,13 +718,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             switch (action) {
 
                 case yhyBleService.ACTION_GATT_CONNECTED:
-                    Toasty.info(TemperatureActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
+                    //Toasty.info(TemperatureActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
                     break;
 
-                case yhyBleService.ACTION_GATT_DISCONNECTED:
+                case yhyBleService.ACTION_GATT_DISCONNECTED: //自動斷開連結
                     Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
-                    mBluetoothLeService.disconnect();
-                    mBluetoothLeService.release();
+                    mBluetoothLeService.closeGatt(macAddress);
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
                     break;
 
@@ -732,7 +731,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.info(TemperatureActivity.this, "藍芽連結失敗", Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     break;
-                case yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC:
+                case yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC: //手動斷開連結
                     Toasty.info(TemperatureActivity.this, "藍芽設備" + deviceName +"已斷開", Toast.LENGTH_SHORT, true).show();
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
                     break;
@@ -938,9 +937,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
      @Override  //停止量測 interface 2021/04/22
      public void onBleDisConnected(TempDataApi.SuccessBean data, int position) {
-        Log.d(TAG, "onBleStopConnect: " + data.getMac() + ",status:" + data.getStatus());
-
-         mBluetoothLeService.closeGatt(data.getMac());
+        mBluetoothLeService.closeGatt(data.getMac());
 
         bleOnClickList.remove(data.getMac());   //移除佇列
      }
@@ -952,10 +949,13 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override   //呼叫圖表interface
     public void onBleChart(TempDataApi.SuccessBean data, int position) {
+        Log.d(TAG, "onBleChart: mac:" + data.getMac() + ",position:" + position);
         //客製Dialog圖表
-        chartDialog = new ChartDialog(this, data);
-        chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
-        chartDialog.show();
+        if(data.getMac() != null) {
+            chartDialog = new ChartDialog(this, data);
+            chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
+            chartDialog.show();
+        }
     }
 
      @Override  //症狀 2021/04/08

@@ -76,7 +76,6 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 TempDataApi.SuccessBean data = dataList.get(i);
                 if(!TextUtils.isEmpty(data.getMac())){
                     if(data.getMac().equals(devMac)){
-                        Log.d(TAG, "disconnectedDevice: devMac:" + devMac +",deviceName:" + devName + ",status:" + devStatus);
                         data.setStatus(devName+devStatus);
                         notifyItemChanged(i);
                     }

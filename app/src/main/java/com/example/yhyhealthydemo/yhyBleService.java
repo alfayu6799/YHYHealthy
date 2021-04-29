@@ -263,7 +263,7 @@ public class yhyBleService extends Service {
     }
 
     /***
-     * 手動針對mac進行斷線處理
+     * 針對mac進行斷線處理
      * 2021/04/28
      * **/
     public void closeGatt(String mac){
