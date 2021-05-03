@@ -1,5 +1,6 @@
 package com.example.yhyhealthydemo.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,13 +13,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-
-import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.tools.DateUtil;
 import com.example.yhyhealthydemo.datebase.Degree;
-import com.example.yhyhealthydemo.datebase.Member;
 import com.example.yhyhealthydemo.tools.TargetZoneLineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -27,8 +25,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /****************************
@@ -67,6 +67,7 @@ public class ChartDialog extends Dialog {
         this.data = data;
     }
 
+    @SuppressLint({"NewApi", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +87,6 @@ public class ChartDialog extends Dialog {
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //需要clear舊資料不然會累積 2021/04/29
-                if (!DataArray.isEmpty()){
-                    data.getDegreeList().clear();
-                }
                 dismiss(); //關閉視窗
             }
         });
@@ -108,8 +105,17 @@ public class ChartDialog extends Dialog {
 
         //避免沒有量測時按下圖表功能造成閃退
         if (data != null && data.getDegreeList().size() > 0){
-            firstDateTime.setText(data.getDegreeList().get(0).getDate());   //開始時間
-            endDateTime.setText(data.getDegreeList().get(data.getDegreeList().size()-1).getDate());  //結束時間
+            //開始時間
+            String firstTime = data.getDegreeList().get(0).getDate();
+            firstDateTime.setText(firstTime);
+
+            //結束時間
+            String lastTime = data.getDegreeList().get(data.getDegreeList().size()-1).getDate();
+            endDateTime.setText(lastTime);
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(2);
+            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
+
             for (int i = 0; i < data.getDegreeList().size(); i++){
                 correctDate = DateUtil.fromDateToTime(data.getDegreeList().get(i).getDate());
                 degree = data.getDegree();
@@ -133,7 +139,6 @@ public class ChartDialog extends Dialog {
              double yValues = DataArray.get(i).getDegree();
              entries.add(new Entry(i , (float)yValues));
              label.add(xValues);
-             Log.d(TAG, "setChart: y軸溫度:" + yValues);
          }
 
          LineDataSet lineDataSet = new LineDataSet(entries,"");
@@ -185,11 +190,17 @@ public class ChartDialog extends Dialog {
     }
 
     //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新
+    @SuppressLint("SetTextI18n")
     public void update(TempDataApi.SuccessBean newMemberBean) {
-        //當使用者與藍芽回來的資料是同一人才進行更新圖表
+        //當使用者與藍芽回來的資料是同一人才進行更新圖表 2021/05/03
         if(data.getUserName().equals(newMemberBean.getUserName())){
+            String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate();
+            endDateTime.setText(lastTime); //結束時間
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(2);
+            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
+
             bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
-            endDateTime.setText(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
             correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
             degree = newMemberBean.getDegree();
             setChart();

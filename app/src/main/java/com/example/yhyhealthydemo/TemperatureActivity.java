@@ -929,7 +929,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     }
 
     @Override  //啟動量測 interface 2021/03/30
-    public void onBleMeasuring(TempDataApi.SuccessBean data, int position) {
+    public void onBleMeasuring(TempDataApi.SuccessBean data) {
 
         bleOnClickList.add(data.getMac());  //將address放到list<String>內
 
@@ -937,7 +937,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     }
 
      @Override  //停止量測 interface 2021/04/22
-     public void onBleDisConnected(TempDataApi.SuccessBean data, int position) {
+     public void onBleDisConnected(TempDataApi.SuccessBean data) {
         mBluetoothLeService.closeGatt(data.getMac());
 
         bleOnClickList.remove(data.getMac());   //移除佇列
@@ -949,8 +949,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     }
 
     @Override   //呼叫圖表interface
-    public void onBleChart(TempDataApi.SuccessBean data, int position) {
-        //Log.d(TAG, "onBleChart: mac:" + data.getMac() + ",position:" + position);
+    public void onBleChart(TempDataApi.SuccessBean data) {
         //客製Dialog圖表
         if(data.getMac() != null) {
             chartDialog = new ChartDialog(this, data);

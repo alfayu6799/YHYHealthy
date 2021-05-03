@@ -276,4 +276,5 @@
     <string name="ble_fail">連結失敗</string>
     <string name="fever_alarm">您發燒了!!!</string>
     <string name="fever_degree_is">您目前體溫是:</string>
+    <string name="next_measure_time_is">next measuring Time:</string>
 </resources>

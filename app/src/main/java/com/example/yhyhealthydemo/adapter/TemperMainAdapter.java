@@ -179,7 +179,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                         @Override  //開始量測(play icon show)
                         public void onClick(View view) {
-                            listener.onBleMeasuring(data, position);
+                            listener.onBleMeasuring(data);
                         }
                     });
                 }else {  //disconnect icon show
@@ -187,7 +187,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            listener.onBleDisConnected(data, position);
+                            listener.onBleDisConnected(data);
                         }
                     });
                 }
@@ -217,7 +217,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         holder.bleChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onBleChart(data, position);
+                listener.onBleChart(data);
             }
         });
 
@@ -237,9 +237,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);
-        void onBleChart(TempDataApi.SuccessBean data, int position);
-        void onBleMeasuring(TempDataApi.SuccessBean data, int position);
-        void onBleDisConnected(TempDataApi.SuccessBean data, int position);
+        void onBleChart(TempDataApi.SuccessBean data);
+        void onBleMeasuring(TempDataApi.SuccessBean data);
+        void onBleDisConnected(TempDataApi.SuccessBean data);
         void onSymptomRecord(TempDataApi.SuccessBean data, int position);
         void passTarget(int targetId, double degree);
     }
