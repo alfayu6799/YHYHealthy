@@ -84,9 +84,9 @@ public class ChartDialog extends Dialog {
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //需要clear舊資料 2021/04/29
+                //需要clear舊資料不然會累積 2021/04/29
                 if (!DataArray.isEmpty()){
-                    DataArray.clear();
+                    data.getDegreeList().clear();
                 }
                 dismiss(); //關閉視窗
             }

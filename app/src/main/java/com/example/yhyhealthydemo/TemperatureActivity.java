@@ -949,7 +949,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override   //呼叫圖表interface
     public void onBleChart(TempDataApi.SuccessBean data, int position) {
-        Log.d(TAG, "onBleChart: mac:" + data.getMac() + ",position:" + position);
+        //Log.d(TAG, "onBleChart: mac:" + data.getMac() + ",position:" + position);
         //客製Dialog圖表
         if(data.getMac() != null) {
             chartDialog = new ChartDialog(this, data);

@@ -343,7 +343,7 @@ public class ApiProxy {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d(TAG, "後台Api失敗: ");
+                Log.d(TAG, "後台Api失敗: " + e.toString());
             }
 
             @Override
