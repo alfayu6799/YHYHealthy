@@ -50,6 +50,7 @@ public class ChartDialog extends Dialog {
     private TextView firstDateTime;        //開始時間
     private TextView endDateTime;          //結束時間
     private ImageView closeDialog;         //結束此Dialog
+    private TextView  nextMeasureTime;     //下次量測時間
 
     private TempDataApi.SuccessBean data;       //使用者DataBean
     private ArrayList<Degree> DataArray;        //體溫DataBean
@@ -79,6 +80,7 @@ public class ChartDialog extends Dialog {
         bleUserDegree = findViewById(R.id.tvUserDegree);
         firstDateTime = findViewById(R.id.tvStartDate);
         endDateTime = findViewById(R.id.tvEndDate);
+        nextMeasureTime = findViewById(R.id.tvNextMeasureTime);
 
         closeDialog = findViewById(R.id.imgCloseDialog);
         closeDialog.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +133,7 @@ public class ChartDialog extends Dialog {
              double yValues = DataArray.get(i).getDegree();
              entries.add(new Entry(i , (float)yValues));
              label.add(xValues);
+             Log.d(TAG, "setChart: y軸溫度:" + yValues);
          }
 
          LineDataSet lineDataSet = new LineDataSet(entries,"");
@@ -183,10 +186,13 @@ public class ChartDialog extends Dialog {
 
     //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新
     public void update(TempDataApi.SuccessBean newMemberBean) {
-        bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
-        endDateTime.setText(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
-        correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
-        degree = newMemberBean.getDegree();
-        setChart();
+        //當使用者與藍芽回來的資料是同一人才進行更新圖表
+        if(data.getUserName().equals(newMemberBean.getUserName())){
+            bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
+            endDateTime.setText(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
+            correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
+            degree = newMemberBean.getDegree();
+            setChart();
+        }
     }
 }

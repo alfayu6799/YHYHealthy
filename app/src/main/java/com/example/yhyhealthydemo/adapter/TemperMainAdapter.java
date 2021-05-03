@@ -109,7 +109,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                if(!TextUtils.isEmpty(data.getMac())){
                     if (data.getMac().equals(mac)) {
                         data.setBattery(String.valueOf(battery) + "%");
-                        data.setDegree(degree, currentDateTime);
+                        data.setDegree(degree, currentDateTime); //溫度與日期
                         notifyItemChanged(i); //刷新
                         updateBefore(mac);
                     }
@@ -130,6 +130,19 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 }
             }
         }
+    }
+
+    //2021/05/03
+    public TempDataApi.SuccessBean getDegreeByMac(String mac){
+        for(int i = 0; i < dataList.size();i++){
+            TempDataApi.SuccessBean data = dataList.get(i);
+            if(!TextUtils.isEmpty(data.getMac())){
+                if (data.getMac().equals(mac)){
+                    return data;
+                }
+            }
+        }
+        return null;
     }
 
     @NonNull

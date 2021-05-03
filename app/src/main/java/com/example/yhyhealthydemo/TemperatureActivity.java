@@ -584,7 +584,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
-                chartDialog.update(statusMemberBean);  //更新Dialog內的溫度圖表
+                //需用mac將藍芽回來的資料分開保存
+                chartDialog.update(tAdapter.getDegreeByMac(macAddress));  //更新Dialog內的溫度圖表
 
             //發燒到37.5會出現警告彈跳視窗
             if(degree > 37.5)

@@ -87,6 +87,16 @@
         android:layout_marginLeft="10dp"
         android:text="12/14 12:05"/>
 
+    <TextView
+        android:id="@+id/tvNextMeasureTime"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tvEndDate"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/tvBleUserName"
+        android:layout_marginLeft="25dp"
+        android:text="下次量測時間:"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
