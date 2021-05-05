@@ -919,7 +919,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     public void onBleChart(TempDataApi.SuccessBean data) {
         //客製Dialog圖表
         if(data.getMac() != null) {
-            Log.d(TAG, "onBleChart: " + data.getUserName());
+            Log.d(TAG, "onBleChart mac : " + data.getMac());
             chartDialog = new ChartDialog(this, data);
             chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
             chartDialog.show();
@@ -951,9 +951,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
          @Override
          public void run() {
-             Log.d(TAG, "每3分鐘command: " + mac);
+             Log.d(TAG, "每5分鐘command: " + mac);
              sendCommand(mac);
-             mHandler.postDelayed(this, 1000 * 60 * 3);
+             mHandler.postDelayed(this, 1000 * 60 *5);
          }
      }
 

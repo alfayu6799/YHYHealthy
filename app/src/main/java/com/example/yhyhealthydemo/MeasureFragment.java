@@ -71,14 +71,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.ivGuid:
-                gotoTeachingVideo();
+                startActivity(new Intent(getActivity(), TeachVideoActivity.class));
                 break;
         }
-    }
-
-    //教學影片 2021/04/09
-    private void gotoTeachingVideo() {
-
     }
 
     //檢查婚姻狀況與經期設定是否有設定完成

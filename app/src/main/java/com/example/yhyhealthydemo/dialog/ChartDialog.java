@@ -18,16 +18,20 @@ import com.example.yhyhealthydemo.datebase.TempDataApi;
 import com.example.yhyhealthydemo.tools.DateUtil;
 import com.example.yhyhealthydemo.datebase.Degree;
 import com.example.yhyhealthydemo.tools.TargetZoneLineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,7 +57,7 @@ public class ChartDialog extends Dialog {
     private TextView  nextMeasureTime;     //下次量測時間
 
     private TempDataApi.SuccessBean data;       //使用者DataBean
-    private ArrayList<Degree> DataArray;        //體溫DataBean
+    private ArrayList<Degree> DataArray = new ArrayList<>();
 
     private String correctDate;
     private Double degree;
@@ -87,7 +91,6 @@ public class ChartDialog extends Dialog {
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataArray.clear();
                 dismiss();
             }
         });
@@ -102,8 +105,6 @@ public class ChartDialog extends Dialog {
 
         bleUserDegree.setText(String.valueOf(data.getDegree())); //使用者目前體溫
 
-        DataArray = new ArrayList<>();
-
         //避免沒有量測時按下圖表功能造成閃退
         if (data != null && data.getDegreeList().size() > 0){
             //開始時間
@@ -114,7 +115,7 @@ public class ChartDialog extends Dialog {
             String lastTime = data.getDegreeList().get(data.getDegreeList().size()-1).getDate();
             endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(3);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5);
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             for (int i = 0; i < data.getDegreeList().size(); i++){
@@ -125,21 +126,25 @@ public class ChartDialog extends Dialog {
         }
     }
 
+    //折線圖資料顯示
     private void setChart() {
-
-        //將溫度與日期塞入DataArray
+         //將溫度與日期塞入DataArray
          DataArray.add(new Degree(degree, correctDate));
 
          ArrayList<String> label = new ArrayList<>();    //X軸(時間)
          ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
 
-         //將資料填入X(日期)與Y軸(溫度)
-         for (int i = 0; i < DataArray.size(); i++ ){
-             String xValues = DataArray.get(i).getDate();
-             double yValues = DataArray.get(i).getDegree();
-             entries.add(new Entry(i , (float)yValues));
-             label.add(xValues);
+         //筆數超過10筆時刪除最早的第一筆資料 2021/05/05
+         if (DataArray.size() > 10){
+             DataArray.remove(0);
          }
+
+        for (int i = 0; i < DataArray.size(); i++ ) {
+            String xValues = DataArray.get(i).getDate();
+            double yValues = DataArray.get(i).getDegree();
+            entries.add(new Entry(i, (float) yValues));
+            label.add(xValues);
+        }
 
          LineDataSet lineDataSet = new LineDataSet(entries,"");
          lineDataSet.setColor(Color.RED);  //軸線顏色
@@ -160,6 +165,7 @@ public class ChartDialog extends Dialog {
          rightAxis.setEnabled(false);                           //不顯示右側Y軸
          YAxis leftAxis = bleLineChart.getAxisLeft();           //獲取左側的Y軸線
          leftAxis.setDrawGridLines(false);                      //隱藏Y軸的格線
+         leftAxis.setValueFormatter(new MyYAxisValueFormatter()); //Y軸數值格式及小數點位數
 
          leftAxis.setLabelCount(7);    //35-42七組數據
          leftAxis.setAxisMaximum(42);  //最高體溫
@@ -189,6 +195,21 @@ public class ChartDialog extends Dialog {
          bleLineChart.invalidate();                             //重新刷圖表
     }
 
+    class MyYAxisValueFormatter implements IAxisValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public MyYAxisValueFormatter() {
+            mFormat = new DecimalFormat("###,###.0");//Y軸數值格式及小數點位數
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            // "value" represents the position of the label on the axis (x or y)
+            return mFormat.format(value);
+        }
+    }
+
     //當藍芽的體溫值有變化時將會透過此方法將舊有的value更新
     @SuppressLint("SetTextI18n")
     public void update(TempDataApi.SuccessBean newMemberBean) {
@@ -199,7 +220,7 @@ public class ChartDialog extends Dialog {
             String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate(); //取得最後一筆
             endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(3);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5);
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
