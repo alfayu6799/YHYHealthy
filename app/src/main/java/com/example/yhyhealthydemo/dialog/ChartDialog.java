@@ -87,7 +87,8 @@ public class ChartDialog extends Dialog {
         closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss(); //關閉視窗
+                DataArray.clear();
+                dismiss();
             }
         });
 
@@ -113,12 +114,12 @@ public class ChartDialog extends Dialog {
             String lastTime = data.getDegreeList().get(data.getDegreeList().size()-1).getDate();
             endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(2);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(3);
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             for (int i = 0; i < data.getDegreeList().size(); i++){
                 correctDate = DateUtil.fromDateToTime(data.getDegreeList().get(i).getDate());
-                degree = data.getDegree();
+                degree = data.getDegreeList().get(i).getDegree();
                 setChart();
             }
         }
@@ -126,14 +127,13 @@ public class ChartDialog extends Dialog {
 
     private void setChart() {
 
+        //將溫度與日期塞入DataArray
          DataArray.add(new Degree(degree, correctDate));
 
-         ArrayList<String> label;    //X軸(時間)
-         ArrayList<Entry> entries;   //Y軸(體溫)
+         ArrayList<String> label = new ArrayList<>();    //X軸(時間)
+         ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
 
          //將資料填入X(日期)與Y軸(溫度)
-         label = new ArrayList<>();
-         entries = new ArrayList<>();
          for (int i = 0; i < DataArray.size(); i++ ){
              String xValues = DataArray.get(i).getDate();
              double yValues = DataArray.get(i).getDegree();
@@ -194,16 +194,18 @@ public class ChartDialog extends Dialog {
     public void update(TempDataApi.SuccessBean newMemberBean) {
         //當使用者與藍芽回來的資料是同一人才進行更新圖表 2021/05/03
         if(data.getUserName().equals(newMemberBean.getUserName())){
-            String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate();
-            endDateTime.setText(lastTime); //結束時間
+
+            //結束時間
+            String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate(); //取得最後一筆
+            endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(2);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(3);
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
             correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
-            degree = newMemberBean.getDegree();
-            setChart();
+            degree = newMemberBean.getDegree(); //取最新的溫度
+            setChart(); //製作折線圖
         }
     }
 }

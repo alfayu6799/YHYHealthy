@@ -52,6 +52,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
+
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthydemo.module.ApiProxy.BLE_USER_LIST;
@@ -82,7 +84,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     //藍芽斷線
     private String disUseName;
 
-    private ArrayMap<String, Integer> userMap = new ArrayMap<>();
+    //藍芽定時
+    private MyRun myRun;
+    private ArrayMap<String, Runnable> userMap = new ArrayMap<>();
 
     //遠端
     private RecyclerView remoteRecycle;
@@ -125,9 +129,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         proxy = ApiProxy.getInstance();
 
         initView();
-
-        requestTemp.run(); //體溫定時器
-
     }
 
     private void initView(){
@@ -550,8 +551,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if(deviceAddress != null){
             if(tAdapter.findNameByMac(deviceAddress) != null){
                 tAdapter.disconnectedDevice(deviceAddress, bleStatus, deviceName);
-                //移除佇列 2021/04/28
-                bleOnClickList.remove(deviceAddress);
+                //移除佇列 2021/05/05
+                userMap.remove(deviceAddress);
             }else {
                 Toasty.info(TemperatureActivity.this, "藍芽連接失敗,請重新連接", Toast.LENGTH_SHORT, true).show();
             }
@@ -565,7 +566,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             statusMemberBean.setMac(deviceAddress);
             statusMemberBean.setStatus(deviceName+bleStatus);
             tAdapter.updateItem(statusMemberBean, statusPosition);
-            //tAdapter.updateDeviceStatusItem(userName,deviceName,deviceAddress, bleStatus);
         }
     }
 
@@ -623,29 +623,11 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         byte[] messageBytes = new byte[0];
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
-
             mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);  //2021/03/30
-            //Log.d(TAG, "sendCommand: " + messageBytes + " device:" + deviceAddress);
-
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }
     }
-
-    //每2分鐘執行一次
-    private Runnable requestTemp = new Runnable() {
-        @Override
-        public void run() {
-
-            if (!bleOnClickList.isEmpty()) {
-                for (int i = 0 ; i < bleOnClickList.size(); i++){
-                    sendCommand(bleOnClickList.get(i));
-                    Log.d(TAG, "每2分鐘執行一次:" + bleOnClickList.get(i));
-                }
-            }
-            mHandler.postDelayed(this, 1000 * 60 *2);
-        }
-    };
 
     @Override
     protected void onStart() {
@@ -776,7 +758,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
         proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
@@ -816,25 +798,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         }
     };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy:");
-        if (mBluetoothLeService != null){
-            unregisterReceiver(mBleReceiver);
-            mBleReceiver = null;
-            mBluetoothLeService.disconnect();
-            mBluetoothLeService.release();
-        }
-        unbindService(mServiceConnection);
-        mBluetoothLeService = null;
-
-        if(mHandler != null)
-            mHandler.removeCallbacks(requestTemp);
-
-        bleOnClickList.clear(); //移除所有ble設備佇列 2021/04/28
-    }
 
     //遠端帳號新增彈跳視窗
     private void dialogRemote() {
@@ -930,8 +893,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
+        //定時啟動 2021/05/04
+        myRun = new MyRun(data.getMac());
+        Thread t = new Thread(myRun);
+        t.start();
 
-        bleOnClickList.add(data.getMac());  //將address放到list<String>內
+        userMap.put(data.getMac(), myRun);
 
         sendCommand(data.getMac());  //command
     }
@@ -939,8 +906,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
      @Override  //停止量測 interface 2021/04/22
      public void onBleDisConnected(TempDataApi.SuccessBean data) {
         mBluetoothLeService.closeGatt(data.getMac());
-
-        bleOnClickList.remove(data.getMac());   //移除佇列
+        mHandler.removeCallbacks(userMap.get(data.getMac())); //移除定時
+        userMap.remove(data.getMac());                        //移除佇列
      }
 
      @Override  //更新數據到後台
@@ -952,6 +919,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     public void onBleChart(TempDataApi.SuccessBean data) {
         //客製Dialog圖表
         if(data.getMac() != null) {
+            Log.d(TAG, "onBleChart: " + data.getUserName());
             chartDialog = new ChartDialog(this, data);
             chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
             chartDialog.show();
@@ -970,6 +938,49 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         bundle.putInt("position", position);
         intent.putExtras(bundle);
         startActivity(intent);
+     }
+
+     //定時fxn 2021/05/05
+     public class MyRun implements Runnable {
+
+         private String mac;
+
+         public MyRun(String mac){
+             this.mac = mac;
+         }
+
+         @Override
+         public void run() {
+             Log.d(TAG, "每3分鐘command: " + mac);
+             sendCommand(mac);
+             mHandler.postDelayed(this, 1000 * 60 * 3);
+         }
+     }
+
+     @Override
+     protected void onDestroy() {
+         super.onDestroy();
+         Log.d(TAG, "onDestroy:");
+         if (mBluetoothLeService != null){
+             unregisterReceiver(mBleReceiver);
+             mBleReceiver = null;
+             mBluetoothLeService.disconnect();
+             mBluetoothLeService.release();
+         }
+         unbindService(mServiceConnection);
+         mBluetoothLeService = null;
+
+         //移除所有的Hnadler
+         if(mHandler != null)
+             mHandler.removeCallbacksAndMessages(null);
+
+         //移除所有ble設備佇列 2021/05/05
+         if (!userMap.isEmpty())
+            userMap.clear();  
+
+         //視窗如果有顯示的話...
+         if (chartDialog != null && chartDialog.isShowing())
+             chartDialog.dismiss();
      }
 
      @Override //新增觀測者資料返回 2021/03/24

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/yhy_background">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgBleUserShot"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/black"
+        android:src="@mipmap/imageview" />
+
+    <TextView
+        android:id="@+id/tvBleUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Matt Bomer"
+        app:layout_constraintEnd_toEndOf="@+id/imgBleUserShot"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="@+id/imgBleUserShot"
+        app:layout_constraintTop_toBottomOf="@+id/imgBleUserShot" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="@+id/imgBleUserShot"
+        app:srcCompat="@mipmap/thermometer_128" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="開始"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="結束"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下次量測時間:"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBleUserName"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="@+id/tvBleUserName" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <TextView
+        android:id="@+id/tvUserDegree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="22sp"
+        android:textColor="@color/red"
+        android:text="30.5"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/tvStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="05/04 13:26"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="05/04 13:28"
+        app:layout_constraintBottom_toBottomOf="@+id/textView33"
+        app:layout_constraintStart_toStartOf="@+id/guideline11"
+        app:layout_constraintTop_toTopOf="@+id/textView33" />
+
+    <TextView
+        android:id="@+id/tvNextMeasureTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="05/04 13:30"
+        app:layout_constraintBottom_toBottomOf="@+id/textView34"
+        app:layout_constraintStart_toEndOf="@+id/textView34"
+        app:layout_constraintTop_toTopOf="@+id/textView34" />
+
+    <ImageView
+        android:id="@+id/imgCloseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_highlight_off_black_48dp" />
+
+    <View
+        android:id="@+id/textView40"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBleUserName" />
+
+    <com.example.yhyhealthydemo.tools.TargetZoneLineChart
+        android:id="@+id/lineChartBle"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView40" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
