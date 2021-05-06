@@ -26,16 +26,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dp"
+            android:textAllCaps="false"
             android:background="@drawable/relative_shape"
             android:layout_weight="1"
-            android:text="月曆"/>
+            android:text="@string/tab_cal"/>
         <Button
             android:id="@+id/btnSwitchChart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAllCaps="false"
             android:layout_weight="1"
             android:background="@drawable/relative_shape"
-            android:text="圖表"
+            android:text="@string/tab_chart"
             android:textSize="18dp"/>
     </LinearLayout>
 
@@ -89,9 +91,10 @@
 
                     <TextView
                         android:id="@+id/tvShowPeriodDay"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="20sp"
                         android:text="週期第N天"
                         app:layout_constraintEnd_toStartOf="@+id/guideline39"
                         app:layout_constraintStart_toStartOf="parent"
@@ -103,8 +106,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="20sp"
-                        android:text="唾液辨識 :"
+                        android:textSize="18sp"
+                        android:text="@string/saliva_result"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvShowPeriodDay" />
@@ -122,8 +125,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="20sp"
-                        android:text="排卵機率 :"
+                        android:textSize="18sp"
+                        android:text="@string/change_of_ovulation"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_result_1" />
@@ -134,8 +137,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="20sp"
-                        android:text="基礎體溫 :"
+                        android:textSize="18sp"
+                        android:text="@string/basal_body_temp"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_probability_1" />
@@ -146,8 +149,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="20sp"
-                        android:text="排卵機率 :"
+                        android:textSize="18sp"
+                        android:text="@string/change_of_ovulation"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_temp_1" />
@@ -181,11 +184,13 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="32dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_for_ovulation"
-                        android:textSize="22sp"
-                        android:text="經期\n設定"
+                        android:background="@drawable/shape_for_period_edit"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:text="@string/cycle_setting"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline39"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -196,9 +201,11 @@
                         android:layout_height="80dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/shape_for_ovulation"
-                        android:text="經期\n紀錄"
-                        android:textSize="22sp"
+                        android:background="@drawable/shape_for_period_edit"
+                        android:textColor="@color/white"
+                        android:text="@string/add_cycle"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/btnPeriodSetting"
                         app:layout_constraintStart_toStartOf="@+id/btnPeriodSetting"
@@ -244,26 +251,21 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:scaleType="fitStart"
+                        android:layout_marginLeft="8dp"
                         android:src="@drawable/ic_brightness_1_24dp"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:scaleType="fitStart"
                         android:src="@drawable/ic_brightness_2_24dp"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:scaleType="fitStart"
                         android:src="@drawable/ic_brightness_3_24dp"/>
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:src="@drawable/ic_brightness_4_24dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -271,28 +273,23 @@
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="月經"/>
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/menstrual_period"/>
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="排卵期"/>
+                        android:layout_gravity="left"
+                        android:text="@string/ovulation_period"/>
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="非排卵期"/>
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="濾泡/黃體期"/>
+                        android:layout_gravity="left"
+                        android:text="@string/no_ovulation_period"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -302,26 +299,56 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:scaleType="fitStart"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/ic_baseline_brightness_8_24"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/ic_baseline_brightness_9_24"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/in_high_cell"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="left"
+                        android:text="@string/in_low_cell"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitStart"
+                        android:layout_marginLeft="8dp"
                         android:src="@drawable/shape_dash_5"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
+                        android:scaleType="fitStart"
                         android:src="@drawable/shape_dash_6"/>
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:src="@drawable/shape_dash_7"/>
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:visibility="invisible"
+                        android:scaleType="fitStart"
                         android:src="@drawable/shape_dash_7"/>
                 </LinearLayout>
                 <LinearLayout
@@ -330,29 +357,23 @@
                     android:orientation="horizontal">
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="預計經期"/>
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/exp_men_period"/>
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="預計排卵期"/>
+                        android:layout_gravity="left"
+                        android:text="@string/exp_ovl_period"/>
                     <TextView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="預計排卵日"/>
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:visibility="invisible"
-                        android:text="濾泡/黃體期"/>
+                        android:layout_gravity="left"
+                        android:text="@string/exp_day_of_ovu"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -404,14 +425,14 @@
                 android:drawableLeft="@drawable/ic_brightness_1_24dp"
                 android:textSize="16sp"
                 android:layout_marginLeft="180dp"
-                android:text="月經"/>
+                android:text="@string/menstrual_period"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_brightness_2_24dp"
                 android:textSize="16sp"
                 android:layout_marginLeft="4dp"
-                android:text="排卵期"/>
+                android:text="@string/ovulation_period"/>
         </LinearLayout>
         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/chart"

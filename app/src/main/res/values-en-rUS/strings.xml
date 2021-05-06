@@ -4,7 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="ovulation">排卵紀錄</string>
+    <string name="ovulation">Ovulation Testing</string>
     <string name="temperature">藍芽體溫</string>
     <string name="pregnancy">懷孕紀錄</string>
     <string name="monitor">呼吸監測</string>
@@ -16,7 +16,7 @@
     <string name="select_function">功能 : </string>
     <string name="select_done">查詢開始</string>
 
-    <string name="to">到</string>
+    <string name="to">To</string>
 
     <string name="param_name">唾液辨識:</string>
     <string name="body_degree">基礎體溫:</string>
@@ -29,9 +29,9 @@
     <string name="period" translatable="false">%1$s – %2$s</string>
 
     <!-- tab -->
-    <string name="tab_cal">月曆</string>
-    <string name="tab_rec">紀錄</string>
-    <string name="tab_chart">圖表</string>
+    <string name="tab_cal">Calendar</string>
+    <string name="tab_rec">Record</string>
+    <string name="tab_chart">Diagram</string>
 
     <!-- 登入 -->
     <string name="account">帳號</string>
@@ -59,7 +59,7 @@
     <string name="male">男性</string>
 
     <!-- 圖表 -->
-    <string name="chart_remind">提醒:\n 女性正常基礎體溫為低溫和高溫期兩個階段:\n 從月經開始到排卵前是低溫期\n 排卵後會持續12-14天高溫期\n 直到下次月經來的第一天為止</string>
+    <string name="chart_remind">Reminder:\nThe usual basal body temperature of a woman has two phases:A cold phase, which begins at the beginning of menstruation and lasts until ovulation and a hot phase, which lasts for 12-14 days after ovulation</string>
 
     <!-- -->
     <string name="normal">無</string>
@@ -162,7 +162,7 @@
     <string name="set_years_range">本服務適用年齡為12~80歲</string>
     <string name="system_account">帳戶設定</string>
     <string name="edit">編輯</string>
-    <string name="delete">刪除</string>
+    <string name="delete">Delete</string>
     <string name="tel_code">國際編碼</string>
     <string name="please_input_vaild_email">請輸入有效的電子郵件地址</string>
     <string name="account_is_not_empty">帳號不得空白</string>
@@ -209,9 +209,9 @@
     <string name="title_process">訊息</string>
     <string name="process">處理中...</string>
     <string name="api_no_respond">伺服器無回應,請檢查網路連線</string>
-    <string name="start_period_date">開始日期</string>
-    <string name="end_period_day">結束日期</string>
-    <string name="real_period">實際經期設定</string>
+    <string name="start_period_date">Start\nDay</string>
+    <string name="end_period_day">End\nDay</string>
+    <string name="real_period">Cycle Setting</string>
     <string name="forget_password">忘記密碼</string>
     <string name="sure">確定</string>
     <string name="please_input_comp_code">請輸入授權碼</string>
@@ -223,13 +223,14 @@
     <string name="month_of_year">月</string>
     <string name="re_camera">重新拍照</string>
     <string name="identify">辨識</string>
-    <string name="in_period">排卵期</string>
-    <string name="in_cell">黃體濾泡期</string>
-    <string name="unknow">無法辨識</string>
-    <string name="non_period">非排卵期</string>
-    <string name="period_day">週期的第</string>
+    <string name="in_period">Ovulation</string>
+    <string name="in_low_cell">Low Follicular/Luteal Phase</string>
+    <string name="in_high_cell">High Follicular/Luteal Phase</string>
+    <string name="unknow">Unrecognizable</string>
+    <string name="non_period">General</string>
+    <string name="period_day">Today is the</string>
     <string name="period_day_out_order">超出本月週期範圍</string>
-    <string name="day">天</string>
+    <string name="day">th Day of Menstrual Period</string>
     <string name="please_chose_really_day">請選擇實際經期:</string>
     <string name="delete_really_day">做刪除</string>
     <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
@@ -277,4 +278,20 @@
     <string name="fever_alarm">您發燒了!!!</string>
     <string name="fever_degree_is">您目前體溫是:</string>
     <string name="next_measure_time_is">next measuring Time:</string>
+    <string name="menstrual_period">Menstrual\nPeriod</string>
+    <string name="ovulation_period">Ovulation\nPeriod</string>
+    <string name="no_ovulation_period">Non-Ovulation\nPeriod</string>
+    <string name="exp_men_period">Expected\nMenstrual Period</string>
+    <string name="exp_ovl_period">Expected\nOvulation Period</string>
+    <string name="exp_day_of_ovu">Expected\nDay of Ovulation</string>
+    <string name="saliva_result">Saliva Result:</string>
+    <string name="change_of_ovulation">Change of\nOvulation:</string>
+    <string name="basal_body_temp">Basal Body\nTemperature:</string>
+    <string name="cycle_setting">Cycle\nSetting</string>
+    <string name="edit_cycle">Edit\nCycle</string>
+    <string name="add_cycle">Add\ncycle</string>
+    <string name="title_ovulation">Ovulation\nTesting</string>
+    <string name="title_temperature">Bluetooth Body\nTemperature</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_save">Save</string>
 </resources>

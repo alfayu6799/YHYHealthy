@@ -64,8 +64,10 @@ public class Math {
                 return context.getDrawable(R.mipmap.ic_2);
             if (statusCode.get(SINGLE)==6)  //預測排卵日
                 return context.getDrawable(R.mipmap.ic_3);
-            if (statusCode.get(SINGLE)==7)  //黃體濾泡
-                return context.getDrawable(R.drawable.ic_brightness_4_24dp);
+            if (statusCode.get(SINGLE)==7)  //高黃體濾泡
+                return context.getDrawable(R.drawable.ic_baseline_brightness_8_24);
+            if (statusCode.get(SINGLE)==8)  //低黃體濾泡
+                return context.getDrawable(R.drawable.ic_baseline_brightness_9_24);
         }
 
         else if(statusCode.size()==2)
@@ -80,8 +82,10 @@ public class Math {
                     return null;
                 if (statusCode.get(FILLED)==3)  // [3,4] : 非排卵期&黃體期
                     return context.getDrawable(R.mipmap.ic_yhy_3_4);
-                if (statusCode.get(FILLED)==7)   //[7,4] : 黃體期&黃體期
+                if (statusCode.get(FILLED)==7)   //[7,4] : 高黃體期&黃體期
                     return context.getDrawable(R.mipmap.ic_yhy_7_4);
+                if (statusCode.get(FILLED)==8)   //[8,4] : 低黃體期&黃體期
+                    return context.getDrawable(R.mipmap.ic_yhy_8_4);
             }
 
             if (statusCode.get(DOTTED)==5) //預計排卵期
@@ -94,8 +98,10 @@ public class Math {
                     return context.getDrawable(R.mipmap.ic_yhy_2_5);
                 if (statusCode.get(FILLED)==3)   // [3,5] : 非排卵期&預計排卵期
                     return context.getDrawable(R.mipmap.ic_yhy_3_5);
-                if (statusCode.get(FILLED)==7)   // [7,5] : 黃體&預計排卵期
+                if (statusCode.get(FILLED)==7)   // [7,5] : 高黃體&預計排卵期
                     return context.getDrawable(R.mipmap.ic_yhy_7_5);
+                if (statusCode.get(FILLED)==8)   // [8,5] : 低黃體&預計排卵期
+                    return context.getDrawable(R.mipmap.ic_yhy_8_5);
             }
 
             if (statusCode.get(DOTTED)==6)  //預計排卵日
@@ -108,8 +114,10 @@ public class Math {
                     return context.getDrawable(R.mipmap.ic_yhy_2_6);
                 if (statusCode.get(FILLED)==3)    // [3,6] : 非排卵期&預計排卵日
                     return context.getDrawable(R.mipmap.ic_yhy_3_6);
-                if (statusCode.get(FILLED)==7)    // [7,6] : 黃體&預計排卵日
+                if (statusCode.get(FILLED)==7)    // [7,6] : 高濾泡黃體&預計排卵日
                     return context.getDrawable(R.mipmap.ic_yhy_7_6);
+                if (statusCode.get(FILLED) == 8)  // [8,6] : 低濾泡黃體&預計排卵日
+                    return context.getDrawable(R.mipmap.ic_yhy_8_6);
             }
         }
         //default

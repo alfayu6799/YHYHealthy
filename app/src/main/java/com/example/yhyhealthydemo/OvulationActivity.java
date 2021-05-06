@@ -289,13 +289,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //唾液辨識結果
         String paramName = record.getSuccess().getMeasure().getParamName();
         if (!paramName.equals("")){
-            btnEdit.setText("編輯\n紀錄");
+            btnEdit.setText(R.string.edit_cycle);
             if (paramName.equals("Ovulation")){
                 textMenstruationResult.setText(getString(R.string.in_period));
             }else if(paramName.equals("General")){
                 textMenstruationResult.setText(getString(R.string.non_period));
-            }else if(paramName.equals("FollicularORLutealPhase")){
-                textMenstruationResult.setText(getString(R.string.in_cell));
+            }else if(paramName.equals("FollicularORLutealPhase")) {      //低濾泡
+                textMenstruationResult.setText(getString(R.string.in_low_cell));
+            }else if (paramName.equals("HighFollicularORLutealPhase")){   //高濾泡
+                textMenstruationResult.setText(getString(R.string.in_high_cell));
             }else if(paramName.equals("Unrecognizable")){
                 textMenstruationResult.setText(getString(R.string.unknow));
             }
@@ -341,7 +343,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         if (clickDay == null){
             clickDay = String.valueOf(LocalDate.now()); //今天
         }
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -655,7 +656,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void parserCycleData(JSONObject result) {
         cycleRecord = CycleRecord.newInstance(result.toString());
-        //Log.d(TAG, "parser週期: " + cycleRecord.toJSONString());
 
         List<String> list = new ArrayList<>(); //經期第一天陣列用
 
@@ -726,7 +726,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             long numOfDays = ChronoUnit.DAYS.between(begin, choseDay);
            if(numOfDays >= 0){
                numOfDays = numOfDays + 1;
-               menstruationPeriodDay.setText(getString(R.string.period_day) + numOfDays + getString(R.string.day));
+               menstruationPeriodDay.setText(getString(R.string.period_day) + " " + numOfDays + " " + getString(R.string.day));
            }else {
                menstruationPeriodDay.setText(getString(R.string.period_day_out_order)); //超出本月份周期
            }

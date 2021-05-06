@@ -71,6 +71,7 @@
             android:text="@string/delete"
             android:textColor="@color/red"
             android:background="@null"
+            android:textAllCaps="false"
             android:layout_marginLeft="10dp"/>
 
         <Button
@@ -79,7 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/btnDateDelete"
             android:textSize="18dp"
-            android:text="@string/slycalendar_cancel"
+            android:textAllCaps="false"
+            android:text="@string/dialog_cancel"
             android:background="@null"/>
 
         <Button
@@ -87,7 +89,8 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:text="@string/slycalendar_save"
+            android:textAllCaps="false"
+            android:text="@string/dialog_save"
             android:background="@null"
             android:textColor="@color/colorPrimaryDark"
             android:layout_toRightOf="@+id/btnDateCancel"/>
