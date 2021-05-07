@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="title_home">YHY Healthy</string>
+
     <string name="ovulation">排卵紀錄</string>
     <string name="temperature">藍芽體溫</string>
     <string name="pregnancy">懷孕紀錄</string>
@@ -120,7 +122,7 @@
 
     <string name="announcement">公告</string>
     <string name="shopping">購物</string>
-    <string name="traning">教學</string>
+    <string name="training">教學</string>
     <string name="api_unavailable">無法取得網路服務，請稍後再試</string>
 
     <string name="setting_user_change_password">密碼變更</string>
@@ -294,4 +296,7 @@
     <string name="title_temperature">藍芽體溫</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_save">確定</string>
+    <string name="last_recognition_ovulation">排卵辨識</string>
+    <string name="record_take_photo">拍照</string>
+    <string name="analysis_result">分析結果:</string>
 </resources>

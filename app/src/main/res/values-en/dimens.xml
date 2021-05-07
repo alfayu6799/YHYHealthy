@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_18">18sp</dimen>
+
+    <dimen name="font_ovulation_saliva">16sp</dimen>
+    <dimen name="font_basal_body_temp">14sp</dimen>
+    <dimen name="font_day_of_menstruation">12sp</dimen>
+    <dimen name="font_chart_period">12sp</dimen>
+    <dimen name="font_chart_ovulation">12sp</dimen>
+    <dimen name="font_chart_remind">14sp</dimen>
+
+    <dimen name="title_yhy_healthy">22dp</dimen>
+    <dimen name="title_announcement">18sp</dimen>
+    <dimen name="title_training">18sp</dimen>
+    <dimen name="title_ovulation">14sp</dimen>
+    <dimen name="title_bluetooth_temperature">14sp</dimen>
+    <dimen name="title_pregnancy">14sp</dimen>
+    <dimen name="title_monitor">14sp</dimen>
+
+    <dimen name="greenish_yellow">12sp</dimen>
+    <dimen name="record_take_photo">10sp</dimen>
+    <dimen name="font_last_recognition_ovulation">12sp</dimen>
+    <dimen name="font_analysis_result">16sp</dimen>
+    <dimen name="font_record_id_photo">10sp</dimen>
+    <dimen name="font_tvAnalysis">16sp</dimen>
+    <dimen name="font_record_FollicularORLutealPhase">14sp</dimen>
+    <dimen name="font_record_HighFollicularORLutealPhase">14sp</dimen>
+    <dimen name="font_FollicularORLutealPhase">10sp</dimen>
+    <dimen name="font_HighFollicularORLutealPhase">10sp</dimen>
+    <dimen name="font_unknow">16sp</dimen>
+</resources>

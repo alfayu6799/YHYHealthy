@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -296,13 +297,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 textMenstruationResult.setText(getString(R.string.non_period));
             }else if(paramName.equals("FollicularORLutealPhase")) {      //低濾泡
                 textMenstruationResult.setText(getString(R.string.in_low_cell));
+                textMenstruationResult.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_FollicularORLutealPhase));
             }else if (paramName.equals("HighFollicularORLutealPhase")){   //高濾泡
                 textMenstruationResult.setText(getString(R.string.in_high_cell));
+                textMenstruationResult.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_HighFollicularORLutealPhase));
             }else if(paramName.equals("Unrecognizable")){
                 textMenstruationResult.setText(getString(R.string.unknow));
             }
         }else {
-            btnEdit.setText("新增\n紀錄");
+            btnEdit.setText(R.string.add_cycle);
             textMenstruationResult.setText("");
         }
 

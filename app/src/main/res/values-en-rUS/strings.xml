@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="title_home">YHY Healthy</string>
+
     <string name="ovulation">Ovulation Testing</string>
     <string name="temperature">藍芽體溫</string>
     <string name="pregnancy">懷孕紀錄</string>
@@ -59,27 +61,27 @@
     <string name="male">男性</string>
 
     <!-- 圖表 -->
-    <string name="chart_remind">Reminder:\nThe usual basal body temperature of a woman has two phases:A cold phase, which begins at the beginning of menstruation and lasts until ovulation and a hot phase, which lasts for 12-14 days after ovulation</string>
+    <string name="chart_remind">Reminder:\nThe usual basal body temperature of a woman has two phases: A cold phase, which begins at the beginning of menstruation and lasts until ovulation and a hot phase, which lasts for 12-14 days after ovulation.</string>
 
     <!-- -->
-    <string name="normal">無</string>
-    <string name="brown">褐色</string>
-    <string name="yellow">黃色</string>
-    <string name="milky">乳白色</string>
-    <string name="white">蛋清色</string>
-    <string name="greenish_yellow">黃綠色</string>
-    <string name="fishy">魚腥味</string>
-    <string name="stink">惡臭味</string>
-    <string name="liquid">水樣</string>
-    <string name="thick">濃稠狀</string>
-    <string name="liquid_milky">乳酪狀</string>
-    <string name="allergy">癢</string>
-    <string name="hot">灼熱感</string>
-    <string name="pain">痛</string>
+    <string name="normal">Normal</string>
+    <string name="brown">Brown</string>
+    <string name="yellow">Yellow</string>
+    <string name="milky">Milky</string>
+    <string name="white">White</string>
+    <string name="greenish_yellow">Greenish Yellow</string>
+    <string name="fishy">Fishy</string>
+    <string name="stink">Stink</string>
+    <string name="liquid">Liquid</string>
+    <string name="thick">Thick</string>
+    <string name="liquid_milky">Liquid Milky</string>
+    <string name="allergy">Allergy</string>
+    <string name="hot">Hot</string>
+    <string name="pain">Pain</string>
 
-    <string name="green">綠色</string>
-    <string name="rusty">鐵鏽色</string>
-    <string name="gray_black">灰黑色</string>
+    <string name="green">Green</string>
+    <string name="rusty">Rusty</string>
+    <string name="gray_black">Gray Black</string>
 
     <string name="email">信箱</string>
     <string name="phone">簡訊</string>
@@ -118,9 +120,9 @@
     <string name="system_version">APP Version</string>
     <string name="system_logout">登出</string>
 
-    <string name="announcement">公告</string>
-    <string name="shopping">購物</string>
-    <string name="traning">教學</string>
+    <string name="announcement">News</string>
+    <string name="shopping">Shopping</string>
+    <string name="training">Training</string>
     <string name="api_unavailable">無法取得網路服務，請稍後再試</string>
 
     <string name="setting_user_change_password">密碼變更</string>
@@ -219,10 +221,10 @@
     <string name="catalog">類別</string>
     <string name="nursing">護理</string>
     <string name="nutrition">營養</string>
-    <string name="year">年</string>
-    <string name="month_of_year">月</string>
-    <string name="re_camera">重新拍照</string>
-    <string name="identify">辨識</string>
+    <string name="year">Year</string>
+    <string name="month_of_year">Month</string>
+    <string name="re_camera">Again</string>
+    <string name="identify">Identify</string>
     <string name="in_period">Ovulation</string>
     <string name="in_low_cell">Low Follicular/Luteal Phase</string>
     <string name="in_high_cell">High Follicular/Luteal Phase</string>
@@ -294,4 +296,7 @@
     <string name="title_temperature">Bluetooth Body\nTemperature</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_save">Save</string>
+    <string name="record_take_photo">new\npicture</string>
+    <string name="last_recognition_ovulation">Last Recognition Ovulation</string>
+    <string name="analysis_result">Analysis Result:</string>
 </resources>

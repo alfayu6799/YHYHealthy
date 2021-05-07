@@ -31,6 +31,7 @@ import android.os.IBinder;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -334,7 +335,23 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         String paramName = photoData.getSuccess().getParamName();
         String param = photoData.getSuccess().getParam();
         changeRecord.getMeasure().setParam(param); //後台需要這個資料
-        textAnalysis.setText(paramName); //顯示分析結果
+        if(!paramName.isEmpty()) {
+            if (paramName.equals("FollicularORLutealPhase")) {
+                textAnalysis.setText(R.string.in_low_cell);  //低濾泡
+                //字形大小需要中文與英文不同
+                textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.font_record_FollicularORLutealPhase));
+            } else if (paramName.equals("Unrecognizable")) {
+                textAnalysis.setText(R.string.unknow);      //無法辨識
+                textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.font_unknow));
+            } else if (paramName.equals("General")) {
+                textAnalysis.setText(R.string.non_period);  //非排卵期
+            } else if (paramName.equals("HighFollicularORLutealPhase")) {
+                textAnalysis.setText(R.string.in_high_cell); //高濾泡
+                textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.font_record_HighFollicularORLutealPhase));
+            } else if (paramName.equals("Ovulation")) {
+                textAnalysis.setText(R.string.in_period);    //排卵期
+            }
+        }
     }
 
     //上傳至後台先檢查資訊是否齊全
@@ -518,7 +535,23 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         editWeight.setText(userWeight);
 
         //辨識結果
-        textAnalysis.setText(record.getSuccess().getMeasure().getParamName());
+        String paramName = record.getSuccess().getMeasure().getParamName();
+        if (paramName.equals("FollicularORLutealPhase")){
+            textAnalysis.setText(R.string.in_low_cell);  //低濾泡
+            //字形大小需要中文與英文不同
+            textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_record_FollicularORLutealPhase));
+        }else if (paramName.equals("Unrecognizable")){
+            textAnalysis.setText(R.string.unknow);      //無法辨識
+            textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_unknow));
+        }else if (paramName.equals("General")){
+            textAnalysis.setText(R.string.non_period);  //非排卵期
+        }else if (paramName.equals("HighFollicularORLutealPhase")){
+            textAnalysis.setText(R.string.in_high_cell); //高濾泡
+            textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_record_HighFollicularORLutealPhase));
+        }else if (paramName.equals("Ovulation")){
+            textAnalysis.setText(R.string.in_period);    //排卵期
+        }
+
         //2021/04/21
         changeRecord.getMeasure().setParam(record.getSuccess().getMeasure().getParam());
 

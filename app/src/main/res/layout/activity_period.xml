@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@mipmap/yhy_background"
     tools:context=".PeriodRecordActivity">
-
     <LinearLayout
         android:id="@+id/ly_reocrd_title"
         android:layout_width="match_parent"
@@ -16,9 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="22sp"
+            android:textSize="@dimen/font_last_recognition_ovulation"
             android:gravity="center"
-            android:text="排卵辨識"/>
+            android:text="@string/last_recognition_ovulation"/>
         <TextView
             android:id="@+id/tvRecordDate"
             android:layout_width="match_parent"
@@ -64,11 +63,13 @@
                     android:layout_toRightOf="@+id/ivPhoto"
                     android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
                     android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
                     android:background="@drawable/shape_268e9f"
                     android:textColor="@color/white"
-                    android:text="拍照"/>
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/record_take_photo"
+                    android:text="@string/record_take_photo"/>
                 <Button
                     android:id="@+id/btnPhotoIdentify"
                     android:layout_width="match_parent"
@@ -80,11 +81,13 @@
                     android:layout_toRightOf="@+id/ivPhoto"
                     android:drawableLeft="@drawable/ic_camera_alt_black_24dp"
                     android:gravity="center"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
                     android:visibility="gone"
+                    android:textAllCaps="false"
                     android:background="@drawable/shape_268e9f"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/font_record_id_photo"
                     android:text="@string/identify" />
             </RelativeLayout>
             <LinearLayout
@@ -95,13 +98,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:textSize="22sp"
-                    android:text="分析結果 : "/>
+                    android:textSize="@dimen/font_analysis_result"
+                    android:text="@string/analysis_result"/>
                 <TextView
                     android:id="@+id/tvAnalysis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"/>
+                    android:textSize="@dimen/font_tvAnalysis"/>
             </LinearLayout>
             <View
                 android:layout_height="1px"
@@ -322,7 +325,7 @@
                 <com.example.yhyhealthydemo.tools.MyGridView
                     android:id="@+id/gvColor"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="100dp"
                     android:focusable="true"
                     android:numColumns="3"
                     android:padding="8dp"/>
@@ -378,7 +381,7 @@
                 <com.example.yhyhealthydemo.tools.MyGridView
                     android:id="@+id/gvType"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="100dp"
                     android:focusable="true"
                     android:numColumns="3"
                     android:padding="8dp"/>
