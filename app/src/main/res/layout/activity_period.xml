@@ -118,14 +118,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="22sp"
-                    android:layout_marginLeft="55dp"
-                    android:text="基礎體溫"/>
+                    android:textSize="@dimen/basal_body_degree"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/body_degree"/>
                 <TextView
                     android:id="@+id/tvBLEConnectStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/font_record_ble_status"
                     android:layout_marginTop="4dp"
                     android:layout_marginLeft="15dp"
                     android:text="@string/not_connect_yet"/>
@@ -156,7 +157,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
-                    android:text="量測中"/>
+                    android:text="@string/ble_connecting_measure"/>
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -202,8 +203,9 @@
                     android:paddingRight="40dp"
                     android:background="@drawable/shape_268e9f"
                     android:textColor="@color/white"
+                    android:textAllCaps="false"
                     android:visibility="invisible"
-                    android:text="開始測量"/>
+                    android:text="@string/record_start_ble_measure"/>
             </LinearLayout>
             <View
                 android:layout_height="1px"
@@ -216,9 +218,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
                     android:layout_weight="1"
-                    android:textSize="22sp"
-                    android:text="體重(kg)"/>
+                    android:textSize="@dimen/font_record_body_weight"
+                    android:text="@string/recode_body_weight"/>
                 <EditText
                     android:id="@+id/edtWeight"
                     android:layout_width="match_parent"
@@ -227,7 +230,7 @@
                     android:gravity="center"
                     android:textSize="14sp"
                     android:layout_marginRight="10dp"
-                    android:hint="請自行輸入體重"/>
+                    android:hint="@string/record_please_input_body_weight"/>
             </LinearLayout>
             <View
                 android:layout_height="1px"
@@ -239,9 +242,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/font_non_menstrual_bleeding"
                     android:textColor="@color/black"
-                    android:text="非經期出血"/>
+                    android:text="@string/non_menstrual_bleeding"/>
                 <Switch
                     android:id="@+id/swBleeding"
                     android:layout_width="100dp"
@@ -262,8 +265,8 @@
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
                     android:layout_weight="1"
-                    android:textSize="22sp"
-                    android:text="乳房脹痛"/>
+                    android:textSize="@dimen/font_chest_pain"
+                    android:text="@string/chest_pain"/>
                 <Switch
                     android:id="@+id/swBreastPain"
                     android:layout_width="100dp"
@@ -284,8 +287,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:text="同房"/>
+                    android:textSize="@dimen/font_intercourse"
+                    android:text="@string/intercourse"/>
                 <Switch
                     android:id="@+id/swIntercourse"
                     android:layout_width="100dp"
@@ -300,9 +303,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="22dp"
+                android:textSize="@dimen/font_secretions"
                 android:textColor="@color/black"
-                android:text="分泌物"/>
+                android:text="@string/secretions"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
@@ -310,9 +313,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
-                android:text="顏色"/>
+                android:text="@string/secretions_color"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
@@ -337,9 +340,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
-                android:text="味道"/>
+                android:text="@string/secretions_scent"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
@@ -365,9 +368,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
-                android:text="型態"/>
+                android:text="@string/secretions_texture"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
@@ -393,9 +396,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
-                android:text="症狀"/>
+                android:text="@string/secretions_symptoms"/>
             <View
                 android:layout_height="1px"
                 android:background="#000000"
@@ -422,11 +425,12 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:textSize="@dimen/font_18"
+                android:textSize="@dimen/font_secretions_all"
+                android:textAllCaps="false"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_btn_pressed"
                 android:textColor="@color/black"
-                android:text="儲存"/>
+                android:text="@string/update_to_api"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

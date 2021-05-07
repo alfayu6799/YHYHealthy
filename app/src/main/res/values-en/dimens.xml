@@ -28,4 +28,14 @@
     <dimen name="font_FollicularORLutealPhase">10sp</dimen>
     <dimen name="font_HighFollicularORLutealPhase">10sp</dimen>
     <dimen name="font_unknow">16sp</dimen>
+    <dimen name="basal_body_degree">14sp</dimen>
+    <dimen name="font_record_ble_status">14sp</dimen>
+    <dimen name="font_record_body_weight">18sp</dimen>
+    <dimen name="font_record_input_body_weight">10sp</dimen>
+    <dimen name="font_non_menstrual_bleeding">22sp</dimen>
+    <dimen name="font_chest_pain">22sp</dimen>
+    <dimen name="font_intercourse">22sp</dimen>
+    <dimen name="font_secretions">22sp</dimen>
+    <dimen name="font_secretions_all">22sp</dimen>
+    <dimen name="font_ble_paired_devices">18sp</dimen>
 </resources>

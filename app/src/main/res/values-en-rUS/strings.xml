@@ -10,9 +10,9 @@
     <string name="temperature">藍芽體溫</string>
     <string name="pregnancy">懷孕紀錄</string>
     <string name="monitor">呼吸監測</string>
-    <string name="update_success">資料上傳成功</string>
+    <string name="update_success">update Success</string>
     <string name="delete_success">資料刪除成功</string>
-    <string name="camera_only_today">拍照辨識僅限當日</string>
+    <string name="camera_only_today">Take picture only today</string>
 
     <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
     <string name="select_function">功能 : </string>
@@ -21,7 +21,7 @@
     <string name="to">To</string>
 
     <string name="param_name">唾液辨識:</string>
-    <string name="body_degree">基礎體溫:</string>
+    <string name="body_degree">Basal Body Temp.</string>
 
     <!-- 第三方庫 : slycalendar 專用 -->
     <string name="slycalendar_cancel">取消</string>
@@ -186,7 +186,7 @@
     <string name="need_comp_code">請由信箱或簡訊獲取驗證碼</string>
     <string name="account_has_already">帳號已存在</string>
     <string name="account_is_no_data">查無資料</string>
-    <string name="update_to_api">儲存</string>
+    <string name="update_to_api">update</string>
     <string name="remind">此資訊與排卵預測相關,\n請務必填寫正確並儲存</string>
     <string name="progress">資料讀取中</string>
     <string name="register_success">註冊成功,請至信箱取得授權碼登入</string>
@@ -217,7 +217,7 @@
     <string name="forget_password">忘記密碼</string>
     <string name="sure">確定</string>
     <string name="please_input_comp_code">請輸入授權碼</string>
-    <string name="json_error_code">"目前無法解析資料,錯誤代碼為: "</string>
+    <string name="json_error_code">json error:</string>
     <string name="catalog">類別</string>
     <string name="nursing">護理</string>
     <string name="nutrition">營養</string>
@@ -231,17 +231,17 @@
     <string name="unknow">Unrecognizable</string>
     <string name="non_period">General</string>
     <string name="period_day">Today is the</string>
-    <string name="period_day_out_order">超出本月週期範圍</string>
+    <string name="period_day_out_order">Out of range</string>
     <string name="day">th Day of Menstrual Period</string>
     <string name="please_chose_really_day">請選擇實際經期:</string>
     <string name="delete_really_day">做刪除</string>
-    <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
-    <string name="period_day_is_empty">沒有週期資料</string>
+    <string name="you_are_chose_day_is">you chose day is :</string>
+    <string name="period_day_is_empty">no information</string>
     <string name="function_only_today">此功能僅限今日</string>
     <string name="ble_is_release">釋放藍芽資源</string>
     <string name="auth_code_update_success">授權碼更新成功</string>
-    <string name="ble_connecting_measure">量測中</string>
-    <string name="ble_only_today">藍芽體溫量測僅限今天</string>
+    <string name="ble_connecting_measure">Measuring....</string>
+    <string name="ble_only_today">Temperature measure only today</string>
     <string name="email_already_existed">此信箱已經註冊過</string>
     <string name="camera_not_action">未做任何拍攝</string>
     <string name="no_date">沒有資料</string>
@@ -273,12 +273,11 @@
     <string name="blood_water">流血水樣</string>
     <string name="off">No</string>
     <string name="on">Yes</string>
-    <string name="measure_done">量測完畢</string>
-    <string name="degree_alarm">37.5°C - 38°C\n(99.5°F -100.4°F):\n除去過多衣物、被子、\n多喝水或補充電解水，\n30分鐘後再進行檢測\n體溫</string>
-    <string name="degree_eng">37.5°C - 38°C\n(99.5°F -100.4°F):\nRemove extra clothing, \nblankets,offer plenty of\nwater or oral electrolyte\nsolutions.Wait for 30\nminutes,then take the\ntemperature again.</string>
-    <string name="ble_fail">連結失敗</string>
-    <string name="fever_alarm">您發燒了!!!</string>
-    <string name="fever_degree_is">您目前體溫是:</string>
+    <string name="measure_done">Measure done</string>
+    <string name="degree_alarm">37.5°C - 38°C\n(99.5°F -100.4°F):\nRemove extra clothing, \nblankets,offer plenty of\nwater or oral electrolyte\nsolutions.Wait for 30\nminutes,then take the\ntemperature again.</string>
+    <string name="ble_fail">connected fail</string>
+    <string name="fever_alarm">You are fever!!</string>
+    <string name="fever_degree_is">Fever degree is:</string>
     <string name="next_measure_time_is">next measuring Time:</string>
     <string name="menstrual_period">Menstrual\nPeriod</string>
     <string name="ovulation_period">Ovulation\nPeriod</string>
@@ -299,4 +298,20 @@
     <string name="record_take_photo">new\npicture</string>
     <string name="last_recognition_ovulation">Last Recognition Ovulation</string>
     <string name="analysis_result">Analysis Result:</string>
+    <string name="record_start_ble_measure">Start</string>
+    <string name="recode_body_weight">Body Weight(kg)</string>
+    <string name="record_please_input_body_weight">Please input body weight</string>
+    <string name="non_menstrual_bleeding">Non-Menstrual Bleeding</string>
+    <string name="chest_pain">Chest Pain</string>
+    <string name="intercourse">Intercourse</string>
+    <string name="secretions">Secretions</string>
+    <string name="secretions_color">Color</string>
+    <string name="secretions_scent">Scent</string>
+    <string name="secretions_texture">Texture</string>
+    <string name="secretions_symptoms">Symptoms</string>
+    <string name="search_in_5_min">5 mins times out</string>
+    <string name="ble_is_connect">bluetooth is connecting ....</string>
+    <string name="ble_is_disconnected_and_release">Bluetooth is disconnected and release</string>
+    <string name="ble_is_disconnected">Bluetooth is disconnected</string>
+    <string name="ble_paired_devices">Paired Devices</string>
 </resources>

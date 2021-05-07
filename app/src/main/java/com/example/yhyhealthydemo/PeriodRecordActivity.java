@@ -722,7 +722,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
-                    Toasty.info(PeriodRecordActivity.this, "5秒停止搜尋", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(PeriodRecordActivity.this, R.string.search_in_5_min, Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
@@ -733,17 +733,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             isScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
         }
-
-//        //BLE搜尋button
-//        Button bleSubmit = view.findViewById(R.id.btnBleSubmit);
-//        bleSubmit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Toast.makeText(PeriodRecordActivity.this, getString(R.string.ble_start_scanner), Toast.LENGTH_SHORT).show();
-//                Log.d(TAG, "dialog : 使用者自行啟動搜尋功能");
-//            }
-//        });
 
         //停止搜尋BLE裝置並關閉此dialog
         Button bleCancel = view.findViewById(R.id.btnBleCancel);
@@ -873,21 +862,21 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
             switch (action) {
                 case yhyBleService.ACTION_GATT_CONNECTED:
-                    Toasty.info(PeriodRecordActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(PeriodRecordActivity.this, R.string.ble_is_connect, Toast.LENGTH_SHORT, true).show();
                     break;
 
                 case yhyBleService.ACTION_GATT_DISCONNECTED:
-                    Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PeriodRecordActivity.this, R.string.ble_is_disconnected_and_release, Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
                     updateConnectionStatus(getString(R.string.ble_is_not_connect));
                     searchBLE.setVisibility(View.VISIBLE);         //搜尋藍芽按鈕顯示
-                    myCountDownTimer.cancel();                    //定時功能取消
+                    myCountDownTimer.cancel();                    //定時功能取消會
                     linearLayout.setVisibility(View.INVISIBLE);  //定時進度條隱藏
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
-                    Toast.makeText(PeriodRecordActivity.this, "藍芽已斷開", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PeriodRecordActivity.this, R.string.ble_is_disconnected, Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
                     searchBLE.setVisibility(View.VISIBLE);        //搜尋藍芽按鈕顯示
                     myCountDownTimer.cancel();                    //定時功能取消
@@ -897,7 +886,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 case yhyBleService.ACTION_NOTIFY_ON:
                     Log.d(TAG, "onReceive: 收到BLE通知服務 啟動成功");
                     deviceAddress = intent.getStringExtra(yhyBleService.EXTRA_MAC);
-                    textBleStatus.setText(deviceName + getString(R.string.ble_connect_status));
+                    textBleStatus.setText(deviceName + " " + getString(R.string.ble_connect_status));
                     textBleStatus.setTextColor(Color.RED);
                     searchBLE.setVisibility(View.INVISIBLE);    //搜尋藍芽按鈕隱藏
                     startMeasure.setVisibility(View.VISIBLE);  //測量按鈕顯示
@@ -968,7 +957,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             mBleReceiver = null;
             mBluetoothLeService.disconnect();
             mBluetoothLeService.release();
-
         }
         unbindService(mServiceConnection);
         mBluetoothLeService = null;

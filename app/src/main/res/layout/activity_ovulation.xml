@@ -93,9 +93,8 @@
                         android:id="@+id/tvShowPeriodDay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
+                        android:layout_marginLeft="16dp"
                         android:textSize="@dimen/font_day_of_menstruation"
-                        android:text="週期第N天"
                         app:layout_constraintEnd_toStartOf="@+id/guideline39"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

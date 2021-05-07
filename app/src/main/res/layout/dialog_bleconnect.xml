@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
-        android:textSize="18sp"
-        android:text="可配對裝置"/>
+        android:textSize="@dimen/font_ble_paired_devices"
+        android:text="@string/ble_paired_devices"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBleScanView"
         android:layout_width="match_parent"
@@ -31,10 +31,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_ble_paired_devices"
+            android:textAllCaps="false"
             android:textColor="@color/red"
             android:background="@color/translucent"
-            android:text="取消"/>
+            android:text="@string/dialog_cancel"/>
         <Button
             android:id="@+id/btnBleSubmit"
             android:layout_width="wrap_content"
@@ -43,6 +44,7 @@
             android:textSize="18sp"
             android:textColor="@color/greenDark"
             android:background="@color/translucent"
+            android:visibility="invisible"
             android:text="搜尋"/>
     </LinearLayout>
 </LinearLayout>
