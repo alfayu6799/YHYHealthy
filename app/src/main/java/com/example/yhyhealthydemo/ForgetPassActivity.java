@@ -125,7 +125,7 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
                             Toasty.success(ForgetPassActivity.this, getString(R.string.change_password_success), Toast.LENGTH_SHORT, true).show();
                             finish();
                         }else {
-                            Log.d(TAG, "錯誤訊息: " + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -216,7 +216,7 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
                     finish();
                 }
             }else {
-                Log.d(TAG, "錯誤訊息: " + errorCode);
+                Log.d(TAG, getString(R.string.json_error_code) + errorCode);
             }
         } catch (JSONException e) {
             e.printStackTrace();

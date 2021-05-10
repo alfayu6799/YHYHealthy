@@ -167,5 +167,6 @@
         android:layout_gravity="center"
         android:background="@drawable/shape_btn_temp_pressed"
         android:textColor="@color/white"
+        android:textAllCaps="false"
         android:text="@string/privacy_confirm"/>
 </LinearLayout>

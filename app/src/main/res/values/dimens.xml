@@ -17,6 +17,11 @@
     <dimen name="title_pregnancy">20sp</dimen>
     <dimen name="title_monitor">20sp</dimen>
 
+    <dimen name="font_login_register">22sp</dimen>
+    <dimen name="font_login_forget">22sp</dimen>
+    <dimen name="font_license_title">22sp</dimen>
+    <dimen name="font_agree">22sp</dimen>
+
     <dimen name="greenish_yellow">12sp</dimen>
     <dimen name="record_take_photo">12sp</dimen>
     <dimen name="font_last_recognition_ovulation">18sp</dimen>
@@ -38,4 +43,5 @@
     <dimen name="font_secretions">22sp</dimen>
     <dimen name="font_secretions_all">18sp</dimen>
     <dimen name="font_ble_paired_devices">18sp</dimen>
+
 </resources>

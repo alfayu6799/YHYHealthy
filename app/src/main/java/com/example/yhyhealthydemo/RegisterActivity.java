@@ -94,10 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d(TAG, "onClick: ????");
                 //帳號與密碼不得為空
-                if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString()))
-                         return;
+                if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString())){
+                    Toasty.error(RegisterActivity.this, getString(R.string.account_is_not_allow_empty), Toast.LENGTH_SHORT, true).show();
+                    return;
+                }
 
                 //帳號和密碼輸入不得少於6
                 if(account.getText().toString().trim().length() < 6 || password.getText().toString().trim().length() < 6) {
@@ -115,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                             //寫回後台
                             upDataToApi();
                         }else {
-                            Toasty.error(RegisterActivity.this, getString(R.string.please_input_vaild_email), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(RegisterActivity.this, getString(R.string.please_input_valid_email), Toast.LENGTH_SHORT, true).show();
                         }
                     }
                 } //end of verificationStyle is email

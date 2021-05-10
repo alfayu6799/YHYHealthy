@@ -43,14 +43,63 @@
     <string name="forget">忘記密碼</string>
     <string name="account_register">註冊帳號</string>
     <string name="confirm_password">再次確認密碼</string>
-    <string name="email_account">eMail</string>
+    <string name="email_account">Email</string>
     <string name="please_input_account">請輸入帳號</string>
     <string name="please_input_password">請輸入密碼</string>
     <string name="verification">驗證方式</string>
     <string name="please_confirm_password">請再次確認密碼</string>
     <string name="register_name_digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-    <string name="privacy_not_pass">請確認服務條款都需要同意</string>
-    <string name="privacy_contrnt">本App所取得的個人資料，都僅供本司於其內部、依照原來所說明的使用目的和範圍，除非事先說明、或依照相關法律規定，否則我司不會將資料提供給第三人、或移作其他目的使用。</string>
+    <string name="privacy_content"><![CDATA[<html>]]>
+      <![CDATA[<style>]]>
+         p.small {
+            line-height: 1.5;
+            font-size: 12px;
+         }
+      <![CDATA[</style>]]>
+      <![CDATA[<body><p align="justify" class="small">]]>
+        使用者授權合約
+        YHY INFORMATION TECHNOLOGY (ASIA) PTE. LTD.及其子公司（以下稱為"YHY"或"我們"）授與您使用YHY行動應用程式（以下簡稱「應用程式」），
+        而非以銷售方式供應。應用程式系根據以下授權提供，且需遵守下列條款及條件。
+      <![CDATA[<br><br>]]>
+         重要提示
+         在使用本應用程式之前，請仔細閱讀本授權。使用應用程式表示，您確認您已閱讀本授權合約並且同意其條款。
+         如果您不同意條款內容，請勿使用本應用程式。
+         若您未滿十八歲，應于使用本應用程式前，將本合約請您的法定代理人(家長)或監護人閱讀、瞭解並同意本合約之所有內容，才可以註冊及使用本應用程式。
+         當您使用本應用程式時，則視為您的家長（或監護人）已經閱讀、瞭解並同意本合約之所有內容及其後之修改變更。
+      <![CDATA[<br><br>]]>
+         授權條款和條件
+         YHY授予您非專屬有限使用授權，讓您根據本合約條款使用應用程式。
+         您同意不對應用程式之任何部分另行重制、複製、修改、解編、反向組譯、還原工程或製作衍生作品；
+         您不得以任何形式、出於任何目的傳播或散佈本應用程式。
+         YHY保留隨時修改本應用程式的權利，或是因任何理由隨時停止提供本應用程式的權利，包括但不限於：
+         如任何協力供應商停止供應內容或服務，或YHY與相關供應商間的合約因故終止。如YHY必須停止提供應用程式，
+         則此合約及其授予您之權利，應立即終止。
+         此合約包含的“保證和責任的免責聲明”在此合約終止後仍然有效。
+         若本應用程式之使用被終止，YHY對您或其他第三人均不承擔任何責任。
+      <![CDATA[<br><br>]]>
+         授予App使用您的資料，基於保護您的隱私權，除非符合以下任一條件，本公司不會將您的個人資料提供、出借或出售給與服務或交易無關之任何第三人：
+          1.	事先征得您本人的同意或授權。
+          2.	司法單位或其他主管機關經合法正式的程式要求時。
+          3.	本公司委由對公司有保密責任之合作夥伴（企業、組織或個人）處理個人資訊。
+                本公司要求該合作夥伴根據本公司的指示處理資料，並遵守本《使用者授權合約》和其他適用的任何保密和安全措施。
+          4.	為了提供您其他服務或優惠權益，本公司如與第三人共同行銷而需與第三人共用您的資料時，本公司將依您的個人資料種類，採取下列行為：
+            4.1	一般個人資料（如：姓名、手機號碼、生日及性別）：
+                本公司將與共同行銷之第三人共用您的一般個人資料。如您不同意該共同行銷之第三人使用您的一般個人資料，請通知本公司管理員。
+            4.2	特種個人資料（如：病歷、醫療、健康檢查、產品使用紀錄）：
+                本公司會在活動時提供充分說明並告知，您可以自由選擇是否接受這項服務或優惠，本公司於取得您的同意時，
+                始會將您的特種個人資料提供予與本公司共同行銷之第三人。
+      <![CDATA[<br><br>]]>
+         限制
+         您不得向任何他人或 協力廠商銷售、租賃或借貸本應用程式。
+         您確認本應用程式應只用作一般資訊參考之用，且不得在任何生死攸關情況下依賴本應用程式。
+      <![CDATA[<br><br>]]>
+         無保證
+         本應用程式系按「原樣(AS IS)」提供，您同意自行承擔使用風險。
+         YHY不作出法律或任何層面的保證、聲明或擔保，無論是明示、暗示、法定還是其他保證，
+         包括但不限於，針對本應用程式的內容、品質、正確性、完整性、有效性、可靠性、適銷性、針對於某一特定用途之適用性、實用性、用途或實效，
+         或本應用程式之運作不中斷或正確無誤。
+      <![CDATA[</p></body></html>]]></string>
+    <string name="private_license">服務條款</string>
 
     <!-- 權限 messages-->
     <string name="permission_required">權限需求</string>
@@ -166,7 +215,7 @@
     <string name="edit">編輯</string>
     <string name="delete">刪除</string>
     <string name="tel_code">國際編碼</string>
-    <string name="please_input_vaild_email">請輸入有效的電子郵件地址</string>
+    <string name="please_input_valid_email">Please input a valid email address</string>
     <string name="account_is_not_empty">帳號不得空白</string>
     <string name="tel_code_not_empty">國際編碼不得空白</string>
     <string name="please_input_compcode">請輸入驗證碼</string>
@@ -192,6 +241,7 @@
     <string name="register_success">註冊成功,請至信箱取得授權碼登入</string>
     <string name="access_success">驗證成功,請再次登入</string>
     <string name="login_success">登入成功</string>
+    <string name="account_is_not_allow_empty">帳號或密碼不得空白</string>
     <string name="number_less_six">字數不得少於6</string>
     <string name="change_password_success">變更密碼成功,請使用新密碼登入</string>
     <string name="please_input_need_height_and_weight">BMI需要輸入身高體重</string>
@@ -241,7 +291,7 @@
     <string name="ble_is_release">釋放藍芽資源</string>
     <string name="auth_code_update_success">授權碼更新成功</string>
     <string name="ble_connecting_measure">量測中</string>
-    <string name="ble_only_today">藍芽體溫量測僅限今天</string>
+    <string name="ble_only_today">藍芽體溫量測僅限當日</string>
     <string name="email_already_existed">此信箱已經註冊過</string>
     <string name="camera_not_action">未做任何拍攝</string>
     <string name="no_date">沒有資料</string>
@@ -314,4 +364,8 @@
     <string name="ble_is_disconnected_and_release">藍芽已斷開並釋放資源</string>
     <string name="ble_is_disconnected">藍芽已斷開</string>
     <string name="ble_paired_devices">可配對之裝置</string>
+    <string name="under_25_degree">溫度低於25度</string>
+    <string name="agree">同意</string>
+    <string name="not_agree">不同意</string>
+    <string name="submit">送出</string>
 </resources>

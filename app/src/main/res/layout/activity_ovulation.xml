@@ -215,8 +215,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:textSize="18dp"
-                        android:text="無法辨識"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_result_1"
                         app:layout_constraintStart_toStartOf="@+id/guideline40"
                         app:layout_constraintTop_toTopOf="@+id/tv_ovul_result_1" />

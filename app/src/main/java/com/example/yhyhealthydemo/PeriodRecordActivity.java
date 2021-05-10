@@ -960,6 +960,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
+        myCountDownTimer.cancel();
     }
 
     public class MyCountDownTimer extends CountDownTimer {

@@ -587,6 +587,10 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 //需用mac將藍芽回來的資料分開保存
                 chartDialog.update(tAdapter.getDegreeByMac(macAddress));  //更新Dialog內的溫度圖表
 
+            //溫度低於25度要通知 2021/05/10
+            if (degree <= 25)
+                Toasty.info(TemperatureActivity.this, R.string.under_25_degree,Toast.LENGTH_SHORT, true).show();
+
             //發燒到37.5會出現警告彈跳視窗
             if(degree > 37.5)
                 feverDialog(tAdapter.findNameByMac(macAddress), degree); //藉由mac取得adapter使用者名稱
