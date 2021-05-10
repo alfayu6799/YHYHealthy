@@ -164,10 +164,12 @@
     <string name="add_new_remote_account">新增監控帳號</string>
     <string name="system_setting">系統設定</string>
     <string name="system_user_setting">個人設定</string>
-    <string name="system_vedio">教學影片</string>
+    <string name="system_video">教學影片</string>
     <string name="system_provision">使用條款</string>
-    <string name="system_version">APP Version</string>
+    <string name="system_version">系統版本</string>
     <string name="system_logout">登出</string>
+    <string name="title_setting">設定</string>
+    <string name="system_setting_account">帳戶設定</string>
 
     <string name="announcement">公告</string>
     <string name="shopping">購物</string>
@@ -368,4 +370,5 @@
     <string name="agree">同意</string>
     <string name="not_agree">不同意</string>
     <string name="submit">送出</string>
+
 </resources>

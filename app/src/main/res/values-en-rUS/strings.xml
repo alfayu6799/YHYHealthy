@@ -152,7 +152,7 @@
     <string name="plase_fill_info">請補齊資料</string>
 
     <string name="chart_no_data">No data</string>
-    <string name="No_sup_Bluetooth">沒有藍芽裝置</string>
+    <string name="No_sup_Bluetooth">bluetooth not support</string>
     <string name="ble_start_scanner">藍芽開始搜尋</string>
     <string name="ble_stop_scanner">藍芽停止搜尋</string>
     <string name="ble_stop_in_10">超時10秒停止掃描</string>
@@ -173,12 +173,14 @@
     <string name="please_input_other_account">請輸入對方的帳號</string>
     <string name="please_input_authorization">請輸入對方的授權碼</string>
     <string name="add_new_remote_account">新增監控帳號</string>
-    <string name="system_setting">系統設定</string>
-    <string name="system_user_setting">個人設定</string>
-    <string name="system_vedio">教學影片</string>
-    <string name="system_provision">使用條款</string>
+    <string name="system_setting">System Setting</string>
+    <string name="system_user_setting">Personal Setting</string>
+    <string name="system_video">Video Tutorials</string>
+    <string name="system_provision">Terms of Use</string>
     <string name="system_version">APP Version</string>
-    <string name="system_logout">登出</string>
+    <string name="system_logout">Sign out</string>
+    <string name="title_setting">Setting</string>
+    <string name="system_setting_account">Account Setting</string>
 
     <string name="announcement">News</string>
     <string name="shopping">Shopping</string>
@@ -186,10 +188,10 @@
     <string name="api_unavailable">無法取得網路服務，請稍後再試</string>
 
     <string name="setting_user_change_password">密碼變更</string>
-    <string name="setting_user_basic_info">基本資料</string>
-    <string name="setting_for_pregnancy">懷孕設定</string>
-    <string name="setting_for_menstruation">經期設定</string>
-    <string name="setting_for_person">個人設定</string>
+    <string name="setting_user_basic_info">Personal Information</string>
+    <string name="setting_for_pregnancy">Pregnancy Settings</string>
+    <string name="setting_for_menstruation">Cycle Settings</string>
+    <string name="setting_for_person">Personal Setting</string>
     <string name="setting_for_period_length">週期長度</string>
     <string name="setting_for_menstruation_length">經期長度</string>
     <string name="setting_for_menstruation_start">上次月經的開始日</string>
@@ -204,13 +206,13 @@
     <string name="setting_for_pregnancy_Caesarean">剖腹產</string>
     <string name="setting_user_verification">驗證方式</string>
     <string name="setting_user_authorization_code">遠端授權碼</string>
-    <string name="setting_user_marriage_info">婚姻狀況</string>
+    <string name="setting_user_marriage_info">Marital Status</string>
     <string name="setting_user_marriage">已婚/未婚</string>
     <string name="setting_for_contraception">是否避孕</string>
     <string name="setting_for_child">小孩(無/有)</string>
     <string name="setting_for_device">裝置管理</string>
     <string name="setting_for_Observation">觀測者編輯</string>
-    <string name="setting_temperature_unit">溫度單位</string>
+    <string name="setting_temperature_unit">Temperature Unit</string>
     <string name="setting_for_ble">藍芽連線</string>
     <string name="setting_ble_scanner">掃描藍芽裝置</string>
     <string name="setting_ble_connect">已連線裝置</string>
@@ -251,14 +253,14 @@
     <string name="progress">資料讀取中</string>
     <string name="register_success">Register Succeed and get verification in email then login</string>
     <string name="access_success">verification succeed,please login again</string>
-    <string name="login_success">登入成功</string>
+    <string name="login_success">Login Succeed</string>
     <string name="account_is_not_allow_empty">Account or Password is not allow empty</string>
     <string name="number_less_six">Words must be at least 6 characters long</string>
     <string name="change_password_success">change password is succeed, please input new password to login</string>
     <string name="please_input_need_height_and_weight">BMI需要輸入身高體重</string>
     <string name="body_weight_is_not_empty">體重不得空白</string>
     <string name="body_height_is_not_empty">身高不得空白</string>
-    <string name="logout_success">登出成功</string>
+    <string name="logout_success">Logout succeed</string>
     <string name="days_is_not_allow_tomorrow">日期不得選擇未來</string>
     <string name="endday_is_not_before_lastday">結束日不得小於起始日</string>
     <string name="not_allow_empty">不允許空白</string>
@@ -270,8 +272,8 @@
     <string name="change_verification_success">變更驗證方式成功</string>
     <string name="failure">失敗</string>
     <string name="title_process">訊息</string>
-    <string name="process">處理中...</string>
-    <string name="api_no_respond">伺服器無回應,請檢查網路連線</string>
+    <string name="process">processing...</string>
+    <string name="api_no_respond">Service is not respond, please check network</string>
     <string name="start_period_date">Start\nDay</string>
     <string name="end_period_day">End\nDay</string>
     <string name="real_period">Cycle Setting</string>
@@ -317,12 +319,12 @@
     <string name="please_update_auth_code">更新遠端帳號授權碼</string>
     <string name="please_input_serial_no">請輸入裝置序號</string>
     <string name="deviceRegister">已註冊之裝置</string>
-    <string name="setting_ble_device_changeName">藍芽設備更名</string>
-    <string name="please_chose_unit">請選擇單位</string>
-    <string name="celsius">攝氏</string>
-    <string name="fahrenheit">華氏</string>
-    <string name="your_chose_unit_is_celsius">你選擇使用攝氏單位</string>
-    <string name="your_chose_unit_is_fahrenheit">你選擇使用華氏單位</string>
+    <string name="setting_ble_device_changeName">rename Bluetooth device</string>
+    <string name="please_chose_unit">Please chose unit</string>
+    <string name="celsius">Celsius</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="your_chose_unit_is_celsius">you chose celsius</string>
+    <string name="your_chose_unit_is_fahrenheit">you chose fahrenheit</string>
     <string name="symptomRecord">症狀紀錄</string>
     <string name="foamy">泡沫狀</string>
     <string name="bloodshot">血絲血痰</string>

@@ -395,19 +395,19 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
             switch (action) {
 
                 case yhyBleService.ACTION_GATT_CONNECTED:
-                    Toasty.info(context, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
+                    //Toasty.info(context, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
                     Log.d(TAG, "onReceive: 藍芽連接中..." );
                     break;
 
                 case yhyBleService.ACTION_GATT_DISCONNECTED:
-                    Toasty.info(context, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(context, getString(R.string.ble_is_disconnected_and_release), Toast.LENGTH_SHORT, true).show();
                     Log.d(TAG, "onReceive: 藍芽已斷開並釋放資源" );
                     mBleService.disconnect();
                     mBleService.release();
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
-                    Toasty.info(context, "藍芽已斷開", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(context, getString(R.string.ble_is_disconnected), Toast.LENGTH_SHORT, true).show();
                     Log.d(TAG, "onReceive: 藍芽已斷開" );
                     mBleService.disconnect();
                     break;

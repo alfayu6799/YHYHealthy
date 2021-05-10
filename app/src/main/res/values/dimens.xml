@@ -43,5 +43,11 @@
     <dimen name="font_secretions">22sp</dimen>
     <dimen name="font_secretions_all">18sp</dimen>
     <dimen name="font_ble_paired_devices">18sp</dimen>
-
+    <dimen name="font_setting_title">22dp</dimen>
+    <dimen name="font_setting_detail">22dp</dimen>
+    <dimen name="font_setting_version">18dp</dimen>
+    <dimen name="font_system_setting">24dp</dimen>
+    <dimen name="font_temperature_unit">24dp</dimen>
+    <dimen name="font_bluetooth_rename">24dp</dimen>
+    <dimen name="font_personal_info">24dp</dimen>
 </resources>

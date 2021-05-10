@@ -42,7 +42,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/setting_user_basic_info"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_personal_info"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -72,7 +72,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/setting_user_marriage_info"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_personal_info"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -83,7 +83,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/setting_for_menstruation"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_personal_info"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_personal_info"
         android:text="@string/setting_for_pregnancy"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/textView31" />
