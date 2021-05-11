@@ -51,4 +51,16 @@
     <dimen name="font_temperature_unit">18dp</dimen>
     <dimen name="font_bluetooth_rename">18dp</dimen>
     <dimen name="font_personal_info">22dp</dimen>
+    <dimen name="font_user_basic_account">18dp</dimen>
+    <dimen name="font_title_user_basic_info">18dp</dimen>
+    <dimen name="font_user_basic_bmi">20dp</dimen>
+    <dimen name="font_title_user_marriage_status">24dp</dimen>
+    <dimen name="font_user_marriage_status_detail">22dp</dimen>
+    <dimen name="font_title_user_cycle">24dp</dimen>
+    <dimen name="font_user_for_menstruation_day_range">18dp</dimen>
+    <dimen name="font_user_for_menstruation_day_range_show">20dp</dimen>
+    <dimen name="font_user_account">24dp</dimen>
+    <dimen name="font_user_for_checkbox">16dp</dimen>
+    <dimen name="font_user_device_control">22dp</dimen>
+    <dimen name="font_system_provision">24dp</dimen>
 </resources>

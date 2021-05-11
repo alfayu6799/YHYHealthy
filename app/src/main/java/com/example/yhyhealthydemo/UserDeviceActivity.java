@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -113,6 +114,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJson(result);
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
+                        }else {
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -189,8 +196,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         if (errorCode ==0){
                             Toasty.success(UserDeviceActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
+                        }else if (errorCode == 23){  //token 失效
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
                         }else {
-                            Log.d(TAG, "錯誤代碼: " + errorCode);
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -246,8 +257,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         if (errorCode == 0){
                             Toasty.success(UserDeviceActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
+                        }else if (errorCode == 23 ){
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
                         }else {
-                            Log.d(TAG, "刪除裝置序號結果之後台回傳的錯誤碼:" + errorCode);
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

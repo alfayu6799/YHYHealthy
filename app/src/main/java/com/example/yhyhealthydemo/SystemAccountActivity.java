@@ -120,7 +120,7 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
         builder.setView(textView);
 
         //確定=關閉視窗
-        builder.setNeutralButton("確定", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -140,6 +140,8 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
         AlertDialog dialog = builder.create();
         dialog.setView(textView, 350, 0, 0, 0);
         dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);  //Button文字小寫顯示
+        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setAllCaps(false);   //Button文字小寫顯示
     }
 
     private void updateToApi() {
@@ -163,6 +165,12 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
                         if (errorCode == 0) {
                             Toasty.success(SystemAccountActivity.this, getString(R.string.auth_code_update_success), Toast.LENGTH_SHORT, true).show();
                             getAuthCodeFromApi(); //重新取得授權碼
+                        }else if (errorCode == 23){
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -203,6 +211,12 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0){
                             authCode = jsonObject.getInt("success"); //將授權碼給予全域
+                        }else if (errorCode == 23){
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

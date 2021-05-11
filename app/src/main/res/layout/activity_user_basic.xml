@@ -17,16 +17,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="12dp"
+            android:layout_weight="0.2"
             android:src="@drawable/ic_baseline_arrow_back_ios_32"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1.5"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="100dp"
-            android:textSize="24dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="@dimen/font_title_user_basic_info"
             android:text="@string/setting_user_basic_info"/>
-
         <Button
             android:id="@+id/btnSaveToApi"
             android:layout_width="wrap_content"
@@ -35,7 +37,8 @@
             android:layout_marginBottom="8dp"
             android:textColor="@color/white"
             android:text="@string/update_to_api"
-            android:layout_marginLeft="35dp"
+            android:textAllCaps="false"
+            android:layout_weight="0.3"
             android:layout_marginRight="15dp"
             android:background="@drawable/shape_268e9f"/>
     </LinearLayout>
@@ -63,8 +66,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="帳號"
-                    android:textSize="24dp"/>
+                    android:text="@string/account"
+                    android:textSize="@dimen/font_user_basic_account"/>
 
                 <TextView
                     android:id="@+id/textUserAccount"
@@ -90,8 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="名稱"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_user_name"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/edtChangeName"
                     android:layout_width="match_parent"
@@ -122,8 +125,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:gravity="center"
-                    android:text="性別"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_user_gender"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <TextView
                     android:id="@+id/textGender"
                     android:layout_width="match_parent"
@@ -150,8 +153,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="信箱"
-                    android:textSize="24dp"/>
+                    android:text="@string/email"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/edtEmailAddress"
                     android:layout_width="match_parent"
@@ -181,8 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:gravity="center"
-                    android:text="生日"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_user_birthday"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <TextView
                     android:id="@+id/textBornDay"
                     android:layout_width="match_parent"
@@ -209,8 +212,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="國際區碼"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_area_code"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/edtAreaCode"
                     android:layout_width="match_parent"
@@ -239,8 +242,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="手機號碼"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_cell_phone_number"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/edtPhoneNumber"
                     android:layout_width="match_parent"
@@ -269,8 +272,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="身高"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_body_height"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/edtHeight"
                     android:layout_width="match_parent"
@@ -299,8 +302,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="體重"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_body_weight"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <EditText
                     android:id="@+id/editWeight"
                     android:layout_width="match_parent"
@@ -329,8 +332,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="BMI"
-                    android:textSize="24dp"/>
+                    android:text="@string/setting_for_body_bmi"
+                    android:textSize="@dimen/font_user_basic_account"/>
                 <TextView
                     android:id="@+id/textBMI"
                     android:layout_width="match_parent"
@@ -338,8 +341,8 @@
                     android:layout_marginLeft="58dp"
                     android:layout_marginRight="16dp"
                     android:gravity="right"
-                    android:textSize="20dp"
-                    android:text="BMI"
+                    android:textSize="@dimen/font_user_basic_bmi"
+                    android:text="@string/setting_for_body_bmi"
                     android:padding="10dp"/>
             </LinearLayout>
         </LinearLayout>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -172,8 +173,12 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                             }else if(code == 2) { //已開通
                                 finish();
                             }
+                        }else if (errorCode == 23){ //token失效 2021/05/11
+                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -259,6 +264,12 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                             }else if (errorCode == 0){ //驗證成功
                                 Toasty.success(UserChangeVerifiActivity.this, getString(R.string.change_verification_success), Toast.LENGTH_SHORT, true).show();
                                 finish();
+                            }else if (errorCode == 23 ) {//token失效 2021/05/11
+                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                                startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
+                                finish();
+                            }else {
+                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

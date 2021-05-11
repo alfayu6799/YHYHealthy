@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -25,11 +26,14 @@ import com.example.yhyhealthydemo.datebase.ChangeUserBasicInfoApi;
 import com.example.yhyhealthydemo.datebase.UsersData;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
 import es.dmoral.toasty.Toasty;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.RENEW_TOKEN;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_UPDATE;
 
@@ -93,7 +97,21 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result); //解析後台來的資料
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserJson(result); //解析後台來的資料
+                        }else if (errorCode == 23){ //token失效 2021/05/11
+                            Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                            //getNewToken(); //更新token
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             });
         }
@@ -282,7 +300,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //體重
         changeUserBasicInfoApi.setWeight(Double.parseDouble(bodyWeight.getText().toString()));
 
-        Log.d(TAG, "updateToApi:  " + changeUserBasicInfoApi.toJSONString());
         //上傳到後台
         proxy.buildPOST(USER_UPDATE, changeUserBasicInfoApi.toJSONString(), changeInfoListener);
     }
@@ -307,6 +324,12 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                         int errorCode = object.getInt("errorCode");
                         if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
+                        }else if(errorCode == 23){ //token失效
+                            Toasty.error(UserBasicActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {  //2021/05/11
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -318,7 +341,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onFailure(String message) {
-
+            Log.d(TAG, "onFailure: " + message);
         }
 
         @Override
@@ -381,6 +404,33 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         alert.setCanceledOnTouchOutside(false);
         alert.show();
     }
+
+    //取得新token 2021/05/11
+    private void getNewToken() {
+        proxy.buildToken(RENEW_TOKEN,"", getNewTokenListen);
+    }
+
+    private ApiProxy.OnApiListener getNewTokenListen = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     //禁用返回健
     @Override

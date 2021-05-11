@@ -18,10 +18,12 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:textSize="24dp"
         android:text="@string/setting_for_menstruation"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/font_title_user_cycle"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +45,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_period_length"
-        android:textSize="22dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -54,7 +56,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_menstruation_length"
-        android:textSize="22dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -65,7 +67,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:text="@string/setting_for_menstruation_start"
-        android:textSize="22dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -76,7 +78,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/setting_for_menstruation_end"
-        android:textSize="22dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
@@ -89,10 +91,12 @@
 
     <EditText
         android:id="@+id/edtCycleLength"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:ems="2"
+        android:gravity="center"
         android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
@@ -100,65 +104,67 @@
         android:id="@+id/tvPeriodLength"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_title_user_cycle"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
         app:layout_constraintTop_toTopOf="@+id/textView14" />
 
     <TextView
         android:id="@+id/tvDateStart"
-        android:layout_width="130dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:padding="8dp"
         android:text="@string/start_period_date"
-        android:padding="12dp"
-        android:textSize="16dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range_show"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
 
     <TextView
         android:id="@+id/tvDateEnd"
-        android:layout_width="130dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:padding="8dp"
         android:text="@string/end_period_day"
-        android:padding="12dp"
-        android:textSize="16dp"
+        android:textSize="@dimen/font_user_for_menstruation_day_range_show"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
         app:layout_constraintStart_toStartOf="@+id/guideline14"
-        app:layout_constraintTop_toBottomOf="@+id/tvDateStart" />
+        app:layout_constraintTop_toTopOf="@+id/textView16" />
 
     <Button
         android:id="@+id/btnSaveToApi3"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_268e9f"
-        android:textColor="@color/white"
         android:text="@string/update_to_api"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="@+id/guideline14"
         app:layout_constraintTop_toTopOf="@+id/textView11" />
 
-    <TextView
-        android:id="@+id/textView30"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/red"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="280dp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/remind"
-        app:layout_constraintEnd_toStartOf="@+id/guideline14"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/ivPeriodLength"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/textView14"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/textView14"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/textView14"-->
-<!--        android:src="@drawable/ic_baseline_calculate_24" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

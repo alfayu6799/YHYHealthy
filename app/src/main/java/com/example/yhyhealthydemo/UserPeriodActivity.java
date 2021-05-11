@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -113,6 +114,10 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                             parserJson(result); //解析後台來的資料
                         }else if(errorCode == 6){  //新人沒有資料
                             setInit();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -332,8 +337,12 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                         if (errorCode == 0){
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
+                        }else if (errorCode == 23){ //token失效 2021/05/11
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, "資料上傳沒有成功的錯誤代碼: " + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

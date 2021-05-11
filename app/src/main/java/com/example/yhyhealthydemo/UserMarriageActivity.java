@@ -2,6 +2,7 @@ package com.example.yhyhealthydemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -93,8 +94,12 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                             marriageStatus.setChecked(false);
                             childStatus.setChecked(false);
                             contraceptionStatus.setChecked(false);
-                        } else {
+                        } else if (errorCode == 0){
                             parserJson(result); //解析後台來的資料
+                        } else if (errorCode == 23){ //token失效
+                            Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -197,13 +202,16 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                     try {
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
+                        }else if (errorCode == 23){  //token失效 2021/05/11
+                            Toasty.error(UserMarriageActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, "後端錯誤回復碼: " + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
-//
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

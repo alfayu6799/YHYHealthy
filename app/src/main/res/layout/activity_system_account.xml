@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_user_account"
         android:text="@string/system_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_user_account"
         android:text="@string/setting_user_change_password"
         app:layout_constraintStart_toStartOf="@+id/guideline20"
         app:layout_constraintTop_toBottomOf="@+id/textView43" />
@@ -54,7 +54,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/setting_user_authorization_code"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_user_account"
         app:layout_constraintStart_toStartOf="@+id/guideline20"
         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/setting_for_device"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_user_account"
         app:layout_constraintStart_toStartOf="@+id/textView45"
         app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
@@ -76,15 +76,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView44"
         android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/ivVerificationStyle"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/textView45"-->
-<!--        android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />-->
 
     <ImageView
         android:id="@+id/ivUserAuthorizationCode"
@@ -109,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="24dp"
+        android:textSize="@dimen/font_user_account"
         android:text="@string/verification"
         app:layout_constraintStart_toStartOf="@+id/textView46"
         app:layout_constraintTop_toBottomOf="@+id/textView46" />
@@ -121,5 +112,5 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView45"
-        app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_32dp" />
+        android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
