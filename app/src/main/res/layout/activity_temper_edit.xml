@@ -22,9 +22,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="22dp"
+            android:textSize="@dimen/font_temperature_title"
             android:textColor="@color/black"
-            android:text="修改觀測者"/>
+            android:text="@string/edit_observation_info"/>
     </LinearLayout>
     <!-- 相片區 -->
     <androidx.constraintlayout.widget.Guideline
@@ -79,16 +79,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="5dp"
-            android:textSize="22dp"
-            android:text="輸入觀測者資料"/>
+            android:textSize="@dimen/font_temperature_title"
+            android:text="@string/please_input_observation_data"/>
         <TextView
             android:id="@+id/textName1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/font_18"
-            android:text="名稱"/>
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/setting_for_user_name"/>
         <EditText
             android:id="@+id/edtInputName1"
             android:layout_width="match_parent"
@@ -104,8 +104,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="95dp"
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/font_18"
-            android:text="性別"/>
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/setting_for_user_gender"/>
 
         <RadioGroup
             android:id="@+id/rdGroup1"
@@ -138,8 +138,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="145dp"
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/font_18"
-            android:text="生日"/>
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/setting_for_user_birthday"/>
 
         <EditText
             android:id="@+id/edtInputBirthday1"
@@ -161,8 +161,8 @@
             android:layout_below="@+id/edtInputBirthday1"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/font_18"
-            android:text="身高"/>
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/setting_for_body_height"/>
 
         <EditText
             android:id="@+id/edtInputHeight1"
@@ -181,8 +181,8 @@
             android:layout_below="@+id/textHeight1"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:textSize="@dimen/font_18"
-            android:text="體重"/>
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/setting_for_body_weight"/>
 
         <EditText
             android:id="@+id/edtInputWeight1"
@@ -203,8 +203,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/shape_btn_temp_pressed"
             android:textColor="@color/white"
-            android:textSize="@dimen/font_18"
-            android:text="確定"/>
+            android:textAllCaps="false"
+            android:textSize="@dimen/font_add_observation"
+            android:text="@string/dialog_save"/>
     </RelativeLayout>
 
 </LinearLayout>

@@ -72,4 +72,7 @@
     <dimen name="font_temperature_title_edit">16dp</dimen>
     <dimen name="font_remote_new_user">14dp</dimen>
     <dimen name="font_account">22dp</dimen>
+    <dimen name="font_tvAccountShow">22dp</dimen>
+    <dimen name="font_add_new_remote_account">18dp</dimen>
+    <dimen name="font_add_observation">18sp</dimen>
 </resources>

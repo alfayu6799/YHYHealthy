@@ -505,7 +505,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         }else if (errorCode == 32){
                             Toasty.error(TemperatureActivity.this, getString(R.string.remote_account_auth_code_error), Toast.LENGTH_SHORT, true).show();
                         }else {
-                            Log.d(TAG, "後台回復之錯誤代碼:" + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -557,7 +557,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 countDownTimer.cancel();  //2021/05/12 可能會有問題
                 mHandler.removeCallbacks(myRun);
             }else {
-                Toasty.info(TemperatureActivity.this, "藍芽連接失敗,請重新連接", Toast.LENGTH_SHORT, true).show();
+                Toasty.info(TemperatureActivity.this, getString(R.string.ble_connect_fail_and_try_again), Toast.LENGTH_SHORT, true).show();
             }
 
         }
@@ -715,21 +715,20 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             switch (action) {
 
                 case yhyBleService.ACTION_GATT_CONNECTED:
-                    //Toasty.info(TemperatureActivity.this, "藍芽連接中...", Toast.LENGTH_SHORT, true).show();
                     break;
 
                 case yhyBleService.ACTION_GATT_DISCONNECTED: //自動斷開連結
-                    Toasty.info(TemperatureActivity.this, "藍芽已斷開並釋放資源", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(TemperatureActivity.this, getString(R.string.ble_is_disconnected_and_release), Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.closeGatt(macAddress);
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:
-                    Toasty.info(TemperatureActivity.this, "藍芽連結失敗", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(TemperatureActivity.this, getString(R.string.ble_is_disconnected), Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.disconnect();
                     break;
                 case yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC: //手動斷開連結
-                    Toasty.info(TemperatureActivity.this, "藍芽設備" + deviceName +"已斷開", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(TemperatureActivity.this, getString(R.string.ble_device_name) + ":" + deviceName + getString(R.string.ble_unconnected), Toast.LENGTH_SHORT, true).show();
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
                     break;
                 case yhyBleService.ACTION_NOTIFY_ON:
@@ -879,7 +878,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                     setAccountInfo();
                 }else {
-                    Log.d(TAG, "新增觀測者結果後台回覆碼:" + errorCode);
+                    Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -951,7 +950,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     public void onBleChart(TempDataApi.SuccessBean data) {
         //客製Dialog圖表
         if(data.getMac() != null) {
-            Log.d(TAG, "onBleChart mac : " + data.getMac());
             chartDialog = new ChartDialog(this, data);
             chartDialog.setCancelable(false); //點擊屏幕或物理返回鍵，dialog不消失
             chartDialog.show();

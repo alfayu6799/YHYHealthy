@@ -267,7 +267,7 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                             Toasty.success(RemoteEditListActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
                             initDate(); //重新跟後台取資料並刷新RecyclerView的內容
                         }else {
-                            Log.d(TAG, "刪除監控者結果後台錯誤回覆碼:" + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -360,7 +360,7 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                             initDate(); //重新跟後台取資料並刷新RecyclerView的內容
                             remoteDialog.dismiss(); //關閉彈跳視窗
                         }else {
-                            Log.d(TAG, "新增觀測者結果後台錯誤回覆碼:" + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
