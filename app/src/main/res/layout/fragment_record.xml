@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textSize="22dp"
-        android:text="歷史紀錄" />
+        android:text="@string/title_history" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -120,9 +120,4 @@
         android:visibility="invisible"
         android:text="@string/select_done"/>
     <!-- 查詢結果顯示 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_record"
-        android:layout_marginTop="400dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </RelativeLayout>

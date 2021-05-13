@@ -14,6 +14,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/setting_for_person"
         android:textSize="24dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

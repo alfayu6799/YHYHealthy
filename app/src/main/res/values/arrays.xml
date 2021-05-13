@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="select_function">
-        <item>排卵紀錄</item>
-        <item>藍芽體溫</item>
-        <item>懷孕紀錄</item>
-        <item>呼吸監測</item>
+        <item>@string/ovulation</item>
+        <item>@string/temperature</item>
+        <item>@string/pregnancy</item>
+        <item>@string/monitor</item>
     </string-array>
 
     <string-array name="unit_arr">

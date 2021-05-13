@@ -7,20 +7,24 @@
     <string name="title_home">YHY Healthy</string>
 
     <string name="ovulation">Ovulation Testing</string>
-    <string name="temperature">藍芽體溫</string>
-    <string name="pregnancy">懷孕紀錄</string>
-    <string name="monitor">呼吸監測</string>
-    <string name="update_success">update Success</string>
-    <string name="delete_success">資料刪除成功</string>
+    <string name="temperature">Bluetooth Body\nTemperature</string>
+    <string name="temperature_title">Bluetooth Body Temperature</string>
+    <string name="pregnancy">Pregnancy Record</string>
+    <string name="monitor">Breath Monitoring</string>
+    <string name="update_success">update Succeed</string>
+    <string name="delete_success">delete succeed</string>
     <string name="camera_only_today">Take picture only today</string>
 
-    <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
-    <string name="select_function">功能 : </string>
-    <string name="select_done">查詢開始</string>
+    <string name="please_select_fun_and_date">Please Select a Record\nDate First</string>
+    <string name="select_function">Function : </string>
+    <string name="select_done">Search</string>
+    <string name="please_chose_less_one">Please chose functions:</string>
+    <string name="history_dialog_confirm">Confirm</string>
+    <string name="history_functions_less_one">Please chose less one function</string>
 
     <string name="to">To</string>
 
-    <string name="param_name">唾液辨識:</string>
+    <string name="param_name">Saliva recognition:</string>
     <string name="body_degree">Basal Body Temp.</string>
 
     <!-- 第三方庫 : slycalendar 專用 -->
@@ -169,8 +173,10 @@
     <string name="please_input_birthday">Please input your Birthday</string>
     <string name="please_input_height">Please input your Height</string>
     <string name="please_input_weight">Please input you Weight</string>
-    <string name="remote_new_user">新增監控者</string>
-    <string name="observation_new_user">新增觀測者</string>
+    <string name="remote_new_user">New Monitoring Account</string>
+    <string name="observation_new_user">New User</string>
+    <string name="observation_title">Observations</string>
+    <string name="remote_title">Remote Connection</string>
     <string name="please_input_other_account">請輸入對方的帳號</string>
     <string name="please_input_authorization">請輸入對方的授權碼</string>
     <string name="add_new_remote_account">新增監控帳號</string>
@@ -308,7 +314,7 @@
     <string name="no_date">沒有資料</string>
     <string name="remove">移除</string>
     <string name="nothing">您沒有新增任何資料</string>
-    <string name="please_select_one_account">請選擇一組帳號</string>
+    <string name="please_select_one_account">Select Account</string>
     <string name="update">更新</string>
     <string name="add">新增</string>
     <string name="you_select_account_is_no_data">你選擇的帳號底下無資料</string>
@@ -317,7 +323,7 @@
     <string name="please_update_auth_code">更新遠端帳號授權碼</string>
     <string name="please_input_serial_no">Please input device serial number</string>
     <string name="deviceRegister">Registered Devices</string>
-    <string name="setting_ble_device_changeName">rename Bluetooth device</string>
+    <string name="setting_ble_device_changeName">Rename Bluetooth device</string>
     <string name="please_chose_unit">Please chose unit</string>
     <string name="celsius">Celsius</string>
     <string name="fahrenheit">Fahrenheit</string>
@@ -389,4 +395,14 @@
     <string name="setting_for_body_bmi">BMI</string>
     <string name="update_failure">update failure and login again</string>
     <string name="request_failure">failure and login again</string>
+    <string name="battery_is_low_40">Battery is less than 40%</string>
+    <string name="title_education">Health Education</string>
+    <string name="education_articles">Articles</string>
+    <string name="education_video">Video</string>
+    <string name="education_forum">Forum</string>
+    <string name="education_consultation">online Consultation</string>
+    <string name="title_history">Record History</string>
+    <string name="title_history_download">downLoad</string>
+    <string name="history_select_function">Select Record</string>
+    <string name="history_select_days">Select Date</string>
 </resources>

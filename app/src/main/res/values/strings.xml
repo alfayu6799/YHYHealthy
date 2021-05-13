@@ -8,6 +8,7 @@
 
     <string name="ovulation">排卵紀錄</string>
     <string name="temperature">藍芽體溫</string>
+    <string name="temperature_title">藍芽體溫</string>
     <string name="pregnancy">懷孕紀錄</string>
     <string name="monitor">呼吸監測</string>
     <string name="update_success">資料上傳成功</string>
@@ -17,6 +18,8 @@
     <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
     <string name="select_function">功能 : </string>
     <string name="select_done">查詢開始</string>
+    <string name="history_dialog_confirm">確定</string>
+    <string name="history_functions_less_one">請務必選擇功能</string>
 
     <string name="to">到</string>
 
@@ -160,6 +163,8 @@
     <string name="please_input_weight">請輸入體重</string>
     <string name="remote_new_user">新增監控者</string>
     <string name="observation_new_user">新增觀測者</string>
+    <string name="observation_title">觀測</string>
+    <string name="remote_title">遠端</string>
     <string name="please_input_other_account">請輸入對方的帳號</string>
     <string name="please_input_authorization">請輸入對方的授權碼</string>
     <string name="add_new_remote_account">新增監控帳號</string>
@@ -297,7 +302,7 @@
     <string name="no_date">沒有資料</string>
     <string name="remove">移除</string>
     <string name="nothing">您沒有新增任何資料</string>
-    <string name="please_select_one_account">請選擇一組帳號</string>
+    <string name="please_select_one_account">請選擇帳號</string>
     <string name="update">更新</string>
     <string name="add">新增</string>
     <string name="you_select_account_is_no_data">你選擇的帳號底下無資料</string>
@@ -378,4 +383,15 @@
     <string name="setting_for_body_bmi">BMI</string>
     <string name="update_failure">上傳失效請重新登入</string>
     <string name="request_failure">查詢失效請重新登入</string>
+    <string name="battery_is_low_40">電量低於40%</string>
+    <string name="title_education">衛教頁面</string>
+    <string name="education_articles">文章</string>
+    <string name="education_video">影片</string>
+    <string name="education_forum">討論區</string>
+    <string name="education_consultation">線上諮詢</string>
+    <string name="title_history">歷史紀錄</string>
+    <string name="title_history_download">紀錄下載</string>
+    <string name="history_select_function">選擇功能</string>
+    <string name="history_select_days">選擇日期</string>
+    <string name="please_chose_less_one">請選擇功能:</string>
 </resources>

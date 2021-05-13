@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getSupportActionBar().hide(); //hide ActionBar
         setContentView(R.layout.activity_main);
 
         navigation = findViewById(R.id.navigation);

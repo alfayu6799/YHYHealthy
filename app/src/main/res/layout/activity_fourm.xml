@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FourmActivity">
+    android:background="@mipmap/yhy_background"
+    tools:context=".ForumActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

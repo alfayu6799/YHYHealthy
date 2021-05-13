@@ -1,11 +1,10 @@
 package com.example.yhyhealthydemo;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import es.dmoral.toasty.Toasty;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
 
@@ -31,73 +31,49 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
 
     private View view;
 
-    private Button select_function;
-    private Button select_date;
-    private Button result_start;
+    private Button btnFunction;
+    private Button btnDate;
 
     private List<String> fxnList;
 
-    private TextView select_title;   //提示文字
-    private TextView date_range;     //日期範圍結果文字顯示
-    private TextView fun_result;     //功能選擇結果文字顯示
-
-    private RecyclerView recyclerView;
+    private TextView textHint;   //提示文字
 
     private String data = ""; //功能選擇的資料字串
-
-    public RecordFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view != null) return view;
 
-        view = inflater.inflate(R.layout.fragment_record, container, false);
+        view = inflater.inflate(R.layout.fragment_record1, container, false);
 
-        select_title = view.findViewById(R.id.tv_select_fun_date);
-        fun_result = view.findViewById(R.id.tv_select_function);
-        date_range = view.findViewById(R.id.tv_date_range);
-        result_start = view.findViewById(R.id.bt_result_start);
+        textHint = view.findViewById(R.id.tvSelectFunDate);
 
-        recyclerView = view.findViewById(R.id.recyclerView_record);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setAdapter(adapter);
+        btnFunction = view.findViewById(R.id.btSelectFuns);
+        btnDate = view.findViewById(R.id.btSelectDate);
 
-        select_function = view.findViewById(R.id.bt_select_fun);
-        select_date = view.findViewById(R.id.bt_select_date);
-
-        select_function.setOnClickListener(this);
-        select_date.setOnClickListener(this);
-        result_start.setOnClickListener(this);
+        btnFunction.setOnClickListener(this);
+        btnDate.setOnClickListener(this);
 
         return view;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.bt_select_fun:
+            case R.id.btSelectFuns:  //功能選擇
+                btnFunction.setBackgroundResource(R.drawable.rectangle_button);
+                btnDate.setBackgroundResource(R.drawable.relative_shape);
                 dialogSelectFunction();  //彈跳視窗for功能選擇
                 break;
-            case R.id.bt_select_date:
+            case R.id.btSelectDate:  //日期範圍
+                btnFunction.setBackgroundResource(R.drawable.relative_shape);
+                btnDate.setBackgroundResource(R.drawable.rectangle_button);
                 selectDateRange();     //彈跳視窗for日期範圍
                 break;
-            case R.id.bt_result_start:
-                resultList();          //顯示結果(RecyclerView)
-                break;
         }
-    }
-
-    /**********************************
-     * 設備+日期以RecyclerView方式呈現
-     * *******************************/
-    private void resultList() {
-        Toast.makeText(getActivity(), "查詢開始!", Toast.LENGTH_SHORT).show();
     }
 
     /**********************
@@ -105,10 +81,11 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
      * *********************/
     private void dialogSelectFunction(){
         fxnList = new ArrayList<>();
+        //資料來源
         final String array[] = getActivity().getResources().getStringArray(R.array.select_function);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle("請選擇功能:");
+        dialogBuilder.setTitle(R.string.please_chose_less_one);
         dialogBuilder.setMultiChoiceItems(R.array.select_function, null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
@@ -123,22 +100,23 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
         });
 
         // Set the action buttons
-        dialogBuilder.setPositiveButton("確定", (dialog, which) ->{
+        dialogBuilder.setPositiveButton(getString(R.string.history_dialog_confirm), (dialog, which) ->{
             data = fxnList.toString().replace("[", "").replace("]", "");
             if (data.equals("")){
-                Toast.makeText(getActivity(), "請務必選擇功能!!" , Toast.LENGTH_SHORT).show();
+                Toasty.warning(getActivity(), getString(R.string.history_functions_less_one) , Toast.LENGTH_SHORT, true).show();
             }else{
-                Toast.makeText(getActivity(), "您選擇的功能有:" + data, Toast.LENGTH_SHORT).show();
-                fun_result.setText(getActivity().getString(R.string.select_function) + " " +data);
-                //要把勾選的資料存儲供RecyclerView使用?
+//                Toast.makeText(getActivity(), "您選擇的功能有:" + data, Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        dialogBuilder.setNegativeButton("取消", (dialog, which) -> dialog.dismiss());
+        dialogBuilder.setNegativeButton(getString(R.string.dialog_cancel), (dialog, which) -> dialog.dismiss());
 
         AlertDialog alert = dialogBuilder.create();
         alert.setCanceledOnTouchOutside(false); //dismiss the dialog with click on outside of the dialog
         alert.show();
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
     }
 
     /*********************************
@@ -164,10 +142,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
             if (firstDate != null) {
                 if (secondDate == null) { //單一日
                     firstDate.set(Calendar.HOUR_OF_DAY, hours);
-//                    firstDate.set(Calendar.MINUTE, minutes);
-
                     String oneDate = new SimpleDateFormat(getString(R.string.timeFormat), Locale.getDefault()).format(firstDate.getTime());
-                    date_range.setText("範圍:" + oneDate); //顯示所選擇的日期區間
+                    //date_range.setText("範圍:" + oneDate); //顯示所選擇的日期區間
                 }else{
                     String SelectDate = getString(
                             R.string.period,
@@ -175,14 +151,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
                             new SimpleDateFormat(getString(R.string.timeFormat), Locale.getDefault()).format(secondDate.getTime())
                     );
                     //顯示所選擇的日期區間
-                    date_range.setText("範圍: " + SelectDate);
+                    Log.d(TAG, "onDataSelected: " + SelectDate);
                 }
             }
             //提示文字隱藏
-            select_title.setVisibility(View.INVISIBLE);
-            result_start.setVisibility(View.VISIBLE);
+            textHint.setVisibility(View.INVISIBLE);
         }
     };
-
 
 }

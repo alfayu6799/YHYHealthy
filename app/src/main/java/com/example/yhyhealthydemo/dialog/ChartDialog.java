@@ -115,7 +115,7 @@ public class ChartDialog extends Dialog {
             String lastTime = data.getDegreeList().get(data.getDegreeList().size()-1).getDate();
             endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5); //五分鐘量測一次
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             for (int i = 0; i < data.getDegreeList().size(); i++){
@@ -220,7 +220,7 @@ public class ChartDialog extends Dialog {
             String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate(); //取得最後一筆
             endDateTime.setText(lastTime);
             DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
-            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5);
+            DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5); //五分鐘量測一次
             nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
 
             bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));

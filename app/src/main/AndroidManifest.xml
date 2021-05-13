@@ -24,7 +24,7 @@
         <activity android:name=".ArticleDetailActivity" />
         <activity android:name=".ArticleActivity" />
         <activity android:name=".OnLineCallActivity" />
-        <activity android:name=".FourmActivity" />
+        <activity android:name=".ForumActivity" />
         <activity android:name=".VideoActivity" />
         <activity android:name=".CatalogActivity" />
         <activity android:name=".UserChangeVerifiActivity" />

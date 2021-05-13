@@ -19,6 +19,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -77,17 +79,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private List<TempDataApi.SuccessBean> dataList;
     private TemperMainAdapter tAdapter;
 
-    //藍芽連線
-    private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
-    private int statusPosition;
-
-    //藍芽斷線
-    private String disUseName;
-
-    //藍芽定時
-    private MyRun myRun;
-    private ArrayMap<String, Runnable> userMap = new ArrayMap<>();
-
     //遠端
     private RecyclerView remoteRecycle;
     private RemoteViewAdapter remoteAdapter;
@@ -105,6 +96,16 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private Handler mHandler = new Handler();
     private AlertDialog alertDialog;
     private List<String> bleOnClickList = new ArrayList<>();
+
+     //藍芽連線
+     private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
+     private int statusPosition;
+
+     //藍芽定時相關宣告
+     private MyRun myRun;
+     private ArrayMap<String, Runnable> userMap = new ArrayMap<>();
+     private CountDownTimer countDownTimer = null;
+     private ArrayMap<String, CountDownTimer> countDownTimerArrayMap = new ArrayMap<>();
 
     //圖表dialog
     private ChartDialog chartDialog;
@@ -456,7 +457,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             Toasty.info(this, R.string.no_date, Toast.LENGTH_SHORT, true).show();
         }else {
             builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-               @Override
+                @Override
                 public void onClick(DialogInterface dialogInterface, int position) {
                     getAccountInfoFromApi(arrayAdapter.getItem(position));
                     accountInfoClicked = arrayAdapter.getItem(position);
@@ -467,8 +468,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             dialog.show();
         }
     }
-
-
+    
     //取得監控帳戶底下觀測者的資料列表　　2021/03/26
     private void getAccountInfoFromApi(String accountNo) {
         JSONObject json = new JSONObject();
@@ -553,6 +553,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 tAdapter.disconnectedDevice(deviceAddress, bleStatus, deviceName);
                 //移除佇列 2021/05/05
                 userMap.remove(deviceAddress);
+                countDownTimerArrayMap.remove(deviceAddress);
+                countDownTimer.cancel();  //2021/05/12 可能會有問題
+                mHandler.removeCallbacks(myRun);
             }else {
                 Toasty.info(TemperatureActivity.this, "藍芽連接失敗,請重新連接", Toast.LENGTH_SHORT, true).show();
             }
@@ -571,21 +574,27 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     //更新收到體溫的訊息給RecyclerView的項目
     private void updateBleData(String receive, String macAddress) {
+        DecimalFormat df = new DecimalFormat("#.##");
+
         String[] str = receive.split(","); //以,分割
-        String degreeStr = str[2];
-        String batteryStr = str[3];
-        double degree = Double.parseDouble(degreeStr)/100;
-        double battery = Double.parseDouble(batteryStr);
+        double degree = Double.parseDouble(str[2])/100;
+        double battery = Double.parseDouble(str[3]);
+        String batteryStr = df.format(battery);
 
         //溫度不為空
         if (degree != 0){
             //將溫度電量及mac傳到Adapter
-            tAdapter.updateItemByMac(degree, battery, macAddress);
+            tAdapter.updateItemByMac(degree, batteryStr, macAddress);
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
                 //需用mac將藍芽回來的資料分開保存
                 chartDialog.update(tAdapter.getDegreeByMac(macAddress));  //更新Dialog內的溫度圖表
+
+            //電量低於40%則要通知 2021/05/12
+            if (battery < 40){
+                Toasty.warning(TemperatureActivity.this,R.string.battery_is_low_40, Toast.LENGTH_SHORT, true).show();
+            }
 
             //溫度低於25度要通知 2021/05/10
             if (degree <= 25)
@@ -627,7 +636,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         byte[] messageBytes = new byte[0];
         try {
             messageBytes = request.getBytes("UTF-8"); //Sting to byte
-            mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);  //2021/03/30
+            if(deviceAddress != null)
+                mBluetoothLeService.writeDataToDevice(messageBytes, deviceAddress);  //2021/03/30
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, "Failed to convert message string to byte array");
         }
@@ -897,21 +907,39 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
-        //定時啟動 2021/05/04
-        myRun = new MyRun(data.getMac());
-        Thread t = new Thread(myRun);
-        t.start();
 
-        userMap.put(data.getMac(), myRun);
+        //5分鐘內每5秒就傳一次體溫資料 2021/05/11
+        countDownTimer = new CountDownTimer(60000*5, 5000){
 
-        sendCommand(data.getMac());  //command
+            @Override
+            public void onTick(long millisUntilFinished) {
+                sendCommand(data.getMac());
+                Log.d(TAG, "onTick: sendCommand mac: " + data.getMac() +",times:" + millisUntilFinished /5000);
+            }
+
+            @Override  //結束
+            public void onFinish() {
+                //啟動5分鐘定時器 2021/05/04
+                myRun = new MyRun(data.getMac());
+                Thread t = new Thread(myRun);
+                t.start();
+
+                userMap.put(data.getMac(), myRun);
+            }
+        };
+
+        countDownTimer.start();
+        countDownTimerArrayMap.put(data.getMac(), countDownTimer);
     }
 
      @Override  //停止量測 interface 2021/04/22
      public void onBleDisConnected(TempDataApi.SuccessBean data) {
         mBluetoothLeService.closeGatt(data.getMac());
-        mHandler.removeCallbacks(userMap.get(data.getMac())); //移除定時
-        userMap.remove(data.getMac());                        //移除佇列
+
+        mHandler.removeCallbacks(userMap.get(data.getMac())); //移除5分鐘的定時
+        userMap.remove(data.getMac());                        //移除5分鐘的佇列
+        countDownTimerArrayMap.remove(data.getMac());         //移除5秒的佇列
+        countDownTimer.cancel();                              //移除5秒的定時
      }
 
      @Override  //更新數據到後台
@@ -980,7 +1008,14 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
          //移除所有ble設備佇列 2021/05/05
          if (!userMap.isEmpty())
-            userMap.clear();  
+            userMap.clear();
+
+         if (!countDownTimerArrayMap.isEmpty())
+             countDownTimerArrayMap.clear();
+
+         if (countDownTimer != null){
+             countDownTimer.cancel();
+         }
 
          //視窗如果有顯示的話...
          if (chartDialog != null && chartDialog.isShowing())

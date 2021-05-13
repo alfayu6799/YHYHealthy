@@ -51,7 +51,7 @@ public class EducationFragment extends Fragment implements View.OnClickListener 
                 target = VideoActivity.class; //影片
                 break;
             case R.id.discuss:
-                target = FourmActivity.class; //討論區
+                target = ForumActivity.class; //討論區
                 break;
             case R.id.onlineCall:
                 target = OnLineCallActivity.class; //線上諮詢
