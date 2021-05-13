@@ -567,7 +567,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private void updateConnectedStatus(String deviceName, String deviceAddress, String bleStatus){
         if (deviceAddress != null){
             statusMemberBean.setMac(deviceAddress);
-            statusMemberBean.setStatus(deviceName+bleStatus);
+            statusMemberBean.setStatus(deviceName+" "+bleStatus);
             tAdapter.updateItem(statusMemberBean, statusPosition);
         }
     }

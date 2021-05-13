@@ -75,22 +75,22 @@ public class CheckBoxSubAdapter extends RecyclerView.Adapter<CheckBoxSubAdapter.
     private Dictionary getDictionary(){
         Dictionary dictionary = new Hashtable();
 
-        dictionary.put("none","無");
-        dictionary.put("green","綠色");
-        dictionary.put("yellow","黃色");
-        dictionary.put("white","白色");
-        dictionary.put("rustColor","鐵鏽色");
-        dictionary.put("grayBlack","灰黑色");
-        dictionary.put("foamy","泡沫狀的");
-        dictionary.put("slimy","黏糊糊的");
-        dictionary.put("transparent","透明");
-        dictionary.put("milky","乳白色");
-        dictionary.put("yellowGreen","黃綠色");
-        dictionary.put("pink","粉色");
-        dictionary.put("brown","褐色");
-        dictionary.put("black","黑色");
-        dictionary.put("waterLike","水樣狀");
-        dictionary.put("stickyPus","黏膿");
+        dictionary.put("none",context.getString(R.string.symptom_none));
+        dictionary.put("green",context.getString(R.string.symptom_green));
+        dictionary.put("yellow",context.getString(R.string.symptom_yellow));
+        dictionary.put("white",context.getString(R.string.symptom_white));
+        dictionary.put("rustColor",context.getString(R.string.symptom_rest_color));
+        dictionary.put("grayBlack",context.getString(R.string.symptom_gray_black));
+        dictionary.put("foamy",context.getString(R.string.symptom_foamy));
+        dictionary.put("slimy",context.getString(R.string.symptom_slimy));
+        dictionary.put("transparent",context.getString(R.string.symptom_transparent));
+        dictionary.put("milky",context.getString(R.string.symptom_milky));
+        dictionary.put("yellowGreen",context.getString(R.string.symptom_yellow_green));
+        dictionary.put("pink",context.getString(R.string.symptom_pink));
+        dictionary.put("brown",context.getString(R.string.symptom_brown));
+        dictionary.put("black",context.getString(R.string.symptom_black));
+        dictionary.put("waterLike",context.getString(R.string.symptom_waterLike));
+        dictionary.put("stickyPus",context.getString(R.string.symptom_stickyPus));
         return dictionary;
     }
 }

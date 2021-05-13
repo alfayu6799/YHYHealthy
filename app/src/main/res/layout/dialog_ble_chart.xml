@@ -58,7 +58,7 @@
         android:layout_toRightOf="@id/imgBleUserShot"
         android:layout_marginTop="10dp"
         android:layout_alignLeft="@id/imgBleTempIcon"
-        android:text="開始"/>
+        android:text="@string/chart_measure_start"/>
     <TextView
         android:id="@+id/tvStartDate"
         android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
         android:layout_toRightOf="@id/imgBleUserShot"
         android:layout_marginTop="40dp"
         android:layout_alignLeft="@id/imgBleTempIcon"
-        android:text="結束"/>
+        android:text="@string/chart_measure_end"/>
     <TextView
         android:id="@+id/tvEndDate"
         android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/tvBleUserName"
         android:layout_marginLeft="25dp"
-        android:text="下次量測時間:"/>
+        android:text="@string/next_measure_time_is"/>
 
     <View
         android:layout_width="match_parent"

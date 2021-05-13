@@ -75,10 +75,10 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<CheckBoxAdapter.ViewHo
 
     private Dictionary getDictionary(){
         Dictionary dictionary = new Hashtable();
-        dictionary.put("sputum","痰");
-        dictionary.put("nose","鼻涕");
-        dictionary.put("color","顏色");
-        dictionary.put("type","型態");
+        dictionary.put("sputum",context.getString(R.string.symptom_sputum));
+        dictionary.put("nose",context.getString(R.string.symptom_nose));
+        dictionary.put("color",context.getString(R.string.symptom_color));
+        dictionary.put("type",context.getString(R.string.symptom_type));
         return dictionary;
     }
 }

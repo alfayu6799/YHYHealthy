@@ -213,9 +213,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
             try {
                 objectCheckBox.put("key", checkBoxGroupList.get(j).getKey());
 
-                //List<String> list = checkBoxGroupList.get(j).getChecked();
                 objectCheckBox.put("value", new JSONArray(checkBoxGroupList.get(j).getChecked()));
-                //objectCheckBox.put("value", list);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -253,7 +251,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                             Toasty.success(SymptomActivity.this, R.string.update_success, Toast.LENGTH_SHORT,true).show();
                             finish(); //返回上一頁
                         }else {
-                            Log.d(TAG, "新增症狀後台傳回錯誤碼: " + errorCode);
+                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

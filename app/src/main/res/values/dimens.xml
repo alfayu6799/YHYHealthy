@@ -74,4 +74,5 @@
     <dimen name="font_tvAccountShow">22dp</dimen>
     <dimen name="font_add_new_remote_account">22dp</dimen>
     <dimen name="font_add_observation">18sp</dimen>
+    <dimen name="font_symptomRecord_title">22dp</dimen>
 </resources>

@@ -87,17 +87,17 @@ public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.Vi
 
     private Dictionary getDictionary() {
         Dictionary dictionary = new Hashtable();
-        dictionary.put("headache","頭痛");
-        dictionary.put("fatigue","疲勞");
-        dictionary.put("soreMusclesJoints","肌肉痠痛");
-        dictionary.put("soreThroat","咽喉痛");
-        dictionary.put("cough","咳嗽");
-        dictionary.put("runnyNose","流鼻涕");
-        dictionary.put("diarrhea","腹瀉");
-        dictionary.put("chestTightness","胸悶");
-        dictionary.put("shortnessBreath","呼吸急促");
-        dictionary.put("taste","味覺");
-        dictionary.put("vomiting","嘔吐");
+        dictionary.put("headache", context.getString(R.string.headache));
+        dictionary.put("fatigue",context.getString(R.string.fatigue));
+        dictionary.put("soreMusclesJoints",context.getString(R.string.soreMusclesJoints));
+        dictionary.put("soreThroat",context.getString(R.string.soreThroat));
+        dictionary.put("cough",context.getString(R.string.cough));
+        dictionary.put("runnyNose",context.getString(R.string.runnyNose));
+        dictionary.put("diarrhea",context.getString(R.string.diarrhea));
+        dictionary.put("chestTightness",context.getString(R.string.chestTightness));
+        dictionary.put("shortnessBreath",context.getString(R.string.shortnessBreath));
+        dictionary.put("taste",context.getString(R.string.taste));
+        dictionary.put("vomiting",context.getString(R.string.vomiting));
 
         return dictionary;
     }

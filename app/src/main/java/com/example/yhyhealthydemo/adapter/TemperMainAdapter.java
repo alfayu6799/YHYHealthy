@@ -62,7 +62,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 TempDataApi.SuccessBean data = dataList.get(j);
                 if(data.getUserName().equals(bleUserName)){
                     data.setMac(deviceAddress);
-                    data.setStatus(deviceName+bleStatus);
+                    data.setStatus(deviceName + " " + bleStatus);
                     notifyItemChanged(j); //刷新
                 }
             }
@@ -76,7 +76,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 TempDataApi.SuccessBean data = dataList.get(i);
                 if(!TextUtils.isEmpty(data.getMac())){
                     if(data.getMac().equals(devMac)){
-                        data.setStatus(devName+devStatus);
+                        data.setStatus(devName + " " + devStatus);
                         notifyItemChanged(i);
                     }
                 }
@@ -168,7 +168,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
         //根據藍芽連線Status變更icon跟功能
         if (data.getStatus() != null){
-            
+            Log.d(TAG, "onBindViewHolder: status:" + data.getStatus());
             String bleConnect = context.getString(R.string.ble_connect_status);
             String bleUnConnect = context.getString(R.string.ble_unconnected);
 
