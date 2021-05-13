@@ -173,7 +173,7 @@
     <string name="please_input_birthday">Please input your Birthday</string>
     <string name="please_input_height">Please input your Height</string>
     <string name="please_input_weight">Please input you Weight</string>
-    <string name="remote_new_user">New Monitoring Account</string>
+    <string name="remote_new_user">New Monitoring\nAccount</string>
     <string name="observation_new_user">New User</string>
     <string name="observation_title">Observations</string>
     <string name="remote_title">Remote Connection</string>

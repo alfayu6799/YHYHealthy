@@ -143,7 +143,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
-        remoteRecycle = findViewById(R.id.rvRomoteUser);  //遠端
+        remoteRecycle = findViewById(R.id.rvRemoteUser);  //遠端
 
         setInfo();        //觀測者初始化資訊
 
@@ -468,7 +468,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             dialog.show();
         }
     }
-    
+
     //取得監控帳戶底下觀測者的資料列表　　2021/03/26
     private void getAccountInfoFromApi(String accountNo) {
         JSONObject json = new JSONObject();

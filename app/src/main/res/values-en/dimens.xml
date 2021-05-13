@@ -68,7 +68,8 @@
     <dimen name="font_education_articles">22dp</dimen>
     <dimen name="font_title_history">22dp</dimen>
     <dimen name="font_history_funs_and_day">22dp</dimen>
-    <dimen name="font_temperature_title">16dp</dimen>
+    <dimen name="font_temperature_title">22dp</dimen>
     <dimen name="font_temperature_title_edit">16dp</dimen>
     <dimen name="font_remote_new_user">14dp</dimen>
+    <dimen name="font_account">22dp</dimen>
 </resources>
