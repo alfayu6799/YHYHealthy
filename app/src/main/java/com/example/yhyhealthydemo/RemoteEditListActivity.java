@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -107,6 +108,12 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                 int errorCode = object.getInt("errorCode");
                 if (errorCode == 0){
                    parserJson(result);
+                }else if (errorCode == 23){ //token失效
+                    Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                    startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
+                    finish();
+                }else {
+                    Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -213,7 +220,14 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                         if (errorCode == 0){
                             Toasty.success(RemoteEditListActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             updateDialog.dismiss(); //關閉視窗
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -263,11 +277,15 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             Toasty.success(RemoteEditListActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
                             initDate(); //重新跟後台取資料並刷新RecyclerView的內容
+                        }else  if (errorCode == 23){ //token失效
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -355,12 +373,16 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             Toasty.success(RemoteEditListActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             initDate(); //重新跟後台取資料並刷新RecyclerView的內容
                             remoteDialog.dismiss(); //關閉彈跳視窗
+                        }else if (errorCode == 23 ){ //token失效
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

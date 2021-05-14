@@ -63,13 +63,19 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_ADD;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_LIST;
 import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
+/**
+ * 藍芽體溫量測首頁
+ * 觀測者配適器 TemperMainAdapter
+ * 遠端者配適器 RemoteViewAdapter
+ * 藍芽配適器  BluetoothLeAdapter
+ * */
 
  public class TemperatureActivity extends DeviceBaseActivity implements View.OnClickListener, TemperMainAdapter.TemperMainListener {
 
     private final static String TAG = "TemperatureActivity";
 
-    private Button supervise, remote;
-    private Button addTemperatureUser, addRemoteUser;
+    private Button   supervise, remote;
+    private Button   addTemperatureUser, addRemoteUser;
     private TextView txtUserInfoEdit;
     private Button   selectedAccount;
     private TextView accountSelected;
@@ -322,6 +328,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             parserJson(result);
                         }else if (errorCode == 6){
                             Toasty.error(TemperatureActivity.this, getString(R.string.no_date), Toast.LENGTH_SHORT, true).show();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -424,11 +436,17 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0){ //帳號資料在success內
                             JSONArray array = object.getJSONArray("success");
                             for (int i = 0; i < array.length(); i++){
                                 arrayAdapter.add(array.getString(i));
                             }
+                        }else if (errorCode == 23 ){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -448,7 +466,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
     };
 
-    //
+    //Dialog顯示遠端帳號
     private void showAccountDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.please_select_one_account));
@@ -502,10 +520,14 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             parserRemoteData(result);
                         }else if (errorCode == 6){
                             Toasty.error(TemperatureActivity.this, getString(R.string.you_select_account_is_no_data), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 32){
+                        }else if (errorCode == 32) {
                             Toasty.error(TemperatureActivity.this, getString(R.string.remote_account_auth_code_error), Toast.LENGTH_SHORT, true).show();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -567,7 +589,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private void updateConnectedStatus(String deviceName, String deviceAddress, String bleStatus){
         if (deviceAddress != null){
             statusMemberBean.setMac(deviceAddress);
-            statusMemberBean.setStatus(deviceName+" "+bleStatus);
+            statusMemberBean.setStatus(deviceName+" "+ bleStatus);
             tAdapter.updateItem(statusMemberBean, statusPosition);
         }
     }
@@ -789,8 +811,12 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode , Toast.LENGTH_SHORT, true).show();
                         }
@@ -842,7 +868,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                if (TextUtils.isEmpty(authCode.getText().toString()))
                    return;
 
-               //傳送到後台
+               //新增的資料傳送到後台
                 updateRemoteToApi(account, authCode);
             }
         });
@@ -874,11 +900,15 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             try {
                 JSONObject object = new JSONObject(result.toString());
                 int errorCode = object.getInt("errorCode");
-                if (errorCode == 0){
+                if (errorCode == 0) {
                     Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                     setAccountInfo();
+                }else if (errorCode == 23){ //token失效
+                    Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                    startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                    finish();
                 }else {
-                    Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                    Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

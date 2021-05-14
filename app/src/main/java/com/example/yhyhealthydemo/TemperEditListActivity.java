@@ -118,6 +118,12 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJsonData(result);
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -235,11 +241,15 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
-                            Toasty.success(TemperEditListActivity.this, getString(R.string.delete_success) + errorCode , Toast.LENGTH_SHORT, true).show();
+                        if (errorCode == 0) {
+                            Toasty.success(TemperEditListActivity.this, getString(R.string.delete_success) + errorCode, Toast.LENGTH_SHORT, true).show();
                             //移除RecyclerView的Item項目
                             list.remove(pos);
                             adapter.notifyItemRemoved(pos);
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(TemperEditListActivity.this, getString(R.string.json_error_code) + errorCode , Toast.LENGTH_SHORT, true).show();
                         }

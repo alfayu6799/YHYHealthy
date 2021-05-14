@@ -29,6 +29,10 @@ import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.CHANGE_VERIFICATION_STYLE;
 import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 
+/***
+ * 帳戶設定 - 驗證方式變更
+ */
+
 public class UserChangeVerifiActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "UserChangeVerifiActivit";
@@ -174,7 +178,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                                 finish();
                             }
                         }else if (errorCode == 23){ //token失效 2021/05/11
-                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -265,7 +269,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                                 Toasty.success(UserChangeVerifiActivity.this, getString(R.string.change_verification_success), Toast.LENGTH_SHORT, true).show();
                                 finish();
                             }else if (errorCode == 23 ) {//token失效 2021/05/11
-                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                                 startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
                                 finish();
                             }else {

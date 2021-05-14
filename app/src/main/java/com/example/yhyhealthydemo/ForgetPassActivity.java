@@ -125,7 +125,7 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
                             Toasty.success(ForgetPassActivity.this, getString(R.string.change_password_success), Toast.LENGTH_SHORT, true).show();
                             finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(ForgetPassActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -203,7 +203,6 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
 
     //解析後台回來的資料
     private void parser(JSONObject result) {
-        Log.d(TAG, "重新要求驗證碼後端回復: " + result.toString());
         try {
             JSONObject object = new JSONObject(result.toString());
             int errorCode = object.getInt("errorCode");
@@ -216,7 +215,7 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
                     finish();
                 }
             }else {
-                Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                Toasty.error(ForgetPassActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -188,7 +188,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "updateToApi: " + json.toString());
+
         proxy.buildPOST(BLE_USER_ADD, json.toString(), addUserListener);
     }
 
@@ -206,11 +206,15 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             Toasty.success(TemperatureAddActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             Intent resultIntent = new Intent();
                             setResult(RESULT_OK, resultIntent);
                             finish(); //回到上一頁
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureAddActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureAddActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(TemperatureAddActivity.this, getString(R.string.json_error_code), Toast.LENGTH_SHORT, true).show();
                         }

@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "Register upDataToApi: " + json.toString() + " DefaultLan:" + defaultLen);
+
         //註冊專用(須帶手機語系defaultLen)
         proxy.buildRegister(REGISTER, json.toString(), defaultLen, registerListener);
     }
@@ -215,8 +215,9 @@ public class RegisterActivity extends AppCompatActivity {
                 Toasty.error(RegisterActivity.this, getString(R.string.account_has_already), Toast.LENGTH_SHORT, true).show();
             }else if (errorCode == 28){ //信箱已存在
                 Toasty.error(RegisterActivity.this, getString(R.string.email_already_existed), Toast.LENGTH_SHORT, true).show();
+            }else {
+                Toasty.error(RegisterActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

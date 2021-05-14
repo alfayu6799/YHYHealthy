@@ -11,8 +11,8 @@
     <string name="temperature_title">Bluetooth Body Temperature</string>
     <string name="pregnancy">Pregnancy Record</string>
     <string name="monitor">Breath Monitoring</string>
-    <string name="update_success">update Succeed</string>
-    <string name="delete_success">delete succeed</string>
+    <string name="update_success">Update Succeed</string>
+    <string name="delete_success">Delete Succeed</string>
     <string name="camera_only_today">Take picture only today</string>
 
     <string name="please_select_fun_and_date">Please Select a Record\nDate First</string>
@@ -119,8 +119,8 @@
     
     <!-- 權限 messages-->
     <string name="permission_required">Permission Required</string>
-    <string name="permission_message">您必須授予相關的權限才能運行相機辨識程序</string>
-    <string name="permission_warning">所有的權限都是必須的,拒絕的話將無法使用相機辨識服務</string>
+    <string name="permission_message">You must grant All Permissions</string>
+    <string name="permission_warning">All permissions are necessary</string>
 
     <string name="female">Female</string>
     <string name="male">Male</string>
@@ -151,24 +151,21 @@
     <string name="email">Email</string>
     <string name="phone">Text Message</string>
     <string name="privacy_confirm">create a new Account</string>
-    <string name="password_confirm_error">密碼不一致</string>
-    <string name="phone_verification">目前簡訊功能尚未啟用</string>
-    <string name="email_is_vaild">信箱無效</string>
-    <string name="plase_fill_info">請補齊資料</string>
+    <string name="password_confirm_error">password is not match</string>
+    <string name="phone_verification">The SMS is disable</string>
+    <string name="email_is_vaild">Email is valid</string>
+    <string name="plase_fill_info">Please fill all information</string>
 
     <string name="chart_no_data">No data</string>
     <string name="No_sup_Bluetooth">bluetooth not support</string>
-    <string name="ble_start_scanner">藍芽開始搜尋</string>
-    <string name="ble_stop_scanner">藍芽停止搜尋</string>
-    <string name="ble_stop_in_10">超時10秒停止掃描</string>
-    <string name="ble_stop_in_5">超時5秒停止掃描</string>
+    <string name="ble_start_scanner">Start search bluetooth devices</string>
+    <string name="ble_stop_scanner">Stop search bluetooth devices</string>
     <string name="not_connect_yet">not connected</string>
     <string name="ble_connect_status">connected</string>
     <string name="ble_unconnected">unconnected</string>
-    <string name="ble_is_not_connect">設備已斷開</string>
-    <string name="no_suo_bluetooth">設備不支援低功率藍芽</string>
+
+    <string name="no_suo_bluetooth">The device does not support bluetooth</string>
     <string name="ble_rssi">RSSI</string>
-    <string name="ble_stop_in_5secs">五秒時間到停止搜尋</string>
     <string name="please_input_name">Please input your name</string>
     <string name="please_input_birthday">Please input your Birthday</string>
     <string name="please_input_height">Please input your Height</string>
@@ -192,7 +189,7 @@
     <string name="announcement">News</string>
     <string name="shopping">Shopping</string>
     <string name="training">Training</string>
-    <string name="api_unavailable">無法取得網路服務，請稍後再試</string>
+    <string name="api_unavailable">Network Error</string>
 
     <string name="setting_user_change_password">Change password</string>
     <string name="setting_user_basic_info">Personal Information</string>
@@ -203,27 +200,21 @@
     <string name="setting_for_menstruation_length">Cycle Length</string>
     <string name="setting_for_menstruation_start">Start Date of\nLast Menstruation</string>
     <string name="setting_for_menstruation_end">End Date of\nLast Menstruation</string>
-    <string name="setting_for_pregnancy_last">最後一次經期</string>
-    <string name="setting_for_pregnancy_edd">預產期</string>
-    <string name="setting_for_pregnancy_baby_amount">胎數</string>
-    <string name="setting_for_pregnancy_times">孕次</string>
-    <string name="setting_for_pregnancy_freq">產次</string>
-    <string name="setting_for_pregnancy_abortion_freq">流產次數</string>
-    <string name="setting_for_pregnancy_disease">疾病史</string>
-    <string name="setting_for_pregnancy_Caesarean">剖腹產</string>
-    <string name="setting_user_verification">驗證方式</string>
+    <string name="setting_for_pregnancy_last">Last Menstruation</string>
+    <string name="setting_for_pregnancy_edd">Expected Date of Birth</string>
+    <string name="setting_for_pregnancy_baby_amount">Number of Fetuses</string>
+    <string name="setting_for_pregnancy_times">Number of Pregnancies</string>
+    <string name="setting_for_pregnancy_freq">Number of Births</string>
+    <string name="setting_for_pregnancy_abortion_freq">Number of Lost Pregnancies</string>
+    <string name="setting_for_pregnancy_disease">Medical History</string>
+    <string name="setting_for_pregnancy_Caesarean">Caesarean Section</string>
     <string name="setting_user_authorization_code">Remote Authorize</string>
     <string name="setting_user_marriage_info">Marital Status</string>
     <string name="setting_user_marriage">Married/Single</string>
     <string name="setting_for_contraception">Pregnant(No/Yes)</string>
     <string name="setting_for_child">Children(No/Yes)</string>
     <string name="setting_for_device">Devices Control</string>
-    <string name="setting_for_Observation">觀測者編輯</string>
     <string name="setting_temperature_unit">Temperature Unit</string>
-    <string name="setting_for_ble">藍芽連線</string>
-    <string name="setting_ble_scanner">掃描藍芽裝置</string>
-    <string name="setting_ble_connect">已連線裝置</string>
-    <string name="setting_ble_device">可用裝置</string>
     <string name="please_input_gender">Please chose gender</string>
     <string name="please_input_email">Please input Email address</string>
     <string name="please_input_area_code">Please input area code</string>
@@ -271,10 +262,10 @@
     <string name="edit_auth_code">change Authorize code</string>
     <string name="please_press_button_to_update">Please click the update button to change the authorization code</string>
     <string name="update_auth_code">update</string>
-    <string name="mobile_is_not_empty">電話號碼不得空白</string>
+    <string name="mobile_is_not_empty">phone number is not allow empty</string>
     <string name="password_is_not_empty">password is not allow empty</string>
     <string name="change_verification_success">change verification style succeed</string>
-    <string name="failure">失敗</string>
+    <string name="failure">failure</string>
     <string name="title_process">Messages</string>
     <string name="process">processing...</string>
     <string name="api_no_respond">Service is not respond, please check network</string>
@@ -285,9 +276,9 @@
     <string name="sure">Sure</string>
     <string name="please_input_comp_code">Please input verification code</string>
     <string name="json_error_code">json error:</string>
-    <string name="catalog">類別</string>
-    <string name="nursing">護理</string>
-    <string name="nutrition">營養</string>
+    <string name="catalog">Catalog</string>
+    <string name="nursing">Nursing</string>
+    <string name="nutrition">Nutrition</string>
     <string name="year">Year</string>
     <string name="month_of_year">Month</string>
     <string name="re_camera">Again</string>
@@ -300,13 +291,11 @@
     <string name="period_day">Today is the</string>
     <string name="period_day_out_order">Out of range</string>
     <string name="day">th Day of Menstrual Period</string>
-    <string name="please_chose_really_day">請選擇實際經期:</string>
-    <string name="delete_really_day">做刪除</string>
+    <string name="please_chose_really_day">please chose a day</string>
+    <string name="delete_really_day">delete</string>
     <string name="you_are_chose_day_is">you chose day is :</string>
     <string name="period_day_is_empty">no information</string>
-    <string name="function_only_today">此功能僅限今日</string>
-    <string name="ble_is_release">釋放藍芽資源</string>
-    <string name="auth_code_update_success">授權碼更新成功</string>
+    <string name="auth_code_update_success">update Succeed</string>
     <string name="ble_connecting_measure">Measuring....</string>
     <string name="ble_only_today">Temperature measure only today</string>
     <string name="email_already_existed">This email is already registered</string>
@@ -330,14 +319,14 @@
     <string name="your_chose_unit_is_celsius">you chose celsius</string>
     <string name="your_chose_unit_is_fahrenheit">you chose fahrenheit</string>
     <string name="symptomRecord">Symptom Record</string>
-    <string name="foamy">泡沫狀</string>
-    <string name="bloodshot">血絲血痰</string>
-    <string name="slimy">黏液狀</string>
-    <string name="transparent">透明無色</string>
-    <string name="pink">粉紅色</string>
-    <string name="black">黑色</string>
-    <string name="Sticky">沾黏狀</string>
-    <string name="blood_water">流血水樣</string>
+    <string name="foamy">Foamy</string>
+    <string name="bloodshot">blood Shot</string>
+    <string name="slimy">Slimy</string>
+    <string name="transparent">Transparent</string>
+    <string name="pink">Pink</string>
+    <string name="black">Black</string>
+    <string name="Sticky">Sticky</string>
+    <string name="blood_water">Blood water</string>
     <string name="off">No</string>
     <string name="on">Yes</string>
     <string name="measure_done">Measure done</string>
@@ -393,7 +382,7 @@
     <string name="setting_for_body_height">Height</string>
     <string name="setting_for_body_weight">Weight</string>
     <string name="setting_for_body_bmi">BMI</string>
-    <string name="update_failure">update failure and login again</string>
+    <string name="update_failure">You do nothing for long time, please login again</string>
     <string name="request_failure">failure and login again</string>
     <string name="battery_is_low_40">Battery is less than 40%</string>
     <string name="title_education">Health Education</string>

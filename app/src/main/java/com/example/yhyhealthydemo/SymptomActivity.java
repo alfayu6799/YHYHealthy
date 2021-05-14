@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +38,9 @@ import static com.example.yhyhealthydemo.module.ApiProxy.SYMPTOM_LIST;
 
 /****  ***********
  * 症狀
- * source data from Api
+ * source data from Api (熱更新)
+ * 配適器 switch - SwitchItemAdapter
+ * 配適器 checkBox - CheckBoxAdapter
  * create 2021/04/07
  * *  *************/
 
@@ -112,10 +115,14 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
-                            initSymptom(result);  //症狀初始化
+                        if (errorCode == 0) {
+                            initSymptom(result);
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(SymptomActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, "症狀初始化之後台傳過來的錯誤碼: " + errorCode);
+                            Toasty.error(SymptomActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -247,11 +254,15 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
-                            Toasty.success(SymptomActivity.this, R.string.update_success, Toast.LENGTH_SHORT,true).show();
+                        if (errorCode == 0) {
+                            Toasty.success(SymptomActivity.this, R.string.update_success, Toast.LENGTH_SHORT, true).show();
                             finish(); //返回上一頁
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(SymptomActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(SymptomActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

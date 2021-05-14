@@ -206,7 +206,7 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
                         }else if (errorCode == 23){  //token失效 2021/05/11
-                            Toasty.error(UserMarriageActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

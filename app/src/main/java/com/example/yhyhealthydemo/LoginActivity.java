@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toasty.error(LoginActivity.this, getString(R.string.account_is_error), Toast.LENGTH_SHORT, true).show();
             }else if(errorCode == 6){
                 Toasty.error(LoginActivity.this, getString(R.string.account_is_no_data), Toast.LENGTH_SHORT, true).show();
-            }else if (errorCode == 34){ //尚未開通帳戶
+            }else if (errorCode == 34) { //尚未開通帳戶
                 showCompInfo();  //驗證碼輸入Dialog
             }else if (errorCode == 0){ //登入成功
                 //因為success內容有三個重要資訊其排卵功能需要用到所以要解析json
@@ -172,6 +172,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+            }else {
+                Toasty.error(LoginActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
             }
         } catch (JSONException e) {
             e.printStackTrace();

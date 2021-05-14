@@ -115,7 +115,7 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         if (errorCode == 0){
                             parserJson(result);
                         }else if (errorCode == 23){ //token失效
-                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {
@@ -197,7 +197,7 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                             Toasty.success(UserDeviceActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
                         }else if (errorCode == 23){  //token 失效
-                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {
@@ -258,7 +258,7 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                             Toasty.success(UserDeviceActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
                         }else if (errorCode == 23 ){
-                            Toasty.error(UserDeviceActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {

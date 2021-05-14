@@ -168,12 +168,22 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
         //根據藍芽連線Status變更icon跟功能
         if (data.getStatus() != null){
-            Log.d(TAG, "onBindViewHolder: status:" + data.getStatus());
             String bleConnect = context.getString(R.string.ble_connect_status);
             String bleUnConnect = context.getString(R.string.ble_unconnected);
 
-            //已連線
-            if (data.getStatus().contains(bleConnect)){
+            //斷線先判斷
+            if (data.getStatus().contains(bleUnConnect)){
+                holder.textBleBattery.setText(""); //清除電池顯示 2021/04/26
+                holder.textDegree.setText("");     //清除溫度顯示 2021/04/26
+                data.setBattery("");               //清除電池data 2021/04/26 for 判斷icon用
+                holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
+                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onBleConnect(data, position); //藍芽連線
+                    }
+                });
+            }else if (data.getStatus().contains(bleConnect)){ //已連線
                 if(holder.textBleBattery.getText().toString().isEmpty()) {
                     holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
@@ -191,17 +201,6 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                         }
                     });
                 }
-            }else if(data.getStatus().contains(bleUnConnect)){  //已斷開 (add icon show)
-                holder.textBleBattery.setText(""); //清除電池顯示 2021/04/26
-                holder.textDegree.setText("");     //清除溫度顯示 2021/04/26
-                data.setBattery("");               //清除電池data 2021/04/26 for 判斷icon用
-                holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
-                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listener.onBleConnect(data, position); //藍芽連線
-                    }
-                });
             }
         }else {
             //啟動藍芽連線

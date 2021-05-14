@@ -338,7 +338,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             writeToSharedPreferences();
                         }else if (errorCode == 23){ //token失效 2021/05/11
-                            Toasty.error(UserPeriodActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

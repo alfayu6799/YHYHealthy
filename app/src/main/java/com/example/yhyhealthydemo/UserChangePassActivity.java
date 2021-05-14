@@ -25,7 +25,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.CHANGE_PASSWORD;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 
 /**
- * 使用者變更密碼
+ * 帳戶設定 - 使用者變更密碼
  * */
 
 public class UserChangePassActivity extends AppCompatActivity implements View.OnClickListener {
@@ -116,7 +116,7 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
                             startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
                             finish();
                         }else if(errorCode == 23){ //token 失效
-                            Toasty.error(UserChangePassActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserChangePassActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
                             finish();
                         }else {

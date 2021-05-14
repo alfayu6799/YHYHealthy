@@ -137,7 +137,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private TasteAdapter aAdapter;
     private ColorAdapter cAdapter;
     private String[] types;  //型態
-    private String[] symps;  //症狀
+    private String[] symptom;  //症狀
     private String[] taste;  //氣味
     private String[] colors; //顏色
 
@@ -216,13 +216,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         gridViewType = findViewById(R.id.gvType);
         gridViewSymptom = findViewById(R.id.gvSymptom);
 
-        //拍完相機回來的資料 2021/02/19
-//        if(photoPath != null){
-//            photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
-//            takePhoto.setText(R.string.re_camera);     //2021/02/19
-//            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
-//        }
-
         takePhoto.setOnClickListener(this);
         searchBLE.setOnClickListener(this);
         startMeasure.setOnClickListener(this);
@@ -262,8 +255,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
     }
 
+    //總計3分鐘,每10秒執行一次onTick方法
     private void startCountDownTime(){
-        myCountDownTimer = new MyCountDownTimer(180000, 1000); //總計3分鐘,每10秒執行一次onTick方法
+        myCountDownTimer = new MyCountDownTimer(180000, 1000);
         myCountDownTimer.start();  //計時開始
         startMeasure.setVisibility(View.INVISIBLE); //量測按鈕隱藏
         linearLayout.setVisibility(View.VISIBLE);   //進度條顯示
@@ -306,8 +300,12 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             parserPhotoId(result);  //2021/02/19
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
                         }else {
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
                         }
@@ -421,7 +419,23 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserUpdateResult(result);
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                            setResult(RESULT_OK);
+                            finish(); //回到前一頁
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
+                        }else {
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -436,21 +450,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             progressDialog.dismiss();
         }
     };
-
-    private void parserUpdateResult(JSONObject result) {
-        Log.d(TAG, "parserUpdateResult: " + result.toString());
-        try {
-            JSONObject jsonObject = new JSONObject(result.toString());
-            int errorCode = jsonObject.getInt("errorCode");
-            if (errorCode == 0){
-                    Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                    setResult(RESULT_OK);
-                    finish(); //回到前一頁
-                }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     //Switch button listener  2021/01/07 leona
     @Override
@@ -510,7 +509,21 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    parserJson(result);
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("erroeCode");
+                        if (errorCode == 0){
+                            parserJson(result);
+                        }else if (errorCode == 23){  //token失效
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
+                        }else {
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -647,7 +660,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         });
 
         //症狀
-        symps = new String[]{ getString(R.string.normal), getString(R.string.hot),getString(R.string.allergy),
+        symptom = new String[]{ getString(R.string.normal), getString(R.string.hot),getString(R.string.allergy),
                 getString(R.string.pain)};
 
         sAdapter = new SymptomAdapter(this);
@@ -655,7 +668,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         String secretionsSymptom = record.getSuccess().getSecretions().getSymptom();
         RecordSymptom recordSymptom = RecordSymptom.getSymptom(secretionsSymptom);
         int pos_symptom = recordSymptom.getIndex();
-        sAdapter.setData(symps,pos_symptom);
+        sAdapter.setData(symptom,pos_symptom);
         changeRecord.getSecretions().setSymptom(secretionsSymptom);  //2021/02/19
 
         gridViewSymptom.setAdapter(sAdapter);
@@ -869,9 +882,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     Toast.makeText(PeriodRecordActivity.this, R.string.ble_is_disconnected_and_release, Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService.release();
-                    updateConnectionStatus(getString(R.string.ble_is_not_connect));
+                    updateConnectionStatus(getString(R.string.ble_unconnected));
                     searchBLE.setVisibility(View.VISIBLE);         //搜尋藍芽按鈕顯示
-                    myCountDownTimer.cancel();                    //定時功能取消會
+                    if(myCountDownTimer != null)
+                        myCountDownTimer.cancel();                    //定時功能取消會
                     linearLayout.setVisibility(View.INVISIBLE);  //定時進度條隱藏
                     break;
 
@@ -879,7 +893,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                     Toast.makeText(PeriodRecordActivity.this, R.string.ble_is_disconnected, Toast.LENGTH_SHORT).show();
                     mBluetoothLeService.disconnect();
                     searchBLE.setVisibility(View.VISIBLE);        //搜尋藍芽按鈕顯示
-                    myCountDownTimer.cancel();                    //定時功能取消
+                    if (myCountDownTimer != null)
+                        myCountDownTimer.cancel();                    //定時功能取消
                     linearLayout.setVisibility(View.INVISIBLE);   //定時進度條隱藏
                     break;
 

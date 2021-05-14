@@ -34,7 +34,6 @@
         <activity android:name=".SystemAccountActivity" />
         <activity android:name=".UserChangePassActivity" />
         <activity android:name=".UserBasicActivity" />
-        <activity android:name=".SysBleActivity" />
         <activity android:name=".PregnancySettingActivity" />
         <activity android:name=".UserPeriodActivity" />
         <activity android:name=".SystemVideoActivity" />

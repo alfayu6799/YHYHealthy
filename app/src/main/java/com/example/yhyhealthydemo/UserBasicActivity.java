@@ -325,7 +325,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                         if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                         }else if(errorCode == 23){ //token失效
-                            Toasty.error(UserBasicActivity.this, getString(R.string.update_failure), Toast.LENGTH_SHORT, true).show();
+                            Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {  //2021/05/11

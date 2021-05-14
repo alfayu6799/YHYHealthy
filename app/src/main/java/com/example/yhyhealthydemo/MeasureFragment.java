@@ -56,21 +56,21 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.bt_ovulation:
-                checkOvulationInfo(); //檢查婚姻狀況與經期設定是否有設定完成
+            case R.id.bt_ovulation:   //排卵紀錄
+                checkOvulationInfo(); //檢查設定
                 break;
-            case R.id.bt_temperature:
+            case R.id.bt_temperature: //藍芽體溫
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
                 startActivity(intent_t);
                 break;
-            case R.id.bt_pregnancy:
+            case R.id.bt_pregnancy: //懷孕紀錄
                 Intent intent_p = new Intent(getActivity(), PregnancyActivity.class);
                 startActivity(intent_p);
                 break;
-            case R.id.bt_monitor:
+            case R.id.bt_monitor: //呼吸監控
 
                 break;
-            case R.id.ivGuid:
+            case R.id.ivGuid:  //教學影片
                 startActivity(new Intent(getActivity(), TeachVideoActivity.class));
                 break;
         }

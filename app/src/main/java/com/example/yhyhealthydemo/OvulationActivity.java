@@ -258,8 +258,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
                         if(errorCode == 0){
-                            Log.d(TAG, "解析: " + result.toString());
-                            parserJson(result);  //2021/01/13 leona
+                            parserJson(result);
+                        }else if (errorCode == 23){  //token失效
+                            Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
                         }
@@ -525,6 +528,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
                     //關閉對話框
                     dialog.dismiss();
+                }else if (errorCode == 23){ //token失效
+                    Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                    startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                    finish();
+                }else {
+                    Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -579,6 +588,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
                             //關閉對話框
                             dialog.dismiss();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -630,8 +645,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     try {
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
-                        if (errorCode == 0){
+                        if (errorCode == 0) {
                             parserCycleData(result); //解析週期資料
+                        }else if (errorCode == 23){  //token失效
+                            Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -771,7 +790,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 scrollViewLayout.setVisibility(View.GONE);
                 chartLayout.setVisibility(View.VISIBLE);
                 initChartData(); //獲取數據
-                //pupWindows();
                 break;
             case R.id.btnBack:
                 onBackPressed();
@@ -789,16 +807,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 nextMonthListener();
                 break;
         }
-    }
-
-    private void pupWindows() {
-        LayoutInflater layoutInflater = (LayoutInflater) OvulationActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = layoutInflater.inflate(R.layout.popup, null);
-        popupWindow = new PopupWindow(customView);
-        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(false);
-        popupWindow.showAtLocation(customView, Gravity.NO_GRAVITY, 100, 600);
     }
 
     @SuppressLint("SimpleDateFormat")
