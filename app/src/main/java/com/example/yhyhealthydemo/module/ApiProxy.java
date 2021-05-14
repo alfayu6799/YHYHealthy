@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.example.yhyhealthydemo.R;
 
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -355,7 +357,7 @@ public class ApiProxy {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d(TAG, "後台Api失敗: " + e.toString());
+                Log.d(TAG, "onFailure: 後台api錯誤訊息" + e.toString());
             }
 
             @Override

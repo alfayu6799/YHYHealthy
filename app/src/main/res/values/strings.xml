@@ -142,7 +142,6 @@
     <string name="password_confirm_error">密碼不一致</string>
     <string name="phone_verification">目前簡訊功能尚未啟用</string>
     <string name="email_is_vaild">信箱無效</string>
-    <string name="plase_fill_info">請補齊資料</string>
 
     <string name="chart_no_data">沒有數據可制圖</string>
     <string name="No_sup_Bluetooth">沒有藍芽裝置</string>

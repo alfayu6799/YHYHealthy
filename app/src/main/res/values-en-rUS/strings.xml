@@ -154,7 +154,6 @@
     <string name="password_confirm_error">password is not match</string>
     <string name="phone_verification">The SMS is disable</string>
     <string name="email_is_vaild">Email is valid</string>
-    <string name="plase_fill_info">Please fill all information</string>
 
     <string name="chart_no_data">No data</string>
     <string name="No_sup_Bluetooth">bluetooth not support</string>
@@ -233,8 +232,8 @@
     <string name="birthday_is_not_empty">Birthday is not allow empty</string>
     <string name="email_is_not_empty">Email is not allow empty</string>
     <string name="update_to_Api_is_success">update Succeed</string>
-    <string name="start_is_not_empty">Start dat is not allow empty</string>
-    <string name="end_is_not_empty">End dat is not allow empty</string>
+    <string name="start_is_not_empty">Start date is not allow empty</string>
+    <string name="end_is_not_empty">End date is not allow empty</string>
     <string name="cycle_is_not_empty">cycle length is not allow empty</string>
     <string name="account_is_error">account or password is not correct</string>
     <string name="compcode_is_not_empty">Verification code is not allow empty</string>
