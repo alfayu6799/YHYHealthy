@@ -221,6 +221,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/font_record_body_weight"
+                    android:layout_marginLeft="8dp"
                     android:text="@string/recode_body_weight"/>
                 <EditText
                     android:id="@+id/edtWeight"
@@ -242,6 +243,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
                     android:textSize="@dimen/font_non_menstrual_bleeding"
                     android:textColor="@color/black"
                     android:text="@string/non_menstrual_bleeding"/>
@@ -264,6 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
+                    android:layout_marginLeft="8dp"
                     android:layout_weight="1"
                     android:textSize="@dimen/font_chest_pain"
                     android:text="@string/chest_pain"/>
@@ -288,6 +291,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_intercourse"
+                    android:layout_marginLeft="8dp"
                     android:text="@string/intercourse"/>
                 <Switch
                     android:id="@+id/swIntercourse"
@@ -305,6 +309,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/font_secretions"
                 android:textColor="@color/black"
+                android:layout_marginLeft="8dp"
                 android:text="@string/secretions"/>
             <View
                 android:layout_height="1px"
@@ -315,6 +320,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
+                android:layout_marginLeft="8dp"
                 android:text="@string/secretions_color"/>
             <View
                 android:layout_height="1px"
@@ -342,6 +348,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
+                android:layout_marginLeft="8dp"
                 android:text="@string/secretions_scent"/>
             <View
                 android:layout_height="1px"
@@ -370,6 +377,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
+                android:layout_marginLeft="8dp"
                 android:text="@string/secretions_texture"/>
             <View
                 android:layout_height="1px"
@@ -398,6 +406,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/font_secretions_all"
                 android:textColor="@color/black"
+                android:layout_marginLeft="8dp"
                 android:text="@string/secretions_symptoms"/>
             <View
                 android:layout_height="1px"

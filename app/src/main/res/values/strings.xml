@@ -371,7 +371,8 @@
     <string name="update_failure">上傳失效請重新登入</string>
     <string name="request_failure">閒置過久請重新登入</string>
     <string name="battery_is_low_40">電量低於40%</string>
-    <string name="title_education">衛教頁面</string>
+    <string name="title_education">衛教</string>
+    <string name="title_pregnancy">懷孕紀錄</string>
     <string name="education_articles">文章</string>
     <string name="education_video">影片</string>
     <string name="education_forum">討論區</string>

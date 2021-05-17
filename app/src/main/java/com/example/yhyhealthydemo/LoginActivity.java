@@ -80,10 +80,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.bt_login:
-//                userLoginApi(); //登入時與後台驗證並取得token
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                userLoginApi(); //登入時與後台驗證並取得token
+//                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                startActivity(intent);
+//                finish();
                 break;
             case R.id.tv_register: //註冊
                 startActivity(new Intent(getBaseContext(), PrivacyActivity.class)); //隱私權page

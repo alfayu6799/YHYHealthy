@@ -26,10 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textSize="@dimen/font_title_history"
+        android:textStyle="bold"
         android:text="@string/title_history"
-        app:layout_constraintEnd_toStartOf="@+id/guideline55"
-        app:layout_constraintStart_toStartOf="@+id/guideline53"
+        android:textSize="@dimen/font_title_history"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -101,7 +102,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/relative_shape"
-            android:drawableLeft="@drawable/ic_dashboard_black_24dp"
+            android:drawableLeft="@drawable/ic_date_range_black_24dp"
             android:gravity="center_vertical"
             android:paddingLeft="32dp"
             android:paddingTop="8dp"

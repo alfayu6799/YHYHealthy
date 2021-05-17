@@ -103,7 +103,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     private AlertDialog alertDialog;
 
-    private String photoPath;
+    private String photoPath = null;
     private String strDay;
     private String base64Str;
 
@@ -139,7 +139,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private String[] types;  //型態
     private String[] symptom;  //症狀
     private String[] taste;  //氣味
-    private String[] colors; //顏色
+//    private String[] colors; //顏色
 
     //進度
     private ProgressDialog progressDialog;
@@ -511,7 +511,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 public void run() {
                     try {
                         JSONObject object = new JSONObject(result.toString());
-                        int errorCode = object.getInt("erroeCode");
+                        int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJson(result);
                         }else if (errorCode == 23){  //token失效
@@ -587,7 +587,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //設置顏色,狀態,氣味,症狀
     private void setSecretion() {
         //顏色
-        colors = new String[]{ getString(R.string.normal), getString(R.string.white), getString(R.string.yellow),
+        String[] colors = new String[]{ getString(R.string.normal), getString(R.string.white), getString(R.string.yellow),
                 getString(R.string.milky), getString(R.string.brown), getString(R.string.greenish_yellow)};
 
         cAdapter = new ColorAdapter(this);
@@ -945,7 +945,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAMERA_RECORD){
+        if(requestCode == CAMERA_RECORD && resultCode == RESULT_OK){ //如果沒照相就回來而沒有判斷resultCode會造成閃退
             photoPath = data.getStringExtra("path");
             if(photoPath != null){
                 photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
@@ -975,7 +975,9 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
-        myCountDownTimer.cancel();
+
+        if(myCountDownTimer != null)
+            myCountDownTimer.cancel();
     }
 
     public class MyCountDownTimer extends CountDownTimer {

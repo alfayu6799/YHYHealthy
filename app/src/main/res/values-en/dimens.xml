@@ -10,11 +10,11 @@
     <dimen name="font_chart_remind">14sp</dimen>
 
 
-    <dimen name="title_yhy_healthy">22dp</dimen>
+    <dimen name="title_yhy_healthy">24dp</dimen>
     <dimen name="title_announcement">18sp</dimen>
     <dimen name="title_training">18sp</dimen>
-    <dimen name="title_ovulation">14sp</dimen>
-    <dimen name="title_bluetooth_temperature">14sp</dimen>
+    <dimen name="title_ovulation">16sp</dimen>
+    <dimen name="title_bluetooth_temperature">16sp</dimen>
     <dimen name="title_pregnancy">14sp</dimen>
     <dimen name="title_monitor">14sp</dimen>
 

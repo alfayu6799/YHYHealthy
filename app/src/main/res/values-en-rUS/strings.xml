@@ -348,6 +348,7 @@
     <string name="add_cycle">Add\ncycle</string>
     <string name="title_ovulation">Ovulation\nTesting</string>
     <string name="title_temperature">Bluetooth Body\nTemperature</string>
+    <string name="title_pregnancy">Pregnancy\nRecord</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_save">Save</string>
     <string name="record_take_photo">new\npicture</string>

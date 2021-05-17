@@ -5,19 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 /****
  * 首頁
  * 四個功能 : 排卵紀錄, 藍芽體溫 , 懷孕紀錄 , 呼吸監控
- * 三個icon : 公告,購物,教學
+ * 二個icon : 購物,教學
  * */
 public class MeasureFragment extends Fragment implements View.OnClickListener {
 
@@ -25,11 +22,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private View view;
 
-    private Button ovulation, temperature, pregnancy, monitor;
+    private ImageView ovulationOnClick, temperatureOnClick, pregnancyOnClick, monitorOnClick;
 
-    private ImageView guid;
-
-    private RecyclerView functionView, specialAreaView;
+    private ImageView guidOnclick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,27 +33,19 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         view = inflater.inflate(R.layout.fragment_measure, container, false);
 
-        functionView = view.findViewById(R.id.rvFunctions);       //四大功能
-        specialAreaView = view.findViewById(R.id.rvSpecialArea);  //購物,教學
+        ovulationOnClick = view.findViewById(R.id.ivOvulation);
+        temperatureOnClick = view.findViewById(R.id.ivTemperature);
+        pregnancyOnClick = view.findViewById(R.id.ivPregnancy);
+        monitorOnClick = view.findViewById(R.id.ivBreath);
 
-        functionView.setHasFixedSize(true);
-        functionView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        
+        guidOnclick = view.findViewById(R.id.ivGuid);
 
-        ovulation = view.findViewById(R.id.bt_ovulation);
-        temperature = view.findViewById(R.id.bt_temperature);
-        pregnancy = view.findViewById(R.id.bt_pregnancy);
-        pregnancy.setVisibility(View.INVISIBLE);
-        monitor = view.findViewById(R.id.bt_monitor);
-        monitor.setVisibility(View.INVISIBLE);
+        ovulationOnClick.setOnClickListener(this);
+        temperatureOnClick.setOnClickListener(this);
+        pregnancyOnClick.setOnClickListener(this);
+        monitorOnClick.setOnClickListener(this);
 
-        guid = view.findViewById(R.id.ivGuid);
-
-        ovulation.setOnClickListener(this);
-        temperature.setOnClickListener(this);
-        pregnancy.setOnClickListener(this);
-        monitor.setOnClickListener(this);
-        guid.setOnClickListener(this);
+        guidOnclick.setOnClickListener(this);
 
         return view;
     }
@@ -67,20 +54,24 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.bt_ovulation:   //排卵紀錄
+            case R.id.ivOvulation:
                 checkOvulationInfo(); //檢查設定
                 break;
-            case R.id.bt_temperature: //藍芽體溫
+
+            case R.id.ivTemperature:
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
                 startActivity(intent_t);
                 break;
-            case R.id.bt_pregnancy: //懷孕紀錄
+
+            case R.id.ivPregnancy:
                 Intent intent_p = new Intent(getActivity(), PregnancyActivity.class);
                 startActivity(intent_p);
                 break;
-            case R.id.bt_monitor: //呼吸監控
+
+            case R.id.ivBreath: //呼吸監控
 
                 break;
+
             case R.id.ivGuid:  //教學影片
                 startActivity(new Intent(getActivity(), TeachVideoActivity.class));
                 break;
