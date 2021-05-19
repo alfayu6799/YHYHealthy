@@ -54,6 +54,7 @@
     <string name="verification_edit">Change Verification</string>
     <string name="please_confirm_password">Confirm password again</string>
     <string name="register_name_digits">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="private_license">End User License Agreement</string>
     <string name="privacy_content">
    <![CDATA[<html>]]>
       <![CDATA[<style>]]>
@@ -63,7 +64,7 @@
          }
       <![CDATA[</style>]]>
       <![CDATA[<body><p align="justify" class="small">]]>
-         YHY INFORMATION TECHNOLOGY (ASIA) PTE. LTD. and its subsidiaries (hereinafter referred to as "YHY" or "We")
+        YHY INFORMATION TECHNOLOGY (ASIA) PTE. LTD. and its subsidiaries (hereinafter referred to as "YHY" or "We")
         authorize the user the use of this mobile application program (hereinafter referred to as "Application" or “App”).
         The application Application is not provided by means of through a sale.
         The Application is provided in accordance withunder the following terms and conditions.
@@ -75,7 +76,7 @@
          and use the Application. Users under 18 years of age must have a legal representative or guardian read, understand,
          and agree to the content of this contract in order to register for and use this App.
          By letting their protégé using this App, the guardian or legal representative confirms to have read,
-         understood, and agreed to the content of this contract as well as later alterations or amendments.
+             understood, and agreed to the content of this contract as well as later alterations or amendments.
       <![CDATA[<br><br>]]>
          Terms and Conditions of Use
          YHY offers the authorized user limited and unexclusive access to this App in accordance withunder
@@ -114,8 +115,6 @@
          or that the Application will be uninterrupted or error-free, by any legal means.
       <![CDATA[</p></body></html>]]>
    </string>
-
-    <string name="private_license">End User License Agreement</string>
     
     <!-- 權限 messages-->
     <string name="permission_required">Permission Required</string>
@@ -431,4 +430,6 @@
     <string name="symptom_black">Black</string>
     <string name="symptom_waterLike">Water Like</string>
     <string name="symptom_stickyPus">Sticky Pus</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="user_cancel_search">user cancel search</string>
 </resources>

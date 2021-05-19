@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -27,8 +26,6 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-import com.example.yhyhealthydemo.CameraActivity;
-import com.example.yhyhealthydemo.PeriodRecordActivity;
 import com.example.yhyhealthydemo.R;
 
 import java.io.File;
@@ -114,7 +111,7 @@ public class AddTemperatureDialog extends Dialog {
             }
         });
 
-        userBirthday = view.findViewById(R.id.edtInputBirthay);  //生日
+        userBirthday = view.findViewById(R.id.edtInputBirthday);  //生日
         userBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

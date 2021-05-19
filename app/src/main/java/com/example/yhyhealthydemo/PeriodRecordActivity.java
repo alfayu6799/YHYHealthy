@@ -945,12 +945,14 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAMERA_RECORD && resultCode == RESULT_OK){ //如果沒照相就回來而沒有判斷resultCode會造成閃退
-            photoPath = data.getStringExtra("path");
-            if(photoPath != null){
-                photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
-                takePhoto.setText(R.string.re_camera);     //2021/02/19
-                photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+        if(resultCode != RESULT_CANCELED){ //如果沒照相就回來而沒有判斷resultCode會造成閃退 2021/05/19
+            if(requestCode == CAMERA_RECORD){
+                photoPath = data.getStringExtra("path");
+                if(photoPath != null){
+                  photoShow.setImageURI(Uri.fromFile(new File(photoPath)));
+                  takePhoto.setText(R.string.re_camera);     //2021/02/19
+                  photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+                }
             }
         }
     }

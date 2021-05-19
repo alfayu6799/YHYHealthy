@@ -147,20 +147,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline54"
         app:layout_constraintTop_toTopOf="@+id/guideline59" />
 
-    <TextView
-        android:id="@+id/tvAccountShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/account"
-        android:visibility="invisible"
-        android:textSize="@dimen/font_tvAccountShow"
-        app:layout_constraintBottom_toTopOf="@+id/guideline60"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline54"
-        app:layout_constraintTop_toTopOf="@+id/guideline59" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTempUser"
         android:layout_width="0dp"

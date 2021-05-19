@@ -125,21 +125,6 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
     }
 
     //保存臨時文件的方法
-    private String saveFile(byte[] bytes){
-        try {
-            File file = File.createTempFile("img","");
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes);
-            fos.flush();
-            fos.close();
-            return file.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    //保存臨時文件的方法
     private String saveImage(byte[] bytes){
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         Matrix matrix = new Matrix();

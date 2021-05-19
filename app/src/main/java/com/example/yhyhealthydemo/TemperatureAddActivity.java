@@ -1,7 +1,6 @@
 package com.example.yhyhealthydemo;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
@@ -28,7 +27,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.yhyhealthydemo.dialog.AddTemperatureDialog;
 import com.example.yhyhealthydemo.module.ApiProxy;
 import com.example.yhyhealthydemo.tools.ImageUtils;
 
@@ -91,7 +89,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         userWeight = findViewById(R.id.edtInputWeight);  //體重
         cancel = findViewById(R.id.imageCancel);  //取消
         btnSave = findViewById(R.id.btnAddUser);   //存檔
-        userBirthday = findViewById(R.id.edtInputBirthay); //生日
+        userBirthday = findViewById(R.id.edtInputBirthday); //生日
 
         rdGroup = findViewById(R.id.rdGroup);  //性別
         rdGroup.setOnCheckedChangeListener(this);
@@ -116,7 +114,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                     requestPermission(); //要求權限
                 }
                 break;
-            case R.id.edtInputBirthay:   //日期選擇
+            case R.id.edtInputBirthday:   //日期選擇
                 showDatePickerDialog();
                 break;
             case R.id.btnAddUser:  //上傳

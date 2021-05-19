@@ -205,7 +205,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline17"
         app:layout_constraintTop_toTopOf="@+id/guideline61">
         <ImageView
-            android:id="@+id/store"
+            android:id="@+id/ivStore"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="8dp"

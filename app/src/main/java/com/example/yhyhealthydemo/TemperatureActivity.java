@@ -78,7 +78,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private Button   addTemperatureUser, addRemoteUser;
     private TextView txtUserInfoEdit;
     private Button   selectedAccount;
-    private TextView accountSelected;
 
     //觀測者
     private RecyclerView recyclerView;
@@ -145,7 +144,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
         txtUserInfoEdit = findViewById(R.id.tvEdit);
         selectedAccount = findViewById(R.id.btnChoseAccount);
-        accountSelected = findViewById(R.id.tvAccountShow);
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
@@ -205,7 +203,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    Log.d(TAG, "5秒停止搜尋: ");
+                    Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
@@ -222,7 +220,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             @Override
             public void onClick(View view) {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                Log.d(TAG, "使用者自行取消搜尋功能 ");
+                Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
                 alertDialog.dismiss(); //關閉視窗
             }
         });
@@ -381,7 +379,6 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 recyclerView.setVisibility(View.VISIBLE);
                 remoteRecycle.setVisibility(View.GONE);
                 selectedAccount.setVisibility(View.GONE);
-                accountSelected.setVisibility(View.GONE);
                 isBleList = true;
                 setInfo();           //觀測者列表初始化
                 break;
@@ -563,9 +560,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         remoteRecycle.addItemDecoration(new SpacesItemDecoration(spacingInPixels)); //設定item間距
 
         //顯示選擇的帳號
-        accountSelected.setVisibility(View.VISIBLE);
-        accountSelected.setTextColor(Color.RED);
-        accountSelected.setText(accountInfoClicked);
+        selectedAccount.setText(accountInfoClicked);
+        selectedAccount.setTextColor(Color.RED);
     }
 
     //斷線狀態回傳給adapter

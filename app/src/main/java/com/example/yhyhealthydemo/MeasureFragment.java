@@ -24,7 +24,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private ImageView ovulationOnClick, temperatureOnClick, pregnancyOnClick, monitorOnClick;
 
-    private ImageView guidOnclick;
+    private ImageView guidOnclick, shoppingOnClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +39,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         monitorOnClick = view.findViewById(R.id.ivBreath);
 
         guidOnclick = view.findViewById(R.id.ivGuid);
+        shoppingOnClick = view.findViewById(R.id.ivStore);
 
         ovulationOnClick.setOnClickListener(this);
         temperatureOnClick.setOnClickListener(this);
@@ -46,6 +47,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         monitorOnClick.setOnClickListener(this);
 
         guidOnclick.setOnClickListener(this);
+        shoppingOnClick.setOnClickListener(this);
 
         return view;
     }
@@ -69,11 +71,15 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.ivBreath: //呼吸監控
-
+                startActivity(new Intent(getActivity(), BreathMonitorActivity.class));
                 break;
 
             case R.id.ivGuid:  //教學影片
                 startActivity(new Intent(getActivity(), TeachVideoActivity.class));
+                break;
+
+            case R.id.ivStore:
+                startActivity(new Intent(getActivity(), ShoppingActivity.class));
                 break;
         }
     }

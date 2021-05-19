@@ -207,10 +207,6 @@ public class ApiProxy {
     //發送驗證碼專用
     private static final String REQUEST_COMP_CODE = "$2a$10$jBSbzD.JToYeHV7jH8TWXeePdGcFd0bCyOSn4VhsGlqZ/KC61e/qK";
 
-    //fake 2021/02/05
-    private static final String Auth_fake = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTYtNCIsImlhdCI6MTYxMjUxMjY5NiwiZXhwIjoxNjEyNTE2Mjk2fQ.12La_DypWKRD-lIf6vF-5xL29Nk3cz86d5yYA_eNzfELQwiLu20ENmQVHQI7kvOfh0rp4SMEJxUZvXKyi23uVw";
-    private static final String Scepter_fake = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2LTYtNCIsImlhdCI6MTYxMjUxMjY5Nn0.JjQLZvOnAcvew1W16lR1TKAg3ylMKl8UJxU-q9xl0YPwFxby87yKaAMDTmvwtG_C4DX8u9wjVqI92VAeSqaVWA";
-
     //單例化
     private YHYHealthyApp app;
 

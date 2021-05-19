@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -148,6 +149,7 @@ public class ChartDialog extends Dialog {
 
          LineDataSet lineDataSet = new LineDataSet(entries,"");
          lineDataSet.setColor(Color.RED);  //軸線顏色
+         lineDataSet.setDrawValues(false); //在圓點上顯示數值 默認true
          LineData data = new LineData(lineDataSet);
          bleLineChart.setData(data);
 
@@ -192,6 +194,13 @@ public class ChartDialog extends Dialog {
 
          bleLineChart.getLegend().setEnabled(false);            //隱藏圖例
          bleLineChart.getDescription().setEnabled(false);       //隱藏描述
+         bleLineChart.setScaleEnabled(true);   //可平滑
+         bleLineChart.setDragEnabled(true);    //拖曳放大
+
+         Matrix matrix = new Matrix();
+         matrix.postScale(1.5f,1.0f); //x軸放大1.5，y軸不變
+         bleLineChart.getViewPortHandler().refresh(matrix, bleLineChart, false);
+
          bleLineChart.invalidate();                             //重新刷圖表
     }
 
@@ -200,7 +209,7 @@ public class ChartDialog extends Dialog {
         private DecimalFormat mFormat;
 
         public MyYAxisValueFormatter() {
-            mFormat = new DecimalFormat("###,###.0");//Y軸數值格式及小數點位數
+            mFormat = new DecimalFormat("0.0");//取小數點後1位,四捨五入
         }
 
         @Override
