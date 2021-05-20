@@ -1,123 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/yhy_background"
     tools:context=".RecordFragment">
 
-    <TextView
-        android:layout_centerHorizontal="true"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline53"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textSize="22dp"
-        android:text="@string/title_history" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline55"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.70" />
 
     <TextView
+        android:id="@+id/textView58"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="250dp"
-        android:text="紀錄下載"/>
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:text="@string/title_history"
+        android:textSize="@dimen/font_title_history"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginLeft="315dp"
-        android:src="@drawable/ic_cloud_download_black_24dp"/>
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_cloud_download_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline55"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView63"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_history_download"
+        app:layout_constraintEnd_toEndOf="@+id/imageView8"
+        app:layout_constraintStart_toStartOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline56"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08344733" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="80dp">
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline57"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline56">
 
-        <!-- 選擇功能 -->
-        <LinearLayout
+        <Button
+            android:id="@+id/btSelectFuns"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:layout_weight="1"
             android:background="@drawable/relative_shape"
-            android:layout_weight="1">
-            <Button
-                android:id="@+id/bt_select_fun"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:drawableLeft="@drawable/ic_dashboard_black_24dp"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                android:text="選擇功能"
-                android:textSize="16dp"/>
-        </LinearLayout>
-        <!-- 選擇日期 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/relative_shape"
-            android:layout_weight="1">
-            <Button
-                android:id="@+id/bt_select_date"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:drawableLeft="@drawable/ic_date_range_black_24dp"
-                android:gravity="center"
-                android:layout_marginLeft="30dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                android:text="選擇日期"
-                android:textSize="16dp"/>
-        </LinearLayout>
+            android:drawableLeft="@drawable/ic_dashboard_black_24dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="5dp"
+            android:text="@string/history_select_function"
+            android:textAllCaps="false"
+            android:textSize="@dimen/font_history_funs_and_day" />
 
-    </LinearLayout>
-    <!-- 功能顯示 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="150dp">
-        <TextView
-            android:id="@+id/tv_select_function"
+        <Button
+            android:id="@+id/btSelectDate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="16dp"
-            android:text=""/>
-    </LinearLayout>
-    <!-- 日期顯示 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="200dp">
-        <TextView
-            android:id="@+id/tv_date_range"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="16dp"
-            android:text=""/>
+            android:layout_weight="1"
+            android:background="@drawable/relative_shape"
+            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="32dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="5dp"
+            android:text="@string/history_select_days"
+            android:textAllCaps="false"
+            android:textSize="@dimen/font_history_funs_and_day" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_select_fun_date"
-        android:layout_centerInParent="true"
+        android:id="@+id/tvSelectFunDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22dp"
-        android:text="@string/please_select_fun_and_date" />
-    <Button
-        android:id="@+id/bt_result_start"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:text="@string/select_done"/>
-    <!-- 查詢結果顯示 -->
-</RelativeLayout>
+        android:text="@string/please_select_fun_and_date"
+        android:textSize="@dimen/font_history_funs_and_day"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView58" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecordResult"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline57" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

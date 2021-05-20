@@ -29,8 +29,8 @@
     <!-- 第三方庫 : slycalendar 專用 -->
     <string name="slycalendar_cancel">取消</string>
     <string name="slycalendar_save">確定</string>
-    <string name="dateFormat" translatable="false">MM/dd/yyyy</string>
-    <string name="timeFormat" translatable="false">MM/dd/yyyy</string>
+    <string name="dateFormat" translatable="false">yyyy-MM-dd</string>
+    <string name="timeFormat" translatable="false">yyyy-MM-dd</string>
     <string name="period" translatable="false">%1$s – %2$s</string>
 
     <!-- tab -->
@@ -421,4 +421,6 @@
     <string name="symptom_stickyPus">黏膿</string>
     <string name="coming_soon">近請期待</string>
     <string name="user_cancel_search">使用者自行取消搜尋功能</string>
+    <string name="your_chose_function_is">您選擇的功能是:</string>
+    <string name="function_is_not_allow_empty">功能不得空白</string>
 </resources>

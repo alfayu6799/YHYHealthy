@@ -197,7 +197,7 @@ public class ChartDialog extends Dialog {
          bleLineChart.setScaleEnabled(true);   //可平滑
          bleLineChart.setDragEnabled(true);    //拖曳放大
 
-         Matrix matrix = new Matrix();
+         Matrix matrix = new Matrix();  //2021/05/19
          matrix.postScale(1.5f,1.0f); //x軸放大1.5，y軸不變
          bleLineChart.getViewPortHandler().refresh(matrix, bleLineChart, false);
 

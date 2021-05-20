@@ -2,7 +2,7 @@
 <resources>
     <string-array name="select_function">
         <item>@string/ovulation</item>
-        <item>@string/temperature</item>
+        <item>@string/temperature_title</item>
         <item>@string/pregnancy</item>
         <item>@string/monitor</item>
     </string-array>

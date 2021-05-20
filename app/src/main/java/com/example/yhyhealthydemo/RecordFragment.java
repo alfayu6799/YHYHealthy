@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthydemo.adapter.FunctionsAdapter;
+import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
+
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,14 +46,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
 
     private TextView textHint;   //提示文字
 
-    private String data = ""; //功能選擇的資料字串
+    private String startDay = "";   //開始日
+    private String endDay = "";     //結束日
+
+    private RecyclerView recordResult;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view != null) return view;
 
-        view = inflater.inflate(R.layout.fragment_record1, container, false);
+        view = inflater.inflate(R.layout.fragment_record, container, false);
 
         textHint = view.findViewById(R.id.tvSelectFunDate);
 
@@ -54,6 +65,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
 
         btnFunction.setOnClickListener(this);
         btnDate.setOnClickListener(this);
+
+        recordResult = view.findViewById(R.id.rvRecordResult);
 
         return view;
     }
@@ -101,12 +114,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
 
         // Set the action buttons
         dialogBuilder.setPositiveButton(getString(R.string.history_dialog_confirm), (dialog, which) ->{
-            data = fxnList.toString().replace("[", "").replace("]", "");
-            if (data.equals("")){
+            if(fxnList.isEmpty()){
                 Toasty.warning(getActivity(), getString(R.string.history_functions_less_one) , Toast.LENGTH_SHORT, true).show();
-            }else{
-//                Toast.makeText(getActivity(), "您選擇的功能有:" + data, Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -115,6 +124,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
         AlertDialog alert = dialogBuilder.create();
         alert.setCanceledOnTouchOutside(false); //dismiss the dialog with click on outside of the dialog
         alert.show();
+
+        //Button內的英文小寫
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
         alert.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
     }
@@ -142,21 +153,41 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
             if (firstDate != null) {
                 if (secondDate == null) { //單一日
                     firstDate.set(Calendar.HOUR_OF_DAY, hours);
-                    String oneDate = new SimpleDateFormat(getString(R.string.timeFormat), Locale.getDefault()).format(firstDate.getTime());
-                    //date_range.setText("範圍:" + oneDate); //顯示所選擇的日期區間
-                }else{
-                    String SelectDate = getString(
-                            R.string.period,
-                            new SimpleDateFormat(getString(R.string.dateFormat), Locale.getDefault()).format(firstDate.getTime()),
-                            new SimpleDateFormat(getString(R.string.timeFormat), Locale.getDefault()).format(secondDate.getTime())
-                    );
-                    //顯示所選擇的日期區間
-                    Log.d(TAG, "onDataSelected: " + SelectDate);
+
+                    DateTime dtFirst = new DateTime(firstDate);
+                    startDay = dtFirst.toString("yyyy-MM-dd");
+                    endDay = dtFirst.toString("yyyy-MM-dd");
+                }else{ //多日
+//                    SelectDate = getString(
+//                            R.string.period,
+//                            new SimpleDateFormat(getString(R.string.dateFormat), Locale.getDefault()).format(firstDate.getTime()),
+//                            new SimpleDateFormat(getString(R.string.dateFormat), Locale.getDefault()).format(secondDate.getTime())
+//                    );
+
+                    DateTime dtFirst = new DateTime(firstDate);
+                    DateTime dtSecond = new DateTime(secondDate);
+                    startDay = dtFirst.toString("yyyy-MM-dd");
+                    endDay = dtSecond.toString("yyyy-MM-dd");
                 }
             }
             //提示文字隱藏
             textHint.setVisibility(View.INVISIBLE);
+            recordResult.setVisibility(View.VISIBLE);
+            setData();
         }
     };
+
+    //執行
+    private void setData() {
+        if (null != fxnList && !fxnList.isEmpty()){ //將功能跟日期傳給adapter
+            FunctionsAdapter functionsAdapter = new FunctionsAdapter(getActivity(), startDay, endDay, fxnList);
+            recordResult.setHasFixedSize(true);
+            recordResult.setAdapter(functionsAdapter);
+            recordResult.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recordResult.addItemDecoration(new SpacesItemDecoration(20));
+        }else { //功能不得空白
+            Toasty.error(getActivity(), getString(R.string.function_is_not_allow_empty), Toast.LENGTH_SHORT,true).show();
+        }
+    }
 
 }
