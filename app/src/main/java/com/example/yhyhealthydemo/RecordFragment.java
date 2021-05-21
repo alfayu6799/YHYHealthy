@@ -3,6 +3,7 @@ package com.example.yhyhealthydemo;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,12 @@ import java.util.List;
 import java.util.Locale;
 import es.dmoral.toasty.Toasty;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
+
+/**   ***************
+ * 歷史紀錄首頁
+ * 目前只會有四個功能
+ * create 2021/05/21
+ * ******************* **/
 
 public class RecordFragment extends Fragment implements View.OnClickListener, FunctionsAdapter.OnRecycleItemClickListener {
 
@@ -189,20 +196,23 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Fu
 
     @Override
     public void onClick(String functionName, String startDay, String endDay) {
-        //Log.d(TAG, "onClick: " + functionName + ",startDay:" + startDay + ",endDay:" + endDay);
+
+        Class<?> target = null;  //通配泛型，?可以代表任何類型
+
         switch (functionName){
             case "Ovulation Testing":
-                //Log.d(TAG, "Ovulation Testing"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                target = OvulationRecordActivity.class;
                 break;
             case "Bluetooth Body Temperature":
-                //Log.d(TAG, "Bluetooth Body Temperature"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                target = TempRecordActivity.class;
                 break;
             case "Pregnancy Record":
-                //Log.d(TAG, "Pregnancy"+ ",startDay:" + startDay + ",endDay:" + endDay);
+
                 break;
             case "Breath Monitoring":
-                //Log.d(TAG, "Breath Monitoring"+ ",startDay:" + startDay + ",endDay:" + endDay);
+
                 break;
         }
+        if (target != null) startActivity(new Intent(getContext(), target));
     }
 }
