@@ -356,7 +356,7 @@
     <string name="ble_is_disconnected_and_release">藍芽已斷開並釋放資源</string>
     <string name="ble_is_disconnected">藍芽已斷開</string>
     <string name="ble_paired_devices">可配對之裝置</string>
-    <string name="under_25_degree">溫度低於25度</string>
+    <string name="under_25_degree">體溫低於25度</string>
     <string name="agree">同意</string>
     <string name="not_agree">不同意</string>
     <string name="submit">送出</string>

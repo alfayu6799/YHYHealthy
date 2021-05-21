@@ -29,11 +29,7 @@ import java.util.Locale;
 import es.dmoral.toasty.Toasty;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class RecordFragment extends Fragment implements View.OnClickListener{
+public class RecordFragment extends Fragment implements View.OnClickListener, FunctionsAdapter.OnRecycleItemClickListener {
 
     private static final String TAG = RecordFragment.class.getSimpleName();
 
@@ -180,7 +176,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
     //執行
     private void setData() {
         if (null != fxnList && !fxnList.isEmpty()){ //將功能跟日期傳給adapter
-            FunctionsAdapter functionsAdapter = new FunctionsAdapter(getActivity(), startDay, endDay, fxnList);
+            FunctionsAdapter functionsAdapter = new FunctionsAdapter(getActivity(), startDay, endDay, fxnList,this);
             recordResult.setHasFixedSize(true);
             recordResult.setAdapter(functionsAdapter);
             recordResult.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -190,4 +186,23 @@ public class RecordFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+
+    @Override
+    public void onClick(String functionName, String startDay, String endDay) {
+        //Log.d(TAG, "onClick: " + functionName + ",startDay:" + startDay + ",endDay:" + endDay);
+        switch (functionName){
+            case "Ovulation Testing":
+                //Log.d(TAG, "Ovulation Testing"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                break;
+            case "Bluetooth Body Temperature":
+                //Log.d(TAG, "Bluetooth Body Temperature"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                break;
+            case "Pregnancy Record":
+                //Log.d(TAG, "Pregnancy"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                break;
+            case "Breath Monitoring":
+                //Log.d(TAG, "Breath Monitoring"+ ",startDay:" + startDay + ",endDay:" + endDay);
+                break;
+        }
+    }
 }

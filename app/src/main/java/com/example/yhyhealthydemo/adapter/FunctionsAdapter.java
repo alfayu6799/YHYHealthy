@@ -19,14 +19,16 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.view
     private Context context;
     private String startDay;
     private String endDay;
-
     private List<String> functionList = new ArrayList<>();
 
-    public FunctionsAdapter(Context context, String startDay, String endDay, List<String> functionList) {
+    private FunctionsAdapter.OnRecycleItemClickListener listener; //interface
+
+    public FunctionsAdapter(Context context, String startDay, String endDay, List<String> functionList, OnRecycleItemClickListener listener) {
         this.context = context;
         this.startDay = startDay;
         this.endDay = endDay;
         this.functionList = functionList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,6 +43,12 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.view
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         holder.textDay.setText(startDay + "~" + endDay);
         holder.textFunction.setText(functionList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClick(functionList.get(position),startDay, endDay);
+            }
+        });
     }
 
     @Override
@@ -48,6 +56,10 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.view
         return functionList.size();
     }
 
+    public interface OnRecycleItemClickListener{
+
+        void onClick(String functionName, String start, String end);
+    }
 
     public class viewHolder extends RecyclerView.ViewHolder{
 

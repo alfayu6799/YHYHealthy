@@ -221,9 +221,11 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                         if (errorCode == 0){
                             Toasty.success(TemperEditActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
 
-                            //if(tmpPhoto.exists()) //如果檔案存在就刪除會閃退
-                            //    tmpPhoto.delete();
-
+                            //如果檔案存在就刪除 2021/05/21
+                            if (tmpPhoto != null){
+                                if (tmpPhoto.exists())
+                                    tmpPhoto.getAbsoluteFile().delete();
+                            }
                             setResult(RESULT_OK); //回到上一頁
                             finish();  //關閉此頁
                         }else {
@@ -404,6 +406,10 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         //如果檔案存在就要砍掉
-        if(file.exists()) file.delete();
+        if(file != null ) {
+            if (file.exists()) {
+                file.getAbsoluteFile().delete();
+            }
+        }
     }
 }

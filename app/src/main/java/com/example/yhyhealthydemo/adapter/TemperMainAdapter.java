@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.TempDataApi;
+import com.example.yhyhealthydemo.datebase.TemperatureData;
 
 
 import java.text.SimpleDateFormat;
@@ -55,18 +56,8 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
-    //更新藍芽連線狀態
-    public void updateDeviceStatusItem(String bleUserName, String deviceName, String deviceAddress, String bleStatus){
-        if(dataList.size() != 0){
-            for (int j = 0; j < dataList.size(); j++){
-                TempDataApi.SuccessBean data = dataList.get(j);
-                if(data.getUserName().equals(bleUserName)){
-                    data.setMac(deviceAddress);
-                    data.setStatus(deviceName + " " + bleStatus);
-                    notifyItemChanged(j); //刷新
-                }
-            }
-        }
+    public void clear(TempDataApi.SuccessBean data) {
+        Log.d(TAG, "adapter clear: " + data.getTargetId());
     }
 
     //斷線刷新 2021/04/28
@@ -84,7 +75,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
-    //找出adapter內的name 2021/04/28
+    //找出adapter內的user Name 2021/04/28
     public String findNameByMac(String bleMac){
         if (dataList.size() != 0){
             for(int i = 0; i < dataList.size();i++){
@@ -97,6 +88,21 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             }
         }
             return null;
+    }
+
+    //找出adapter內的Device Name 2021/05/21
+    public String findDeviceNameByMac(String bleMac){
+        if (dataList.size() != 0){
+            for(int i = 0; i < dataList.size();i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                    if(data.getMac().equals(bleMac)){
+                        return data.getDeviceName();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     //更新溫度與電量 2021/04/06
@@ -233,6 +239,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public int getItemCount() {
         return dataList.size();
     }
+
+
+
 
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);

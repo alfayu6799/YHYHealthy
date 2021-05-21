@@ -586,6 +586,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if (deviceAddress != null){
             statusMemberBean.setMac(deviceAddress);
             statusMemberBean.setStatus(deviceName+" "+ bleStatus);
+            statusMemberBean.setDeviceName(deviceName);
             tAdapter.updateItem(statusMemberBean, statusPosition);
         }
     }
@@ -610,14 +611,16 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 chartDialog.update(tAdapter.getDegreeByMac(macAddress));  //更新Dialog內的溫度圖表
 
             //電量低於40%則要通知 2021/05/12
-            if (battery < 40){
-                Toasty.warning(TemperatureActivity.this,R.string.battery_is_low_40, Toast.LENGTH_SHORT, true).show();
+            if (battery < 40) {
+                String deviceName = tAdapter.findDeviceNameByMac(macAddress);
+                Toasty.warning(TemperatureActivity.this,deviceName + getString(R.string.battery_is_low_40), Toast.LENGTH_SHORT, true).show();
             }
 
-            //溫度低於25度要通知 2021/05/10
-            if (degree <= 25)
-                Toasty.info(TemperatureActivity.this, R.string.under_25_degree,Toast.LENGTH_SHORT, true).show();
-
+            //溫度低於25度要通知 2021/05/21
+            if (degree <= 25){
+                String userName = tAdapter.findNameByMac(macAddress);
+                Toasty.warning(TemperatureActivity.this, userName + getString(R.string.under_25_degree),Toast.LENGTH_SHORT, true).show();
+            }
             //發燒到37.5會出現警告彈跳視窗
             if(degree > 37.5)
                 feverDialog(tAdapter.findNameByMac(macAddress), degree); //藉由mac取得adapter使用者名稱
@@ -790,7 +793,7 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             e.printStackTrace();
         }
         Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
-        proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
+        //proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
     private ApiProxy.OnApiListener addBleValueListener = new ApiProxy.OnApiListener() {
@@ -965,11 +968,14 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         userMap.remove(data.getMac());                        //移除5分鐘的佇列
         countDownTimerArrayMap.remove(data.getMac());         //移除5秒的佇列
         countDownTimer.cancel();                              //移除5秒的定時
+        //tAdapter.clear(data);
+        //data.setTargetId(data.getTargetId());
      }
 
      @Override  //更新數據到後台
     public void passTarget(int targetId, double degree) {
-        updateDegreeValueToApi(degree, targetId);
+         Log.d(TAG, "passTarget: " + targetId);
+        //updateDegreeValueToApi(degree, targetId);
     }
 
     @Override   //呼叫圖表interface

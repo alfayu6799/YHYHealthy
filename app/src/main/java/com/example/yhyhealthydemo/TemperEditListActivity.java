@@ -189,22 +189,28 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     //編輯
     @Override
     public void onEditClick(TempDataApi.SuccessBean data) {
-        //大頭貼轉成bitmap格式
-        Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
-        //存到本機端記憶卡內
-        if(bitmap != null)
-            saveBitmap(bitmap);
-
         Intent intent = new Intent();
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
+
+        //大頭貼轉成bitmap格式
+        if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
+            Log.d(TAG, "onEditClick: " + data.getHeadShot());
+            Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
+            saveBitmap(bitmap); //存到本機端記憶卡內
+            bundle.putString("HeadShot", tmpPhoto.toString());
+        }
+//
+//        if(tmpPhoto != null && !tmpPhoto.exists()){ //檔案有存在
+//            bundle.putString("HeadShot", tmpPhoto.toString());
+//        }
+//
         bundle.putInt("targetId", data.getTargetId());
         bundle.putString("name", data.getUserName());
         bundle.putString("gender", data.getGender());
         bundle.putString("birthday", data.getTempBirthday());
         bundle.putString("height", String.valueOf(data.getTempHeight()));
         bundle.putString("weight", String.valueOf(data.getTempWeight()));
-        bundle.putString("HeadShot", tmpPhoto.toString());
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_CODE);
     }
