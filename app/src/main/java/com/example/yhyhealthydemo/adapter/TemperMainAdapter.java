@@ -107,7 +107,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
 
     //更新溫度與電量 2021/04/06
     public void updateItemByMac(double degree, String battery, String mac){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm:ss");
         String currentDateTime = sdf.format(new Date());  // 目前時間
         if (dataList.size() != 0){
             for(int i = 0; i < dataList.size();i++){

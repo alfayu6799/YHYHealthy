@@ -115,9 +115,9 @@ public class ChartDialog extends Dialog {
             //結束時間
             String lastTime = data.getDegreeList().get(data.getDegreeList().size()-1).getDate();
             endDateTime.setText(lastTime);
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm:ss");
             DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5); //五分鐘量測一次
-            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
+            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm:ss"));
 
             for (int i = 0; i < data.getDegreeList().size(); i++){
                 correctDate = DateUtil.fromDateToTime(data.getDegreeList().get(i).getDate());
@@ -131,12 +131,12 @@ public class ChartDialog extends Dialog {
     private void setChart() {
          //將溫度與日期塞入DataArray
          DataArray.add(new Degree(degree, correctDate));
-
+        Log.d(TAG, "setChart: " + correctDate);
          ArrayList<String> label = new ArrayList<>();    //X軸(時間)
          ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
 
-         //筆數超過10筆時刪除最早的第一筆資料 2021/05/05
-         if (DataArray.size() > 10){
+         //筆數超過12筆時刪除最早的第一筆資料 2021/05/12
+         if (DataArray.size() > 12){
              DataArray.remove(0);
          }
 
@@ -228,9 +228,9 @@ public class ChartDialog extends Dialog {
             //結束時間
             String lastTime = newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate(); //取得最後一筆
             endDateTime.setText(lastTime);
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm");
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd HH:mm:ss");
             DateTime testDataTime = dtf.parseDateTime(lastTime).plusMinutes(5); //五分鐘量測一次
-            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm"));
+            nextMeasureTime.setText(getContext().getString(R.string.next_measure_time_is) + testDataTime.toString("HH:mm:ss"));
 
             bleUserDegree.setText(String.valueOf(newMemberBean.getDegree()));
             correctDate = DateUtil.fromDateToTime(newMemberBean.getDegreeList().get(newMemberBean.getDegreeList().size()-1).getDate());
