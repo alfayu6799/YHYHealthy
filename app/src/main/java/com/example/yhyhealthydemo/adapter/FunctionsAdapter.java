@@ -7,14 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.yhyhealthydemo.R;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.viewHolder>{
+
+    private static final String TAG = "FunctionsAdapter";
 
     private Context context;
     private String startDay;
@@ -41,12 +44,18 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.view
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        holder.textDay.setText(startDay + "~" + endDay);
+        DateTime dt1 = new DateTime(startDay);
+        DateTime dt2 = new DateTime(endDay);
+        String startDayStr = dt1.toString("yyyy/MM/dd");
+        String endDayStr = dt2.toString("yyyy/MM/dd");
+
+        holder.textDay.setText(startDayStr + "~" + endDayStr);
         holder.textFunction.setText(functionList.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onClick(functionList.get(position),startDay, endDay);
+                //listener.onClick(functionList.get(position),startDay, endDay);
+                listener.onClick(position, startDay, endDay);
             }
         });
     }
@@ -58,7 +67,7 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.view
 
     public interface OnRecycleItemClickListener{
 
-        void onClick(String functionName, String start, String end);
+        void onClick(int functionName, String start, String end);
     }
 
     public class viewHolder extends RecyclerView.ViewHolder{

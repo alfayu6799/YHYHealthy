@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,10 @@ import com.example.yhyhealthydemo.tools.SpacesItemDecoration;
 
 import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+
 import es.dmoral.toasty.Toasty;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
@@ -195,24 +193,28 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Fu
 
 
     @Override
-    public void onClick(String functionName, String startDay, String endDay) {
+    public void onClick(int functionName, String startDay, String endDay) {
 
-        Class<?> target = null;  //通配泛型，?可以代表任何類型
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString("startDay", startDay);
+        bundle.putString("endDay", endDay);
 
         switch (functionName){
-            case "Ovulation Testing":
-                target = OvulationRecordActivity.class;
+            case 0:
+                intent = new Intent(getActivity(),OvulationRecordActivity.class);
                 break;
-            case "Bluetooth Body Temperature":
-                target = TempRecordActivity.class;
+            case 1:
+                intent = new Intent(getActivity(), TempRecordActivity.class);
                 break;
-            case "Pregnancy Record":
-
-                break;
-            case "Breath Monitoring":
-
-                break;
+//            case 2:
+//
+//                break;
+//            case 3:
+//
+//                break;
         }
-        if (target != null) startActivity(new Intent(getContext(), target));
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

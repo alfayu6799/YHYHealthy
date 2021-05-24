@@ -25,6 +25,9 @@
 
     <string name="param_name">唾液辨識:</string>
     <string name="body_degree">基礎體溫:</string>
+    <string name="cycle_record_note">特殊狀況:</string>
+    <string name="cycle_body_degree">基礎體溫:</string>
+    <string name="cycle_param_name">唾液辨識:</string>
 
     <!-- 第三方庫 : slycalendar 專用 -->
     <string name="slycalendar_cancel">取消</string>

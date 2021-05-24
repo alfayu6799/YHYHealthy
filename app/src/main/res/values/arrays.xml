@@ -3,8 +3,8 @@
     <string-array name="select_function">
         <item>@string/ovulation</item>
         <item>@string/temperature_title</item>
-        <item>@string/pregnancy</item>
-        <item>@string/monitor</item>
+<!--        <item>@string/pregnancy</item>-->
+<!--        <item>@string/monitor</item>-->
     </string-array>
 
     <string-array name="unit_arr">

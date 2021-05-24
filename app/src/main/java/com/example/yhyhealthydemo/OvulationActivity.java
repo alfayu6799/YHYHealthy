@@ -622,7 +622,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "startDate: " + startDay + " endDate:" + endDay);
+        //Log.d(TAG, "startDate: " + startDay + " endDate:" + endDay);
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
