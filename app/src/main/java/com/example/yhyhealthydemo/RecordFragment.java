@@ -195,26 +195,20 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Fu
     @Override
     public void onClick(int functionName, String startDay, String endDay) {
 
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putString("startDay", startDay);
-        bundle.putString("endDay", endDay);
+//        Intent intent = new Intent();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("startDay", startDay);
+//        bundle.putString("endDay", endDay);
 
         switch (functionName){
             case 0:
-                intent = new Intent(getActivity(),OvulationRecordActivity.class);
-                break;
             case 1:
-                intent = new Intent(getActivity(), TempRecordActivity.class);
+                Toasty.info(getContext(), getString(R.string.fxn_is_coming_soon), Toast.LENGTH_SHORT,true).show();
+                //intent = new Intent(getActivity(),OvulationRecordActivity.class);
                 break;
-//            case 2:
-//
-//                break;
-//            case 3:
-//
-//                break;
+            //intent = new Intent(getActivity(), TempRecordActivity.class);
         }
-        intent.putExtras(bundle);
-        startActivity(intent);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
     }
 }

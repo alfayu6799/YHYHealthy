@@ -64,6 +64,8 @@ import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_DELETE;
 import static com.example.yhyhealthydemo.module.ApiProxy.PERIOD_UPDATE;
 import static com.example.yhyhealthydemo.module.ApiProxy.RECORD_INFO;
+import static com.example.yhyhealthydemo.module.ApiProxy.authToken;
+import static com.example.yhyhealthydemo.module.ApiProxy.scepterToken;
 
 public class OvulationActivity extends AppCompatActivity implements View.OnClickListener, OnDateSelectedListener {
 
@@ -187,7 +189,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private void initCalendar() {
 
         Log.d(TAG, "初始化日曆fxn: initCalendar");
-
 //        widget.addDecorators(
 //                new MySelectorDecorator(OvulationActivity.this), //點擊日期後的背景
 //                oneDayDecorator
@@ -260,6 +261,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         if(errorCode == 0){
                             parserJson(result);
                         }else if (errorCode == 23){  //token失效
+                            getNewToken(); //2021/05/25 for test
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
@@ -622,7 +624,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "startDate: " + startDay + " endDate:" + endDay);
+        Log.d(TAG, "跟後端startDate: " + startDay + " endDate:" + endDay);
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -826,6 +828,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         lastDayOfThisMonth = endLastMonth;
         initChartData();         //圖表範圍顯示
         widget.goToPrevious();  //上個月月曆
+    }
+
+    //取得新token  2021/05/25
+    private void getNewToken() {
+        //需要舊token資料
+        Log.d(TAG, "getNewToken: old token:" + authToken);
+        Log.d(TAG, "getNewToken: old scepterToken:" + scepterToken);
     }
 
     @Override

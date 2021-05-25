@@ -17,6 +17,9 @@ import java.util.List;
 
 import sun.bob.mcalendarview.vo.DateData;
 
+/****
+ * 經期8組
+ * */
 public class Math {
     private final CycleRecord.SuccessBean date;
     private final int YEAR = 0;
@@ -66,7 +69,7 @@ public class Math {
                 return context.getDrawable(R.mipmap.ic_3);
             if (statusCode.get(SINGLE)==7)  //高黃體濾泡
                 return context.getDrawable(R.drawable.ic_baseline_brightness_8_24);
-            if (statusCode.get(SINGLE)==8)  //低黃體濾泡
+            if (statusCode.get(SINGLE)==8)  //低黃體濾泡  //2021/05/01 add
                 return context.getDrawable(R.drawable.ic_baseline_brightness_9_24);
         }
 

@@ -437,4 +437,7 @@
     <string name="user_cancel_search">user cancel search</string>
     <string name="your_chose_function_is">You choose function is :</string>
     <string name="function_is_not_allow_empty">function is not allow empty</string>
+    <string name="tempStart">Start</string>
+    <string name="tempEnd">End</string>
+    <string name="fxn_is_coming_soon">Function is coming soon</string>
 </resources>

@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -36,6 +37,7 @@ import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.RENEW_TOKEN;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.USER_UPDATE;
+import static com.example.yhyhealthydemo.module.ApiProxy.userSetting;
 
 /***** ****
  * 設定 - 個人設定 - 基本資料
@@ -324,6 +326,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                         int errorCode = object.getInt("errorCode");
                         if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
+                            userSetting = true;  //使用者設定
+                            //writeToSharedPreferences();
                         }else if(errorCode == 23){ //token失效
                             Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
@@ -349,6 +353,12 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             progressDialog.dismiss();
         }
     };
+
+    //使用者資料寫到SharedPreferences
+    private void writeToSharedPreferences() {
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putBoolean("USERSET", true).apply();
+    }
 
     //出生年月日彈跳視窗選擇
     private void dialogPickBirthday() {

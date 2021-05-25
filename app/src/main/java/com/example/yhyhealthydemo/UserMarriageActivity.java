@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.MARRIAGE_UPDATE;
+import static com.example.yhyhealthydemo.module.ApiProxy.maritalSetting;
 
 /***  ****************
  * 設定 - 個人 - 婚姻狀態
@@ -204,7 +205,8 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0) {
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
-                            writeToSharedPreferences();
+                            maritalSetting = true;  //婚姻狀態設定
+                            //writeToSharedPreferences();
                         }else if (errorCode == 23){  //token失效 2021/05/11
                             Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入

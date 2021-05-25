@@ -6,10 +6,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import static com.example.yhyhealthydemo.module.ApiProxy.maritalSetting;
+import static com.example.yhyhealthydemo.module.ApiProxy.menstrualSetting;
+import static com.example.yhyhealthydemo.module.ApiProxy.userSetting;
 
 /****
  * 首頁
@@ -35,16 +40,16 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         ovulationOnClick = view.findViewById(R.id.ivOvulation);
         temperatureOnClick = view.findViewById(R.id.ivTemperature);
-        pregnancyOnClick = view.findViewById(R.id.ivPregnancy);
-        monitorOnClick = view.findViewById(R.id.ivBreath);
+//        pregnancyOnClick = view.findViewById(R.id.ivPregnancy);
+//        monitorOnClick = view.findViewById(R.id.ivBreath);
 
         guidOnclick = view.findViewById(R.id.ivGuid);
         shoppingOnClick = view.findViewById(R.id.ivStore);
 
         ovulationOnClick.setOnClickListener(this);
         temperatureOnClick.setOnClickListener(this);
-        pregnancyOnClick.setOnClickListener(this);
-        monitorOnClick.setOnClickListener(this);
+//        pregnancyOnClick.setOnClickListener(this);
+//        monitorOnClick.setOnClickListener(this);
 
         guidOnclick.setOnClickListener(this);
         shoppingOnClick.setOnClickListener(this);
@@ -65,14 +70,14 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent_t);
                 break;
 
-            case R.id.ivPregnancy:
-                Intent intent_p = new Intent(getActivity(), PregnancyActivity.class);
-                startActivity(intent_p);
-                break;
-
-            case R.id.ivBreath: //呼吸監控
-                startActivity(new Intent(getActivity(), BreathMonitorActivity.class));
-                break;
+//            case R.id.ivPregnancy:
+//                Intent intent_p = new Intent(getActivity(), PregnancyActivity.class);
+//                startActivity(intent_p);
+//                break;
+//
+//            case R.id.ivBreath: //呼吸監控
+//                startActivity(new Intent(getActivity(), BreathMonitorActivity.class));
+//                break;
 
             case R.id.ivGuid:  //教學影片
                 startActivity(new Intent(getActivity(), TeachVideoActivity.class));
@@ -86,20 +91,20 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     //檢查婚姻狀況與經期設定是否有設定完成
     private void checkOvulationInfo() {
-        //取得相關資訊(local file)
-        //婚姻狀況
-        boolean marriageStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MARRIAGE", false);
-        //經期設定
-        boolean menstrualStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MENSTRUAL", false);
-        //個人資料設定
-        boolean userInfoStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("USERSET", false);
-
-        //判斷進入排卵功能必需的元素是否齊全
-        if (!marriageStatus) {  //婚姻狀態不齊全
+//        //取得相關資訊(local file)
+//        //婚姻狀況
+//        boolean marriageStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MARRIAGE", false);
+//        //經期設定
+//        boolean menstrualStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("MENSTRUAL", false);
+//        //個人資料設定
+//        boolean userInfoStatus = this.getActivity().getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getBoolean("USERSET", false);
+//
+//        //判斷進入排卵功能必需的元素是否齊全
+        if (!maritalSetting) {  //婚姻狀態不齊全
             startActivity(new Intent(getActivity(), UserMarriageActivity.class));
-        } else if (!menstrualStatus) { //經期設定不齊全
+        } else if (!menstrualSetting) { //經期設定不齊全
             startActivity(new Intent(getActivity(), UserPeriodActivity.class));
-        }else if (!userInfoStatus){  //個人資料設定不齊全
+        }else if (!userSetting){  //個人資料設定不齊全
             startActivity(new Intent(getActivity(), UserBasicActivity.class));
         }else {
             startActivity(new Intent(getActivity(), OvulationActivity.class));

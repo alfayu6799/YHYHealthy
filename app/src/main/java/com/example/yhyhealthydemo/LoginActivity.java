@@ -25,6 +25,9 @@ import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthydemo.module.ApiProxy.COMP;
 import static com.example.yhyhealthydemo.module.ApiProxy.LOGIN;
+import static com.example.yhyhealthydemo.module.ApiProxy.maritalSetting;
+import static com.example.yhyhealthydemo.module.ApiProxy.menstrualSetting;
+import static com.example.yhyhealthydemo.module.ApiProxy.userSetting;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -156,15 +159,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }else if (errorCode == 0){ //登入成功
                 //因為success內容有三個重要資訊其排卵功能需要用到所以要解析json
                 JSONObject success = object.getJSONObject("success");
-                boolean maritalSet = success.getBoolean("maritalSet");
-                boolean menstrualSet = success.getBoolean("menstrualSet");
-                boolean userSet = success.getBoolean("userSet");
-                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                pref.edit().putString("ACCOUNT", account.getText().toString())
-                        .putString("PASSWORD", password.getText().toString())
-                        .putBoolean("MARRIAGE", maritalSet)
-                        .putBoolean("MENSTRUAL", menstrualSet)
-                        .putBoolean("USERSET", userSet).apply();
+                //boolean maritalSet = success.getBoolean("maritalSet");
+                maritalSetting = success.getBoolean("maritalSet");
+                //boolean menstrualSet = success.getBoolean("menstrualSet");
+                menstrualSetting = success.getBoolean("menstrualSet");
+                //boolean userSet = success.getBoolean("userSet");
+                userSetting = success.getBoolean("userSet");
+//                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+//                pref.edit().putString("ACCOUNT", account.getText().toString())
+//                        .putString("PASSWORD", password.getText().toString())
+//                        .putBoolean("MARRIAGE", maritalSet)
+//                        .putBoolean("MENSTRUAL", menstrualSet)
+//                        .putBoolean("USERSET", userSet).apply();
 
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 

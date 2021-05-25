@@ -426,4 +426,7 @@
     <string name="user_cancel_search">使用者自行取消搜尋功能</string>
     <string name="your_chose_function_is">您選擇的功能是:</string>
     <string name="function_is_not_allow_empty">功能不得空白</string>
+    <string name="tempStart">開始</string>
+    <string name="tempEnd">結束</string>
+    <string name="fxn_is_coming_soon">功能尚未開放</string>
 </resources>

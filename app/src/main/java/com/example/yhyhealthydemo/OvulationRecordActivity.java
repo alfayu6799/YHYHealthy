@@ -126,7 +126,6 @@ public class OvulationRecordActivity extends AppCompatActivity {
 
     //解析後台來的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "parserJson: " + result.toString());
         CycleRecord cycleRecord = CycleRecord.newInstance(result.toString());
         List<CycleRecord.SuccessBean> dataList = cycleRecord.getSuccess();  //resource
         //將資料配置到adapter顯示
@@ -134,6 +133,6 @@ public class OvulationRecordActivity extends AppCompatActivity {
         rvOvulation.setAdapter(adapter);
         rvOvulation.setHasFixedSize(true);
         rvOvulation.setLayoutManager(new LinearLayoutManager(this));
-        rvOvulation.addItemDecoration(new SpacesItemDecoration(10));
+        rvOvulation.addItemDecoration(new SpacesItemDecoration(30));
     }
 }

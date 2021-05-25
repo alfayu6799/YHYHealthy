@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.yhyhealthydemo.R;
 import com.example.yhyhealthydemo.datebase.CycleRecord;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 public class OvulationRecordAdapter extends RecyclerView.Adapter<OvulationRecordAdapter.ViewHolder>{
@@ -33,8 +35,10 @@ public class OvulationRecordAdapter extends RecyclerView.Adapter<OvulationRecord
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.txtDay.setText(dataList.get(position).getTestDate());
-            holder.txtDegree.setText(String.valueOf(dataList.get(position).getTemperature()));
+        DateTime dateTime = new DateTime(dataList.get(position).getTestDate());
+        holder.txtDay.setText(dateTime.toString("yyyy/MM/dd"));
+
+        holder.txtDegree.setText(String.valueOf(dataList.get(position).getTemperature()));
     }
 
     @Override

@@ -39,6 +39,7 @@ import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 import static com.example.yhyhealthydemo.module.ApiProxy.MENSTRUAL_RECORD_UPDATE;
+import static com.example.yhyhealthydemo.module.ApiProxy.menstrualSetting;
 
 /**
  * 使用者設定 - 經期設定
@@ -336,7 +337,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0){
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
-                            writeToSharedPreferences();
+                            menstrualSetting = true;  //經期設定
+//                            writeToSharedPreferences();
                         }else if (errorCode == 23){ //token失效 2021/05/11
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
