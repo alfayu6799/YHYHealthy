@@ -109,16 +109,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
     private static final int PERIOD_RECORD = 1;
-    private PopupWindow popupWindow;
-    private LinearLayout linearLayout;
-
-    //ble
-    private yhyBleService mBluetoothLeService;
+    private String beginPeriodDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getSupportActionBar().hide(); //hide ActionBar
         setContentView(R.layout.activity_ovulation);
 
         //休眠禁止
@@ -202,8 +197,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //自動檢查今天是否有資料 2021/02/25
         checkTodayInfo(String.valueOf(LocalDate.now()));
 
-        //顯示今天是周期的第幾天
-        checkPeriodDayOfThisMonth(LocalDate.now());
+//        //顯示今天是周期的第幾天
+//        checkPeriodDayOfThisMonth(LocalDate.now());
 
         //監聽月曆滑動
         monthListener();
@@ -702,15 +697,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         }
 
+        //經期第一天給予全域變數
+        if(list.get(0) != null)
+            beginPeriodDay = list.get(0);
+
         //圖表初始化
         MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
         chartManager.showCombinedChart(dataList);
 
-        //經期第一天寫入sharePref
-        if(list.get(0) != null){
-            SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-            pref.edit().putString("BEGIN", list.get(0)).apply();
-        }
+        //顯示今天是周期的第幾天 2021/05/25 需要等到月曆完全顯示完後再做周期的第一天查詢
+        checkPeriodDayOfThisMonth(LocalDate.now());
     }
 
     //日期被選到時的動作 2021/02/25
@@ -741,12 +737,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //週期第幾天Fxn 2021/03/02
     @SuppressLint("SetTextI18n")
     private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
-        String beginStr = getSharedPreferences("yhyHealthy", Context.MODE_PRIVATE).getString("BEGIN", "");
+        Log.d(TAG, "checkPeriodDayOfThisMonth: 關鍵日:" + choseDay);
+        Log.d(TAG, "checkPeriodDayOfThisMonth: 來自api: " + beginPeriodDay);
 
-        if (TextUtils.isEmpty(beginStr)){
+        if (TextUtils.isEmpty(beginPeriodDay)){
             menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
         }else {
-            LocalDate begin = LocalDate.parse(beginStr);
+            LocalDate begin = LocalDate.parse(beginPeriodDay);
             long numOfDays = ChronoUnit.DAYS.between(begin, choseDay);
            if(numOfDays >= 0){
                numOfDays = numOfDays + 1;

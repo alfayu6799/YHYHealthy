@@ -159,18 +159,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }else if (errorCode == 0){ //登入成功
                 //因為success內容有三個重要資訊其排卵功能需要用到所以要解析json
                 JSONObject success = object.getJSONObject("success");
-                //boolean maritalSet = success.getBoolean("maritalSet");
-                maritalSetting = success.getBoolean("maritalSet");
-                //boolean menstrualSet = success.getBoolean("menstrualSet");
-                menstrualSetting = success.getBoolean("menstrualSet");
-                //boolean userSet = success.getBoolean("userSet");
-                userSetting = success.getBoolean("userSet");
-//                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-//                pref.edit().putString("ACCOUNT", account.getText().toString())
-//                        .putString("PASSWORD", password.getText().toString())
-//                        .putBoolean("MARRIAGE", maritalSet)
-//                        .putBoolean("MENSTRUAL", menstrualSet)
-//                        .putBoolean("USERSET", userSet).apply();
+                maritalSetting = success.getBoolean("maritalSet");      //婚姻狀況
+                menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
+                userSetting = success.getBoolean("userSet");            //使用者基本資料
 
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 

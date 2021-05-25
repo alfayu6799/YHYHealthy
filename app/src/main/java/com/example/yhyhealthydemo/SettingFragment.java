@@ -1,6 +1,7 @@
 package com.example.yhyhealthydemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.example.yhyhealthydemo.tools.ProgressDialogUtil;
 
 import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**  *************
  * 設定首頁
@@ -74,6 +77,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), SystemProvisionActivity.class));
                 break;
             case R.id.tvLogout:     //登出
+//                SharedPreferences pref = getActivity().getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+//                pref.edit().putString("BEGIN", "").apply();
+
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
                 Toasty.success(getActivity(), getString(R.string.logout_success), Toast.LENGTH_SHORT, true).show();
