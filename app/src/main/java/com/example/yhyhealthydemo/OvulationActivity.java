@@ -109,7 +109,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private ProgressDialog progressDialog;
     private AlertDialog dialog;
     private static final int PERIOD_RECORD = 1;
-    private String beginPeriodDay;
+    private String beginPeriodDay;   //經期第一天
+    private int periodLength;  //經期長度
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +203,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         //監聽月曆滑動
         monthListener();
+
+        //取得使用者經期天數及週期天數(需先初始化取得相關的資料) 2021/05/26
+        checkPeriodRecordInfo();
     }
 
     //監聽月曆滑動
@@ -361,11 +365,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         toDate.setText(clickDay);        //將使用者選擇的日期帶入,禁用自行輸入,可避免選擇未來日期
         DateTime startDay = new DateTime(clickDay); //ex : 2021-02-03T00:00:00.000Z
 
-        //取得使用者經期天數及週期天數 2021/03/03
-        checkPeriodRecordInfo();
-
         //經由使用者輸入的經期長度自動計算結束日期
-        int periodLength = getSharedPreferences("yhyHealthy", MODE_PRIVATE).getInt("PERIOD", 0) - 1;
+        Log.d(TAG, "showPeriod: " + periodLength);
         DateTime endDay = startDay.plusDays(periodLength);
         fromDate.setText(endDay.toString("yyyy-MM-dd"));  //自動計算結束日期
 
@@ -474,10 +475,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 int errorCode = object.getInt("errorCode");
                 if (errorCode == 0){
                     period = PeriodData.newInstance(result.toString());
-                    //將資料寫入sharePref
-                    SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                    pref.edit().putInt("PERIOD", period.getSuccess().getPeriod()).apply();
-                    pref.edit().putInt("CYCLE" , period.getSuccess().getCycle()).apply();
+                    //2021/05/26 取得經期長度並減掉一天
+                    periodLength = period.getSuccess().getPeriod() -1;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -514,9 +513,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 if(errorCode ==0){
                     Toasty.success(OvulationActivity.this,getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
 
-                    //砍掉SharedPreferences內的內容
-                    deleteSharePref();
-
                     //重刷資料前先清除之前的mark
                     widget.removeDecorators();
 
@@ -547,13 +543,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             progressDialog.dismiss();
         }
     };
-
-    //砍掉SharedPreferences內經期第一天與最後一天的內容
-    private void deleteSharePref() {
-        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-        pref.edit().putString("BEGIN", "").apply();
-        pref.edit().putString("END", "").apply();
-    }
 
     //經期更新Api
     private ApiProxy.OnApiListener periodListener = new ApiProxy.OnApiListener() {
@@ -619,7 +608,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "跟後端startDate: " + startDay + " endDate:" + endDay);
+
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
