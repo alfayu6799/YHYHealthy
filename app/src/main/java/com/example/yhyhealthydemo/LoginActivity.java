@@ -241,6 +241,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toasty.error(LoginActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
                         }else if (errorCode == 0){ //驗證成功
                             Toasty.success(LoginActivity.this, getString(R.string.access_success), Toast.LENGTH_SHORT, true).show();
+                        }else {
+                            Toasty.error(LoginActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

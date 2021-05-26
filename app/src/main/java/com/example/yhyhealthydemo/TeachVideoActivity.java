@@ -20,25 +20,23 @@ public class TeachVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teach_video);
 
-        VideoView videoView =(VideoView)findViewById(R.id.videoView);
-
-        //Creating MediaController
-        MediaController mediaController= new MediaController(this);
-
-        // set anchor view for video view
-        mediaController.setAnchorView(videoView);
-
-        // set the media controller for video view
-        videoView.setMediaController(mediaController);
-
-        //set the uri for the video view
-        Uri uri = Uri.parse(VIDEO_SAMPLE);
-        videoView.setVideoURI(uri);
-
-        // start a video
-        videoView.start();
-
-        // implement on completion listener on video view
+//        VideoView videoView =(VideoView)findViewById(R.id.videoView);
+//
+//        //Creating MediaController
+//        MediaController mediaController= new MediaController(this);
+//
+//        // set anchor view for video view
+//        mediaController.setAnchorView(videoView);
+//
+//        // set the media controller for video view
+//        videoView.setMediaController(mediaController);
+//
+//        //set the uri for the video view
+//        Uri uri = Uri.parse(VIDEO_SAMPLE);
+//        videoView.setVideoURI(uri);
+//
+//        // start a video
+//        videoView.start();
 
     }
 }

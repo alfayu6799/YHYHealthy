@@ -366,7 +366,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         DateTime startDay = new DateTime(clickDay); //ex : 2021-02-03T00:00:00.000Z
 
         //經由使用者輸入的經期長度自動計算結束日期
-        Log.d(TAG, "showPeriod: " + periodLength);
         DateTime endDay = startDay.plusDays(periodLength);
         fromDate.setText(endDay.toString("yyyy-MM-dd"));  //自動計算結束日期
 
@@ -408,11 +407,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //將經期第一天寫入  2021/02/22
-//                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-//                pref.edit().putString("BEGIN", toDate.getText().toString()).apply();
-//                pref.edit().putString("END", fromDate.getText().toString()).apply();
-
                 //參數 startDate & endDate
                 JSONObject json = new JSONObject();
                 try {

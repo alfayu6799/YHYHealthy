@@ -206,8 +206,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
                             Toasty.success(TemperatureAddActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                            Intent resultIntent = new Intent();
-                            setResult(RESULT_OK, resultIntent);
+                            setResult(RESULT_OK);
                             finish(); //回到上一頁
                         }else if (errorCode == 23){ //token失效
                             Toasty.error(TemperatureAddActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
