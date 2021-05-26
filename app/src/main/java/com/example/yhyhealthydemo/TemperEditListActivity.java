@@ -177,6 +177,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivDegreeBack: //回上一頁
+                setResult(RESULT_OK);  //帶參數回上一頁 2021/05/26
                 finish();
                 break;
             case R.id.btnAddDegreeUser: //新增監控者

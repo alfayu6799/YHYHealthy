@@ -409,15 +409,15 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 //將經期第一天寫入  2021/02/22
-                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                pref.edit().putString("BEGIN", toDate.getText().toString()).apply();
-                pref.edit().putString("END", fromDate.getText().toString()).apply();
+//                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+//                pref.edit().putString("BEGIN", toDate.getText().toString()).apply();
+//                pref.edit().putString("END", fromDate.getText().toString()).apply();
 
                 //參數 startDate & endDate
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("startDate", toDate.getText().toString());
-                    json.put("endDate", fromDate.getText().toString());
+                    json.put("startDate", toDate.getText().toString());  //經期第一天
+                    json.put("endDate", fromDate.getText().toString());  //經期最後一天
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -429,19 +429,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                String startDate = pref.getString("BEGIN", "");
-                String endDate = pref.getString("END", "");
-
-                //使用者點擊的日期須與sharePref內的日期符合才可以砍掉經期
-                if(!toDate.getText().toString().equals(startDate)){
-                    Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day) + startDate
-                            + getString(R.string.delete_really_day), Toast.LENGTH_SHORT, true).show();
+                //使用者點擊的日期須與sharePref內的日期符合才可以砍掉經期  2021/05/26 重構
+                if(!toDate.getText().toString().equals(beginPeriodDay)){
+                    Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day), Toast.LENGTH_SHORT,true).show();
                 }else {
                     JSONObject json = new JSONObject();
                     try {
-                        json.put("startDate", startDate);
-                        json.put("endDate", endDate);
+                        json.put("startDate", toDate.getText().toString());
+                        json.put("endDate", fromDate.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -726,9 +721,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //週期第幾天Fxn 2021/03/02
     @SuppressLint("SetTextI18n")
     private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
-        Log.d(TAG, "checkPeriodDayOfThisMonth: 關鍵日:" + choseDay);
-        Log.d(TAG, "checkPeriodDayOfThisMonth: 來自api: " + beginPeriodDay);
-
         if (TextUtils.isEmpty(beginPeriodDay)){
             menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
         }else {

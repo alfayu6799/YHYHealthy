@@ -280,7 +280,7 @@
     <string name="period_day">今天是週期的第</string>
     <string name="period_day_out_order">超出本月週期範圍</string>
     <string name="day">天</string>
-    <string name="please_chose_really_day">請選擇實際經期:</string>
+    <string name="please_chose_really_day">請選擇實際經期做刪除</string>
     <string name="delete_really_day">做刪除</string>
     <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
     <string name="period_day_is_empty">沒有週期資料</string>

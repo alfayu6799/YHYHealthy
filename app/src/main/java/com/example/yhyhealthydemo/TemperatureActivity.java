@@ -402,7 +402,10 @@ import static com.example.yhyhealthydemo.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 break;
             case R.id.tvEdit:           //編輯使用者資訊
                 if(isBleList) {
-                    startActivity(new Intent(this, TemperEditListActivity.class));
+                    //startActivity(new Intent(this, TemperEditListActivity.class));
+                    //2021/05/26修改
+                    Intent intent1 = new Intent(this,TemperEditListActivity.class);
+                    startActivityForResult(intent1, 1);
                 }else {
                     startActivity(new Intent(this, RemoteEditListActivity.class));
                 }

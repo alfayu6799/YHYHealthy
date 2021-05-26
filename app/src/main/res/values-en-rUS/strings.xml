@@ -292,7 +292,7 @@
     <string name="period_day">Today is the</string>
     <string name="period_day_out_order">Out of range</string>
     <string name="day">th Day of Menstrual Period</string>
-    <string name="please_chose_really_day">please chose a day</string>
+    <string name="please_chose_really_day">please chose a correct period first day</string>
     <string name="delete_really_day">delete</string>
     <string name="you_are_chose_day_is">you chose day is :</string>
     <string name="period_day_is_empty">no information</string>
