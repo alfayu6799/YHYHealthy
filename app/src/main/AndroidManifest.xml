@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yhyhealthydemo">
+    package="com.example.yhyhealthy">
 
     <application
-        android:name=".module.YHYHealthyApp"
+        android:name="com.example.yhyhealthy.module.YHYHealthyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/yhy_icon"
+        android:icon="@drawable/yhy_logo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/yhy_icon"
+        android:roundIcon="@drawable/yhy_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".TempRecordActivity"></activity>
-        <activity android:name=".OvulationRecordActivity" />
-        <activity android:name=".BreathMonitorActivity" />
-        <activity android:name=".ShoppingActivity" />
-        <activity android:name=".TeachVideoActivity" />
-        <activity android:name=".SymptomActivity" />
-        <activity android:name=".UserDeviceActivity" />
-        <activity android:name=".RemoteEditListActivity" />
-        <activity android:name=".TemperEditActivity" />
-        <activity android:name=".TemperEditListActivity" />
-        <activity android:name=".TemperatureAddActivity" />
-        <activity android:name=".VideoShowActivity" />
-        <activity android:name=".VideoDetailActivity" />
-        <activity android:name=".ArticleDetailActivity" />
-        <activity android:name=".ArticleActivity" />
-        <activity android:name=".OnLineCallActivity" />
-        <activity android:name=".ForumActivity" />
-        <activity android:name=".VideoActivity" />
-        <activity android:name=".CatalogActivity" />
-        <activity android:name=".UserChangeVerifiActivity" />
-        <activity android:name=".ForgetPassActivity" />
-        <activity android:name=".UserMarriageActivity" />
-        <activity android:name=".SystemProvisionActivity" />
-        <activity android:name=".SystemAccountActivity" />
-        <activity android:name=".UserChangePassActivity" />
-        <activity android:name=".UserBasicActivity" />
-        <activity android:name=".PregnancySettingActivity" />
-        <activity android:name=".UserPeriodActivity" />
-        <activity android:name=".SystemVideoActivity" />
-        <activity android:name=".SystemUserActivity" />
-        <activity android:name=".SystemSettingActivity" />
-        <activity android:name=".ScanActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".PeriodRecordActivity" />
-        <activity android:name=".PrivacyActivity" />
-        <activity android:name=".CameraActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name="com.example.yhyhealthy.TempRecordActivity"></activity>
+        <activity android:name="com.example.yhyhealthy.OvulationRecordActivity" />
+        <activity android:name="com.example.yhyhealthy.BreathMonitorActivity" />
+        <activity android:name="com.example.yhyhealthy.ShoppingActivity" />
+        <activity android:name="com.example.yhyhealthy.TeachVideoActivity" />
+        <activity android:name="com.example.yhyhealthy.SymptomActivity" />
+        <activity android:name="com.example.yhyhealthy.UserDeviceActivity" />
+        <activity android:name="com.example.yhyhealthy.RemoteEditListActivity" />
+        <activity android:name="com.example.yhyhealthy.TemperEditActivity" />
+        <activity android:name="com.example.yhyhealthy.TemperEditListActivity" />
+        <activity android:name="com.example.yhyhealthy.TemperatureAddActivity" />
+        <activity android:name="com.example.yhyhealthy.VideoShowActivity" />
+        <activity android:name="com.example.yhyhealthy.VideoDetailActivity" />
+        <activity android:name="com.example.yhyhealthy.ArticleDetailActivity" />
+        <activity android:name="com.example.yhyhealthy.ArticleActivity" />
+        <activity android:name="com.example.yhyhealthy.OnLineCallActivity" />
+        <activity android:name="com.example.yhyhealthy.ForumActivity" />
+        <activity android:name="com.example.yhyhealthy.VideoActivity" />
+        <activity android:name="com.example.yhyhealthy.CatalogActivity" />
+        <activity android:name="com.example.yhyhealthy.UserChangeVerifiActivity" />
+        <activity android:name="com.example.yhyhealthy.ForgetPassActivity" />
+        <activity android:name="com.example.yhyhealthy.UserMarriageActivity" />
+        <activity android:name="com.example.yhyhealthy.SystemProvisionActivity" />
+        <activity android:name="com.example.yhyhealthy.SystemAccountActivity" />
+        <activity android:name="com.example.yhyhealthy.UserChangePassActivity" />
+        <activity android:name="com.example.yhyhealthy.UserBasicActivity" />
+        <activity android:name="com.example.yhyhealthy.PregnancySettingActivity" />
+        <activity android:name="com.example.yhyhealthy.UserPeriodActivity" />
+        <activity android:name="com.example.yhyhealthy.SystemVideoActivity" />
+        <activity android:name="com.example.yhyhealthy.SystemUserActivity" />
+        <activity android:name="com.example.yhyhealthy.SystemSettingActivity" />
+        <activity android:name="com.example.yhyhealthy.ScanActivity" />
+        <activity android:name="com.example.yhyhealthy.RegisterActivity" />
+        <activity android:name="com.example.yhyhealthy.PeriodRecordActivity" />
+        <activity android:name="com.example.yhyhealthy.PrivacyActivity" />
+        <activity android:name="com.example.yhyhealthy.CameraActivity" />
+        <activity android:name="com.example.yhyhealthy.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OvulationActivity" />
-        <activity android:name=".PregnancyActivity" />
-        <activity android:name=".TemperatureActivity" />
-        <activity android:name=".PreviewActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.example.yhyhealthy.OvulationActivity" />
+        <activity android:name="com.example.yhyhealthy.PregnancyActivity" />
+        <activity android:name="com.example.yhyhealthy.TemperatureActivity" />
+        <activity android:name="com.example.yhyhealthy.PreviewActivity" />
+        <activity android:name="com.example.yhyhealthy.MainActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -72,7 +72,7 @@
         </provider>
 
         <service
-            android:name=".yhyBleService"
+            android:name="com.example.yhyhealthy.yhyBleService"
             android:enabled="true"
             android:exported="true" />
     </application>

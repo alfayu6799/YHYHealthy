@@ -139,7 +139,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBleUserName" />
 
-    <com.example.yhyhealthydemo.tools.TargetZoneLineChart
+    <com.example.yhyhealthy.tools.TargetZoneLineChart
         android:id="@+id/lineChartBle"
         android:layout_width="match_parent"
         android:layout_height="400dp"

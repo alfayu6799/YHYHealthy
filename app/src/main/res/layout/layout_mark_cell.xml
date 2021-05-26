@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.yhyhealthydemo.tools.MarkCellView
+<com.example.yhyhealthy.tools.MarkCellView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -11,4 +11,4 @@
         android:layout_height="match_parent"
         android:textColor="@color/gray"
         android:id="@+id/id_cell_text"/>
-</com.example.yhyhealthydemo.tools.MarkCellView>
+</com.example.yhyhealthy.tools.MarkCellView>

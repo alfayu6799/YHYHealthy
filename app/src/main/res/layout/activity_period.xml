@@ -331,7 +331,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.example.yhyhealthydemo.tools.MyGridView
+                <com.example.yhyhealthy.tools.MyGridView
                     android:id="@+id/gvColor"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -360,7 +360,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.example.yhyhealthydemo.tools.MyGridView
+                <com.example.yhyhealthy.tools.MyGridView
                     android:id="@+id/gvTaste"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -389,7 +389,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.example.yhyhealthydemo.tools.MyGridView
+                <com.example.yhyhealthy.tools.MyGridView
                     android:id="@+id/gvType"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -416,7 +416,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <com.example.yhyhealthydemo.tools.MyGridView
+                <com.example.yhyhealthy.tools.MyGridView
                     android:id="@+id/gvSymptom"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"

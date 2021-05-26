@@ -106,7 +106,7 @@
         android:background="#000000"
         android:layout_below="@+id/tvBleUserName"/>
 
-    <com.example.yhyhealthydemo.tools.TargetZoneLineChart
+    <com.example.yhyhealthy.tools.TargetZoneLineChart
         android:id="@+id/lineChartBle"
         android:layout_width="match_parent"
         android:layout_below="@+id/tvUserDegree"
