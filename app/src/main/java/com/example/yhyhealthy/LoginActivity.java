@@ -202,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
         AlertDialog compDialog = builder.create();
         compDialog.show();
+        compDialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);  //Button文字小寫顯示
     }
 
     //傳至後台驗證

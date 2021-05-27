@@ -212,6 +212,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         birthday.setOnClickListener(this);                //生日onclick
     }
 
+    //體重Listener
     private TextWatcher weightWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
@@ -219,9 +220,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            double w = Double.parseDouble(bodyWeight.getText().toString()); //體重
-            double h = Double.parseDouble(bodyHeight.getText().toString()); //身高
-            calculate(h, w);
+            if (!bodyWeight.getText().toString().isEmpty()) {
+                double w = Double.parseDouble(bodyWeight.getText().toString()); //體重
+                double h = Double.parseDouble(bodyHeight.getText().toString()); //身高
+                calculate(h, w);
+            }
         }
 
         @Override
@@ -404,33 +407,6 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         alert.setCanceledOnTouchOutside(false);
         alert.show();
     }
-
-    //取得新token 2021/05/11
-    private void getNewToken() {
-        proxy.buildToken(RENEW_TOKEN,"", getNewTokenListen);
-    }
-
-    private ApiProxy.OnApiListener getNewTokenListen = new ApiProxy.OnApiListener() {
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public void onSuccess(JSONObject result) {
-
-        }
-
-        @Override
-        public void onFailure(String message) {
-            Log.d(TAG, "onFailure: " + message);
-        }
-
-        @Override
-        public void onPostExecute() {
-
-        }
-    };
 
     //禁用返回健
     @Override
