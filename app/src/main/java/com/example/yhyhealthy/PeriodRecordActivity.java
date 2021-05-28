@@ -62,6 +62,7 @@ import com.example.yhyhealthy.tools.ByteUtils;
 import com.example.yhyhealthy.tools.ImageUtils;
 import com.example.yhyhealthy.tools.MyGridView;
 import com.example.yhyhealthy.module.RecordColor;
+import com.github.mikephil.charting.utils.FileUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -266,6 +267,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     private void upPhotoToApi() {
         //先將照片編碼成base64
         base64Str = ImageUtils.imageToBase64(photoPath);
+
         //今天日期
         DateTime today = new DateTime();
         String todayStr = today.toString("yyyy-MM-dd");
