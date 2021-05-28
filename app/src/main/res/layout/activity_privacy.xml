@@ -45,9 +45,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline48">
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/privacy_Content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </ScrollView>
 

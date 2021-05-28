@@ -106,7 +106,7 @@
          包括但不限於，針對本應用程式的內容、品質、正確性、完整性、有效性、可靠性、適銷性、針對於某一特定用途之適用性、實用性、用途或實效，
          或本應用程式之運作不中斷或正確無誤。
       <![CDATA[</p></body></html>]]></string>
-    <string name="private_license">End User License Agreement</string>
+    <string name="private_license">使用者授權合約</string>
 
     <!-- 權限 messages-->
     <string name="permission_required">權限需求</string>

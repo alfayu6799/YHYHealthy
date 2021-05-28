@@ -116,20 +116,21 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                         data.setBattery(battery + "%");
                         data.setDegree(degree, currentDateTime); //溫度與日期
                         notifyItemChanged(i); //刷新
-                        updateBefore(mac);
+                        Log.d(TAG, "updateItemByMac: " + data.getTargetId());
+//                        updateBefore(mac, data.getTargetId());
                     }
                }
             }
         }
     }
 
-    //將需要上傳資料的key:targetId傳回MAin
-    public void updateBefore(String mac){
+    //得到的資料需要有targetId傳給後台
+    public void updateBefore(String mac, int targetId){
         for(int i = 0; i < dataList.size();i++){
             TempDataApi.SuccessBean data = dataList.get(i);
             if(!TextUtils.isEmpty(data.getMac())){
                 if (data.getMac().equals(mac)){
-                    int targetId = data.getTargetId();
+                    //int targetId = data.getTargetId();
                     double degree = data.getDegree();
                     listener.passTarget(targetId, degree);
                 }
