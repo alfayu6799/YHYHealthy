@@ -15,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.example.yhyhealthy.module.yhyBleService;
+
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
@@ -22,7 +25,6 @@ import es.dmoral.toasty.Toasty;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
 
 /***
@@ -34,7 +36,7 @@ public class DeviceBaseActivity extends AppCompatActivity {
     private static final String TAG = "DeviceBaseActivity";
 
     public static final int REQUEST_CODE = 100;
-    private String[] neededPermissions = new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
+    private String[] neededPermissions = new String[]{CAMERA, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
 
     /** BLE連線工具 **/
     private yhyBleService mBluetoothLeService;

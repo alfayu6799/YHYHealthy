@@ -1,4 +1,4 @@
-package com.example.yhyhealthy;
+package com.example.yhyhealthy.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yhyhealthy.LoginActivity;
+import com.example.yhyhealthy.R;
+import com.example.yhyhealthy.SystemAccountActivity;
+import com.example.yhyhealthy.SystemProvisionActivity;
+import com.example.yhyhealthy.SystemSettingActivity;
+import com.example.yhyhealthy.SystemUserActivity;
+import com.example.yhyhealthy.SystemVideoActivity;
 
 import es.dmoral.toasty.Toasty;
 

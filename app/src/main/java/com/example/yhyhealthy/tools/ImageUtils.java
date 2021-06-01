@@ -58,10 +58,14 @@ public class ImageUtils {
     }
 
     public static String getBase64String(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String base64String = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        String base64String = null;
+        if (bitmap != null) { //判斷是否有檔案
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            byte[] imageBytes = baos.toByteArray();
+            base64String = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        }
+
         return base64String;
     }
 

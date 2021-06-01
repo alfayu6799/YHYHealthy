@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.yhyhealthy.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthy.data.ScannedData;
+import com.example.yhyhealthy.module.yhyBleService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

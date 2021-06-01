@@ -36,7 +36,7 @@ public class ApiProxy {
     private static ApiProxy INSTANCE = null;
 
     //Api網址
-//    private static final String URL = "http://192.168.1.108:8080/"; //內部網路
+//    private static final String URL = "http://192.168.1.108:8080/"; //內部網路 還需要去network_security_config.xml改為ture才可以使用
     private static final String URL = "https://www.yhihc.com/services/";
 
     //使用者api目錄

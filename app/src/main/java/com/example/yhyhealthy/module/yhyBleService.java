@@ -1,4 +1,4 @@
-package com.example.yhyhealthy;
+package com.example.yhyhealthy.module;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -129,6 +129,7 @@ public class yhyBleService extends Service {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
 
                 mConnectionState = STATE_DISCONNECTED;
+                gatt.close();  //make status 133 not fire. 2021/06/01 fix
                 broadcastUpdate(ACTION_GATT_DISCONNECTED, gatt);
 
                 Log.d(TAG, "onConnectionStateChange : STATE_DISCONNECTED: " );

@@ -169,8 +169,15 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
         String base64Str = null;
         //可能存在空指针須使用null判断  2021/04/25
-        if(tmpPhoto != null )
-           base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
+//        if(tmpPhoto != null )
+//           base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
+
+//        //2021/05/31變更
+        if (tmpPhoto != null) {   //可能存在空指针須使用null判断
+            String filePath = tmpPhoto.getPath(); //取得照片位置
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath); //將照片轉成bitmap
+            base64Str = ImageUtils.getBase64String(bitmap);  //bitmap轉成String
+        }
 
         String Name = userName.getText().toString().trim();   //名稱
         String Birthday = userBirthday.getText().toString();  //生日
@@ -189,6 +196,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //Log.d(TAG, "updateToApi: " + json.toString());
         //執行上傳到後台
         proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
     }

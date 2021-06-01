@@ -1,4 +1,4 @@
-package com.example.yhyhealthy;
+package com.example.yhyhealthy.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yhyhealthy.R;
 import com.example.yhyhealthy.adapter.FunctionsAdapter;
 import com.example.yhyhealthy.tools.SpacesItemDecoration;
 

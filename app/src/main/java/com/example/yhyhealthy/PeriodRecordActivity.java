@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -58,11 +60,11 @@ import com.example.yhyhealthy.module.RecordSymptom;
 import com.example.yhyhealthy.module.RecordTaste;
 import com.example.yhyhealthy.module.RecordType;
 import com.example.yhyhealthy.module.ApiProxy;
+import com.example.yhyhealthy.module.yhyBleService;
 import com.example.yhyhealthy.tools.ByteUtils;
 import com.example.yhyhealthy.tools.ImageUtils;
 import com.example.yhyhealthy.tools.MyGridView;
 import com.example.yhyhealthy.module.RecordColor;
-import com.github.mikephil.charting.utils.FileUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -265,8 +267,12 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //2021/02/19 照片辨識
     private void upPhotoToApi() {
-        //先將照片編碼成base64
-        base64Str = ImageUtils.imageToBase64(photoPath);
+        //先將照片編碼成base64 2021/06/01修改
+        File file = new File((photoPath));
+        String filePath = file.getAbsolutePath();
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        base64Str = ImageUtils.getBase64String(bitmap);
+//        base64Str = ImageUtils.imageToBase64(photoPath);
 
         //今天日期
         DateTime today = new DateTime();
@@ -279,6 +285,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         } catch (JSONException e) {
             e.printStackTrace();
         }
+//        Log.d(TAG, "upPhotoToApi: " + json.toString());
         proxy.buildPOST(IMAGE_DETECTION, json.toString(), photoIdentifyListener);
     }
 

@@ -124,12 +124,12 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     }
 
     //得到的資料需要有targetId傳給後台
-    public void updateBefore(String mac, int targetId){
+    public void updateBefore(String mac){
         for(int i = 0; i < dataList.size();i++){
             TempDataApi.SuccessBean data = dataList.get(i);
             if(!TextUtils.isEmpty(data.getMac())){
                 if (data.getMac().equals(mac)){
-                    //int targetId = data.getTargetId();
+                    int targetId = data.getTargetId();
                     double degree = data.getDegree();
                     listener.passTarget(targetId, degree);
                 }

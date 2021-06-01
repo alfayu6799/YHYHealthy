@@ -168,7 +168,16 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
 
     //傳資料給後台
     private void updateToApi() {
-        String base64Str = ImageUtils.imageToBase64(mPath);   //照片
+        String base64Str = null;
+        if (mPath != null) {
+            File file = new File((mPath));
+            String filePath = file.getAbsolutePath();
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            base64Str = ImageUtils.getBase64String(bitmap);
+        }
+
+//        String base64Str = ImageUtils.imageToBase64(mPath);   //照片
+
         String Name = userName.getText().toString().trim();  //名稱
         String Birthday = userBirthday.getText().toString(); //生日
         String Height = userHeight.getText().toString();     //身高
@@ -186,7 +195,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+//        Log.d(TAG, "updateToApi: " + json.toString());
         proxy.buildPOST(BLE_USER_ADD, json.toString(), addUserListener);
     }
 

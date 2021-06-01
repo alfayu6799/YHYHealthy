@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
-import com.example.yhyhealthy.yhyBleService;
+import com.example.yhyhealthy.module.yhyBleService;
 import es.dmoral.toasty.Toasty;
 
 public class BleStateBroadcastReceiver extends BroadcastReceiver {

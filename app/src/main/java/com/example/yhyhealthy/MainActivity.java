@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.yhyhealthy.fragments.EducationFragment;
+import com.example.yhyhealthy.fragments.MeasureFragment;
+import com.example.yhyhealthy.fragments.RecordFragment;
+import com.example.yhyhealthy.fragments.SettingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

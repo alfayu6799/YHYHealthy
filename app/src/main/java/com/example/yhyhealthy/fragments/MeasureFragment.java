@@ -1,4 +1,4 @@
-package com.example.yhyhealthy;
+package com.example.yhyhealthy.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.example.yhyhealthy.OvulationActivity;
+import com.example.yhyhealthy.R;
+import com.example.yhyhealthy.ShoppingActivity;
+import com.example.yhyhealthy.TeachVideoActivity;
+import com.example.yhyhealthy.TemperatureActivity;
+import com.example.yhyhealthy.UserBasicActivity;
+import com.example.yhyhealthy.UserMarriageActivity;
+import com.example.yhyhealthy.UserPeriodActivity;
 
 import static com.example.yhyhealthy.module.ApiProxy.maritalSetting;
 import static com.example.yhyhealthy.module.ApiProxy.menstrualSetting;

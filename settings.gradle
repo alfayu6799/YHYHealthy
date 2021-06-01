@@ -1,3 +1,2 @@
-include ':mcalendarview'
 rootProject.name='YHYHealthyDemo'
 include ':app'
