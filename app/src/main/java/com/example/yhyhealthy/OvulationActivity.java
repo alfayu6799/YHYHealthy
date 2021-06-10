@@ -179,7 +179,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //初始化日曆
     private void initCalendar() {
 
-        Log.d(TAG, "初始化日曆fxn: initCalendar");
+        //Log.d(TAG, "初始化日曆fxn: initCalendar");
 //        widget.addDecorators(
 //                new MySelectorDecorator(OvulationActivity.this), //點擊日期後的背景
 //                oneDayDecorator
@@ -285,7 +285,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     @SuppressLint("SetTextI18n")
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
-        Log.d(TAG, "parserJson: " + record.toJSONString());
+        //Log.d(TAG, "parserJson: " + record.toJSONString());
         //唾液辨識結果
         String paramName = record.getSuccess().getMeasure().getParamName();
         if (!paramName.equals("")){

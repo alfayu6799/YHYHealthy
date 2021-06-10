@@ -44,8 +44,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline52">
 
-        <WebView
-            android:id="@+id/webViewProvision"
+        <TextView
+            android:id="@+id/tv_provision"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>

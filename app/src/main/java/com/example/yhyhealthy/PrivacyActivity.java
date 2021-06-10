@@ -17,6 +17,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ *  使用者授權合約
+ **/
 public class PrivacyActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnScrollChangedListener {
 
     private Button agree, notAgree;

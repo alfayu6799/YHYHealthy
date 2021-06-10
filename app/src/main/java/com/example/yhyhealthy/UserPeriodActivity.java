@@ -117,6 +117,8 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else {
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -336,13 +338,12 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                         if (errorCode == 0){
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             menstrualSetting = true;  //經期設定
-//                            writeToSharedPreferences();
                         }else if (errorCode == 23){ //token失效 2021/05/11
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -361,15 +362,6 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
             progressDialog.dismiss();
         }
     };
-
-    //經期設定寫到SharedPreferences
-    private void writeToSharedPreferences() {
-        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-        pref.edit().putString("BEGIN", firstDay.getText().toString()).apply();
-        pref.edit().putInt("PERIOD", Integer.parseInt(periodLength.getText().toString())).apply();
-        pref.edit().putInt("CYCLE" , Integer.parseInt(cycleLength.getText().toString())).apply();
-        pref.edit().putBoolean("MENSTRUAL", true).apply();
-    }
 
     //日期彈跳視窗
     private void dialogPickDate() {

@@ -429,4 +429,7 @@
     <string name="tempStart">開始</string>
     <string name="tempEnd">結束</string>
     <string name="fxn_is_coming_soon">功能尚未開放</string>
+    <string name="update_succeed_next">更新成功並請執行下一步</string>
+    <string name="device_no_error">裝置序號錯誤</string>
+    <string name="edit_temp_list">編輯觀測者資料</string>
 </resources>

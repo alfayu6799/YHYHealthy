@@ -192,6 +192,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
             json.put("height", Height);
             json.put("weight", Weight);
             json.put("headShot", base64Str);
+//            json.put("headShot", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -248,7 +249,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         File imageFile = getImageFile(); //取得相片位置
         if (imageFile == null) return;
         //取得相片檔案的本機位置
-        Uri imageUri = FileProvider.getUriForFile(this,"com.example.yhyhealthydemo.fileprovider", imageFile);
+        Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.group.yhyhealthy.fileprovider", imageFile);
         //通知相機照片儲存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         //將照片帶回

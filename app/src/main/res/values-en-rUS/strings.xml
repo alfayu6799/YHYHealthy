@@ -440,4 +440,5 @@
     <string name="tempStart">Start</string>
     <string name="tempEnd">End</string>
     <string name="fxn_is_coming_soon">Function is coming soon</string>
+    <string name="device_no_error">Serial Number Error</string>
 </resources>

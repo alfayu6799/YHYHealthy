@@ -25,6 +25,7 @@ import es.dmoral.toasty.Toasty;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION_CODES.M;
 
 /***
@@ -36,14 +37,7 @@ public class DeviceBaseActivity extends AppCompatActivity {
     private static final String TAG = "DeviceBaseActivity";
 
     public static final int REQUEST_CODE = 100;
-    private String[] neededPermissions = new String[]{CAMERA, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
-
-    /** BLE連線工具 **/
-    private yhyBleService mBluetoothLeService;
-
-    protected String deviceMac;
-
-    private boolean serviceBound = false;
+    private final String[] neededPermissions = new String[]{CAMERA, WRITE_EXTERNAL_STORAGE,ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
 
     @Override
     protected void onStart() {
@@ -76,7 +70,6 @@ public class DeviceBaseActivity extends AppCompatActivity {
                 }
             }
             Log.d(TAG, "requestPermission: 取得權限");
-//            initBleService();  //啟動BLE背景服務
         }
     }
 
@@ -113,53 +106,7 @@ public class DeviceBaseActivity extends AppCompatActivity {
                         return;
                     }
                 }
-                //BLE背景服務
-//                initBleService();
                 break;
         }
     }
-
-    private void initBleService() {
-        /** 綁定後台服務 ***/
-        if (!serviceBound) {
-            Log.d(TAG, "initBleService: OK");
-            Intent intent = new Intent(this, yhyBleService.class);
-            bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
-
-    /** ble Service 背景服務 **/
-    public ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            serviceBound = true;
-            mBluetoothLeService = ((yhyBleService.LocalBinder) iBinder).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            serviceBound = false;
-            mBluetoothLeService = null;
-        }
-    };
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (serviceBound){ //假如service沒註冊之修正
-            Log.d(TAG, "onStop: DeviceBase");
-            unbindService(mServiceConnection);
-            serviceBound = false;
-        }
-    }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (serviceBound){ //假如service沒註冊之修正
-//            Log.d(TAG, "onDestroy: DeviceBase");
-//            unbindService(mServiceConnection);
-//            serviceBound = false;
-//        }
-//    }
 }

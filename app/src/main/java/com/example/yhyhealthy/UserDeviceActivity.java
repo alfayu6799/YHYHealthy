@@ -193,9 +193,11 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode ==0){
+                        if (errorCode ==0) {
                             Toasty.success(UserDeviceActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
+                        }else if (errorCode == 33){ //裝置序號錯誤
+                                Toasty.success(UserDeviceActivity.this, getString(R.string.device_no_error), Toast.LENGTH_SHORT, true).show();
                         }else if (errorCode == 23){  //token 失效
                             Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));

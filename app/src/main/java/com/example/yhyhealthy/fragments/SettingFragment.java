@@ -79,9 +79,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), SystemProvisionActivity.class));
                 break;
             case R.id.tvLogout:     //登出
-//                SharedPreferences pref = getActivity().getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-//                pref.edit().putString("BEGIN", "").apply();
-
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
                 Toasty.success(getActivity(), getString(R.string.logout_success), Toast.LENGTH_SHORT, true).show();

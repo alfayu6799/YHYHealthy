@@ -412,7 +412,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
     }
 
-    //查詢遠端帳號-選擇帳號
+    //查詢遠端帳號-選擇帳號api
     private void setAccountInfo() {
         proxy.buildPOST(REMOTE_USER_LIST, "" , requestListener);
     }
@@ -424,22 +424,24 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         @Override
         public void onSuccess(JSONObject result) {
-            new Thread(){
+            arrayAdapter = new ArrayAdapter<String>(TemperatureActivity.this, android.R.layout.select_dialog_item);
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    arrayAdapter = new ArrayAdapter<String>(TemperatureActivity.this, android.R.layout.select_dialog_item);
                     try {
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
-                        if (errorCode == 0){ //帳號資料在success內
+                        if (errorCode == 0) { //帳號資料在success內
                             JSONArray array = object.getJSONArray("success");
                             for (int i = 0; i < array.length(); i++){
                                 arrayAdapter.add(array.getString(i));
                             }
-                        }else if (errorCode == 23 ){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if (errorCode == 6){ //查無資料
+                            Toasty.info(TemperatureActivity.this, getString(R.string.account_is_no_data), Toast.LENGTH_SHORT, true).show();
                         }else {
                             Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -447,7 +449,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         e.printStackTrace();
                     }
                 }
-            }.start();
+            });
         }
 
         @Override
@@ -482,7 +484,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
     }
 
-    //取得監控帳戶底下觀測者的資料列表　　2021/03/26
+    //取得監控帳戶底下觀測者的資料列表　　2021/06/09 後端有問題...
     private void getAccountInfoFromApi(String accountNo) {
         JSONObject json = new JSONObject();
         try {
@@ -509,6 +511,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 @Override
                 public void run() {
                     try {
+                        Log.d(TAG, "run: " + result.toString());
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
@@ -899,22 +902,27 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         @Override
         public void onSuccess(JSONObject result) {
-            try {
-                JSONObject object = new JSONObject(result.toString());
-                int errorCode = object.getInt("errorCode");
-                if (errorCode == 0) {
-                    Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                    setAccountInfo();
-                }else if (errorCode == 23){ //token失效
-                    Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
-                    startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
-                    finish();
-                }else {
-                    Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0) {
+                            Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                            setAccountInfo();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            });
         }
 
         @Override

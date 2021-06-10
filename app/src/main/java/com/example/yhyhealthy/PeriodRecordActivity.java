@@ -3,10 +3,12 @@ package com.example.yhyhealthy;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -22,13 +24,16 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -47,6 +52,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.yhyhealthy.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthy.adapter.ColorAdapter;
 import com.example.yhyhealthy.adapter.SecretionTypeAdapter;
@@ -71,11 +77,14 @@ import org.joda.time.LocalDate;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 import es.dmoral.toasty.Toasty;
 
@@ -147,6 +156,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //
     private static final int CAMERA_RECORD = 2;
+    private String mPath = "";
 
     //量測進度
     private ProgressBar measureProgress;
@@ -267,12 +277,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //2021/02/19 照片辨識
     private void upPhotoToApi() {
-        //先將照片編碼成base64 2021/06/01修改
-        File file = new File((photoPath));
-        String filePath = file.getAbsolutePath();
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        base64Str = ImageUtils.getBase64String(bitmap);
-//        base64Str = ImageUtils.imageToBase64(photoPath);
+        //先將照片編碼成base64
+        base64Str = ImageUtils.imageToBase64(photoPath);
 
         //今天日期
         DateTime today = new DateTime();
@@ -285,7 +291,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        Log.d(TAG, "upPhotoToApi: " + json.toString());
+        //執行照片辨識api
         proxy.buildPOST(IMAGE_DETECTION, json.toString(), photoIdentifyListener);
     }
 
@@ -359,11 +365,11 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
     }
 
+
     //上傳至後台先檢查資訊是否齊全
     private void checkBeforeUpdate() {
         //體重
         if(!TextUtils.isEmpty(editWeight.getText().toString())){
-            Log.d(TAG, "checkBeforeUpdate: " + editWeight.getText().toString());
             changeRecord.getMeasure().setWeight(Double.parseDouble(editWeight.getText().toString()));
         }
 
@@ -395,6 +401,12 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //開啟相機功能
     private void openCamera() {
         if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
+//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  //呼叫原生相機
+//            File imageFile = getImageFile();
+//            if (imageFile == null) return;
+//            Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.yhyhealthy.fileprovider", imageFile);
+//            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//            startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
             Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class); //自定義Camera功能
             startActivityForResult(camera, CAMERA_RECORD);
         }else {
@@ -402,11 +414,25 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         }
     }
 
+    //取得相片檔案的URL
+    private File getImageFile(){
+        String time = new SimpleDateFormat("yyMMdd").format(new Date());
+        String fileName = time + "_";
+        File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        try {
+            File imageFile = File.createTempFile(fileName, ".jpg", dir);
+            mPath = imageFile.getAbsolutePath();
+            return imageFile;
+        } catch (IOException e) {
+            return null;
+        }
+
+    }
+
     //上傳至後台儲存 2021/02/19 leona
     private void UpdateToApi() {
         //需要日期傳到後台去做更新
         changeRecord.setTestDate(strDay);
-        Log.d(TAG, "上傳到後台的資料 : " + changeRecord.toJSONString());
 
         proxy.buildPOST(RECORD_UPDATE, changeRecord.toJSONString(), changeRecordListener);
     }
@@ -549,7 +575,6 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //解析後台資料
     private void parserJson(JSONObject result) {
         record = MenstruationRecord.newInstance(result.toString());
-        Log.d(TAG, "排X編輯解析後台資料: " + record.toJSONString());
         //體重
         String userWeight = String.valueOf(record.getSuccess().getMeasure().getWeight());
         editWeight.setText(userWeight);
@@ -952,6 +977,29 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1){
+//            new Thread(()->{
+//                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+//                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+//                Matrix matrix = new Matrix();
+//                matrix.setRotate(90f);//轉90度
+//                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+//                        ,0,0
+//                        ,getHighImage.get().getWidth()
+//                        ,getHighImage.get().getHeight()
+//                        ,matrix,true));
+//                runOnUiThread(()->{
+//                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+//                    Glide.with(this)
+//                            .load(getHighImage.get())
+//                            .centerCrop()
+//                            .into(photoShow);
+//                });
+//            }).start();
+//            //當日可以連續拍照
+//            takePhoto.setText(R.string.re_camera);
+//            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+//        }
         if(resultCode != RESULT_CANCELED){ //如果沒照相就回來而沒有判斷resultCode會造成閃退 2021/05/19
             if(requestCode == CAMERA_RECORD){
                 photoPath = data.getStringExtra("path");

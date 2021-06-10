@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthy.module.ApiProxy.COMP;
 import static com.example.yhyhealthy.module.ApiProxy.LOGIN;
+import static com.example.yhyhealthy.module.ApiProxy.accountInfo;
 import static com.example.yhyhealthy.module.ApiProxy.maritalSetting;
 import static com.example.yhyhealthy.module.ApiProxy.menstrualSetting;
 import static com.example.yhyhealthy.module.ApiProxy.userSetting;
@@ -111,7 +112,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         proxy.buildLogin(LOGIN, json.toString(), loginListener);
     }
 
@@ -160,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 maritalSetting = success.getBoolean("maritalSet");      //婚姻狀況
                 menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
                 userSetting = success.getBoolean("userSet");            //使用者基本資料
+                accountInfo = account.getText().toString();                   //使用者帳戶
 
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 

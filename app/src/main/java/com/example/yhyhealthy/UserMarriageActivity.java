@@ -101,6 +101,8 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                             Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else {
+                            Toasty.error(UserMarriageActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -206,13 +208,12 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                         if (errorCode == 0) {
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             maritalSetting = true;  //婚姻狀態設定
-                            //writeToSharedPreferences();
                         }else if (errorCode == 23){  //token失效 2021/05/11
                             Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
-                            Log.d(TAG, getString(R.string.json_error_code) + errorCode);
+                            Toasty.error(UserMarriageActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -231,16 +232,4 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
 
         }
     };
-
-    //婚姻狀況寫到SharedPreferences
-    private void writeToSharedPreferences() {
-        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-        pref.edit().putBoolean("MARRIAGE", true).apply();
-    }
-
-    //禁用返回健
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-    }
 }

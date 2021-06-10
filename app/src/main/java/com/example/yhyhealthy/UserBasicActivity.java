@@ -106,6 +106,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
                             finish();
                             //getNewToken(); //更新token
+                        }else {
+                            Toasty.error(UserBasicActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

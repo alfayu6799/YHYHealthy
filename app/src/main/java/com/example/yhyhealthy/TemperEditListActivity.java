@@ -51,7 +51,6 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private static final String TAG = "TemperEditListActivity";
 
     private ImageView back;
-    private Button    addUser;
 
     private RecyclerView rv;
     private TemperatureEditAdapter adapter;
@@ -80,11 +79,8 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     private void initView() {
         rv = findViewById(R.id.rvDegreeEdit);
-        addUser = findViewById(R.id.btnAddDegreeUser);
-        addUser.setVisibility(View.INVISIBLE);
         back = findViewById(R.id.ivDegreeBack);
         back.setOnClickListener(this);
-        addUser.setOnClickListener(this);
     }
 
     private void initData() {
@@ -174,10 +170,6 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                 setResult(RESULT_OK);  //帶參數回上一頁 2021/05/26
                 finish();
                 break;
-            case R.id.btnAddDegreeUser: //新增監控者
-                startActivity(new Intent(this, TemperatureAddActivity.class));
-                finish();//關閉此頁面
-                break;
         }
     }
 
@@ -188,18 +180,18 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
 
-        //大頭貼轉成bitmap格式
+//        //大頭貼轉成bitmap格式
         if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
             Log.d(TAG, "onEditClick: " + data.getHeadShot());
             Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
             saveBitmap(bitmap); //存到本機端記憶卡內
             bundle.putString("HeadShot", tmpPhoto.toString());
         }
-//
-//        if(tmpPhoto != null && !tmpPhoto.exists()){ //檔案有存在
-//            bundle.putString("HeadShot", tmpPhoto.toString());
-//        }
-//
+
+        if(tmpPhoto != null && !tmpPhoto.exists()){ //檔案有存在
+            bundle.putString("HeadShot", tmpPhoto.toString());
+        }
+
         bundle.putInt("targetId", data.getTargetId());
         bundle.putString("name", data.getUserName());
         bundle.putString("gender", data.getGender());

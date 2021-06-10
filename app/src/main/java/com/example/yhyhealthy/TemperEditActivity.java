@@ -112,7 +112,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }else {
             rdGroup.check(R.id.rdMale1);
         }
-
+            //2021/06/02
         if(headShot != null){
             //照片顯示
             file = new File(headShot);
@@ -192,11 +192,11 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             json.put("birthday",Birthday);
             json.put("height", Height);
             json.put("weight", Weight);
+//            json.put("headShot","");
             json.put("headShot", base64Str);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //Log.d(TAG, "updateToApi: " + json.toString());
         //執行上傳到後台
         proxy.buildPOST(BLE_USER_UPDATE, json.toString(), updateListener);
     }
@@ -283,7 +283,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         File imageFile = getImageFile(); //取得相片位置
         if (imageFile == null) return;
         //取得相片檔案的本機位置
-        Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.yhyhealthy.fileprovider", imageFile);
+        Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.group.yhyhealthy.fileprovider", imageFile);
         //通知相機照片儲存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
@@ -316,6 +316,12 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
+//            Bundle getImage = data.getExtras();
+//            Bitmap getLowImage = (Bitmap) getImage.get("data");
+//            Glide.with(this)
+//                    .load(getLowImage)
+//                    .centerCrop()
+//                    .into(photoShow);
 
             new Thread(() -> {
                 //取得旋轉度
@@ -364,7 +370,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
     //圖檔存至本地端
     private void saveBitmap(Bitmap bitmap){
-        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/6,bitmap.getHeight()/6,true);
+        //壓縮原圖的10倍
+        Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/10,bitmap.getHeight()/10,true);
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE); //放照片的目錄
         tmpPhoto = new File(directory, "newPicture" + ".jpg");

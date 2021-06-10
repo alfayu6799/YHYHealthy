@@ -26,6 +26,7 @@ import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthy.module.ApiProxy.CHANGE_VERIFICATION_STYLE;
 import static com.example.yhyhealthy.module.ApiProxy.COMP;
+import static com.example.yhyhealthy.module.ApiProxy.accountInfo;
 
 /***
  * 帳戶設定 - 驗證方式變更
@@ -124,6 +125,15 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
             return;
         }
 
+        //2021/06/08 add
+        if (Style.equals("mail")){  //信箱不得空白
+            if (TextUtils.isEmpty(editMail.getText().toString()))
+                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.email_is_not_empty), Toast.LENGTH_SHORT, true).show();
+        }else {  //電話號碼不得空白
+            if (TextUtils.isEmpty(editMobile.getText().toString()))
+                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.mobile_is_not_empty), Toast.LENGTH_SHORT, true).show();
+        }
+
         //上傳到後端
         updateToApi();
     }
@@ -144,8 +154,10 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        //執行
         proxy.buildVerification(CHANGE_VERIFICATION_STYLE, json.toString(), defaultLan, verificationChangeListener);
+        //上傳成功提示
+        Toasty.success(UserChangeVerifiActivity.this, getString(R.string.update_succeed_next), Toast.LENGTH_SHORT, true).show();
     }
 
     private ApiProxy.OnApiListener verificationChangeListener = new ApiProxy.OnApiListener() {
@@ -160,7 +172,6 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
 
         @Override
         public void onSuccess(JSONObject result) {
-            Log.d(TAG, "onSuccess: " + result.toString());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -230,12 +241,10 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
     }
 
     private void checkComp(EditText editText){
-        //去SharedPreferences取得使用者的帳號:ACCOUNT
-        String account = getSharedPreferences("yhyHealthy", MODE_PRIVATE).getString("ACCOUNT", "");
 
         JSONObject json = new JSONObject();
         try {
-            json.put("account", account);
+            json.put("account", accountInfo);  //來自LoginActivity的帳戶資料
             json.put("verCode", editText.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();

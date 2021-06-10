@@ -1,6 +1,7 @@
 package com.example.yhyhealthy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.TimeUtils;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,11 +10,11 @@ import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +33,7 @@ public class CameraActivity extends AppCompatActivity implements Camera.PictureC
     private Camera camera = null;
     private ImageView capture;
     Camera.Parameters mParameters;
+    private String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

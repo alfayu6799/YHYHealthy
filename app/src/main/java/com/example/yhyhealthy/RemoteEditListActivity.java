@@ -84,6 +84,7 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
         });
     }
 
+    //查詢
     private void initDate() {
         proxy = ApiProxy.getInstance();
         proxy.buildPOST(REMOTE_USER_LIST, "" , requestListener);
@@ -101,21 +102,28 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
 
         @Override
         public void onSuccess(JSONObject result) {
-            try {
-                JSONObject object = new JSONObject(result.toString());
-                int errorCode = object.getInt("errorCode");
-                if (errorCode == 0){
-                   parserJson(result);
-                }else if (errorCode == 23){ //token失效
-                    Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
-                    startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
-                    finish();
-                }else {
-                    Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserJson(result);
+                        }else if (errorCode == 23) { //token失效
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(RemoteEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 6){
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.no_date), Toast.LENGTH_SHORT, true).show();
+                        }else {
+                            Toasty.error(RemoteEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            });
         }
 
         @Override

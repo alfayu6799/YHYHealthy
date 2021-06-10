@@ -127,7 +127,7 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //當使用者按下更新Button時會執行這邊的邏輯
-                updateToApi();
+                updateToApi(); //更新本地端的資料
                 //可以不關閉視窗的作法:https://www.jianshu.com/p/2278c0b90f0d
             }
         });
