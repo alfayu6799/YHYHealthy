@@ -693,21 +693,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
         mBleReceiver = new BleReceiver();
-        registerReceiver(mBleReceiver, makeGattUpdateIntentFilter());
-    }
-
-    public static IntentFilter makeGattUpdateIntentFilter(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(yhyBleService.ACTION_GATT_CONNECTED);
-        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED);         //全部斷開
-        filter.addAction(yhyBleService.ACTION_GATT_SERVICES_DISCOVERED);
-        filter.addAction(yhyBleService.ACTION_DATA_AVAILABLE);
-        filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
-        filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
-        filter.addAction(yhyBleService.EXTRA_MAC);
-        filter.addAction(yhyBleService.EXTRA_DEVICE_NAME);
-        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC); //針對mac斷開
-        return filter;
+        registerReceiver(mBleReceiver, yhyBleService.makeIntentFilter());
     }
 
     /** ble Service 背景服務 **/

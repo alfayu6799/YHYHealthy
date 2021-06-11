@@ -888,7 +888,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         startService(gettIntent);
 
         mBleReceiver = new BleReceiver();
-        registerReceiver(mBleReceiver, mBluetoothLeService.makeIntentFilter());
+        registerReceiver(mBleReceiver, yhyBleService.makeIntentFilter());
     }
 
     /**

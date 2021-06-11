@@ -327,6 +327,8 @@ public class yhyBleService extends Service {
         filter.addAction(yhyBleService.ACTION_NOTIFY_ON);
         filter.addAction(yhyBleService.ACTION_CONNECTING_FAIL);
         filter.addAction(yhyBleService.EXTRA_MAC);
+        filter.addAction(yhyBleService.EXTRA_DEVICE_NAME);
+        filter.addAction(yhyBleService.ACTION_GATT_DISCONNECTED_SPECIFIC); //針對mac斷開
         return filter;
     }
 
