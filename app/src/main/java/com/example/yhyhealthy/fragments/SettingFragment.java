@@ -49,6 +49,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         ImageView provision = view.findViewById(R.id.imgSystemProvision);
         TextView  version = view.findViewById(R.id.tvVersion);
         TextView  logout = view.findViewById(R.id.tvLogout);
+        version.setText(getString(R.string.version));
 
         setting.setOnClickListener(this);
         UserSetting.setOnClickListener(this);

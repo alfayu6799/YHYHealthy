@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.62" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline64"
@@ -76,8 +76,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline62">
         <ImageView
             android:id="@+id/ivOvulation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
             android:src="@mipmap/ovul_green_icon"/>
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="8dp"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/title_ovulation"
@@ -107,8 +107,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline62">
         <ImageView
             android:id="@+id/ivTemperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
             android:src="@mipmap/temper_green_icon"/>
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="8dp"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/title_bluetooth_temperature"
@@ -128,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.87" />
 
     <LinearLayout
         android:layout_width="0dp"

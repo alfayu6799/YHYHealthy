@@ -8,8 +8,8 @@ android {
         applicationId "com.yhihc.group.yhyhealthy"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.01"
+        versionCode 3
+        versionName "1.03"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //2021/05/26 for aab檔案使用

@@ -37,6 +37,11 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         this.listener = listener;
     }
 
+    public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList) {
+        this.context = context;
+        this.dataList = dataList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

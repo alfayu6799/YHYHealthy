@@ -15,7 +15,7 @@
     <string name="delete_success">資料刪除成功</string>
     <string name="camera_only_today">拍照辨識僅限當日</string>
 
-    <string name="please_select_fun_and_date">請先選擇功能跟日期</string>
+    <string name="please_select_fun_and_date">請先選擇觀測者</string>
     <string name="select_function">功能 : </string>
     <string name="select_done">查詢開始</string>
     <string name="history_dialog_confirm">確定</string>
@@ -283,6 +283,7 @@
     <string name="please_chose_really_day">請選擇實際經期做刪除</string>
     <string name="delete_really_day">做刪除</string>
     <string name="you_are_chose_day_is">\"您選擇的日期為: \"</string>
+    <string name="you_are_chose_observer_is">您選擇的觀測者為:</string>
     <string name="period_day_is_empty">沒有週期資料</string>
     <string name="auth_code_update_success">授權碼更新成功</string>
     <string name="ble_connecting_measure">量測中</string>
@@ -432,4 +433,9 @@
     <string name="update_succeed_next">更新成功並請執行下一步</string>
     <string name="device_no_error">裝置序號錯誤</string>
     <string name="edit_temp_list">編輯觀測者資料</string>
+    <string name="wifi_setting">無線設定</string>
+    <string name="you_do_nothing">未做任何拍攝</string>
+    <string name="version">1.03</string>
+    <string name="service_time_out">目前系統開小差請稍後</string>
+    <string name="history_select_observer">選擇觀測者</string>
 </resources>

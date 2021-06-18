@@ -15,7 +15,7 @@
     <string name="delete_success">Delete Succeed</string>
     <string name="camera_only_today">Take picture only today</string>
 
-    <string name="please_select_fun_and_date">Please Select a Record\nDate First</string>
+    <string name="please_select_fun_and_date">Please Select a Observer First</string>
     <string name="select_function">Function : </string>
     <string name="select_done">Search</string>
     <string name="please_chose_less_one">Please chose functions:</string>
@@ -439,6 +439,14 @@
     <string name="function_is_not_allow_empty">function is not allow empty</string>
     <string name="tempStart">Start</string>
     <string name="tempEnd">End</string>
+    <string name="update_succeed_next">Succeed and next</string>
     <string name="fxn_is_coming_soon">Function is coming soon</string>
     <string name="device_no_error">Serial Number Error</string>
+    <string name="wifi_setting">WiFi Setting</string>
+    <string name="edit_temp_list">Edit Observation info</string>
+    <string name="you_do_nothing">You do Nothing</string>
+    <string name="version">1.03</string>
+    <string name="service_time_out">The Service is time out , please wait a moment</string>
+    <string name="history_select_observer">Select Observer</string>
+    <string name="you_are_chose_observer_is">You selected observer is :</string>
 </resources>

@@ -87,13 +87,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/relative_shape"
-            android:drawableLeft="@drawable/ic_dashboard_black_24dp"
+            android:drawableLeft="@drawable/ic_account_circle_black_24dp"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:paddingTop="8dp"
             android:paddingRight="16dp"
             android:paddingBottom="5dp"
-            android:text="@string/history_select_function"
+            android:text="@string/history_select_observer"
             android:textAllCaps="false"
             android:textSize="@dimen/font_history_funs_and_day" />
 

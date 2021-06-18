@@ -278,7 +278,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //2021/02/19 照片辨識
     private void upPhotoToApi() {
         //先將照片編碼成base64
-        base64Str = ImageUtils.imageToBase64(photoPath);
+        base64Str = ImageUtils.imageToBase64(mPath);         //使用內建原生相機
+//        base64Str = ImageUtils.imageToBase64(photoPath);   //使用客制相機
 
         //今天日期
         DateTime today = new DateTime();
@@ -401,14 +402,16 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
     //開啟相機功能
     private void openCamera() {
         if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED){
-//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  //呼叫原生相機
-//            File imageFile = getImageFile();
-//            if (imageFile == null) return;
-//            Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.yhyhealthy.fileprovider", imageFile);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//            startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
-            Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class); //自定義Camera功能
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  //呼叫原生相機
+            File imageFile = getImageFile();
+            if (imageFile == null) return;
+            Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.group.yhyhealthy.fileprovider", imageFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
+            /* 使用客制相機(自定義Camera功能)
+            Intent camera = new Intent(PeriodRecordActivity.this, CameraActivity.class);
             startActivityForResult(camera, CAMERA_RECORD);
+            */
         }else {
             requestPermission();
         }
@@ -974,32 +977,37 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     }
 
-    @Override
+    @Override  ///照片回傳
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1){
-//            new Thread(()->{
-//                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
-//                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
-//                Matrix matrix = new Matrix();
-//                matrix.setRotate(90f);//轉90度
-//                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
-//                        ,0,0
-//                        ,getHighImage.get().getWidth()
-//                        ,getHighImage.get().getHeight()
-//                        ,matrix,true));
-//                runOnUiThread(()->{
-//                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
-//                    Glide.with(this)
-//                            .load(getHighImage.get())
-//                            .centerCrop()
-//                            .into(photoShow);
-//                });
-//            }).start();
-//            //當日可以連續拍照
-//            takePhoto.setText(R.string.re_camera);
-//            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
-//        }
+
+        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1){
+            new Thread(()->{
+                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90f);//轉90度
+                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+                        ,0,0
+                        ,getHighImage.get().getWidth()
+                        ,getHighImage.get().getHeight()
+                        ,matrix,true));
+                runOnUiThread(()->{
+                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+                    Glide.with(this)
+                            .load(getHighImage.get())
+                            .centerCrop()
+                            .into(photoShow);
+                });
+            }).start();
+            //當日可以連續拍照
+            takePhoto.setText(R.string.re_camera);
+            photoIdentify.setVisibility(View.VISIBLE); //辨識按鈕
+        }else {
+            Toasty.info(PeriodRecordActivity.this, getString(R.string.you_do_nothing), Toast.LENGTH_SHORT, true).show();
+        }
+
+        /* 自定義相機
         if(resultCode != RESULT_CANCELED){ //如果沒照相就回來而沒有判斷resultCode會造成閃退 2021/05/19
             if(requestCode == CAMERA_RECORD){
                 photoPath = data.getStringExtra("path");
@@ -1010,6 +1018,7 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 }
             }
         }
+        */
     }
 
     @Override

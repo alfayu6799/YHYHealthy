@@ -152,7 +152,7 @@
         android:id="@+id/tvVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1.02"
+        android:text="1.03"
         app:layout_constraintStart_toStartOf="@+id/imgSystemProvision"
         app:layout_constraintTop_toTopOf="@+id/textView6" />
 

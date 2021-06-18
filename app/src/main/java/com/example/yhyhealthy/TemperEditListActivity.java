@@ -83,6 +83,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         back.setOnClickListener(this);
     }
 
+    //初始化觀測者資料(from api)
     private void initData() {
         proxy = ApiProxy.getInstance();
         proxy.buildPOST(BLE_USER_LIST, "", UserListListener);
@@ -133,7 +134,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         }
     };
 
-    //解析後台回來的資料
+    //解析後台回來的觀測者資料
     private void parserJsonData(JSONObject result) {
         TempDataApi tempDataApi = TempDataApi.newInstance(result.toString());
         list = tempDataApi.getSuccess();
