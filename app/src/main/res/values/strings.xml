@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YHYHealthyDemo</string>
+    <string name="app_name">YHYHealthy</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -16,6 +16,7 @@
     <string name="camera_only_today">拍照辨識僅限當日</string>
 
     <string name="please_select_fun_and_date">請先選擇觀測者</string>
+    <string name="please_select_observer_date">請務必選擇日期</string>
     <string name="select_function">功能 : </string>
     <string name="select_done">查詢開始</string>
     <string name="history_dialog_confirm">確定</string>

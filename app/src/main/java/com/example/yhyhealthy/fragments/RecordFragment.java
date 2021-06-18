@@ -55,7 +55,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     private Button btnFunction;
     private Button btnDate;
 
-    private List<String> fxnList;
+    //private List<String> fxnList;
 
     private TextView textHint;   //提示文字
 
@@ -167,7 +167,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.btSelectFuns:  //功能選擇
+            case R.id.btSelectFuns:  //觀測者選擇
                 btnFunction.setBackgroundResource(R.drawable.rectangle_button);
                 btnFunction.setTextColor(getResources().getColor(R.color.white));
                 btnDate.setBackgroundResource(R.drawable.relative_shape);
@@ -206,6 +206,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     /**********************
      * 功能彈跳視窗 Dialog
      * *********************/
+    /*
     private void dialogSelectFunction(){
         fxnList = new ArrayList<>();
         //資料來源
@@ -243,7 +244,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
         alert.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
     }
-
+    */
     /*********************************
      * 日期彈跳視窗 Dialog採用第三方庫件
      * *******************************/
@@ -287,9 +288,19 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
             //提示文字隱藏
             textHint.setVisibility(View.INVISIBLE);
             recordResult.setVisibility(View.VISIBLE);
-            //setData();
+            updateDateToApi();
         }
     };
+
+    //將查詢用的資料傳至後台請求資料
+    private void updateDateToApi() {
+        if (!TextUtils.isEmpty(startDay) && (!TextUtils.isEmpty(endDay))) {
+            Log.d(TAG, "開始日: " + startDay + ",結束日:" + endDay + ",使用者:" + selectObserver);
+            recordResult.setVisibility(View.GONE);
+        }else {
+            Toasty.info(getActivity(), getString(R.string.please_select_observer_date), Toast.LENGTH_SHORT, true).show();
+        }
+    }
 
     @Override
     public void onItemClick(TempDataApi.SuccessBean data) {
