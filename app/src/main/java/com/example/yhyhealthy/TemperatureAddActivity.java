@@ -1,14 +1,17 @@
 package com.example.yhyhealthy;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -66,7 +69,7 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
 
     private Button btnSave;       //存檔上傳到後台
 
-    private String mPath = "";  //照片位址全域宣告
+    private String mPath = "";        //camera照片位址全域宣告
 
     //api
     private ApiProxy proxy;
@@ -109,7 +112,8 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                 break;
             case R.id.ivTakePhoto:
                 if(ActivityCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    openCamera(); //開啟相機
+//                    openCamera(); //開啟相機
+                    selectImage();   //選擇照片來源 2021/06/21增加
                 }else {
                     requestPermission(); //要求權限
                 }
@@ -121,6 +125,31 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                 checkBeforeUpdate();
                 break;
         }
+    }
+
+    //選擇大頭貼來源 2021/06/21增加
+    private void selectImage() {
+        String[] options = getResources().getStringArray(R.array.camera_resource); //來源選擇 (add a list)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_select_from));
+        builder.setItems(options, new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:  //相機
+                        openCamera();
+                        break;
+                    case 1:  //畫廊
+                        openGallery();
+                        break;
+                    case 2:  //取消
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     //日期的設定
@@ -192,7 +221,6 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
             json.put("height", Height);
             json.put("weight", Weight);
             json.put("headShot", base64Str);
-//            json.put("headShot", "");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -243,6 +271,13 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         }
     };
 
+    //呼叫圖庫
+    private void openGallery() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);
+    }
+
+
     //呼叫原生相機
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //呼叫原生相機
@@ -253,7 +288,8 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         //通知相機照片儲存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         //將照片帶回
-        startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
+//        startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
+        startActivityForResult(intent,0);
     }
 
     //取得相片檔案的URL
@@ -274,29 +310,66 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
-            new Thread(() -> {
-                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
-                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
-                Matrix matrix = new Matrix();
-                //matrix.setRotate(90f);//轉90度
-                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
-                        , 0, 0
-                        , getHighImage.get().getWidth()
-                        , getHighImage.get().getHeight()
-                        , matrix, true));
-                runOnUiThread(() -> {
-                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
-                    Glide.with(this)
-                            .load(getHighImage.get())
-                            .centerCrop()
-                            .into(photoShow);
-                });
-            }).start();
+        switch(requestCode){
+            case 0:  //相機
+                new Thread(() -> {
+                    //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+                    AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+                    Matrix matrix = new Matrix();
+                    //matrix.setRotate(90f);//轉90度
+                    getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+                            , 0, 0
+                            , getHighImage.get().getWidth()
+                            , getHighImage.get().getHeight()
+                            , matrix, true));
+                    runOnUiThread(() -> {
+                        //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+                        Glide.with(this)
+                                .load(getHighImage.get())
+                                .centerCrop()
+                                .into(photoShow);
+                    });
+                }).start();
+                break;
+            case 1: //畫廊
+                Uri contentUri = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(contentUri,filePath, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePath[0]);
+                mPath = cursor.getString(columnIndex);  //取得圖片路徑
+                cursor.close();
 
-        } else {
-            Toasty.info(TemperatureAddActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
+                Glide.with(this)
+                        .load(contentUri)
+                        .centerCrop()
+                        .into(photoShow);
+                break;
+
         }
+//        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
+//            new Thread(() -> {
+//                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+//                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath));
+//                Matrix matrix = new Matrix();
+//                //matrix.setRotate(90f);//轉90度
+//                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+//                        , 0, 0
+//                        , getHighImage.get().getWidth()
+//                        , getHighImage.get().getHeight()
+//                        , matrix, true));
+//                runOnUiThread(() -> {
+//                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+//                    Glide.with(this)
+//                            .load(getHighImage.get())
+//                            .centerCrop()
+//                            .into(photoShow);
+//                });
+//            }).start();
+//
+//        } else {
+//            Toasty.info(TemperatureAddActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
+//        }
     }
 
     @Override

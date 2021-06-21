@@ -11,6 +11,12 @@
         <item>@string/celsius</item>
         <item>@string/fahrenheit</item>
     </string-array>
+
+    <string-array name="camera_resource">
+        <item>@string/take_photo</item>
+        <item>@string/from_gallery</item>
+        <item>@string/dialog_cancel</item>
+    </string-array>
     
     <string-array name="secretions_colors">
         <item>none</item>

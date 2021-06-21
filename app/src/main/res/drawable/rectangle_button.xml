@@ -5,5 +5,5 @@
     <solid android:color="@color/colorPrimaryDark" />
 
     <!--邊框的寬度及顏色-->
-    <stroke android:width="5px" android:color="#000000" />
+    <stroke android:width="5px" android:color="@color/colorPrimaryDark" />
 </shape>

@@ -450,4 +450,8 @@
     <string name="history_select_observer">Select Observer</string>
     <string name="you_are_chose_observer_is">You selected observer is :</string>
     <string name="please_select_observer_date">Date Selected is necessary!!!</string>
+    <string name="you_cant_chose_future">You cannot chose future day</string>
+    <string name="take_photo">Camera</string>
+    <string name="from_gallery">Gallery</string>
+    <string name="please_select_from">Please select resource</string>
 </resources>

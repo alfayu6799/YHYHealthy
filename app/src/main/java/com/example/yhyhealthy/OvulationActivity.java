@@ -341,7 +341,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //經期設定對話框
     private void showPeriod(String clickDay) {
 
-        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
+//        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
         if (clickDay == null){
             clickDay = String.valueOf(LocalDate.now()); //今天
         }
@@ -357,7 +357,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         EditText toDate = view.findViewById(R.id.et_to_date);     //起始日期
         EditText fromDate = view.findViewById(R.id.et_from_date); //結束日期
 
-        toDate.setText(clickDay);        //將使用者選擇的日期帶入,禁用自行輸入,可避免選擇未來日期
+        toDate.setText(clickDay);        //將使用者選擇的日期帶入
         DateTime startDay = new DateTime(clickDay); //ex : 2021-02-03T00:00:00.000Z
 
         //經由使用者輸入的經期長度自動計算結束日期
@@ -370,6 +370,24 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         Button btnDelete = view.findViewById(R.id.btnDateDelete); //刪除onClick
 
         dialog = builder.create();
+
+        //起始日
+        toDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(OvulationActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                //todo
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, month, dayOfMonth);
+                                toDate.setText(dateFormatter.format(newDate.getTime()));
+                            }
+                        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
 
         //結束日
         fromDate.setOnClickListener(new View.OnClickListener() {
@@ -402,15 +420,22 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //參數 startDate & endDate
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("startDate", toDate.getText().toString());  //經期第一天
-                    json.put("endDate", fromDate.getText().toString());  //經期最後一天
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                //上傳前確定起始日不得是未來日期  2021/06/21 增加
+                DateTime dt1 = new DateTime(toDate.getText().toString());
+                boolean b1 = dt1.isBeforeNow();
+                if (b1) {  //不是未來日期
+                    //參數 startDate & endDate
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("startDate", toDate.getText().toString());  //經期第一天
+                        json.put("endDate", fromDate.getText().toString());  //經期最後一天
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    proxy.buildPOST(PERIOD_UPDATE, json.toString(), periodListener);
+                }else { //未來日期要提示
+                    Toasty.error(OvulationActivity.this, getString(R.string.you_cant_chose_future), Toast.LENGTH_SHORT, true).show();
                 }
-                proxy.buildPOST(PERIOD_UPDATE, json.toString(), periodListener);
             }
         });
 

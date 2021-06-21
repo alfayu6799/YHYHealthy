@@ -1,6 +1,8 @@
 package com.example.yhyhealthy.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,8 @@ import com.example.yhyhealthy.SystemUserActivity;
 import com.example.yhyhealthy.SystemVideoActivity;
 
 import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**  *************
  * 設定首頁
@@ -61,6 +65,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -80,6 +85,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), SystemProvisionActivity.class));
                 break;
             case R.id.tvLogout:     //登出
+                SharedPreferences pref = getActivity().getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear(); //清除帳號&密碼  2021/06/21增加
+                editor.apply(); //執行  2021/06/21增加
+
+                //回到登入頁面
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
                 Toasty.success(getActivity(), getString(R.string.logout_success), Toast.LENGTH_SHORT, true).show();

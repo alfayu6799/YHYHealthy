@@ -439,4 +439,8 @@
     <string name="version">1.03</string>
     <string name="service_time_out">目前系統開小差請稍後</string>
     <string name="history_select_observer">選擇觀測者</string>
+    <string name="you_cant_chose_future">起始日不得大於今天日期</string>
+    <string name="take_photo">相機</string>
+    <string name="from_gallery">圖庫</string>
+    <string name="please_select_from">請選擇來源</string>
 </resources>

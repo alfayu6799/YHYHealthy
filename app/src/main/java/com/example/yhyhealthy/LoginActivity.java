@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,14 +34,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "LoginActivity";
 
-    Button loginButton;
-    EditText account, password;
-    TextView register, forget;
+    private Button loginButton;
+    private EditText account, password;
+    private TextView register, forget;
+
+    //sharePref for account & password to auto login
+    private SharedPreferences pref;
 
     //api
-    ApiProxy proxy;
+    private ApiProxy proxy;
 
-    String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
+    private String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
 
     private ProgressDialog progressDialog;
 
@@ -52,16 +56,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         proxy = ApiProxy.getInstance();
+        pref = this.getSharedPreferences("yhyHealthy", MODE_PRIVATE);
 
         initView();
+
+        autoLogin(); //自動登入 2021/06/21增加
+    }
+
+    //自動登入 2021/06/21增加
+    private void autoLogin() {
+        account.setText(pref.getString("ACCOUNT",""));    //取得帳號
+        password.setText(pref.getString("PASSWORD",""));  //取得密碼
+        userLoginApi();
     }
 
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
-//        //暫時
-//        account.setText("demo21");
-//        password.setText("123456");
         
         //註冊
         register = findViewById(R.id.tv_register);
@@ -159,9 +170,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 JSONObject success = object.getJSONObject("success");
                 maritalSetting = success.getBoolean("maritalSet");      //婚姻狀況
                 menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
-                userSetting = success.getBoolean("userSet");            //使用者基本資料
+                userSetting = success.getBoolean("userSet");            //使用者設定
+
                 accountInfo = account.getText().toString();                   //使用者帳戶
-                //將帳號及密碼存到sharePref:自動登入使用
+
+                //將帳號及密碼存到sharePref:自動登入使用  2021/06/21增加
+                pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+                pref.edit().putString("PASSWORD", password.getText().toString())
+                        .putString("ACCOUNT", account.getText().toString())
+                        .apply();
 
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 

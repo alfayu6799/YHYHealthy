@@ -2,9 +2,11 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- 邊框 -->
-    <stroke
-        android:width="5px"
-        android:color="@color/black"/>
+<!--    <stroke-->
+<!--        android:width="5px"-->
+<!--        android:color="@color/colorAccent"/>-->
+    <!-- 填充的顏色 -->
+    <solid android:color="@color/colorPrimary" />
 
     <!-- 邊距 -->
     <padding

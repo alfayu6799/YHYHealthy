@@ -169,7 +169,7 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
         AlertDialog.Builder builder = new AlertDialog.Builder(SystemSettingActivity.this);
         builder.setTitle(getString(R.string.please_chose_unit));
 
-        String[] values = getResources().getStringArray(R.array.unit_arr); //數據
+        String[] values = getResources().getStringArray(R.array.unit_arr); // add a list
 
         builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
 
