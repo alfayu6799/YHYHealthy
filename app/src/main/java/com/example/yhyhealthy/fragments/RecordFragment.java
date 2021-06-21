@@ -288,18 +288,24 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
             //提示文字隱藏
             textHint.setVisibility(View.INVISIBLE);
             recordResult.setVisibility(View.VISIBLE);
-            updateDateToApi();
+            updateToApi();  //選好日期後將資料往後端傳
         }
     };
 
     //將查詢用的資料傳至後台請求資料
-    private void updateDateToApi() {
+    private void updateToApi() {
         if (!TextUtils.isEmpty(startDay) && (!TextUtils.isEmpty(endDay))) {
-            Log.d(TAG, "開始日: " + startDay + ",結束日:" + endDay + ",使用者:" + selectObserver);
-            recordResult.setVisibility(View.GONE);
+            //將參數傳給後台並取資料回來
+            getObserverInfoFromApi(startDay, endDay, selectObserver);
         }else {
             Toasty.info(getActivity(), getString(R.string.please_select_observer_date), Toast.LENGTH_SHORT, true).show();
         }
+    }
+
+    //將參數傳給後台並取資料回來
+    private void getObserverInfoFromApi(String startDay, String endDay, String selectObserver){
+        recordResult.setVisibility(View.GONE);
+        Log.d(TAG, "startDay: " + startDay + ",EndDay:" + endDay + ",userName:" + selectObserver);
     }
 
     @Override
@@ -307,38 +313,4 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
         selectObserver = data.getUserName();
     }
 
-
-//    //執行
-//    private void setData() {
-//        if (null != fxnList && !fxnList.isEmpty()){ //將功能跟日期傳給adapter
-//            FunctionsAdapter functionsAdapter = new FunctionsAdapter(getActivity(), startDay, endDay, fxnList,this);
-//            recordResult.setHasFixedSize(true);
-//            recordResult.setAdapter(functionsAdapter);
-//            recordResult.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            recordResult.addItemDecoration(new SpacesItemDecoration(20));
-//        }else { //功能不得空白
-//            Toasty.error(getActivity(), getString(R.string.function_is_not_allow_empty), Toast.LENGTH_SHORT,true).show();
-//        }
-//    }
-//
-//
-//    @Override
-//    public void onClick(int functionName, String startDay, String endDay) {
-//
-////        Intent intent = new Intent();
-////        Bundle bundle = new Bundle();
-////        bundle.putString("startDay", startDay);
-////        bundle.putString("endDay", endDay);
-//
-//        switch (functionName){
-//            case 0:
-//            case 1:
-//                Toasty.info(getContext(), getString(R.string.fxn_is_coming_soon), Toast.LENGTH_SHORT,true).show();
-//                //intent = new Intent(getActivity(),OvulationRecordActivity.class);
-//                break;
-//            //intent = new Intent(getActivity(), TempRecordActivity.class);
-//        }
-////        intent.putExtras(bundle);
-////        startActivity(intent);
-//    }
 }

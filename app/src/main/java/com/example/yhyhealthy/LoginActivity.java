@@ -59,9 +59,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
-        //暫時
-        account.setText("demo21");
-        password.setText("123456");
+//        //暫時
+//        account.setText("demo21");
+//        password.setText("123456");
         
         //註冊
         register = findViewById(R.id.tv_register);
@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
                 userSetting = success.getBoolean("userSet");            //使用者基本資料
                 accountInfo = account.getText().toString();                   //使用者帳戶
+                //將帳號及密碼存到sharePref:自動登入使用
 
                 Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
 
