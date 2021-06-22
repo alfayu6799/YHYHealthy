@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,6 +64,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_symptom);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //禁止旋轉
 
         //休眠禁止
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -140,7 +142,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
 
     //症狀初始化 2021/04/07
     private void initSymptom(JSONObject result) {
-
+        Log.d(TAG, "initSymptom: " + result.toString());
         try {
             JSONObject jsonObject = new JSONObject(result.toString());
             JSONArray array = jsonObject.getJSONArray("success");
@@ -158,7 +160,9 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                         listData.add(jsonValue.getString(k));
                     }
                     checkBoxGroupList.add(new SymptomData.CheckBoxGroup(key,listData));
-                }
+                }/*else if (value instanceof String){
+                    String testStr = newObject.getString("value");
+                }*/
             }
         } catch (JSONException e) {
             e.printStackTrace();

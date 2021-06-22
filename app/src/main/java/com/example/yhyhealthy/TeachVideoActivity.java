@@ -17,6 +17,7 @@ public class TeachVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teach_video);
 
+
 //        VideoView videoView =(VideoView)findViewById(R.id.videoView);
 //
 //        //Creating MediaController

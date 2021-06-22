@@ -1,6 +1,7 @@
 package com.example.yhyhealthy;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -10,7 +11,10 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -84,6 +88,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temper_edit);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //禁止旋轉
 
         initView();
 
@@ -152,7 +157,8 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                 finish();  //回上一頁
                 break;
             case R.id.ivTakePhoto1:
-                openCamera();   //啟動相機
+//                openCamera();   //啟動相機
+                selectImage();   //選擇照片來源 2021/06/21增加
                 break;
             case R.id.edtInputBirthday1:
                 showDatePickerDialog();  //日期
@@ -161,6 +167,31 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
                 updateToApi();  //update to 後台
                 break;
         }
+    }
+
+    //選擇照片來源 2021/06/21增加
+    private void selectImage() {
+        String[] options = getResources().getStringArray(R.array.camera_resource); //來源選擇 (add a list)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_select_from));
+        builder.setItems(options, new DialogInterface.OnClickListener(){
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:  //相機
+                        openCamera();
+                        break;
+                    case 1:  //畫廊
+                        openGallery();
+                        break;
+                    case 2:  //取消
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     //更新到後台
@@ -192,7 +223,6 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             json.put("birthday",Birthday);
             json.put("height", Height);
             json.put("weight", Weight);
-//            json.put("headShot","");
             json.put("headShot", base64Str);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -277,6 +307,12 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         return RValue;
     }
 
+    //呼叫圖庫
+    private void openGallery() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);
+    }
+
     //原生相機
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //呼叫原生相機
@@ -286,7 +322,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         Uri imageUri = FileProvider.getUriForFile(this,"com.yhihc.group.yhyhealthy.fileprovider", imageFile);
         //通知相機照片儲存位置
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, Activity.DEFAULT_KEYS_DIALER);
+        startActivityForResult(intent, 0);
     }
 
     //取得相片檔案的URL
@@ -315,49 +351,92 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     @Override  //拍照後回傳
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
-//            Bundle getImage = data.getExtras();
-//            Bitmap getLowImage = (Bitmap) getImage.get("data");
-//            Glide.with(this)
-//                    .load(getLowImage)
-//                    .centerCrop()
-//                    .into(photoShow);
+        switch(requestCode){
+            case 0:  //相機  2021/06/13增加
+                new Thread(() -> {
+                    //取得旋轉度
+                    int rotate = readPictureDegree(mPath);
 
-            new Thread(() -> {
-                //取得旋轉度
-                int rotate = readPictureDegree(mPath);
+                    //取得bitmap
+                    Bitmap bitmap = BitmapFactory.decodeFile(mPath);
 
-                //取得bitmap
-                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+                    if(rotate == 0){  //不用旋轉的照片則直接存檔  2021/04/23
+                        saveBitmap(bitmap);
+                    }else {
+                        rotateBitmap(bitmap);
+                    }
 
-                if(rotate == 0){  //不用旋轉的照片則直接存檔  2021/04/23
-                    saveBitmap(bitmap);
-                }else {
-                    rotateBitmap(bitmap);
-                }
+                    //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+                    AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath)); //實例化
+                    Matrix matrix = new Matrix();
+                    matrix.setScale(0.5f, 0.5f);
+                    //圖片重建
+                    getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+                            , 0, 0
+                            , getHighImage.get().getWidth()
+                            , getHighImage.get().getHeight()
+                            , matrix, true));
+                    runOnUiThread(() -> {
+                        //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+                        Glide.with(this)
+                                .load(getHighImage.get())
+                                .centerCrop()
+                                .transform(new RotateTransformation(this,rotate))
+                                .into(photoShow);
+                    });
+                }).start();
+                break;
+            case 1: //畫廊  2021/06/13增加
+                Uri contentUri = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(contentUri,filePath, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePath[0]);
+                tmpPhoto = new File(cursor.getString(columnIndex));  //取得圖片路徑
+                cursor.close();
 
-                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
-                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath)); //實例化
-                Matrix matrix = new Matrix();
-                matrix.setScale(0.5f, 0.5f);
-                //圖片重建
-                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
-                        , 0, 0
-                        , getHighImage.get().getWidth()
-                        , getHighImage.get().getHeight()
-                        , matrix, true));
-                runOnUiThread(() -> {
-                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
-                    Glide.with(this)
-                            .load(getHighImage.get())
-                            .centerCrop()
-                            .transform(new RotateTransformation(this,rotate))
-                            .into(photoShow);
-                });
-            }).start();
-        }else {
-            Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
+                Glide.with(this)
+                        .load(contentUri)
+                        .centerCrop()
+                        .into(photoShow);
+                break;
         }
+//        if (requestCode == Activity.DEFAULT_KEYS_DIALER && resultCode == -1) {
+//            new Thread(() -> {
+//                //取得旋轉度
+//                int rotate = readPictureDegree(mPath);
+//
+//                //取得bitmap
+//                Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+//
+//                if(rotate == 0){  //不用旋轉的照片則直接存檔  2021/04/23
+//                    saveBitmap(bitmap);
+//                }else {
+//                    rotateBitmap(bitmap);
+//                }
+//
+//                //在BitmapFactory中以檔案URI路徑取得相片檔案，並處理為AtomicReference<Bitmap>，方便後續旋轉圖片
+//                AtomicReference<Bitmap> getHighImage = new AtomicReference<>(BitmapFactory.decodeFile(mPath)); //實例化
+//                Matrix matrix = new Matrix();
+//                matrix.setScale(0.5f, 0.5f);
+//                //圖片重建
+//                getHighImage.set(Bitmap.createBitmap(getHighImage.get()
+//                        , 0, 0
+//                        , getHighImage.get().getWidth()
+//                        , getHighImage.get().getHeight()
+//                        , matrix, true));
+//                runOnUiThread(() -> {
+//                    //以Glide設置圖片(因為旋轉圖片屬於耗時處理，故會LAG一下，且必須使用Thread執行緒)
+//                    Glide.with(this)
+//                            .load(getHighImage.get())
+//                            .centerCrop()
+//                            .transform(new RotateTransformation(this,rotate))
+//                            .into(photoShow);
+//                });
+//            }).start();
+//        }else {
+//            Toasty.info(TemperEditActivity.this, getString(R.string.camera_not_action), Toast.LENGTH_SHORT, true).show();
+//        }
     }
 
     //旋轉圖片

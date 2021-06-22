@@ -2,6 +2,7 @@ package com.example.yhyhealthy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -27,6 +28,7 @@ public class SystemProvisionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_provision);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //禁止旋轉
 
         back = findViewById(R.id.imageViewBack);
         back.setOnClickListener(new View.OnClickListener() {
