@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.yhyhealthy.adapter.CheckBoxAdapter;
@@ -25,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +44,13 @@ import static com.example.yhyhealthy.module.ApiProxy.SYMPTOM_LIST;
  * create 2021/04/07
  * *  *************/
 
-public class SymptomActivity extends AppCompatActivity implements View.OnClickListener {
+public class SymptomActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SymptomActivity";
 
     private ImageView back;
-    private RecyclerView viewSymptomSW, viewSymptomCH;
+    private RecyclerView viewSymptomSW, viewSymptomCH, viewVaccination;
+    private Switch swVaccine;
 
     private int targetId;
     private int position;
@@ -87,8 +91,13 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
         update = findViewById(R.id.btnUpdate);
         back = findViewById(R.id.ivBackBlePage);
 
+        swVaccine = findViewById(R.id.sw_vaccine);
+        swVaccine.setText(R.string.close);
+        swVaccine.setOnCheckedChangeListener(this);
+
         viewSymptomSW = findViewById(R.id.rvSymptomUp);
         viewSymptomCH = findViewById(R.id.rvSymptomDown);
+        viewVaccination = findViewById(R.id.rvVaccination);
 
         update.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -142,7 +151,7 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
 
     //症狀初始化 2021/04/07
     private void initSymptom(JSONObject result) {
-        Log.d(TAG, "initSymptom: " + result.toString());
+        //Log.d(TAG, "initSymptom: " + result.toString());
         try {
             JSONObject jsonObject = new JSONObject(result.toString());
             JSONArray array = jsonObject.getJSONArray("success");
@@ -282,4 +291,15 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     };
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if (isChecked){  //有選擇才會變成true
+            swVaccine.setText(R.string.open);
+            viewVaccination.setVisibility(View.VISIBLE);
+        }else {
+            swVaccine.setText(R.string.close);
+            viewVaccination.setVisibility(View.GONE);
+        }
+    }
 }

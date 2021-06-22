@@ -402,6 +402,7 @@
     <string name="edit_observation_info">Edit User information</string>
     <string name="chart_measure_start">Start</string>
     <string name="chart_measure_end">End</string>
+    <string name="symptom_vaccine">Vaccination</string>
     <string name="headache">Headache</string>
     <string name="fatigue">Fatigue</string>
     <string name="soreMusclesJoints">Sore Muscles Joints</string>
@@ -454,4 +455,6 @@
     <string name="take_photo">Camera</string>
     <string name="from_gallery">Gallery</string>
     <string name="please_select_from">Please select resource</string>
+    <string name="close">Close</string>
+    <string name="open">Open</string>
 </resources>

@@ -601,6 +601,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     //更新收到體溫的訊息給RecyclerView的項目
     private void updateBleData(String receive, String macAddress) {
+        Log.d(TAG, "updateBleData: " + receive + ",mac:" + macAddress);
         DecimalFormat df = new DecimalFormat("#.##");
 
         String[] str = receive.split(","); //以,分割
@@ -752,6 +753,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     break;
                     
                 case yhyBleService.ACTION_DATA_AVAILABLE:
+                    Log.d(TAG, "onReceive: ACTION_DATA_AVAILABLE" + ByteUtils.byteArrayToString(data));
                     String receiveInfo = ByteUtils.byteArrayToString(data);
                     updateBleData(receiveInfo, macAddress);
                     break;
@@ -937,7 +939,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
         //5sec@5mins
         secondTimerCreator(data.getMac());
-
     }
 
     //5秒鐘跑一次command

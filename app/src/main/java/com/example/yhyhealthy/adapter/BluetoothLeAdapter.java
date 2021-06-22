@@ -53,8 +53,8 @@ public class BluetoothLeAdapter extends RecyclerView.Adapter<BluetoothLeAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tvName.setText(arrayList.get(position).getDeviceName());
-        holder.tvAddress.setText(arrayList.get(position).getAddress());
-        holder.tvRssi.setText("rssi "+ arrayList.get(position).getRssi());
+        //holder.tvAddress.setText(arrayList.get(position).getAddress());
+        //holder.tvRssi.setText("rssi "+ arrayList.get(position).getRssi());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +79,8 @@ public class BluetoothLeAdapter extends RecyclerView.Adapter<BluetoothLeAdapter.
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvBleName);
-            tvAddress = itemView.findViewById(R.id.tvBleAddress);
-            tvRssi = itemView.findViewById(R.id.tvBleRssi);
+            //tvAddress = itemView.findViewById(R.id.tvBleAddress);
+            //tvRssi = itemView.findViewById(R.id.tvBleRssi);
         }
     }
 

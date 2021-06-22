@@ -1,0 +1,89 @@
+{
+  "success": [
+    {
+      "key": "headache",
+      "value": false
+    },
+    {
+      "key": "fatigue",
+      "value": false
+    },
+    {
+      "key": "soreMusclesJoints",
+      "value": false
+    },
+    {
+      "key": "soreThroat",
+      "value": false
+    },
+    {
+      "key": "cough",
+      "value": false
+    },
+    {
+      "key": "runnyNose",
+      "value": false
+    },
+    {
+      "key": "diarrhea",
+      "value": false
+    },
+    {
+      "key": "chestTightness",
+      "value": false
+    },
+    {
+      "key": "shortnessBreath",
+      "value": false
+    },
+    {
+      "key": "taste",
+      "value": false
+    },
+    {
+      "key": "vomiting",
+      "value": false
+    },
+    {
+      "key": "sputum,color",
+      "value": [
+        "none",
+        "green",
+        "yellow",
+        "white",
+        "rustColor",
+        "grayBlack"
+      ]
+    },
+    {
+      "key": "sputum,type",
+      "value": [
+        "none",
+        "foamy",
+        "slimy"
+      ]
+    },
+    {
+      "key": "nose,color",
+      "value": [
+        "none",
+        "transparent",
+        "milky",
+        "yellowGreen",
+        "pink",
+        "brown",
+        "black"
+      ]
+    },
+    {
+      "key": "nose,type",
+      "value": [
+        "none",
+        "slimy",
+        "waterLike",
+        "stickyPus"
+      ]
+    }
+  ],
+  "errorCode": 0
+}

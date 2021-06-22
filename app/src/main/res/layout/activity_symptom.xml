@@ -48,6 +48,35 @@
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical" >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/symptom_vaccine"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_symptomRecord_title"/>
+
+                <Switch
+                    android:id="@+id/sw_vaccine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:textOff="@string/off"
+                    android:checked="false"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVaccination"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="500dp"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSymptomUp"
                 android:layout_width="match_parent"
