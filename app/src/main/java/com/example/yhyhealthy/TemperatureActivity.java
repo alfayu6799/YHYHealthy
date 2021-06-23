@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -36,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.yhyhealthy.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthy.adapter.RemoteViewAdapter;
@@ -55,6 +57,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -647,12 +650,38 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         feverName.setText(bleUserName);  //顯示發燒者
 
         TextView feverDegree = view.findViewById(R.id.tvFeverDegree);
-        feverDegree.setText(getString(R.string.fever_degree_is) + String.valueOf(degree));  //顯示體溫
+        feverDegree.setText(getString(R.string.fever_degree_is) + String.valueOf(degree));      //顯示體溫
+
+        EditText edtDrugName = view.findViewById(R.id.edt_drug_name);      //藥名
+        EditText edtDrugDosage = view.findViewById(R.id.edt_drug_dosage);  //藥劑量
+
+        EditText edtDrugTime = view.findViewById(R.id.edt_drug_pick_time); //服藥時間dialog
+        edtDrugTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+                new TimePickerDialog(TemperatureActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        //Time小於10則加0
+                        edtDrugTime.setText(new StringBuilder().append(hourOfDay < 10 ? "0" + hourOfDay : hourOfDay).append(":")
+                        .append(minute < 10 ? "0" + minute: minute));
+                    }
+                },hour,minute,false).show();
+            }
+        });
 
         ImageView close = view.findViewById(R.id.ivClosefever);
         close.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
+                 //將資料往後端傳送後再關閉彈跳視窗 2021/06/23
+                 String drugName = edtDrugName.getText().toString();
+                 String drugDosage = edtDrugDosage.getText().toString();
+                 String drugTime = edtDrugTime.getText().toString();
+                 Log.d(TAG, "onClick: drugName:" + drugName + ",Dosage:" + drugDosage + ",time:" + drugTime);
                  dialog.dismiss();
              }
         });

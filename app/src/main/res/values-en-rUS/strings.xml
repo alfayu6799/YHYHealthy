@@ -446,7 +446,7 @@
     <string name="wifi_setting">WiFi Setting</string>
     <string name="edit_temp_list">Edit Observation info</string>
     <string name="you_do_nothing">You do Nothing</string>
-    <string name="version">1.03</string>
+    <string name="version">1.06</string>
     <string name="service_time_out">The Service is time out , please wait a moment</string>
     <string name="history_select_observer">Select Observer</string>
     <string name="you_are_chose_observer_is">You selected observer is :</string>
@@ -457,4 +457,8 @@
     <string name="please_select_from">Please select resource</string>
     <string name="close">Close</string>
     <string name="open">Open</string>
+    <string name="drug_record">Drug Note</string>
+    <string name="please_pick_time">Please pick a time</string>
+    <string name="please_input_drug">Please input Drug Name</string>
+    <string name="please_input_dosage">Please input dosage</string>
 </resources>

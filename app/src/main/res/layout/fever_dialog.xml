@@ -24,12 +24,9 @@
         android:id="@+id/textView64"
         android:layout_width="wrap_content"
         android:layout_height="500dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
         android:text="@string/degree_alarm"
-        android:textSize="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="@+id/guideline43"
         app:layout_constraintTop_toTopOf="@+id/guideline44" />
 
@@ -37,10 +34,10 @@
         android:id="@+id/ivClosefever"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline45"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/cancel" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -48,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.69" />
+        app:layout_constraintGuide_percent="0.49" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -90,5 +87,68 @@
         android:textColor="@color/red"
         app:layout_constraintStart_toStartOf="@+id/guideline43"
         app:layout_constraintTop_toBottomOf="@+id/textView66" />
+
+    <TextView
+        android:id="@+id/textView77"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drug_record"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline43"
+        app:layout_constraintTop_toTopOf="@+id/guideline45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.52" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edittext_normal"
+        app:layout_constraintStart_toStartOf="@+id/guideline43"
+        app:layout_constraintTop_toBottomOf="@+id/textView77">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_drug_pick_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/please_pick_time" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edittext_normal"
+        app:layout_constraintStart_toStartOf="@+id/guideline43"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_drug_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/please_input_drug" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edittext_normal"
+        app:layout_constraintStart_toStartOf="@+id/guideline43"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_drug_dosage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/please_input_dosage" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

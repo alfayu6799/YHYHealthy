@@ -322,7 +322,7 @@
     <string name="off">No</string>
     <string name="on">Yes</string>
     <string name="measure_done">量測完畢</string>
-    <string name="degree_alarm">37.5°C - 38°C\n(99.5°F -100.4°F):\n除去過多衣物、被子、\n多喝水或補充電解水，\n30分鐘後再進行檢測\n體溫</string>
+    <string name="degree_alarm">37.5°C - 38°C(99.5°F -100.4°F):\n除去過多衣物、被子、多喝水或\n補充電解水，30分鐘後再進行\n檢測體溫</string>
     <string name="ble_fail">連結失敗</string>
     <string name="fever_alarm">您發燒了!!!</string>
     <string name="fever_degree_is">您目前體溫是:</string>
@@ -437,7 +437,7 @@
     <string name="edit_temp_list">編輯觀測者資料</string>
     <string name="wifi_setting">無線設定</string>
     <string name="you_do_nothing">未做任何拍攝</string>
-    <string name="version">1.03</string>
+    <string name="version">1.06</string>
     <string name="service_time_out">目前系統開小差請稍後</string>
     <string name="history_select_observer">選擇觀測者</string>
     <string name="you_cant_chose_future">起始日不得大於今天日期</string>
@@ -446,4 +446,8 @@
     <string name="please_select_from">請選擇來源</string>
     <string name="close">關閉</string>
     <string name="open">開啟</string>
+    <string name="drug_record">添加服藥紀錄</string>
+    <string name="please_pick_time">請選擇服藥時間</string>
+    <string name="please_input_drug">請輸入藥名</string>
+    <string name="please_input_dosage">請輸入劑量</string>
 </resources>
