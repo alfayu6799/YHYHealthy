@@ -22,13 +22,19 @@ import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.ArrayMap;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -59,6 +65,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ConcurrentModificationException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -122,7 +129,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private ProgressDialog progressDialog;
 
     //Other
-    boolean isBleList = true;
+    private boolean isBleList = true;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -362,7 +370,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         tAdapter = new TemperMainAdapter(this, dataList, this);
 
         //設定item間距的距離
-        int spacingInPixels = 10;
+        int spacingInPixels = 20;
         recyclerView.setAdapter(tAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -604,7 +612,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     //更新收到體溫的訊息給RecyclerView的項目
     private void updateBleData(String receive, String macAddress) {
-        Log.d(TAG, "updateBleData: " + receive + ",mac:" + macAddress);
         DecimalFormat df = new DecimalFormat("#.##");
 
         String[] str = receive.split(","); //以,分割
@@ -633,14 +640,20 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 String userName = tAdapter.findNameByMac(macAddress);
                 Toasty.warning(TemperatureActivity.this, userName + getString(R.string.under_25_degree),Toast.LENGTH_SHORT, true).show();
             }
-            //發燒到37.5會出現警告彈跳視窗
-            if(degree > 37.5)
-                feverDialog(tAdapter.findNameByMac(macAddress), degree); //藉由mac取得adapter使用者名稱
+
+            DateTime measureStartTime = tAdapter.findTimeByMac(macAddress);  //取得量測開始時的時間
+            DateTime dateTime = new DateTime(new Date());                    //現在時間
+
+            //高燒37.5以上+量測時間開始後超過5分鐘才顯示警告dialog 2021/06/25
+            if ((dateTime.isAfter(measureStartTime.plusSeconds(301)) && degree > 35)){
+                feverDialog(tAdapter.findNameByMac(macAddress), degree, tAdapter.findTargetIdByMac(macAddress), macAddress);
+                startAlarm(); //啟動循環撥放音效
+            }
         }
     }
 
     //發燒警告 2021/04/22
-     private void feverDialog(String bleUserName, double degree) {
+     private void feverDialog(String bleUserName, double degree, int targetId, String macAddress) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.fever_dialog, null);
         builder.setView(view);
@@ -673,15 +686,34 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             }
         });
 
-        ImageView close = view.findViewById(R.id.ivClosefever);
-        close.setOnClickListener(new View.OnClickListener() {
+         TextView drugInfo = view.findViewById(R.id.txt_update_faver);
+         drugInfo.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 //將資料往後端傳送後再關閉彈跳視窗 2021/06/23
-                 String drugName = edtDrugName.getText().toString();
-                 String drugDosage = edtDrugDosage.getText().toString();
-                 String drugTime = edtDrugTime.getText().toString();
-                 Log.d(TAG, "onClick: drugName:" + drugName + ",Dosage:" + drugDosage + ",time:" + drugTime);
+                 //上傳到後端
+                 if (TextUtils.isEmpty(edtDrugTime.getText().toString()))
+                     Toasty.error(TemperatureActivity.this, getString(R.string.please_pick_time), Toast.LENGTH_SHORT, true).show();
+
+                 if (TextUtils.isEmpty(edtDrugName.getText().toString()))
+                     Toasty.error(TemperatureActivity.this, getString(R.string.please_input_drug), Toast.LENGTH_SHORT, true).show();
+
+                 if (TextUtils.isEmpty(edtDrugDosage.getText().toString()))
+                     Toasty.error(TemperatureActivity.this, getString(R.string.please_input_dosage), Toast.LENGTH_SHORT, true).show();
+
+                 //資料齊全後上傳到後端去
+                 updateFeverDrugToApi(edtDrugTime.getText().toString(), edtDrugName.getText().toString(), edtDrugDosage.getText().toString(), targetId);
+             }
+         });
+
+         //現在時間
+         DateTime dateTime = new DateTime(new Date());
+         ImageView close = view.findViewById(R.id.ivClosefever);
+         close.setOnClickListener(new View.OnClickListener() {  //關閉Dialog
+             @Override
+             public void onClick(View view) {
+                 //記錄使用者關閉dialog時間
+                 tAdapter.setFeverCloseTime(targetId, macAddress, dateTime.plusMinutes(25));
+                 stopAlarm();  //停止播放循環音效
                  dialog.dismiss();
              }
         });
@@ -689,7 +721,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         dialog.show();
      }
 
-     //command
+    //發燒用藥上傳到後端去
+    private void updateFeverDrugToApi(String drugTime, String drugName, String drugDoes, int targetId) {
+
+    }
+
+    //command
     private void sendCommand(String deviceAddress) {
         String request = "AIDO,0"; //詢問溫度command/@3mins
         byte[] messageBytes = new byte[0];
@@ -711,15 +748,15 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: ");
+        //DateTime dateTime = new DateTime(new Date());
+        Log.d(TAG, "onResume: 註冊藍芽接受器+綁定後台服務");
+        //Log.d(TAG, "onResume: " + dateTime.toString("HH:mm:ss"));
         //註冊藍芽接受器
         registerBleReceiver();
     }
 
     //註冊藍芽接受器
     private void registerBleReceiver() {
-        Log.d(TAG, "註冊藍芽接受器+綁定後台服務");
-
 //        /** 綁定後台服務 ***/
         Intent intent = new Intent(this, yhyBleService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -964,10 +1001,14 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         initBle();
     }
 
+
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
         //5sec@5mins
         secondTimerCreator(data.getMac());
+
+        //寫入啟動時間 2021/06/24增加
+        data.setAlertDateTime(new DateTime(new Date()));
     }
 
     //5秒鐘跑一次command
@@ -1001,8 +1042,78 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
      @Override  //更新數據到後台
     public void passTarget(int targetId, double degree) {
-        Log.d(TAG, "passTarget: " + targetId);
+        Log.d(TAG, "passTarget: " + targetId + ",degree:" + degree);
 //        updateDegreeValueToApi(degree, targetId);
+    }
+
+    @Override  //服藥時間
+    public void onPillRecord(TempDataApi.SuccessBean data, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.pill_doalog, null);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false); //disable touch other screen
+
+        EditText pillTime = view.findViewById(R.id.edt_pill_time);
+        EditText pillName = view.findViewById(R.id.edt_pill_name);
+        EditText pillDoes = view.findViewById(R.id.edt_pill_does);
+        TextView pillUpdate = view.findViewById(R.id.txt_pill_update);
+        ImageView closePill = view.findViewById(R.id.img_pill_close);
+
+        pillTime.setOnClickListener(new View.OnClickListener() {  //時間選擇
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        pillUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //上傳到後端前檢查資料是否齊全:時間,藥名,劑量
+                if (TextUtils.isEmpty(pillTime.getText().toString()))
+                    Toasty.error(TemperatureActivity.this, getString(R.string.please_pick_time), Toast.LENGTH_SHORT, true).show();
+
+
+                if (TextUtils.isEmpty(pillName.getText().toString()))
+                    Toasty.error(TemperatureActivity.this, getString(R.string.please_input_drug), Toast.LENGTH_SHORT, true).show();
+
+
+                if (TextUtils.isEmpty(pillDoes.getText().toString()))
+                    Toasty.error(TemperatureActivity.this, getString(R.string.please_input_dosage), Toast.LENGTH_SHORT, true).show();
+
+                //上傳到後端
+                updateMedicineRecordToApi(pillTime.getText().toString(), pillName.getText().toString(), pillDoes.getText().toString(), data.getTargetId());
+            }
+        });
+
+        closePill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+        //將對話視窗大小按照螢幕比例設定
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int displayWidth = displayMetrics.widthPixels;
+        int displayHeight = displayMetrics.heightPixels;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWidth = (int) (displayWidth * 0.8f);
+        int dialogHeight = (int) (displayHeight * 0.8f);
+        layoutParams.width = dialogWidth;
+        layoutParams.height = dialogHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+    }
+
+    //將使用者服藥的資訊上傳到後端
+    private void updateMedicineRecordToApi(String drugTime, String drugName, String drugDoes, int targetId) {
+        Log.d(TAG, "updateMedicineRecordToApi: targetId:" + targetId);
     }
 
     @Override   //呼叫圖表interface
@@ -1069,6 +1180,25 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
              }
          }
      }
+
+     //播放音效
+    private void startAlarm(){
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        mediaPlayer = MediaPlayer.create(this, notification);
+        mediaPlayer.setLooping(true);  //是否循環撥放
+        mediaPlayer.start();
+    }
+
+    //停止音效
+    private void stopAlarm(){
+        if (mediaPlayer != null){
+            if (mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        }
+    }
 
      @Override
      protected void onDestroy() {

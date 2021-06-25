@@ -461,4 +461,8 @@
     <string name="please_pick_time">Please pick a time</string>
     <string name="please_input_drug">Please input Drug Name</string>
     <string name="please_input_dosage">Please input dosage</string>
+    <string name="pill_record">Record Medication</string>
+    <string name="pill_time">Time</string>
+    <string name="pill_name">Medication Name</string>
+    <string name="pill_dose">Dose</string>
 </resources>

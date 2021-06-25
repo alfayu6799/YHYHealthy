@@ -131,7 +131,7 @@ public class ChartDialog extends Dialog {
     private void setChart() {
          //將溫度與日期塞入DataArray
          DataArray.add(new Degree(degree, correctDate));
-        Log.d(TAG, "setChart: " + correctDate);
+
          ArrayList<String> label = new ArrayList<>();    //X軸(時間)
          ArrayList<Entry> entries = new ArrayList<>();   //Y軸(體溫)
 

@@ -17,6 +17,8 @@ import com.example.yhyhealthy.R;
 import com.example.yhyhealthy.datebase.TempDataApi;
 
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,9 +57,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
-    public void clear(TempDataApi.SuccessBean data) {
-        Log.d(TAG, "adapter clear: " + data.getTargetId());
-    }
+//    public void clear(TempDataApi.SuccessBean data) {
+//        Log.d(TAG, "adapter clear: " + data.getTargetId());
+//    }
 
     //斷線刷新 2021/04/28
     public void disconnectedDevice(String devMac, String devStatus, String devName){
@@ -74,6 +76,35 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
+    //將發燒使用者點選關閉按鈕的時間寫入資料 2021/06/25
+    public void setFeverCloseTime(int targetId, String bleMac, DateTime dateTime){
+        if(dataList.size() != 0){
+            for(int i = 0; i < dataList.size(); i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                    if(data.getMac().equals(bleMac)){
+                        data.setAlertDateTime(dateTime);
+                    }
+                }
+            }
+        }
+    }
+
+    //找出adapter內的量測開始的時間 2021/06/24
+    public DateTime findTimeByMac(String bleMac){
+        if (dataList.size() != 0){
+            for(int i = 0; i < dataList.size();i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                    if(data.getMac().equals(bleMac)){
+                        return data.getAlertDateTime();
+                    }
+                }
+            }
+        }
+        return DateTime.now();
+    }
+
     //找出adapter內的user Name 2021/04/28
     public String findNameByMac(String bleMac){
         if (dataList.size() != 0){
@@ -87,6 +118,21 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             }
         }
             return null;
+    }
+
+    //找出adapter內的targetId 2021/05/21
+    public int findTargetIdByMac(String bleMac){
+        if (dataList.size() != 0){
+            for(int i = 0; i < dataList.size();i++){
+                TempDataApi.SuccessBean data = dataList.get(i);
+                if(!TextUtils.isEmpty(data.getMac())){
+                    if(data.getMac().equals(bleMac)){
+                        return data.getTargetId();
+                    }
+                }
+            }
+        }
+     return 0;
     }
 
     //找出adapter內的Device Name 2021/05/21
@@ -116,7 +162,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                         data.setBattery(battery + "%");
                         data.setDegree(degree, currentDateTime); //溫度與日期
                         notifyItemChanged(i); //刷新
-//                       updateBefore(mac, data.getTargetId());
+                        //updateBefore(mac);
                     }
                }
             }
@@ -232,6 +278,14 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                 listener.onSymptomRecord(data, position);
             }
         });
+
+        //服藥時間
+        holder.pillRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onPillRecord(data, position);
+            }
+        });
     }
 
     @Override
@@ -249,6 +303,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         void onBleDisConnected(TempDataApi.SuccessBean data);
         void onSymptomRecord(TempDataApi.SuccessBean data, int position);
         void passTarget(int targetId, double degree);
+        void onPillRecord(TempDataApi.SuccessBean data, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -260,6 +315,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         TextView textBleBattery;
         ImageView bleConnect, bleChart;
         ImageView SymptomIcon;
+        ImageView pillRecord;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -273,6 +329,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             bleConnect = itemView.findViewById(R.id.imgBleConnect);
             bleChart = itemView.findViewById(R.id.imgBleChart);
             SymptomIcon = itemView.findViewById(R.id.ivSymIcon);
+            pillRecord = itemView.findViewById(R.id.iv_input_pill);
         }
     }
 }

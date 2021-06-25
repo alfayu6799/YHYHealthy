@@ -450,4 +450,8 @@
     <string name="please_pick_time">請選擇服藥時間</string>
     <string name="please_input_drug">請輸入藥名</string>
     <string name="please_input_dosage">請輸入劑量</string>
+    <string name="pill_record">添加服藥紀錄</string>
+    <string name="pill_time">時間</string>
+    <string name="pill_name">藥名</string>
+    <string name="pill_dose">劑量</string>
 </resources>

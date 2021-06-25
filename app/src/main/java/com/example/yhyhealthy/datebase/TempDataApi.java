@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,12 +99,14 @@ public class TempDataApi {
         }
 
         //以下是本地端的
-        private double degree;       //體溫
-        private String Status;       //連線狀態
-        private String battery;      //電量
-        private String mac;         //ble's mac
-        private String deviceName;  //ble's name
+        private double degree;       //ble 體溫
+        private String Status;       //ble 連線狀態
+        private String battery;      //ble 電量
+        private String mac;          //ble mac
+        private String deviceName;   //ble name
         private List<Degree> degreeList = new ArrayList<>();
+
+        private DateTime alertDateTime; //2021/06/24 紀錄時間
 
         public void setDegree(double degree , String date){
             this.degree = degree;
@@ -152,6 +156,14 @@ public class TempDataApi {
 
         public void setDeviceName(String deviceName) {
             this.deviceName = deviceName;
+        }
+
+        public DateTime getAlertDateTime() {
+            return alertDateTime;
+        }
+
+        public void setAlertDateTime(DateTime alertDateTime) {
+            this.alertDateTime = alertDateTime;
         }
     }
 
