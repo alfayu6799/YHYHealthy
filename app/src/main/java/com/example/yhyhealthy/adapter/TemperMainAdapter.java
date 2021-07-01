@@ -235,15 +235,15 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                     }
                 });
             }else if (data.getStatus().contains(bleConnect)){ //已連線
-                if(holder.textBleBattery.getText().toString().isEmpty()) {
-                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
-                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                        @Override  //開始量測(play icon show)
-                        public void onClick(View view) {
-                            listener.onBleMeasuring(data);
-                        }
-                    });
-                }else {  //disconnect icon show
+//                if(holder.textBleBattery.getText().toString().isEmpty()) {
+//                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
+//                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+//                        @Override  //開始量測(play icon show)
+//                        public void onClick(View view) {
+////                            listener.onBleMeasuring(data);
+//                        }
+//                    });
+////                }else {  //disconnect icon show
                     holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -251,7 +251,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                             listener.onBleDisConnected(data);
                         }
                     });
-                }
+//                }
             }
         }else {
             //啟動藍芽連線

@@ -196,6 +196,9 @@ public class ApiProxy {
     public static boolean userSetting = false;       //使用者設定
     public static String  accountInfo = "";          //使用者帳戶
 
+    //covid-19疫苗
+    public static String covid19Select ="";        //covid19疫苗
+
     //註冊專用Authorization token
     private static final String REGISTER_AUTH_CODE = "$2a$10$x42hx/UBe.PxFEoAk0RyuO0ImZ4h71hptmgvIF1sRZxA1HFqjJUAK";
 

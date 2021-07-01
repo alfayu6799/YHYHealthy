@@ -76,14 +76,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:buttonTint="@color/black"
+            android:buttonTint="@color/white"
             android:text="@string/email"/>
         <RadioButton
             android:id="@+id/rtoBtnPhone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:buttonTint="@color/black"
+            android:buttonTint="@color/white"
             android:text="@string/phone"/>
     </RadioGroup>
     <com.google.android.material.textfield.TextInputLayout

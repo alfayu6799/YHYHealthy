@@ -85,6 +85,7 @@ public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.Vi
 
     private Dictionary getDictionary() {
         Dictionary dictionary = new Hashtable();
+        dictionary.put("fever",context.getString(R.string.fever));
         dictionary.put("headache", context.getString(R.string.headache));
         dictionary.put("fatigue",context.getString(R.string.fatigue));
         dictionary.put("soreMusclesJoints",context.getString(R.string.soreMusclesJoints));
@@ -96,7 +97,7 @@ public class SwitchItemAdapter extends RecyclerView.Adapter<SwitchItemAdapter.Vi
         dictionary.put("shortnessBreath",context.getString(R.string.shortnessBreath));
         dictionary.put("taste",context.getString(R.string.taste));
         dictionary.put("vomiting",context.getString(R.string.vomiting));
-
+        dictionary.put("chills",context.getString(R.string.chills));
         return dictionary;
     }
 }

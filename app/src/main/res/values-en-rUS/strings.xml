@@ -403,6 +403,7 @@
     <string name="chart_measure_start">Start</string>
     <string name="chart_measure_end">End</string>
     <string name="symptom_vaccine">Vaccination</string>
+    <string name="fever">Fever</string>
     <string name="headache">Headache</string>
     <string name="fatigue">Fatigue</string>
     <string name="soreMusclesJoints">Sore Muscles Joints</string>
@@ -414,6 +415,7 @@
     <string name="shortnessBreath">Shortness Breath</string>
     <string name="taste">Taste</string>
     <string name="vomiting">Vomiting</string>
+    <string name="chills">Chills</string>
     <string name="symptom_sputum">Sputum</string>
     <string name="symptom_nose">Nose</string>
     <string name="symptom_color">Color</string>
@@ -433,7 +435,7 @@
     <string name="symptom_brown">Brown</string>
     <string name="symptom_black">Black</string>
     <string name="symptom_waterLike">Water Like</string>
-    <string name="symptom_stickyPus">Sticky Pus</string>
+    <string name="symptom_mucopurulent">Mucopurulent</string>
     <string name="coming_soon">Coming Soon</string>
     <string name="user_cancel_search">user cancel search</string>
     <string name="your_chose_function_is">You choose function is :</string>
@@ -465,4 +467,23 @@
     <string name="pill_time">Time</string>
     <string name="pill_name">Medication Name</string>
     <string name="pill_dose">Dose</string>
+    <string name="symptom_other">Other</string>
+    <string name="input_other_symptom">Please input other side effect</string>
+    <string name="vaccine_name">Vaccine Name</string>
+    <string name="pain_site">Vaccine Pain Site</string>
+    <string name="swelling_redness">Swelling Redness</string>
+    <string name="vaccine_other_Brand">Other Brand</string>
+    <string name="other_brand">Other Brand</string>
+    <string name="vaccine_bnt">BNT</string>
+    <string name="vaccine_az">AZ</string>
+    <string name="vaccine_sinopharm">Sinopharm</string>
+    <string name="vaccine_sinovac">Sinovac</string>
+    <string name="vaccine_novavax">Novavax</string>
+    <string name="vaccine_johnson">Johnson</string>
+    <string name="vaccine_moderna">Moderna</string>
+    <string name="covid19">Covid-19</string>
+    <string name="service_is_not_respond">Service is done for minutes</string>
+    <string name="symptom_bloody">Bloody</string>
+    <string name="symptom_foulSmelling">FoulSmelling</string>
+    <string name="symptom_wateryBloody">WateryBloody</string>
 </resources>

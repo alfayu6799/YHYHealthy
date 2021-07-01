@@ -45,7 +45,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -71,16 +70,149 @@
                     android:textOff="@string/off"
                     android:checked="false"/>
             </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvVaccination"
+            <LinearLayout
+                android:id="@+id/ly_Vaccination"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="500dp"/>
+                android:layout_height="430dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="8dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/txt_vaccine_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/black"
+                        android:text="@string/vaccine_name"/>
+                    <EditText
+                        android:id="@+id/edt_vaccine_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:hint="@string/vaccine_name"/>
+                </LinearLayout>
+                <!-- 新冠疫苗 (國內) -->
+                <LinearLayout
+                    android:id="@+id/ly_covid19_vaccine"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_covid_select"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/covid19"
+                        android:textSize="22dp"
+                        android:textColor="@color/black"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSymptom19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <!-- 新冠疫苗 (來源不知) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/txt_vaccine_other_Brand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/black"
+                        android:text="@string/vaccine_other_Brand"/>
+                    <EditText
+                        android:id="@+id/edt_vaccine_other_Brand"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:hint="@string/vaccine_other_Brand"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_vaccine_pain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/vaccine_name"/>
+                    <Switch
+                        android:id="@+id/sw_pain_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:padding="8dp"
+                        android:text="Switch"
+                        android:layout_weight="0.7"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_vaccine_swell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/vaccine_name"/>
+                    <Switch
+                        android:id="@+id/sw_swelling_redness"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:text="Switch"
+                        android:padding="8dp"
+                        android:layout_weight="0.7"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSymptomUp"
                 android:layout_width="match_parent"
-                android:layout_height="550dp" />
+                android:layout_height="650dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/txt_key_other"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/symptom_other"
+                    android:textColor="@color/black"/>
+
+                <EditText
+                    android:id="@+id/edt_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="@string/input_other_symptom" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSymptomDown"

@@ -394,6 +394,7 @@
     <string name="edit_observation_info">修改觀測者</string>
     <string name="chart_measure_start">開始</string>
     <string name="chart_measure_end">結束</string>
+    <string name="fever">發燒</string>
     <string name="headache">頭痛</string>
     <string name="fatigue">疲勞</string>
     <string name="soreMusclesJoints">肌肉痠痛</string>
@@ -405,6 +406,7 @@
     <string name="shortnessBreath">呼吸急促</string>
     <string name="taste">味覺</string>
     <string name="vomiting">嘔吐</string>
+    <string name="chills">畏寒</string>
     <string name="symptom_sputum">痰</string>
     <string name="symptom_nose">鼻涕</string>
     <string name="symptom_color">顏色</string>
@@ -424,7 +426,7 @@
     <string name="symptom_brown">褐色</string>
     <string name="symptom_black">黑色</string>
     <string name="symptom_waterLike">水樣狀</string>
-    <string name="symptom_stickyPus">黏膿</string>
+    <string name="symptom_mucopurulent">黏膿</string>
     <string name="coming_soon">近請期待</string>
     <string name="user_cancel_search">使用者自行取消搜尋功能</string>
     <string name="your_chose_function_is">您選擇的功能是:</string>
@@ -454,4 +456,23 @@
     <string name="pill_time">時間</string>
     <string name="pill_name">藥名</string>
     <string name="pill_dose">劑量</string>
+    <string name="symptom_other">其他</string>
+    <string name="input_other_symptom">請輸入其他症狀</string>
+    <string name="vaccine_name">疫苗名稱</string>
+    <string name="pain_site">接種部位疼痛</string>
+    <string name="swelling_redness">接種部位紅腫</string>
+    <string name="vaccine_other_Brand">其他廠牌</string>
+    <string name="other_brand">其他廠牌</string>
+    <string name="vaccine_bnt">輝瑞</string>
+    <string name="vaccine_az">AZ</string>
+    <string name="vaccine_sinopharm">國藥</string>
+    <string name="vaccine_sinovac">科興</string>
+    <string name="vaccine_novavax">諾瓦瓦克斯</string>
+    <string name="vaccine_johnson">嬌生</string>
+    <string name="vaccine_moderna">莫德納</string>
+    <string name="covid19">Covid-19疫苗</string>
+    <string name="service_is_not_respond">後端系統開小差,請稍後再試</string>
+    <string name="symptom_bloody">血絲血痰</string>
+    <string name="symptom_foulSmelling">臭味</string>
+    <string name="symptom_wateryBloody">流血水樣</string>
 </resources>

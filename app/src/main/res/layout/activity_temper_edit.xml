@@ -122,14 +122,14 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/rdFemale1"
-                android:buttonTint="@color/black"
+                android:buttonTint="@color/white"
                 android:text="@string/female"/>
             <RadioButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/rdMale1"
-                android:buttonTint="@color/black"
+                android:buttonTint="@color/white"
                 android:text="@string/male"/>
         </RadioGroup>
         <TextView
