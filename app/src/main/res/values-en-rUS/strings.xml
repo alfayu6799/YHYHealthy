@@ -486,4 +486,5 @@
     <string name="symptom_bloody">Bloody</string>
     <string name="symptom_foulSmelling">FoulSmelling</string>
     <string name="symptom_wateryBloody">WateryBloody</string>
+    <string name="ble_is_sleep">sleep</string>
 </resources>

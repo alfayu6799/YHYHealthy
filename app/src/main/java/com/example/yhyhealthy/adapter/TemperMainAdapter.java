@@ -207,7 +207,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TempDataApi.SuccessBean data = dataList.get(position);
         holder.textName.setText(data.getUserName());                 //姓名
-        holder.textBleStatus.setText(data.getStatus());              //連線狀態
+        holder.textBleStatus.setText(data.getDeviceName());          //藍芽裝置名稱
         holder.textBleBattery.setText(data.getBattery());            //電量
         holder.textDegree.setText(String.valueOf(data.getDegree())); //體溫
 
@@ -221,6 +221,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         if (data.getStatus() != null){
             String bleConnect = context.getString(R.string.ble_connect_status);
             String bleUnConnect = context.getString(R.string.ble_unconnected);
+//            String bleSleepConnect = context.getString(R.string.ble_is_sleep);
 
             //斷線先判斷
             if (data.getStatus().contains(bleUnConnect)){
@@ -235,23 +236,23 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                     }
                 });
             }else if (data.getStatus().contains(bleConnect)){ //已連線
-//                if(holder.textBleBattery.getText().toString().isEmpty()) {
-//                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
-//                    holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-//                        @Override  //開始量測(play icon show)
-//                        public void onClick(View view) {
-////                            listener.onBleMeasuring(data);
-//                        }
-//                    });
-////                }else {  //disconnect icon show
-                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
+                if(holder.textBleBattery.getText().toString().isEmpty()) {
+                    holder.bleConnect.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
                     holder.bleConnect.setOnClickListener(new View.OnClickListener() {
-                        @Override
+                        @Override  //開始量測(play icon show)
                         public void onClick(View view) {
-                            listener.onBleDisConnected(data);
+                            listener.onBleMeasuring(data);
                         }
                     });
-//                }
+                }else {  //disconnect icon show
+                holder.bleConnect.setImageResource(R.drawable.ic_baseline_close_24);
+                holder.bleConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onBleDisConnected(data);
+                    }
+                });
+                }
             }
         }else {
             //啟動藍芽連線
@@ -292,9 +293,6 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
     public int getItemCount() {
         return dataList.size();
     }
-
-
-
 
     public interface TemperMainListener {
         void onBleConnect(TempDataApi.SuccessBean data, int position);

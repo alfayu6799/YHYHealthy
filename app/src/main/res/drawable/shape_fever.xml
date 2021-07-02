@@ -8,7 +8,7 @@
     <corners android:radius="0dp" />
     <!-- 邊框線 -->
     <stroke
-        android:width="20dp"
+        android:width="10dp"
         android:color="@color/fever_color"
         android:dashGap="0dp"
         android:dashWidth="0dp" />

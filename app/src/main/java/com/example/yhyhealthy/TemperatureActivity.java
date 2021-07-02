@@ -78,6 +78,7 @@ import java.util.List;
 import es.dmoral.toasty.Toasty;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
+import static com.example.yhyhealthy.module.ApiProxy.FEVER_RECORD;
 import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_ADD;
 import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_LIST;
 import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
@@ -117,9 +118,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private final Handler mHandler = new Handler();
     private AlertDialog alertDialog;
     //2021/07/01
-    private BluetoothLeScanner mBluetoothLeScanner;
-    private List<ScanFilter> filters;
-    private ScanSettings settings;
+//    private BluetoothLeScanner mBluetoothLeScanner;
+//    private List<ScanFilter> filters;
+//    private ScanSettings settings;
 
      //藍芽連線
      private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
@@ -194,11 +195,11 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             mBluetoothAdapter.enable();   //自動啟動藍芽
 
         //2021/07/01
-        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        settings = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-                .build();
-        filters = new ArrayList<ScanFilter>();
+//        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+//        settings = new ScanSettings.Builder()
+//                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+//                .build();
+//        filters = new ArrayList<ScanFilter>();
         /**開始掃描*/
         dialogBleConnect();
     }
@@ -230,19 +231,19 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
+                    //mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
                     Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
-            mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
+            //mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
             findDevice.clear();
             tempAdapter.clearDevice();
         }else {
             isScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            mBluetoothLeScanner.stopScan(mScanCallback);   //2021/07/01
+            //mBluetoothLeScanner.stopScan(mScanCallback);   //2021/07/01
         }
 
         Button btnCancel = view.findViewById(R.id.btnBleCancel);
@@ -264,9 +265,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            Log.d(TAG, "onScanResult1: " + callbackType);
-            Log.d(TAG, "onScanResult2: " + result.toString());
+            //Log.d(TAG, "onScanResult1: " + callbackType);
+            //Log.d(TAG, "onScanResult2: " + result.toString());
             BluetoothDevice btDevice = result.getDevice();
+//            if (btDevice != null){
+//                if ()
+//            }
         }
 
         @Override
@@ -343,7 +347,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         public void onItemClick(ScannedData selectedDevice) {
 
             mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
-            mBluetoothLeScanner.stopScan(mScanCallback);  //停止搜尋
+//            mBluetoothLeScanner.stopScan(mScanCallback);  //停止搜尋
 
             //啟動ble server連線
 //            Log.d(TAG, "onItemClick: " + selectedDevice.getAddress());
@@ -656,7 +660,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             statusMemberBean.setDeviceName(deviceName);
             tAdapter.updateItem(statusMemberBean, statusPosition);
 
-            secondTimerCreator(deviceAddress); //連線後-啟動5秒read 2021/07/01
+            //secondTimerCreator(deviceAddress); //連線後-啟動5秒read 2021/07/01
         }
     }
 
@@ -691,14 +695,14 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 Toasty.warning(TemperatureActivity.this, userName + getString(R.string.under_25_degree),Toast.LENGTH_SHORT, true).show();
             }
 
-//            DateTime measureStartTime = tAdapter.findTimeByMac(macAddress);  //取得量測開始時的時間
-//            DateTime dateTime = new DateTime(new Date());                    //現在時間
-//
-//            //高燒37.5以上+量測時間開始後超過5分鐘才顯示警告dialog 2021/06/25
-//            if ((dateTime.isAfter(measureStartTime.plusSeconds(301)) && degree > 35)){
-//                feverDialog(tAdapter.findNameByMac(macAddress), degree, tAdapter.findTargetIdByMac(macAddress), macAddress);
-//                startAlarm(); //啟動循環撥放音效
-//            }
+            DateTime measureStartTime = tAdapter.findTimeByMac(macAddress);  //取得量測開始時的時間
+            DateTime dateTime = new DateTime(new Date());                    //現在時間
+
+            //高燒37.5以上+量測時間開始後超過5分鐘才顯示警告dialog 2021/06/25
+            if ((dateTime.isAfter(measureStartTime.plusSeconds(301)) && degree > 35)){
+                feverDialog(tAdapter.findNameByMac(macAddress), degree, tAdapter.findTargetIdByMac(macAddress), macAddress);
+                startAlarm(); //啟動循環撥放音效
+            }
         }
     }
 
@@ -751,7 +755,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                      Toasty.error(TemperatureActivity.this, getString(R.string.please_input_dosage), Toast.LENGTH_SHORT, true).show();
 
                  //資料齊全後上傳到後端去
-                 updateFeverDrugToApi(edtDrugTime.getText().toString(), edtDrugName.getText().toString(), edtDrugDosage.getText().toString(), targetId);
+                 updateMedicineRecordToApi(edtDrugName.getText().toString(), edtDrugDosage.getText().toString(), targetId);
              }
          });
 
@@ -770,11 +774,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         dialog.show();
      }
-
-    //發燒用藥上傳到後端去
-    private void updateFeverDrugToApi(String drugTime, String drugName, String drugDoes, int targetId) {
-
-    }
 
     //command 0
     private void sendCommand(String deviceAddress) {
@@ -885,18 +884,14 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 case yhyBleService.ACTION_DATA_AVAILABLE:
                     Log.d(TAG, "onReceive: ACTION_DATA_AVAILABLE" + ByteUtils.byteArrayToString(data));
                     String receiveInfo = ByteUtils.byteArrayToString(data);
-                    if (receiveInfo.contains("AT+DISCONNECT")){
-                        Log.d(TAG, "onReceive: ble is disconnect!"); //藍芽斷開
-
-                    }else {
-                        updateBleData(receiveInfo, macAddress);
-                    }
-                    //DecimalFormat df = new DecimalFormat("#.##");
-//                    String[] str = receiveInfo.split(","); //以,分割
-//                    double degree = Double.parseDouble(str[2])/100;
-//                    double battery = Double.parseDouble(str[3]);
-//                    String batteryStr = df.format(battery);
-                    //updateBleData(receiveInfo, macAddress);
+                    //2021/07/01
+//                    if (receiveInfo.contains("AT+DISCONNECT")){
+//                        Log.d(TAG, "onReceive: ble is disconnect!"); //藍芽斷開
+//                        updateConnectedStatus(deviceName, macAddress, getString(R.string.ble_is_sleep));
+//                    }else {
+//                        updateBleData(receiveInfo, macAddress);
+//                    }
+                    updateBleData(receiveInfo, macAddress); //更新體溫跟電量
                     break;
 
                 default:
@@ -1136,9 +1131,20 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         ImageView closePill = view.findViewById(R.id.img_pill_close);
 
         pillTime.setOnClickListener(new View.OnClickListener() {  //時間選擇
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-
+                Calendar calendar = Calendar.getInstance();
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+                new TimePickerDialog(TemperatureActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        //Time小於10則加0
+                        pillTime.setText(new StringBuilder().append(hourOfDay < 10 ? "0" + hourOfDay : hourOfDay).append(":")
+                                .append(minute < 10 ? "0" + minute: minute));
+                    }
+                },hour,minute,false).show();
             }
         });
 
@@ -1159,7 +1165,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.error(TemperatureActivity.this, getString(R.string.please_input_dosage), Toast.LENGTH_SHORT, true).show();
 
                 //上傳到後端
-                updateMedicineRecordToApi(pillTime.getText().toString(), pillName.getText().toString(), pillDoes.getText().toString(), data.getTargetId());
+                updateMedicineRecordToApi(pillName.getText().toString(), pillDoes.getText().toString(), data.getTargetId());
             }
         });
 
@@ -1186,10 +1192,61 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         dialog.getWindow().setAttributes(layoutParams);
     }
 
-    //將使用者服藥的資訊上傳到後端
-    private void updateMedicineRecordToApi(String drugTime, String drugName, String drugDoes, int targetId) {
-        Log.d(TAG, "updateMedicineRecordToApi: targetId:" + targetId);
+    //將使用者服藥的資訊上傳到後端 2021/07/02
+    private void updateMedicineRecordToApi(String drugName, String drugDoes, int targetId) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("targetId", targetId);
+            json.put("medicine", drugName);
+            json.put("drugDose", drugDoes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        proxy.buildPOST(FEVER_RECORD, json.toString(), drugListener);
     }
+
+    private ApiProxy.OnApiListener drugListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
+                        }else if (errorCode == 23){ //token失效
+                            Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else {
+                            Toasty.error(TemperatureActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+
+        }
+    };
 
     @Override   //呼叫圖表interface
     public void onBleChart(TempDataApi.SuccessBean data) {
@@ -1227,7 +1284,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
          @Override
          public void run() {
              Log.d(TAG, "每5分鐘command: " + mac);
-             sendCommand6(mac);
+             sendCommand(mac);
              mHandler.postDelayed(this, 1000 * 60 *5);  //5分鐘
          }
      }
