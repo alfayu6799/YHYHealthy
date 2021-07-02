@@ -121,7 +121,7 @@ public class ApiProxy {
     public static String PERIOD_DELETE = MENSTRUAL_API + "DelPeriod";
 
     //衛教IP網址
-    private static final String URL_EDUCATION = "http://192.168.1.108:8080/yhyHe/";
+    private static final String URL_EDUCATION = "https://www.yhihc.com/test/yhyHe/";
 
     //衛教文章分類api
     public static String EDU_ART_CATALOG = "article/getNewItemAttr";

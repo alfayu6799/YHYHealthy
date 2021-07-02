@@ -18,6 +18,8 @@ import com.example.yhyhealthy.tools.SpacesItemDecoration;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.BlockingDeque;
+
 import static com.example.yhyhealthy.module.ApiProxy.EDU_ART_CATALOG;
 
 /******** ************
@@ -111,6 +113,7 @@ public class CatalogActivity extends AppCompatActivity {
 
     //將需要的text&icon填入
     private void parserResult(JSONObject result) {
+        Log.d(TAG, "parserResult: " + result.toString());
         educationData = EducationData.newInstance(result.toString());
         EducationAdapter adapter = new EducationAdapter(CatalogActivity.this, educationData.getServiceItemList());
         recyclerView.setAdapter(adapter);

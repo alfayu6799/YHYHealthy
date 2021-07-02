@@ -77,6 +77,7 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
 import static com.example.yhyhealthy.module.ApiProxy.FEVER_RECORD;
 import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_ADD;
@@ -699,7 +700,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             DateTime dateTime = new DateTime(new Date());                    //現在時間
 
             //高燒37.5以上+量測時間開始後超過5分鐘才顯示警告dialog 2021/06/25
-            if ((dateTime.isAfter(measureStartTime.plusSeconds(301)) && degree > 35)){
+            if ((dateTime.isAfter(measureStartTime.plusSeconds(301)) && degree > 37.5)){
                 feverDialog(tAdapter.findNameByMac(macAddress), degree, tAdapter.findTargetIdByMac(macAddress), macAddress);
                 startAlarm(); //啟動循環撥放音效
             }
@@ -924,8 +925,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
-        //proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
+        //Log.d(TAG, "updateDegreeValueToApi: " + object.toString());
+        proxy.buildPOST(BLE_USER_ADD_VALUE, object.toString(), addBleValueListener);
     }
 
     private ApiProxy.OnApiListener addBleValueListener = new ApiProxy.OnApiListener() {

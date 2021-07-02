@@ -92,6 +92,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
         //初始化觀測者資料
         initObserver();
 
+        //使用者資訊按鈕提示
+        btnFunction.setBackgroundResource(R.drawable.rectangle_button);
+        btnFunction.setTextColor(getResources().getColor(R.color.white));
+
         return view;
     }
 
