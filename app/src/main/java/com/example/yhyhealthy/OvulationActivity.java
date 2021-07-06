@@ -256,9 +256,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         int errorCode = jsonObject.getInt("errorCode");
                         if(errorCode == 0){
                             parserJson(result);
-                        }else if (errorCode == 23){  //token失效
-                            getNewToken(); //2021/05/25 for test
+                        }else if (errorCode == 23) {  //token失效
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){  //帳號重複登入
+                            Toasty.error(OvulationActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -532,8 +535,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
                     //關閉對話框
                     dialog.dismiss();
-                }else if (errorCode == 23){ //token失效
+                }else if (errorCode == 23) { //token失效
                     Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                    startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                    finish();
+                }else if (errorCode == 31){
+                    Toasty.error(OvulationActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                     startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                     finish();
                 }else {
@@ -585,8 +592,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
                             //關閉對話框
                             dialog.dismiss();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(OvulationActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -644,8 +655,12 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0) {
                             parserCycleData(result); //解析週期資料
-                        }else if (errorCode == 23){  //token失效
+                        }else if (errorCode == 23) {  //token失效
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(OvulationActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -822,13 +837,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         lastDayOfThisMonth = endLastMonth;
         initChartData();         //圖表範圍顯示
         widget.goToPrevious();  //上個月月曆
-    }
-
-    //取得新token  2021/05/25
-    private void getNewToken() {
-        //需要舊token資料
-        Log.d(TAG, "getNewToken: old token:" + authToken);
-        Log.d(TAG, "getNewToken: old scepterToken:" + scepterToken);
     }
 
     @Override

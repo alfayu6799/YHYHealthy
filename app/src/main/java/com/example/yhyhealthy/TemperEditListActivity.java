@@ -115,6 +115,10 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                             Toasty.error(TemperEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(TemperEditListActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -244,6 +248,10 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
                             adapter.notifyItemRemoved(pos);
                         }else if (errorCode == 23){ //token失效
                             Toasty.error(TemperEditListActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperEditListActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperEditListActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

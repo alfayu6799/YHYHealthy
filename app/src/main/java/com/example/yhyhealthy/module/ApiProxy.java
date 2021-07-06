@@ -42,6 +42,9 @@ public class ApiProxy {
 //    private static final String URL = "https://www.yhihc.com/services/";
     private static final String URL = "https://www.yhihc.com/test/";
 
+    //衛教IP網址
+    private static final String URL_EDUCATION = "https://www.yhihc.com/test/";
+
     //使用者api目錄
     private static final String USER_API = "allUser/users/";
 
@@ -120,20 +123,17 @@ public class ApiProxy {
     //刪除實際經期設定api
     public static String PERIOD_DELETE = MENSTRUAL_API + "DelPeriod";
 
-    //衛教IP網址
-    private static final String URL_EDUCATION = "https://www.yhihc.com/test/yhyHe/";
-
     //衛教文章分類api
-    public static String EDU_ART_CATALOG = "article/getNewItemAttr";
+    public static String EDU_ART_CATALOG = "yhyHe/article/getNewItemAttr";
 
     //衛教影片分類api
-    public static String EDU_VIDEO_CATALOG = "video/getNewItemAttr";
+    public static String EDU_VIDEO_CATALOG = "yhyHe/video/getNewItemAttr";
 
     //衛教文章api網址
-    public static String ARTICLE_LIST = "article/getNewList";
+    public static String ARTICLE_LIST = "yhyHe/article/getNewList";
 
     //衛教影片api網址
-    public static String VIDEO_LIST = "video/getNewList";
+    public static String VIDEO_LIST = "yhyHe/video/getNewList";
 
     //藍芽體溫api目錄
     public static final String BLE_TEMPERATURE_API = "allApp/aido/";
@@ -237,18 +237,6 @@ public class ApiProxy {
     }
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
-
-    //重新要Token
-    public void buildToken(String action, String body, OnApiListener listener){
-        RequestBody requestBody = RequestBody.create(JSON, body);
-        Request.Builder request = new Request.Builder();
-        request.url(URL + action);
-        request.post(requestBody);
-        request.addHeader(AUTHORIZATION, authToken);
-        request.addHeader(SCEPTER, scepterToken);
-        request.addHeader(SYSTEM,"6");    //當前所使用的app代碼
-        buildRequest(request.build(), listener);
-    }
 
     //衛教專用
     public void buildEdu(String action, String body, String language, OnApiListener listener){

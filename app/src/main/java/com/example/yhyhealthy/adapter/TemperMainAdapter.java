@@ -227,6 +227,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
             if (data.getStatus().contains(bleUnConnect)){
                 holder.textBleBattery.setText(""); //清除電池顯示 2021/04/26
                 holder.textDegree.setText("");     //清除溫度顯示 2021/04/26
+                holder.textBleStatus.setText("");  //清除藍芽名稱 2021/07/06
                 data.setBattery("");               //清除電池data 2021/04/26 for 判斷icon用
                 holder.bleConnect.setImageResource(R.drawable.ic_add_black_24dp);
                 holder.bleConnect.setOnClickListener(new View.OnClickListener() {

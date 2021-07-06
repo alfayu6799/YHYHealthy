@@ -67,8 +67,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
@@ -118,7 +120,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private BluetoothLeAdapter tempAdapter;
     private final Handler mHandler = new Handler();
     private AlertDialog alertDialog;
-    //2021/07/01
+    //2021/07/01 test
 //    private BluetoothLeScanner mBluetoothLeScanner;
 //    private List<ScanFilter> filters;
 //    private ScanSettings settings;
@@ -208,6 +210,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     /**BLE開始掃描*/
     @SuppressLint("NewApi")
     private void dialogBleConnect(){
+        Log.d(TAG, "dialogBleConnect: 開始搜尋藍芽設備");
         alertDialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.dialog_bleconnect, null);
@@ -232,19 +235,19 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    //mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
-                    Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
+//                    mBluetoothLeScanner.stopScan(mScanCallback);  //2021/07/01
+                    //Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-            //mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
+            mBluetoothAdapter.startLeScan(mLeScanCallback); 
+//            mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
             findDevice.clear();
             tempAdapter.clearDevice();
         }else {
             isScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            //mBluetoothLeScanner.stopScan(mScanCallback);   //2021/07/01
+//            mBluetoothLeScanner.stopScan(mScanCallback);   //2021/07/01
         }
 
         Button btnCancel = view.findViewById(R.id.btnBleCancel);
@@ -252,7 +255,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             @Override
             public void onClick(View view) {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
+                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
                 alertDialog.dismiss(); //關閉視窗
             }
         });
@@ -260,33 +263,35 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         alertDialog.show();
     }
 
-    /****2021/07/01 ***/
-    @SuppressLint("NewApi")
-    private ScanCallback mScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
-            //Log.d(TAG, "onScanResult1: " + callbackType);
-            //Log.d(TAG, "onScanResult2: " + result.toString());
-            BluetoothDevice btDevice = result.getDevice();
+//    /****2021/07/01 bluetooth 搜尋回調 ***/
+//    @SuppressLint("NewApi")
+//    private ScanCallback mScanCallback = new ScanCallback() {
+//        @Override
+//        public void onScanResult(int callbackType, ScanResult result) {
+//            super.onScanResult(callbackType, result);
+//            BluetoothDevice btDevice = result.getDevice();
 //            if (btDevice != null){
-//                if ()
+//                if (findDevice.size() > 0){
+//                    if ( !findDevice.contains(btDevice)){
+//                        Log.d(TAG, "onScanResult: " + btDevice);
+//                    }
+//                }
 //            }
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-            for (ScanResult sr : results){
-                Log.d(TAG, "onBatchScanResults: " + sr.toString());
-            }
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-            super.onScanFailed(errorCode);
-            Log.d(TAG, "onScanFailed: " + errorCode);
-        }
-    };
+//        }
+//
+//        @Override
+//        public void onBatchScanResults(List<ScanResult> results) {
+//            for (ScanResult sr : results){
+//                Log.d(TAG, "onBatchScanResults: " + sr.toString());
+//            }
+//        }
+//
+//        @Override
+//        public void onScanFailed(int errorCode) {
+//            super.onScanFailed(errorCode);
+//            Log.d(TAG, "onScanFailed: " + errorCode);
+//        }
+//    };
 
     /**顯示掃描到物件*/
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
@@ -389,8 +394,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             parserJson(result);
                         }else if (errorCode == 6){
                             Toasty.error(TemperatureActivity.this, getString(R.string.no_date), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -506,6 +515,10 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else if (errorCode == 6){ //查無資料
                             Toasty.info(TemperatureActivity.this, getString(R.string.account_is_no_data), Toast.LENGTH_SHORT, true).show();
                         }else {
@@ -586,8 +599,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             Toasty.error(TemperatureActivity.this, getString(R.string.you_select_account_is_no_data), Toast.LENGTH_SHORT, true).show();
                         }else if (errorCode == 32) {
                             Toasty.error(TemperatureActivity.this, getString(R.string.remote_account_auth_code_error), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -945,8 +962,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
                             Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -1038,8 +1059,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         if (errorCode == 0) {
                             Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             setAccountInfo();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -1223,8 +1248,12 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -1333,7 +1362,20 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
     }
 
-     @Override
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause:");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
      protected void onDestroy() {
          super.onDestroy();
          Log.d(TAG, "onDestroy:");

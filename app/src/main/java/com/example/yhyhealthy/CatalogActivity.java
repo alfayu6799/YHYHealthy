@@ -76,7 +76,7 @@ public class CatalogActivity extends AppCompatActivity {
         String language = getResources().getConfiguration().locale.getLanguage();
         String country = getResources().getConfiguration().locale.getCountry();
         String defaultLan = language + "-" + country;
-
+        Log.d(TAG, "initDate: " + EDU_ART_CATALOG);
         proxy.buildEdu(EDU_ART_CATALOG, "", defaultLan,requestListener);
     }
 

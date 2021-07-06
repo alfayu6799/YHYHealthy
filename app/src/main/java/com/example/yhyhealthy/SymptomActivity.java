@@ -181,8 +181,12 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
                             initSymptom(result);
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(SymptomActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(SymptomActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -475,8 +479,12 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
                         if (errorCode == 0) {
                             Toasty.success(SymptomActivity.this, R.string.update_success, Toast.LENGTH_SHORT, true).show();
                             finish(); //返回上一頁
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(SymptomActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(SymptomActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(SymptomActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

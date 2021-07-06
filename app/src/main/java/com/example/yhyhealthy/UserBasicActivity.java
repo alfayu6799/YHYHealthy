@@ -103,11 +103,14 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJson(result); //解析後台來的資料
-                        }else if (errorCode == 23){ //token失效 2021/05/11
+                        }else if (errorCode == 23) { //token失效 2021/05/11
                             Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
                             finish();
-                            //getNewToken(); //更新token
+                        }else if (errorCode == 31){
+                            Toasty.error(UserBasicActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(UserBasicActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -333,6 +336,10 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                             userSetting = true;  //使用者設定
                         }else if(errorCode == 23){ //token失效
                             Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserBasicActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {  //2021/05/11

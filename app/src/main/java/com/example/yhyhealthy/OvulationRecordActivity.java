@@ -100,8 +100,12 @@ public class OvulationRecordActivity extends AppCompatActivity {
                         int errorCode = jsonObject.getInt("errorCode");
                         if(errorCode == 0){
                             parserJson(result);
-                        }else if (errorCode == 23){  //token失效
+                        }else if (errorCode == 23) {  //token失效
                             Toasty.error(OvulationRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(OvulationRecordActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(OvulationRecordActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationRecordActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

@@ -192,6 +192,10 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                             Toasty.error(UserChangeVerifiActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if(errorCode == 31){
+                            Toasty.error(UserChangeVerifiActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class));
+                            finish();
                         }else {
                             Toasty.error(UserChangeVerifiActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -279,6 +283,10 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                                 finish();
                             }else if (errorCode == 23 ) {//token失效 2021/05/11
                                 Toasty.error(UserChangeVerifiActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                                startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
+                                finish();
+                            }else if (errorCode == 31 ) {//token失效 2021/05/11
+                                Toasty.error(UserChangeVerifiActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                                 startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
                                 finish();
                             }else {

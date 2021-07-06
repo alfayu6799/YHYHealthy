@@ -487,4 +487,5 @@
     <string name="symptom_foulSmelling">FoulSmelling</string>
     <string name="symptom_wateryBloody">WateryBloody</string>
     <string name="ble_is_sleep">sleep</string>
+    <string name="login_duplicate">Your account have been login , please login again.</string>
 </resources>

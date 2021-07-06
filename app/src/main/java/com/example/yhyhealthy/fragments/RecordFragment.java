@@ -126,8 +126,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
                             parser(result);
                         }else if (errorCode == 6){
                             Toasty.error(getActivity(), getString(R.string.no_date), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){  //token失效
+                        }else if (errorCode == 23) {  //token失效
                             Toasty.error(getActivity(), getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(getActivity(), LoginActivity.class)); //重新登入
+                            getActivity().finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(getActivity(), getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(getActivity(), LoginActivity.class)); //重新登入
                             getActivity().finish();
                         }else {

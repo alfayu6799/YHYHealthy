@@ -162,8 +162,12 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
                         if (errorCode == 0) {
                             Toasty.success(SystemAccountActivity.this, getString(R.string.auth_code_update_success), Toast.LENGTH_SHORT, true).show();
                             getAuthCodeFromApi(); //重新取得授權碼
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(SystemAccountActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){ //token失效
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
@@ -210,6 +214,10 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
                             authCode = jsonObject.getInt("success"); //將授權碼給予全域
                         }else if (errorCode == 23){
                             Toasty.error(SystemAccountActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){ //token失效
+                            Toasty.error(SystemAccountActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(SystemAccountActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

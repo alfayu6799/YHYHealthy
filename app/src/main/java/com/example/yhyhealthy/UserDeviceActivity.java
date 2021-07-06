@@ -116,8 +116,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJson(result);
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {
@@ -200,8 +204,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                             initData(); //裝置列表重刷
                         }else if (errorCode == 33){ //裝置序號錯誤
                                 Toasty.success(UserDeviceActivity.this, getString(R.string.device_no_error), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 23){  //token 失效
+                        }else if (errorCode == 23) {  //token 失效
                             Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {
@@ -261,8 +269,12 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
                         if (errorCode == 0){
                             Toasty.success(UserDeviceActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
                             initData(); //裝置列表重刷
-                        }else if (errorCode == 23 ){
+                        }else if (errorCode == 23 ) {
                             Toasty.error(UserDeviceActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserDeviceActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserDeviceActivity.this, LoginActivity.class));
                             finish();
                         }else {

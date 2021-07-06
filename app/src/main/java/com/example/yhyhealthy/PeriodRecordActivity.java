@@ -318,9 +318,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
                             parserPhotoId(result);  //2021/02/19
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31 ){
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT,true).show();
@@ -464,9 +468,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                             Toasty.success(PeriodRecordActivity.this,getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
                             setResult(RESULT_OK);
                             finish(); //回到前一頁
-                        }else if (errorCode == 23){ //token失效
+                        }else if (errorCode == 23) { //token失效
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
@@ -552,9 +560,13 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0){
                             parserJson(result);
-                        }else if (errorCode == 23){  //token失效
+                        }else if (errorCode == 23) {  //token失效
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class));
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(PeriodRecordActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(PeriodRecordActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {
                             Toasty.error(PeriodRecordActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();

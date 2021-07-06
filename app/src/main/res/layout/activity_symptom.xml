@@ -67,6 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
+                    android:theme="@style/SwitchTheme"
                     android:textOff="@string/off"
                     android:checked="false"/>
             </LinearLayout>
@@ -159,6 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:padding="8dp"
+                        android:theme="@style/SwitchTheme"
                         android:text="Switch"
                         android:layout_weight="0.7"/>
                 </LinearLayout>
@@ -182,6 +184,7 @@
                         android:layout_marginRight="8dp"
                         android:text="Switch"
                         android:padding="8dp"
+                        android:theme="@style/SwitchTheme"
                         android:layout_weight="0.7"/>
                 </LinearLayout>
             </LinearLayout>

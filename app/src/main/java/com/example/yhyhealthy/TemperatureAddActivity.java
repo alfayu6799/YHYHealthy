@@ -252,6 +252,10 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
                             Toasty.error(TemperatureAddActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureAddActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(TemperatureAddActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(TemperatureAddActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(TemperatureAddActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }

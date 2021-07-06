@@ -111,6 +111,8 @@ public class yhyBleService extends Service {
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            Log.d(TAG, "onConnectionStateChange: status:" + status);
+            Log.d(TAG, "onConnectionStateChange: newStatus:" + newState);
 
             BluetoothDevice device = gatt.getDevice();
             String address = device.getAddress();
@@ -149,7 +151,7 @@ public class yhyBleService extends Service {
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicRead: ???");
+            Log.d(TAG, "onCharacteristicRead:" + status);
             // 收到数据
             broadcastUpdate(ACTION_DATA_AVAILABLE, gatt);
         }
@@ -168,7 +170,6 @@ public class yhyBleService extends Service {
                 String[] str = result.split(","); //以,切割
                 String temp = str[2];
                 double degree = Double.parseDouble(temp)/100;  //25.0
-                //Log.d(TAG, "onCharacteristicChanged: " + degree + " device mac:" + gatt.getDevice().getAddress());
                 broadcastUpdate(ACTION_DATA_AVAILABLE, gatt, characteristic);
             }
         }

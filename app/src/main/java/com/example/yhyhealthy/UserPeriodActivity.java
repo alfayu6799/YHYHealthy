@@ -119,6 +119,10 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
                             finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
+                            finish();
                         }else {
                             Toasty.error(UserPeriodActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
@@ -342,6 +346,10 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                             menstrualSetting = true;  //經期設定
                         }else if (errorCode == 23){ //token失效 2021/05/11
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
+                            finish();
+                        }else if (errorCode == 31){
+                            Toasty.error(UserPeriodActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
                             finish();
                         }else {

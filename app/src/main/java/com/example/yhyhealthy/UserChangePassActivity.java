@@ -118,6 +118,10 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
                             Toasty.error(UserChangePassActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
                             finish();
+                        }else if(errorCode == 31){
+                            Toasty.error(UserChangePassActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(UserChangePassActivity.this, LoginActivity.class));
+                            finish();
                         }else {
                             Toasty.error(UserChangePassActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }
