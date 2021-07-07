@@ -488,4 +488,7 @@
     <string name="symptom_wateryBloody">WateryBloody</string>
     <string name="ble_is_sleep">sleep</string>
     <string name="login_duplicate">Your account have been login , please login again.</string>
+    <string name="search_device">Search Bluetooth</string>
+    <string name="ble_pair_list">Paired Devices</string>
+    <string name="ble_unpair_list">Discovery Devices</string>
 </resources>

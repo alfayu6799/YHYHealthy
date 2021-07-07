@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.yhyhealthy.LoginActivity;
 import com.example.yhyhealthy.R;
+import com.example.yhyhealthy.TemperatureActivity;
 import com.example.yhyhealthy.adapter.FunctionsAdapter;
 import com.example.yhyhealthy.adapter.ObserverAdapter;
 import com.example.yhyhealthy.datebase.TempDataApi;
@@ -39,6 +40,8 @@ import es.dmoral.toasty.Toasty;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
+import static com.example.yhyhealthy.module.ApiProxy.HISTORY_RECORD;
+import static com.example.yhyhealthy.module.ApiProxy.HISTORY_TARGET;
 
 /**   ***************
  * 歷史紀錄首頁
@@ -64,7 +67,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
     private RecyclerView recordResult;
 
-    private String selectObserver;
+    private int selectObserverId;
+    private String selectObserverName;
 
     //api
     private ApiProxy proxy;
@@ -99,9 +103,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
         return view;
     }
 
+    //初始化觀測者資料
     private void initObserver() {
         proxy = ApiProxy.getInstance();
-        proxy.buildPOST(BLE_USER_LIST, "", observerListListener);
+        proxy.buildPOST(HISTORY_TARGET, "" ,observerListListener);
     }
 
     private ApiProxy.OnApiListener observerListListener = new ApiProxy.OnApiListener() {
@@ -196,7 +201,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
     //檢查是否已先擇觀測者在進行日期選擇
     private void checkObserverOK() {
-        if (TextUtils.isEmpty(selectObserver)){
+        if (TextUtils.isEmpty(selectObserverName)){
             Toasty.info(getActivity(), getString(R.string.please_select_fun_and_date), Toast.LENGTH_SHORT, true).show();
         }else { //進行日期選擇
 //            Toasty.info(getActivity(),getString(R.string.you_are_chose_observer_is) + selectObserver, Toast.LENGTH_SHORT,true).show();
@@ -304,21 +309,84 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     private void updateToApi() {
         if (!TextUtils.isEmpty(startDay) && (!TextUtils.isEmpty(endDay))) {
             //將參數傳給後台並取資料回來
-            getObserverInfoFromApi(startDay, endDay, selectObserver);
+            getObserverInfoFromApi(startDay, endDay, selectObserverId, selectObserverName);
         }else {
             Toasty.info(getActivity(), getString(R.string.please_select_observer_date), Toast.LENGTH_SHORT, true).show();
         }
     }
 
     //將參數傳給後台並取資料回來
-    private void getObserverInfoFromApi(String startDay, String endDay, String selectObserver){
+    private void getObserverInfoFromApi(String startDay, String endDay, int targetId, String UserName){
         recordResult.setVisibility(View.GONE);
-        Log.d(TAG, "startDay: " + startDay + ",EndDay:" + endDay + ",userName:" + selectObserver);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("targetId", targetId);
+            json.put("startDate", startDay);
+            json.put("endDate",endDay);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildPOST(HISTORY_RECORD, json.toString(), getInfoListener);
+    }
+
+    private ApiProxy.OnApiListener getInfoListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            if(progressDialog == null){
+                progressDialog = ProgressDialog.show(getActivity(), getString(R.string.title_process), getString(R.string.process), true);
+            }else {
+                progressDialog.show();
+            }
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if (errorCode == 0){
+                            parserHistoryById(result);  //解析後台回復的資料
+                        }else if (errorCode == 23) {  //token失效
+                            Toasty.error(getActivity(), getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(getActivity(), LoginActivity.class)); //重新登入
+                            getActivity().finish();
+                        }else if (errorCode == 31){ //登入重複
+                            Toasty.error(getActivity(), getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
+                            startActivity(new Intent(getActivity(), LoginActivity.class)); //重新登入
+                            getActivity().finish();
+                        }else {
+                            Toasty.error(getActivity(), getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //
+    private void parserHistoryById(JSONObject result) {
+        Log.d(TAG, "歷史資料後台回: " + result.toString());
     }
 
     @Override
     public void onItemClick(TempDataApi.SuccessBean data) {
-        selectObserver = data.getUserName();
+        selectObserverId = data.getTargetId();   //使用者targetId
+        selectObserverName = data.getUserName(); //使用者名稱
     }
 
 }

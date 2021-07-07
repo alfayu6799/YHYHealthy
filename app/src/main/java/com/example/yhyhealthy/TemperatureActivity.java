@@ -6,30 +6,22 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -40,7 +32,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -67,15 +58,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import es.dmoral.toasty.Toasty;
 
@@ -120,6 +110,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private BluetoothLeAdapter tempAdapter;
     private final Handler mHandler = new Handler();
     private AlertDialog alertDialog;
+    //2021/07/06
+    private Button searchPairBle;
+
     //2021/07/01 test
 //    private BluetoothLeScanner mBluetoothLeScanner;
 //    private List<ScanFilter> filters;
@@ -167,6 +160,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
         txtUserInfoEdit = findViewById(R.id.tvEdit);
         selectedAccount = findViewById(R.id.btnChoseAccount);
+        searchPairBle = findViewById(R.id.btn_pair_bluetooth);
 
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
@@ -180,6 +174,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         addRemoteUser.setOnClickListener(this);
         txtUserInfoEdit.setOnClickListener(this);
         selectedAccount.setOnClickListener(this);
+        searchPairBle.setOnClickListener(this);
 
         supervise.setBackgroundResource(R.drawable.rectangle_button); //先顯示觀測Button
     }
@@ -197,12 +192,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if (!mBluetoothAdapter.isEnabled())
             mBluetoothAdapter.enable();   //自動啟動藍芽
 
-        //2021/07/01
-//        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-//        settings = new ScanSettings.Builder()
-//                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-//                .build();
-//        filters = new ArrayList<ScanFilter>();
         /**開始掃描*/
         dialogBleConnect();
     }
@@ -216,6 +205,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         View view = inflater.inflate(R.layout.dialog_bleconnect, null);
         RecyclerView bleRecyclerView = view.findViewById(R.id.rvBleScanView);
 
+//        View view = inflater.inflate(R.layout.dialog_ble_list, null);
+//        RecyclerView bleRecyclerView = view.findViewById(R.id.rv_ble_scan_view);
+
         /**設置Recyclerview列表*/
         tempAdapter = new BluetoothLeAdapter();
         bleRecyclerView.setAdapter(tempAdapter);
@@ -223,11 +215,28 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         bleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         alertDialog.setView(view);
-        alertDialog.setCancelable(false);
+        //alertDialog.setCancelable(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tempAdapter.OnItemClick(itemClick);
 
+        searchBleDevices(); //搜尋藍芽
+
+//        Button btnCancel = view.findViewById(R.id.btnBleCancel);
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
+//                alertDialog.dismiss(); //關閉視窗
+//            }
+//        });
+
+        alertDialog.show();
+    }
+
+    //藍芽搜尋 2021/07/06
+    private void searchBleDevices() {
         isScanning = true;
         if (isScanning){
             mHandler.postDelayed(new Runnable() {
@@ -235,63 +244,18 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//                    mBluetoothLeScanner.stopScan(mScanCallback);  //2021/07/01
                     //Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback); 
-//            mBluetoothLeScanner.startScan(filters,settings,mScanCallback);  //2021/07/01
+            mBluetoothAdapter.startLeScan(mLeScanCallback);
             findDevice.clear();
             tempAdapter.clearDevice();
         }else {
             isScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//            mBluetoothLeScanner.stopScan(mScanCallback);   //2021/07/01
         }
-
-        Button btnCancel = view.findViewById(R.id.btnBleCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
-                alertDialog.dismiss(); //關閉視窗
-            }
-        });
-
-        alertDialog.show();
     }
-
-//    /****2021/07/01 bluetooth 搜尋回調 ***/
-//    @SuppressLint("NewApi")
-//    private ScanCallback mScanCallback = new ScanCallback() {
-//        @Override
-//        public void onScanResult(int callbackType, ScanResult result) {
-//            super.onScanResult(callbackType, result);
-//            BluetoothDevice btDevice = result.getDevice();
-//            if (btDevice != null){
-//                if (findDevice.size() > 0){
-//                    if ( !findDevice.contains(btDevice)){
-//                        Log.d(TAG, "onScanResult: " + btDevice);
-//                    }
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onBatchScanResults(List<ScanResult> results) {
-//            for (ScanResult sr : results){
-//                Log.d(TAG, "onBatchScanResults: " + sr.toString());
-//            }
-//        }
-//
-//        @Override
-//        public void onScanFailed(int errorCode) {
-//            super.onScanFailed(errorCode);
-//            Log.d(TAG, "onScanFailed: " + errorCode);
-//        }
-//    };
 
     /**顯示掃描到物件*/
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
@@ -483,6 +447,10 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             case R.id.btnChoseAccount:   //遠端監控者-選擇帳號
                 setAccountInfo();        //先呼叫
                 showAccountDialog();
+                break;
+            case R.id.btn_pair_bluetooth:
+                Log.d(TAG, "onClick: pair blueTooth" );
+//                initBle();
                 break;
         }
     }
@@ -695,6 +663,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if (degree != 0){
             //將溫度電量及mac傳到Adapter
             tAdapter.updateItemByMac(degree, batteryStr, macAddress);
+
+            Log.d(TAG, "updateBleData: name:" + tAdapter.findNameByMac(macAddress)); //
+//            Log.d(TAG, "updateBleData,targetId: " + tAdapter.findTargetIdByMac(macAddress));
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
@@ -1096,7 +1067,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         //初始化藍芽
         initBle();
     }
-
 
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {

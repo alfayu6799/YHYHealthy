@@ -477,4 +477,7 @@
     <string name="symptom_wateryBloody">流血水樣</string>
     <string name="ble_is_sleep">sleep</string>
     <string name="login_duplicate">帳號重複登入,請重新登入</string>
+    <string name="search_device">搜尋藍芽設備</string>
+    <string name="ble_pair_list">配對裝置</string>
+    <string name="ble_unpair_list">其他裝置</string>
 </resources>

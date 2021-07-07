@@ -169,6 +169,8 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
+
+
     //得到的資料需要有targetId傳給後台
     public void updateBefore(String mac){
         for(int i = 0; i < dataList.size();i++){

@@ -147,6 +147,24 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline54"
         app:layout_constraintTop_toTopOf="@+id/guideline59" />
 
+    <!-- -->
+    <Button
+        android:id="@+id/btn_pair_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_round_button"
+        android:gravity="center"
+        android:text="@string/search_device"
+        android:textAllCaps="false"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline60"
+        app:layout_constraintEnd_toStartOf="@+id/guideline54"
+        app:layout_constraintTop_toTopOf="@+id/guideline59" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTempUser"
         android:layout_width="0dp"

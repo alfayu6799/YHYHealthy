@@ -38,8 +38,8 @@ public class ApiProxy {
     private static ApiProxy INSTANCE = null;
 
     //Api網址
-//    private static final String URL = "http://192.168.1.108:8080/"; //內部網路 還需要去network_security_config.xml改為true才可以使用
-//    private static final String URL = "https://www.yhihc.com/services/";
+//    private static final String URL = "http://192.168.1.144:8080/"; //內部網路 還需要去network_security_config.xml改為true才可以使用
+//    private static final String URL = "https://www.yhihc.co；m/services/";
     private static final String URL = "https://www.yhihc.com/test/";
 
     //衛教IP網址
@@ -182,6 +182,14 @@ public class ApiProxy {
 
     //高燒服藥紀錄
     public static String FEVER_RECORD = BLE_TEMPERATURE_API + "medicineRecord";
+
+    //歷史紀錄api目錄  2021/07/07
+    public static String HISTORY_API = "allApp/history/";
+
+    //歷史紀錄查詢觀測對象
+    public static String HISTORY_TARGET = HISTORY_API + "target";
+
+    public static String HISTORY_RECORD = HISTORY_API + "historyRecord";
 
     //教學影片
     public static String TEACHING_VIDEO = URL + "allPush/tutorial/video";
