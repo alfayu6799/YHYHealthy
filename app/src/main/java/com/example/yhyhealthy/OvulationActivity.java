@@ -76,8 +76,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private OneDayDecorator oneDayDecorator;
     private TextView menstruationPeriodDay;        //週期顯示TextView
     private String onClickDay;
-    private String firstDayOfThisMonth;
-    private String lastDayOfThisMonth;
+    private String firstDayOfThisMonth;            //月曆頁面第一天
+    private String lastDayOfThisMonth;             //月曆頁面最後一天
 
     private Button btnSetting; //經期設定click
     private Button btnEdit;    //經期編輯click
@@ -131,7 +131,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         cycleRecord = new CycleRecord();
         proxy = ApiProxy.getInstance();
 
-        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //起始日-5天
+        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //這個月的第一天往前推算前5天
         lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
 
         oneDayDecorator = new OneDayDecorator(this);
@@ -189,7 +189,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         widget.addDecorator(oneDayDecorator);
 
-        //經期月曆 (起始日&結束日)
+        //經期月曆 (起始日&結束日) 2021/07/09暫時變更起始日
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
 
         //自動檢查今天是否有資料 2021/02/25
@@ -324,7 +324,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         //根據基礎體溫結果得到的機率
         int btRate = record.getSuccess().getOvuRate().getBtRate();
         bodyDegreeRate.setRating(btRate);
-
     }
 
     //紀錄按鈕
@@ -345,7 +344,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //經期設定對話框
     private void showPeriod(String clickDay) {
-
 //        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
         if (clickDay == null){
             clickDay = String.valueOf(LocalDate.now()); //今天
@@ -596,7 +594,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
-                        }else if (errorCode == 31){
+                        }else if (errorCode == 31){ //重複登入
                             Toasty.error(OvulationActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                             finish();
@@ -623,6 +621,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //跟後端要資料來填滿月曆
     private void setCycleRecord(String startDay, String endDay) {
+        //2021/07/09 暫時將起始日移至更前面的日子
+
         JSONObject json = new JSONObject();
         try {
             json.put("startDate", startDay);
@@ -630,7 +630,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "setCycleRecord: " + startDay);
+        Log.d(TAG, "後台接受到的開始日: " + startDay + ",後台接受到的結束日:" + endDay);
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 

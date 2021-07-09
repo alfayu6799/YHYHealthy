@@ -369,13 +369,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void run() {
                     try {
-                        Log.d(TAG, "run: ???");
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             userSetting = true;    //使用者設定
-                            Log.d(TAG, "經期資料: " + menstrualSetting + ",婚姻狀況:" + maritalSetting);
                             //詢問使用者是否要填寫經期資料及婚姻資料 2021/07/08
                             if (!menstrualSetting || !maritalSetting){
                                 dialogPeriod();

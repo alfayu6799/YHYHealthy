@@ -154,8 +154,7 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
 
     //解析後台來的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "經期設定JSON解析: " + result.toString());
-
+//        Log.d(TAG, "經期設定JSON解析: " + result.toString());
         period = PeriodData.newInstance(result.toString());
 
         //週期長度
