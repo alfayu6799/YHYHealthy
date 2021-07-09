@@ -100,6 +100,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private RecyclerView remoteRecycle;
     private ArrayAdapter<String> arrayAdapter;
     private String accountInfoClicked;
+    private AlertDialog remoteDialog;
 
     //藍芽相關
     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -222,15 +223,16 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         searchBleDevices(); //搜尋藍芽
 
-//        Button btnCancel = view.findViewById(R.id.btnBleCancel);
-//        btnCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mBluetoothAdapter.stopLeScan(mLeScanCallback);
-//                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
-//                alertDialog.dismiss(); //關閉視窗
-//            }
-//        });
+        //取消搜尋按鈕
+        Button btnCancel = view.findViewById(R.id.btnBleCancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
+                alertDialog.dismiss(); //關閉視窗
+            }
+        });
 
         alertDialog.show();
     }
@@ -664,7 +666,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             //將溫度電量及mac傳到Adapter
             tAdapter.updateItemByMac(degree, batteryStr, macAddress);
 
-            Log.d(TAG, "updateBleData: name:" + tAdapter.findNameByMac(macAddress)); //
+            //Log.d(TAG, "updateBleData: name:" + tAdapter.findNameByMac(macAddress)); //
 //            Log.d(TAG, "updateBleData,targetId: " + tAdapter.findTargetIdByMac(macAddress));
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
@@ -964,7 +966,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     //遠端帳號新增彈跳視窗
     private void dialogRemote() {
-        AlertDialog remoteDialog = new AlertDialog.Builder(this).create();
+        remoteDialog = new AlertDialog.Builder(this).create();
         LayoutInflater remoteLayout = LayoutInflater.from(this);
         View remoteView = remoteLayout.inflate(R.layout.dialog_remote_add, null);
         remoteDialog.setView(remoteView);
@@ -1029,12 +1031,13 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                         int errorCode = object.getInt("errorCode");
                         if (errorCode == 0) {
                             Toasty.success(TemperatureActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT, true).show();
-                            setAccountInfo();
+                            remoteDialog.dismiss(); //2021/07/08
+                            setAccountInfo();       //刷新遠端帳號資料
                         }else if (errorCode == 23) { //token失效
                             Toasty.error(TemperatureActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();
-                        }else if (errorCode == 31){
+                        }else if (errorCode == 31){ //重複登入
                             Toasty.error(TemperatureActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(TemperatureActivity.this, LoginActivity.class)); //重新登入
                             finish();

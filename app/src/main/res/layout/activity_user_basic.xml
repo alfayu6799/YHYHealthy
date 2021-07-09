@@ -214,18 +214,16 @@
                     android:layout_marginLeft="8dp"
                     android:text="@string/setting_for_area_code"
                     android:textSize="@dimen/font_user_basic_account"/>
-                <EditText
-                    android:id="@+id/edtAreaCode"
+                <TextView
+                    android:id="@+id/tv_area_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="16dp"
                     android:gravity="right"
-                    android:ems="5"
-                    android:inputType="number"
-                    android:padding="10dp"
+                    android:textSize="18sp"
                     android:background="@null"
-                    android:hint="@string/please_input_area_code"/>
+                    android:text="@string/please_chose_area_code"/>
             </LinearLayout>
             <Space
                 android:layout_width="match_parent"

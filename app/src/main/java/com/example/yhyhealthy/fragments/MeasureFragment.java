@@ -1,5 +1,6 @@
 package com.example.yhyhealthy.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -64,15 +65,18 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.ivOvulation:
-                checkOvulationInfo(); //檢查設定
-                break;
+            case R.id.ivOvulation:     //排卵頁面
 
-            case R.id.ivTemperature:
+                //檢查經期和婚姻是否有設定
+                checkOvulationInfo();
+
+                break;
+            case R.id.ivTemperature:   //藍芽體溫頁面
                 Intent intent_t = new Intent(getActivity(), TemperatureActivity.class);
                 startActivity(intent_t);
                 break;
@@ -88,9 +92,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
             case R.id.ivGuid:  //教學影片
                 startActivity(new Intent(getActivity(), TeachVideoActivity.class));
-                break;
 
-            case R.id.ivStore:
+                break;
+            case R.id.ivStore:  //商城
                 startActivity(new Intent(getActivity(), ShoppingActivity.class));
                 break;
         }
@@ -99,12 +103,12 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     //檢查婚姻狀況與經期設定是否有設定完成
     private void checkOvulationInfo() {
         //判斷進入排卵功能必需的元素是否齊全
-        if (!maritalSetting) {  //婚姻狀態不齊全
-            startActivity(new Intent(getActivity(), UserMarriageActivity.class));
+        if (!userSetting) {  //個人資料設定不齊全
+            startActivity(new Intent(getActivity(), UserBasicActivity.class));
         } else if (!menstrualSetting) { //經期設定不齊全
             startActivity(new Intent(getActivity(), UserPeriodActivity.class));
-        }else if (!userSetting){  //個人資料設定不齊全
-            startActivity(new Intent(getActivity(), UserBasicActivity.class));
+        }else if (!maritalSetting){    //婚姻狀態不齊全
+            startActivity(new Intent(getActivity(), UserMarriageActivity.class));
         }else {
             startActivity(new Intent(getActivity(), OvulationActivity.class));
         }

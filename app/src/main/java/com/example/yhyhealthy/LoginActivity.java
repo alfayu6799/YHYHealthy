@@ -164,33 +164,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             JSONObject object = new JSONObject(result.toString());
             int errorCode = object.getInt("errorCode");
-            if(errorCode == 1) { //無此帳號或密碼錯誤...
+            if(errorCode == 1) {
+                //無此帳號或密碼錯誤...
                 Toasty.error(LoginActivity.this, getString(R.string.account_is_error), Toast.LENGTH_SHORT, true).show();
+
             }else if(errorCode == 6){
+                //查無資料
                 Toasty.error(LoginActivity.this, getString(R.string.account_is_no_data), Toast.LENGTH_SHORT, true).show();
-            }else if (errorCode == 34) { //尚未開通帳戶
-                showCompInfo();  //驗證碼輸入Dialog
-            }else if (errorCode == 0){ //登入成功
-                //因為success內容有三個重要資訊其排卵功能需要用到所以要解析json
-                JSONObject success = object.getJSONObject("success");
-                maritalSetting = success.getBoolean("maritalSet");      //婚姻狀況
-                menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
-                userSetting = success.getBoolean("userSet");            //使用者設定
 
-                accountInfo = account.getText().toString();                   //使用者帳戶
+                //尚未開通帳戶
+            }else if (errorCode == 34) {
+                //驗證碼輸入Dialog
+                showCompInfo();
 
-                //將帳號及密碼存到sharePref:自動登入使用  2021/06/21增加
-                pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
-                pref.edit().putString("PASSWORD", password.getText().toString())
-                        .putString("ACCOUNT", account.getText().toString())
-                        .apply();
+                //登入成功
+            }else if (errorCode == 0){
+                //將必要資訊寫入
+                writeInfo(object);
 
-                Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
-
-                //導至首頁
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }else {
                 Toasty.error(LoginActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
             }
@@ -198,6 +189,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
 
+    }
+
+    //將必要資訊寫入手機
+    private void writeInfo(JSONObject object) throws JSONException {
+        //因為success內容有三個重要資訊其排卵功能需要用到所以要先解析json
+        JSONObject success = object.getJSONObject("success");
+        maritalSetting = success.getBoolean("maritalSet");      //婚姻狀況
+        menstrualSetting = success.getBoolean("menstrualSet");  //經期設定
+        userSetting = success.getBoolean("userSet");            //使用者設定
+
+        accountInfo = account.getText().toString();                   //使用者帳戶
+
+        writeToShare(); //帳號及密碼寫到手機內
+
+        Toasty.success(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT, true).show();
+
+        //導至首頁
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void writeToShare() {
+        //將帳號及密碼存到sharePref:自動登入使用  2021/06/21增加
+        pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+        pref.edit().putString("PASSWORD", password.getText().toString())
+                .putString("ACCOUNT", account.getText().toString())
+                .apply();
     }
 
     //驗證碼輸入
@@ -262,8 +281,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         int errorCode = object.getInt("errorCode");
                         if(errorCode == 5){  //驗證碼不對
                             Toasty.error(LoginActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
-                        }else if (errorCode == 0){ //驗證成功
-                            Toasty.success(LoginActivity.this, getString(R.string.access_success), Toast.LENGTH_SHORT, true).show();
+
+                            //再次輸入驗證碼dialog
+                            showCompInfo();
+
+                        }else if (errorCode == 0){ //驗證碼驗證成功
+                            writeToShare();       //將帳號及密碼寫入share
+                            //自動登入
+                            autoLogin();
+
                         }else {
                             Toasty.error(LoginActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }

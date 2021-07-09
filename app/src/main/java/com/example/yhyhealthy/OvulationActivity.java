@@ -630,7 +630,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d(TAG, "setCycleRecord: " + startDay);
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -707,6 +707,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             boolean isFirstDay = dataList.get(i).isFirstDay();
             if (isFirstDay){
                 String day = dataList.get(i).getTestDate();
+                Log.d(TAG, "來自後台資料經期第一天: " + day);
                 list.add(day);
             }
 
@@ -752,15 +753,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //週期第幾天Fxn 2021/03/02
     @SuppressLint("SetTextI18n")
     private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
+        Log.d(TAG, "本月經期第一天: " + beginPeriodDay);
         if (TextUtils.isEmpty(beginPeriodDay)){
             menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
         }else {
             LocalDate begin = LocalDate.parse(beginPeriodDay);
             long numOfDays = ChronoUnit.DAYS.between(begin, choseDay);
-           if(numOfDays >= 0){
+            if(numOfDays >= 0){
                numOfDays = numOfDays + 1;
                menstruationPeriodDay.setText(getString(R.string.period_day) + " " + numOfDays + " " + getString(R.string.day));
-           }else {
+            }else {
                menstruationPeriodDay.setText(getString(R.string.period_day_out_order)); //超出本月份周期
            }
         }

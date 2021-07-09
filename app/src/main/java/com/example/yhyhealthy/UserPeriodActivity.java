@@ -344,14 +344,17 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
                         if (errorCode == 0){
                             Toasty.success(UserPeriodActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             menstrualSetting = true;  //經期設定
+                            //導引至婚姻狀況 2021/08/07
+                            startActivity(new Intent(UserPeriodActivity.this, UserMarriageActivity.class));
+                            finish(); //結束這個頁面
                         }else if (errorCode == 23){ //token失效 2021/05/11
                             Toasty.error(UserPeriodActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
-                            finish();
+                            finish(); //結束這個頁面
                         }else if (errorCode == 31){
                             Toasty.error(UserPeriodActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserPeriodActivity.this, LoginActivity.class)); //重新登入
-                            finish();
+                            finish(); //結束這個頁面
                         }else {
                             Toasty.error(UserPeriodActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
                         }

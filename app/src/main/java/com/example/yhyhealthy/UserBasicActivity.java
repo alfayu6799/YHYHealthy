@@ -35,6 +35,8 @@ import es.dmoral.toasty.Toasty;
 import static com.example.yhyhealthy.module.ApiProxy.RENEW_TOKEN;
 import static com.example.yhyhealthy.module.ApiProxy.USER_INFO;
 import static com.example.yhyhealthy.module.ApiProxy.USER_UPDATE;
+import static com.example.yhyhealthy.module.ApiProxy.maritalSetting;
+import static com.example.yhyhealthy.module.ApiProxy.menstrualSetting;
 import static com.example.yhyhealthy.module.ApiProxy.userSetting;
 
 /***** ****
@@ -45,8 +47,8 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     private static final String TAG = "UserBasicActivity";
 
     TextView accountInfo;
-    TextView genderInfo, birthday, BMIValue;
-    EditText accountName , accountMail, areaCode, phoneNo, bodyHeight, bodyWeight;
+    TextView genderInfo, birthday, BMIValue, areaCode;
+    EditText accountName , accountMail, phoneNo, bodyHeight, bodyWeight;
     ImageView back;
     Button buttonSave;
 
@@ -159,8 +161,14 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         birthday.setText(usersData.getSuccess().getBirthday());
         changeUserBasicInfoApi.setBirthday(usersData.getSuccess().getBirthday());
 
-        //國際區碼
-        areaCode.setText(usersData.getSuccess().getTelCode());
+        //國際區碼 2021/07/08
+        if (usersData.getSuccess().getTelCode().equals("CN")){
+            areaCode.setText(getString(R.string.china));
+            changeUserBasicInfoApi.setTelCode("CN");
+        }else if (usersData.getSuccess().getTelCode().equals("TW")){
+            areaCode.setText(getString(R.string.taiwan));
+            changeUserBasicInfoApi.setTelCode("TW");
+        }
 
         //電話號碼
         phoneNo.setText(usersData.getSuccess().getMobile());
@@ -193,7 +201,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         buttonSave = findViewById(R.id.btnSaveToApi);
         accountInfo = findViewById(R.id.textUserAccount);   //帳號不得變更
         accountName = findViewById(R.id.edtChangeName);     //變更名稱
-        accountName.setInputType(InputType.TYPE_NULL); //hide keyboard
+        accountName.setInputType(InputType.TYPE_NULL);      //hide keyboard
         accountName.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -203,20 +211,21 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        genderInfo = findViewById(R.id.textGender);        //性別
-        accountMail = findViewById(R.id.edtEmailAddress);  //信箱
-        birthday = findViewById(R.id.textBornDay);         //生日
-        areaCode = findViewById(R.id.edtAreaCode);         //國際區碼
-        phoneNo = findViewById(R.id.edtPhoneNumber);       //電話號碼
-        bodyHeight = findViewById(R.id.edtHeight);         //身高
-        bodyWeight = findViewById(R.id.editWeight);        //體重
+        genderInfo = findViewById(R.id.textGender);         //性別
+        accountMail = findViewById(R.id.edtEmailAddress);   //信箱
+        birthday = findViewById(R.id.textBornDay);          //生日
+        areaCode = findViewById(R.id.tv_area_code);         //國際區碼
+        phoneNo = findViewById(R.id.edtPhoneNumber);        //電話號碼
+        bodyHeight = findViewById(R.id.edtHeight);          //身高
+        bodyWeight = findViewById(R.id.editWeight);         //體重
         bodyWeight.addTextChangedListener(weightWatcher);   //體重Listener
-        BMIValue = findViewById(R.id.textBMI);             //BMI
+        BMIValue = findViewById(R.id.textBMI);              //BMI
 
         back.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
         genderInfo.setOnClickListener(this);              //性別onclick
         birthday.setOnClickListener(this);                //生日onclick
+        areaCode.setOnClickListener(this);
     }
 
     //體重Listener
@@ -244,7 +253,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.ivBackSetting6:
-                finish();
+                finish(); //回到上一頁
                 break;
             case R.id.textGender:
                 dialogGender(); //性別採用彈跳視窗
@@ -252,10 +261,41 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             case R.id.textBornDay:
                 dialogPickBirthday();
                 break;
+            case R.id.tv_area_code:  //國碼選擇
+                dialogAreaCode();    //彈跳視窗
+                break;
             case R.id.btnSaveToApi:
-                checkBeforeUpdate();
+                checkBeforeUpdate(); //儲存
                 break;
         }
+    }
+
+    //國碼選擇
+    private void dialogAreaCode() {
+        AlertDialog.Builder alertBuild = new AlertDialog.Builder(this);
+        alertBuild.setTitle(getString(R.string.please_chose_area_code));
+        String[] areaCodeItems = { getString(R.string.china) , getString(R.string.taiwan)};
+        int itemChecked = -1;
+        alertBuild.setSingleChoiceItems(areaCodeItems, itemChecked, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch ((which)){
+                    case 0:
+                        areaCode.setText(getString(R.string.china));
+                        changeUserBasicInfoApi.setTelCode("CN");
+                        dialog.dismiss();
+                        break;
+                    case 1:
+                        areaCode.setText(getString(R.string.taiwan));
+                        changeUserBasicInfoApi.setTelCode("TW");
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        AlertDialog alertDialog = alertBuild.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     //更新前要先檢查資料是否齊全
@@ -301,7 +341,7 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
         //信箱
         changeUserBasicInfoApi.setEmail(accountMail.getText().toString());
         //國際區碼
-        changeUserBasicInfoApi.setTelCode(areaCode.getText().toString());
+        //changeUserBasicInfoApi.setTelCode(areaCode.getText().toString());
         //手機號碼
         changeUserBasicInfoApi.setMobile(phoneNo.getText().toString());
         //身高
@@ -329,11 +369,20 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
                 @Override
                 public void run() {
                     try {
+                        Log.d(TAG, "run: ???");
                         JSONObject object = new JSONObject(result.toString());
                         int errorCode = object.getInt("errorCode");
                         if(errorCode == 0){
                             Toasty.success(UserBasicActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
-                            userSetting = true;  //使用者設定
+                            userSetting = true;    //使用者設定
+                            Log.d(TAG, "經期資料: " + menstrualSetting + ",婚姻狀況:" + maritalSetting);
+                            //詢問使用者是否要填寫經期資料及婚姻資料 2021/07/08
+                            if (!menstrualSetting || !maritalSetting){
+                                dialogPeriod();
+                            }else {
+                                startActivity(new Intent(UserBasicActivity.this, MainActivity.class));
+                                finish();  //結束這個頁面
+                            }
                         }else if(errorCode == 23){ //token失效
                             Toasty.error(UserBasicActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserBasicActivity.this, LoginActivity.class)); //重新登入
@@ -363,6 +412,35 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
             progressDialog.dismiss();
         }
     };
+
+    //2021/07/08 增加詢問使用者是否需要使用排卵紀錄
+    private void dialogPeriod() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.need_some_info_for_period);
+        String[] choseItem = {getString(R.string.on) ,getString(R.string.off)};
+        int choseItemClicked = -1;
+        builder.setSingleChoiceItems(choseItem, choseItemClicked, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int witch) {
+                switch (witch){
+                    case 0: //否:主頁面
+                        dialog.dismiss();
+                        startActivity(new Intent(UserBasicActivity.this, MainActivity.class));
+                        finish();
+                        break;
+                    case 1: //是:導引至經期設定頁面 2021/08/07
+                        dialog.dismiss();
+                        startActivity(new Intent(UserBasicActivity.this, UserPeriodActivity.class));
+                        finish(); //結束這個頁面
+                        break;
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
 
     //出生年月日彈跳視窗選擇
     private void dialogPickBirthday() {

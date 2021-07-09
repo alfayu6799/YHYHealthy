@@ -319,8 +319,8 @@
     <string name="black">黑色</string>
     <string name="Sticky">沾黏狀</string>
     <string name="blood_water">流血水樣</string>
-    <string name="off">No</string>
-    <string name="on">Yes</string>
+    <string name="off">是</string>
+    <string name="on">否</string>
     <string name="measure_done">量測完畢</string>
     <string name="degree_alarm">37.5°C - 38°C(99.5°F -100.4°F):\n除去過多衣物、被子、多喝水或\n補充電解水，30分鐘後再進行\n檢測體溫</string>
     <string name="ble_fail">連結失敗</string>
@@ -480,4 +480,9 @@
     <string name="search_device">搜尋藍芽設備</string>
     <string name="ble_pair_list">配對裝置</string>
     <string name="ble_unpair_list">其他裝置</string>
+    <string name="please_chose_area_code">請選擇區域</string>
+    <string name="china">中國</string>
+    <string name="taiwan">台灣</string>
+    <string name="please_chose_one">請選擇是否填寫以下資料</string>
+    <string name="need_some_info_for_period">排卵紀錄需要填寫經期設定與婚姻狀況,是否現在填寫?</string>
 </resources>

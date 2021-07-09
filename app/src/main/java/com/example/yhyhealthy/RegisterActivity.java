@@ -1,8 +1,13 @@
 package com.example.yhyhealthy;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Region;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,12 +23,15 @@ import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.yhyhealthy.module.ApiProxy.COMP;
 import static com.example.yhyhealthy.module.ApiProxy.REGISTER;
 
 /**** ************
  * 註冊功能
- * api需要info:帳號,密碼,信箱,國際區碼,手機號碼
+ * api需要info:帳號,密碼,信箱,國際區碼(CN),手機號碼(CN)
  * 流程 : 開通帳號需要有驗證碼
+ * 開通後會將帳號與密碼存入手機方便給自動登入用
+ * create 2021/01/06
  * * * * * ** ***********/
 
 public class RegisterActivity extends AppCompatActivity {
@@ -194,16 +202,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     //解析後台回的資料
     private void parserJson(JSONObject result) {
-        Log.d(TAG, "註冊完成後台回覆: " + result.toString());
         try {
             JSONObject object = new JSONObject(result.toString());
             int errorCode = object.getInt("errorCode");
             if(errorCode == 0){ //註冊成功後台會回覆是否需開通code
                 JSONObject success = object.getJSONObject("success");
                 int code = success.getInt("statusCode");
-                if(code == 1){ //未開通
+                if(code == 1){ //尚未開通
                     Toasty.success(RegisterActivity.this, getString(R.string.register_success), Toast.LENGTH_SHORT, true).show();
-                    finish();
+
+                    //2021/07/08 授權碼dialog
+                    dialogComp();
+
                 }else if (code == 2) { //已開通
                     finish(); //關閉並回到登入頁面
                 }
@@ -217,5 +227,110 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    //授權碼dialog
+    private void dialogComp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.please_input_compcode));
+        builder.setMessage(getString(R.string.need_comp_code));
+
+        //set custom layout
+        View compLayout = getLayoutInflater().inflate(R.layout.dialog_comp, null);
+        builder.setView(compLayout);
+        builder.setCancelable(false);
+
+        //add ok button
+        builder.setPositiveButton(getString(R.string.slycalendar_save), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                EditText editText = compLayout.findViewById(R.id.edtCompCode);
+                if(TextUtils.isEmpty(editText.getText().toString())){
+                    Toasty.error(RegisterActivity.this, getString(R.string.compcode_is_not_empty), Toast.LENGTH_SHORT, true).show();
+                    return;
+                }
+                //傳至後台驗證
+                checkComp(editText);
+            }
+        });
+        AlertDialog compDialog = builder.create();
+        compDialog.show();
+        compDialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);  //Button文字小寫顯示
+    }
+
+    //傳至後台驗證授權碼
+    private void checkComp(EditText editText) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("account", account.getText().toString());
+            json.put("verCode", editText.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        proxy.buildInit(COMP, json.toString(), verificationListener);
+    }
+
+    private ApiProxy.OnApiListener verificationListener = new ApiProxy.OnApiListener() {
+        @Override
+        public void onPreExecute() {
+            //顯示對話方塊
+            if(progressDialog == null) {
+                progressDialog = ProgressDialog.show(RegisterActivity.this, getString(R.string.title_process), getString(R.string.process), true);
+            }
+            if (!progressDialog.isShowing()) progressDialog.show();
+        }
+
+        @Override
+        public void onSuccess(JSONObject result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject object = new JSONObject(result.toString());
+                        int errorCode = object.getInt("errorCode");
+                        if(errorCode == 5){  //驗證碼不對
+                            Toasty.error(RegisterActivity.this, getString(R.string.comp_code_error), Toast.LENGTH_SHORT, true).show();
+
+                            //再次輸入驗證碼
+                            dialogComp();
+
+                        }else if (errorCode == 0){ //驗證成功
+                            Toasty.success(RegisterActivity.this, getString(R.string.access_success), Toast.LENGTH_SHORT, true).show();
+                            //將帳號及密碼存到sharePref:自動登入使用 2021/07/08
+                            writeUserAccount();
+
+                        }else {
+                            Toasty.error(RegisterActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(String message) {
+            Log.d(TAG, "onFailure: " + message);
+        }
+
+        @Override
+        public void onPostExecute() {
+            progressDialog.dismiss();
+        }
+    };
+
+    //使用者帳號&密碼寫入手機
+    private void writeUserAccount() {
+        SharedPreferences pref = getSharedPreferences("yhyHealthy", MODE_PRIVATE);
+
+        pref.edit().putString("PASSWORD", password.getText().toString())
+                .putString("ACCOUNT", account.getText().toString())
+                .apply();
+
+        //導引至登入頁面並自動登入
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -491,4 +491,9 @@
     <string name="search_device">Search Bluetooth</string>
     <string name="ble_pair_list">Paired Devices</string>
     <string name="ble_unpair_list">Discovery Devices</string>
+    <string name="please_chose_area_code">Please chose zip code</string>
+    <string name="china">China</string>
+    <string name="taiwan">Taiwan</string>
+    <string name="please_chose_one">Please chose one option</string>
+    <string name="need_some_info_for_period">Ovulation Testing need fill in period info, now or later?</string>
 </resources>

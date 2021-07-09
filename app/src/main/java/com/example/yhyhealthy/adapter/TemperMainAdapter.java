@@ -163,11 +163,13 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                         data.setDegree(degree, currentDateTime); //溫度與日期
                         notifyItemChanged(i); //刷新
                         //updateBefore(mac);
+                        Log.d(TAG, "updateItemByMac: " + data.getTargetId());
                     }
                }
             }
         }
     }
+
 
 
 

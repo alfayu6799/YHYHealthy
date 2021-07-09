@@ -214,6 +214,9 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
                         if (errorCode == 0) {
                             Toasty.success(UserMarriageActivity.this, getString(R.string.update_to_Api_is_success), Toast.LENGTH_SHORT, true).show();
                             maritalSetting = true;  //婚姻狀態設定
+                            //導引到排卵首頁
+                            startActivity(new Intent(UserMarriageActivity.this, OvulationActivity.class));
+                            finish();
                         }else if (errorCode == 23){  //token失效 2021/05/11
                             Toasty.error(UserMarriageActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserMarriageActivity.this, LoginActivity.class)); //重新登入
