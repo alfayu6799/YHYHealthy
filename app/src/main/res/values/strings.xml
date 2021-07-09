@@ -496,4 +496,5 @@
     <string name="taiwan">Taiwan</string>
     <string name="please_chose_one">Please chose one option</string>
     <string name="need_some_info_for_period">Ovulation Testing need fill in period info, now or later?</string>
+    <string name="bluetooth_is_disconnected">Alert Notice</string>
 </resources>

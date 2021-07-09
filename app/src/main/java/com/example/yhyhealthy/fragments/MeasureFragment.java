@@ -20,6 +20,8 @@ import com.example.yhyhealthy.UserBasicActivity;
 import com.example.yhyhealthy.UserMarriageActivity;
 import com.example.yhyhealthy.UserPeriodActivity;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.maritalSetting;
 import static com.example.yhyhealthy.module.ApiProxy.menstrualSetting;
 import static com.example.yhyhealthy.module.ApiProxy.userSetting;
@@ -33,6 +35,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "MeasureFragment";
 
+    //private GifImageView gifImageView;
+
     private View view;
 
     private ImageView ovulationOnClick, temperatureOnClick, pregnancyOnClick, monitorOnClick;
@@ -45,6 +49,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         if (view != null) return view;
 
         view = inflater.inflate(R.layout.fragment_measure, container, false);
+
+//        gifImageView = view.findViewById(R.id.game_gif);
+//        gifImageView.setBackgroundResource(R.mipmap.game_morning);
 
         ovulationOnClick = view.findViewById(R.id.ivOvulation);
         temperatureOnClick = view.findViewById(R.id.ivTemperature);

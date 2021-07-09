@@ -21,6 +21,8 @@ import com.example.yhyhealthy.fragments.SettingFragment;
 import com.example.yhyhealthy.module.ApiProxy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.userSetting;
 
 public class MainActivity extends AppCompatActivity {

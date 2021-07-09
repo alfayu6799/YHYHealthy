@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MeasureFragment">
 
+<!--    <pl.droidsonroids.gif.GifImageView-->
+<!--        android:id="@+id/game_gif"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@mipmap/game_morning"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
     <TextView
         android:id="@+id/textView36"
         android:layout_width="wrap_content"

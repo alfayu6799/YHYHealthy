@@ -189,7 +189,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         widget.addDecorator(oneDayDecorator);
 
-        //經期月曆 (起始日&結束日) 2021/07/09暫時變更起始日
+        //經期月曆 (起始日&結束日)
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
 
         //自動檢查今天是否有資料 2021/02/25
@@ -621,7 +621,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //跟後端要資料來填滿月曆
     private void setCycleRecord(String startDay, String endDay) {
-        //2021/07/09 暫時將起始日移至更前面的日子
 
         JSONObject json = new JSONObject();
         try {
@@ -630,7 +629,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "後台接受到的開始日: " + startDay + ",後台接受到的結束日:" + endDay);
+        Log.d(TAG, "後台接受到的日期範圍: " + json.toString());
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -654,6 +653,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0) {
+                            Log.d(TAG, "run: " + result.toString());
                             parserCycleData(result); //解析週期資料
                         }else if (errorCode == 23) {  //token失效
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
@@ -685,45 +685,44 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         }
     };
 
-    //解析後端回來的週期資料 2021/02/22
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void parserCycleData(JSONObject result) {
-        cycleRecord = CycleRecord.newInstance(result.toString());
+        //解析後端回來的週期資料 2021/02/22
+        @SuppressLint("UseCompatLoadingForDrawables")
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        private void parserCycleData(JSONObject result) {
+            cycleRecord = CycleRecord.newInstance(result.toString());
 
-        List<String> list = new ArrayList<>(); //經期第一天陣列用
+            List<String> list = new ArrayList<>(); //經期第一天陣列用
 
-        dataList = cycleRecord.getSuccess(); //獲取數據
+            dataList = cycleRecord.getSuccess(); //獲取數據
 
-        for (int i = 0; i < dataList.size(); i ++){
+            for (int i = 0; i < dataList.size(); i++) {
 
-            math = new Math(this, dataList.get(i));
+                math = new Math(this, dataList.get(i));
 
-            //月曆
-            if (math.getCalenderDrawable() != null)
-                widget.addDecorator(new MyEventDecorator(math.getCalenderDrawable(), Collections.singletonList(math.getDateData())));
+                //月曆
+                if (math.getCalenderDrawable() != null)
+                    widget.addDecorator(new MyEventDecorator(math.getCalenderDrawable(), Collections.singletonList(math.getDateData())));
 
-            //經期第一天
-            boolean isFirstDay = dataList.get(i).isFirstDay();
-            if (isFirstDay){
-                String day = dataList.get(i).getTestDate();
-                Log.d(TAG, "來自後台資料經期第一天: " + day);
-                list.add(day);
+                //經期第一天
+                boolean isFirstDay = dataList.get(i).isFirstDay();
+                if (isFirstDay) {
+                    String day = dataList.get(i).getTestDate();
+                    list.add(day);
+                }
+
             }
+//
+            //經期第一天給予全域變數
+            if(null != list && !list.isEmpty())
+                beginPeriodDay = list.get(0);
+//
+            //圖表初始化
+            MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
+            chartManager.showCombinedChart(dataList);
 
+            //顯示今天是周期的第幾天 2021/05/25 需要等到月曆完全顯示完後再做周期的第一天查詢
+            checkPeriodDayOfThisMonth(LocalDate.now());
         }
-
-        //經期第一天給予全域變數
-        if(list.get(0) != null)
-            beginPeriodDay = list.get(0);
-
-        //圖表初始化
-        MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
-        chartManager.showCombinedChart(dataList);
-
-        //顯示今天是周期的第幾天 2021/05/25 需要等到月曆完全顯示完後再做周期的第一天查詢
-        checkPeriodDayOfThisMonth(LocalDate.now());
-    }
 
     //日期被選到時的動作 2021/02/25
     @Override
@@ -753,7 +752,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //週期第幾天Fxn 2021/03/02
     @SuppressLint("SetTextI18n")
     private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
-        Log.d(TAG, "本月經期第一天: " + beginPeriodDay);
         if (TextUtils.isEmpty(beginPeriodDay)){
             menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
         }else {

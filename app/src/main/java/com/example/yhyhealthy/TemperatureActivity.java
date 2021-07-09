@@ -114,11 +114,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     //2021/07/06
     private Button searchPairBle;
 
-    //2021/07/01 test
-//    private BluetoothLeScanner mBluetoothLeScanner;
-//    private List<ScanFilter> filters;
-//    private ScanSettings settings;
-
      //藍芽連線
      private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
      private int statusPosition;
@@ -256,6 +251,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }else {
             isScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
+
         }
     }
 
@@ -640,6 +636,27 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
      }
 
+     //斷線音效  2021/07/09
+    private void dialogDisconnected(String deviceName) {
+        AlertDialog.Builder disconnectBuilder = new AlertDialog.Builder(this);
+        disconnectBuilder.setTitle(getString(R.string.bluetooth_is_disconnected));
+        disconnectBuilder.setMessage(deviceName +" " + getString(R.string.ble_is_disconnected));
+        disconnectBuilder.setCancelable(false);
+        disconnectBuilder.setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                stopAlarm();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = disconnectBuilder.create();
+        dialog.show();
+        dialog.getWindow().setBackgroundDrawableResource(R.color.orange);
+
+        startAlarm(); //啟動循環撥放音效
+    }
+
     //連線成功後回傳參數給adapter
     private void updateConnectedStatus(String deviceName, String deviceAddress, String bleStatus){
         if (deviceAddress != null){
@@ -857,6 +874,18 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.info(TemperatureActivity.this, getString(R.string.ble_is_disconnected_and_release), Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.closeGatt(macAddress);
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
+                    dialogDisconnected(deviceName);  //2021/07/09 斷線通知
+
+                    //移除所有的Handler
+                    if(mHandler != null)
+                        mHandler.removeCallbacksAndMessages(null);
+
+                    //移除所有ble設備佇列 2021/05/05
+                    if (!userMap.isEmpty())
+                        userMap.clear();
+
+                    if (!countDownTimerArrayMap.isEmpty())
+                        countDownTimerArrayMap.clear();
                     break;
 
                 case yhyBleService.ACTION_CONNECTING_FAIL:

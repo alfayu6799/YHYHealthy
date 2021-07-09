@@ -8,8 +8,8 @@ android {
         applicationId "com.yhihc.group.yhyhealthy"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.07"
+        versionCode 8
+        versionName "1.08"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //2021/05/26 for aab檔案使用
@@ -94,4 +94,7 @@ dependencies {
     //強大的看圖片第三方庫
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    //gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
 }

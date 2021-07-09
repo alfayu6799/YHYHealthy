@@ -485,4 +485,5 @@
     <string name="taiwan">台灣</string>
     <string name="please_chose_one">請選擇是否填寫以下資料</string>
     <string name="need_some_info_for_period">排卵紀錄需要填寫經期設定與婚姻狀況,是否現在填寫?</string>
+    <string name="bluetooth_is_disconnected">藍芽斷線通知</string>
 </resources>
