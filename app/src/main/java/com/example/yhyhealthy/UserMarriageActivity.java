@@ -19,6 +19,8 @@ import com.example.yhyhealthy.module.ApiProxy;
 import org.json.JSONException;
 import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.MARRIAGE_INFO;
 import static com.example.yhyhealthy.module.ApiProxy.MARRIAGE_UPDATE;
 import static com.example.yhyhealthy.module.ApiProxy.maritalSetting;
@@ -40,6 +42,9 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
     Switch    childStatus;
 
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     //api
     ApiProxy proxy;
@@ -66,6 +71,10 @@ public class UserMarriageActivity extends AppCompatActivity implements CompoundB
         marriageStatus = findViewById(R.id.switchMarriage);
         contraceptionStatus = findViewById(R.id.switchContraception);
         childStatus = findViewById(R.id.switchChild);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         back.setOnClickListener(this);
         save.setOnClickListener(this);

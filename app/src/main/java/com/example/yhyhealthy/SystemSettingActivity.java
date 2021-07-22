@@ -47,6 +47,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -83,6 +84,9 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
     //記錄溫度單位
     private SharedPreferences pref;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,9 +106,15 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
         BleSetting = findViewById(R.id.ivToBleSetting);
         unitSetting = findViewById(R.id.ivToUnitSetting);
         edtNewName = findViewById(R.id.editBleName);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+
         back.setOnClickListener(this);
         BleSetting.setOnClickListener(this);
         unitSetting.setOnClickListener(this);
+
         edtNewName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {

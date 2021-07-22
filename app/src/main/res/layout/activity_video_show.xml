@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".VideoShowActivity">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/game_gif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@mipmap/yhy_new_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
         android:id="@+id/youtubePlayerView"
         android:layout_width="match_parent"

@@ -43,6 +43,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.SYMPTOM_ADD;
 import static com.example.yhyhealthy.module.ApiProxy.SYMPTOM_LIST;
@@ -98,7 +99,10 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
    private boolean swellingRednessBoolean;     //紅腫(Y/N)
    private String  vaccineNameOtherBrand;      //其他新冠疫苗
    private String  covid19Vaccine;             //新冠19疫苗
-   private String  otherSymptom;                      //其他症狀
+   private String  otherSymptom;               //其他症狀
+
+    //背景動畫
+   private GifImageView gifImageView;
 
    private LinearLayout lyCovid19Vaccine;
 
@@ -156,6 +160,10 @@ public class SymptomActivity extends AppCompatActivity implements View.OnClickLi
         txtCovidSelect = findViewById(R.id.tv_covid_select);
 
         lyCovid19Vaccine = findViewById(R.id.ly_covid19_vaccine);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         update.setOnClickListener(this);
         back.setOnClickListener(this);

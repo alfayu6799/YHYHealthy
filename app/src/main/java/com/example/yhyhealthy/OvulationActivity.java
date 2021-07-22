@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.CYCLE_RECORD;
 import static com.example.yhyhealthy.module.ApiProxy.MENSTRUAL_RECORD_INFO;
@@ -108,10 +109,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private String beginPeriodDay;   //經期第一天
     private int periodLength;  //經期長度
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ovulation);
+        setContentView(R.layout.activity_ovulation1);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //禁止旋轉
 
         //休眠禁止
@@ -187,7 +191,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 //                oneDayDecorator
 //        );
 
-        widget.addDecorator(oneDayDecorator);
+        widget.addDecorator(oneDayDecorator); //當天Text背景是白色
 
         //經期月曆 (起始日&結束日)
         setCycleRecord(firstDayOfThisMonth, lastDayOfThisMonth);
@@ -789,14 +793,14 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 calendar.setBackgroundResource(R.drawable.rectangle_button);
                 chart.setBackgroundResource(R.drawable.relative_shape);
                 calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
-                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.color_font));
                 scrollViewLayout.setVisibility(View.VISIBLE);
                 chartLayout.setVisibility(View.GONE);
                 break;
             case R.id.btnSwitchChart:  //圖表
                 calendar.setBackgroundResource(R.drawable.relative_shape);
                 chart.setBackgroundResource(R.drawable.rectangle_button);
-                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                calendar.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.color_font));
                 chart.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
                 scrollViewLayout.setVisibility(View.GONE);
                 chartLayout.setVisibility(View.VISIBLE);

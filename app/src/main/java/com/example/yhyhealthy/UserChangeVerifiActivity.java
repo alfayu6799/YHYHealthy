@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.CHANGE_VERIFICATION_STYLE;
 import static com.example.yhyhealthy.module.ApiProxy.COMP;
@@ -48,6 +49,9 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
     //api
     ApiProxy proxy;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,10 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
         editTelCode.setText("CN");                      //只有大陸才會用到
         editTelCode.setFocusable(false);                //不可編輯
         editTelCode.setFocusableInTouchMode(false);     //不可編輯
+
+        //動畫background
+        //gifImageView = findViewById(R.id.game_gif);
+        //gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
         
         editMobile = findViewById(R.id.edtMobile);      //手機號碼
         editPassword = findViewById(R.id.edtPassword);  //密瑪

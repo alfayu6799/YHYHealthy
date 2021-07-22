@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.CHANGE_PASSWORD;
 
@@ -39,6 +40,9 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
 
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,10 @@ public class UserChangePassActivity extends AppCompatActivity implements View.On
     private void initView() {
         update = findViewById(R.id.btnUpdatePassWD);
         back = findViewById(R.id.ivBackSetting5);
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+
         oldPassword = findViewById(R.id.edtOldPassword);
         newPassword = findViewById(R.id.edtNewPassword);
         update.setOnClickListener(this);

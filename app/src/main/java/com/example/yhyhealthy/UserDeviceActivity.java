@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.PRODUCTS_BIND;
 import static com.example.yhyhealthy.module.ApiProxy.PRODUCTS_BIND_REMOVE;
@@ -59,6 +60,9 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
     //進度條
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,10 @@ public class UserDeviceActivity extends AppCompatActivity implements UserDeviceA
     private void initView() {
         deviceNo = findViewById(R.id.edtDeviceNo);
         deviceList = findViewById(R.id.rvDeviceList);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         back = findViewById(R.id.ivBackSetting20);
         back.setOnClickListener(new View.OnClickListener() {

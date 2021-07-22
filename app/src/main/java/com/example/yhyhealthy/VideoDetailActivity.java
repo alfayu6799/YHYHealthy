@@ -20,6 +20,8 @@ import com.example.yhyhealthy.tools.SpacesItemDecoration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.VIDEO_LIST;
 
 /**  **********
@@ -40,6 +42,9 @@ public class VideoDetailActivity extends AppCompatActivity {
 
     //進度條
     ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,10 @@ public class VideoDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         recyclerView = findViewById(R.id.rv_video);
         int spacingInPixels = 10;

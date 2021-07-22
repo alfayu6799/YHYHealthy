@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_DELETE;
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
@@ -68,6 +69,9 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     //進度條
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +86,10 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private void initView() {
         rv = findViewById(R.id.rvDegreeEdit);
         back = findViewById(R.id.ivDegreeBack);
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+
         back.setOnClickListener(this);
     }
 

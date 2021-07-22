@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * 使用者設定:
  * 基本資料
@@ -24,6 +26,9 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
     ImageView basicInfo, marriageInfo;
 
     TextView  tvPregnancyInfo;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,10 @@ public class SystemUserActivity extends AppCompatActivity implements View.OnClic
         tvPregnancyInfo.setVisibility(View.INVISIBLE);
         PregnancyInfo.setVisibility(View.INVISIBLE);
         marriageInfo = findViewById(R.id.ivMarriageSetting);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         back.setOnClickListener(this);
         PregnancyInfo.setOnClickListener(this);

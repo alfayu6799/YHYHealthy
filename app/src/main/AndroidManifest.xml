@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Temperature1Activity"></activity>
         <activity android:name=".OvulationRecordActivity" />
         <activity android:name=".BreathMonitorActivity" />
         <activity android:name=".ShoppingActivity" />

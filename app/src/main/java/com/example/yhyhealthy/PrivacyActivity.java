@@ -17,6 +17,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  *  使用者授權合約
  **/
@@ -25,6 +27,9 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
     private Button agree, notAgree;
     private ScrollView scrollView;
     private TextView privacyContent;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -40,6 +45,10 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
         notAgree = findViewById(R.id.btnNoAgree);
         agree.setOnClickListener(this);
         notAgree.setOnClickListener(this);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         scrollView = findViewById(R.id.scrollView);
         scrollView.setOnTouchListener(this);

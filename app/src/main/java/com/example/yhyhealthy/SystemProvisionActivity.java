@@ -15,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /***** ****
  * 設定 - 條款
  * *****/
@@ -23,6 +25,8 @@ public class SystemProvisionActivity extends AppCompatActivity {
 
     private ImageView back;
     private TextView privacyContent;
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,10 @@ public class SystemProvisionActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
         
         privacyContent = findViewById(R.id.tv_provision);
         privacyContent.setText(Html.fromHtml(readHTML()));

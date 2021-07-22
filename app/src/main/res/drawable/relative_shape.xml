@@ -6,7 +6,7 @@
 <!--        android:width="5px"-->
 <!--        android:color="@color/colorAccent"/>-->
     <!-- 填充的顏色 -->
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/colorPrimaryDark" />
 
     <!-- 邊距 -->
     <padding

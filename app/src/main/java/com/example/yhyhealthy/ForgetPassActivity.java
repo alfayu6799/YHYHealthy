@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.COMP_CODE_REQUEST;
 import static com.example.yhyhealthy.module.ApiProxy.FORGET_PASSWORD;
@@ -33,6 +34,9 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
     private ApiProxy proxy;
 
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class ForgetPassActivity extends AppCompatActivity implements View.OnClic
 
         verificationLayout = findViewById(R.id.verificationLayout);
         newPasswordLayout = findViewById(R.id.newPasswordLayout);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         btnSend = findViewById(R.id.btnForgetSend);
         btnGetCompCode = findViewById(R.id.btnSend);

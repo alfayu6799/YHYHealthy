@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.COMP;
 import static com.example.yhyhealthy.module.ApiProxy.REGISTER;
@@ -52,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,10 @@ public class RegisterActivity extends AppCompatActivity {
     private void initView() {
         account = findViewById(R.id.edtAccountInput);
         password = findViewById(R.id.edtPasswordInput);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         emailLayout = findViewById(R.id.EmailLayout);
         telCodeLayout = findViewById(R.id.TelCodeLayout);

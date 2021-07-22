@@ -16,6 +16,8 @@ import com.example.yhyhealthy.OnLineCallActivity;
 import com.example.yhyhealthy.R;
 import com.example.yhyhealthy.VideoActivity;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /***
  * 衛教頁面
  * 文章,影片,討論區,線上諮詢
@@ -26,6 +28,8 @@ public class EducationFragment extends Fragment implements View.OnClickListener 
    private View view;
 
    private Button btnArticle, btnVideo, btnForum, btnOnline;
+
+    private GifImageView gifImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +43,10 @@ public class EducationFragment extends Fragment implements View.OnClickListener 
         btnForum.setVisibility(View.GONE);  //2021/05/25 hide
         btnOnline = view.findViewById(R.id.onlineCall);
         btnOnline.setVisibility(View.GONE); //2021/05/25 hide
+
+        //動畫background
+        gifImageView = view.findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         btnArticle.setOnClickListener(this);
         btnVideo.setOnClickListener(this);

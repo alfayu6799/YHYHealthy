@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_UPDATE;
 /***
@@ -83,6 +84,9 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
     //進度條
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +143,10 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         back = findViewById(R.id.imageCancel1);  //取消
         btnSave = findViewById(R.id.btnEditUser1);   //存檔
         userBirthday = findViewById(R.id.edtInputBirthday1); //生日
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         rdGroup = findViewById(R.id.rdGroup1);  //性別
         rdGroup.setOnCheckedChangeListener(this);

@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
@@ -76,6 +77,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     //進度條
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,6 +91,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
         btnFunction = view.findViewById(R.id.btSelectFuns);
         btnDate = view.findViewById(R.id.btSelectDate);
+
+        //動畫background
+        gifImageView = view.findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         btnFunction.setOnClickListener(this);
         btnDate.setOnClickListener(this);

@@ -20,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.concurrent.BlockingDeque;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.EDU_ART_CATALOG;
 
 /******** ************
@@ -40,6 +42,9 @@ public class CatalogActivity extends AppCompatActivity {
 
     //進度條
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,10 @@ public class CatalogActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         int spacingInPixels = 30;  //設定item間距的距離
         recyclerView = findViewById(R.id.rvEdu);

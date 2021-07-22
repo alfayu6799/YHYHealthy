@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.MENSTRUAL_RECORD_INFO;
 import static com.example.yhyhealthy.module.ApiProxy.MENSTRUAL_RECORD_UPDATE;
@@ -61,6 +62,9 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
     //進度條
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,10 @@ public class UserPeriodActivity extends AppCompatActivity implements View.OnClic
         endDay = findViewById(R.id.tvDateEnd);                   //結束日
         endDay.addTextChangedListener(endWatch);
         save = findViewById(R.id.btnSaveToApi3);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         firstDay.setOnClickListener(this);
         endDay.setOnClickListener(this);

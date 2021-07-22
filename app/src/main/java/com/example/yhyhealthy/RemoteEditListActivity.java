@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.MONITOR_CODE_UPDATE;
 import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_ADD;
@@ -55,6 +56,9 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
     //進度條
     private ProgressDialog progressDialog;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,10 @@ public class RemoteEditListActivity extends AppCompatActivity implements RemoteE
 
     private void initView() {
         rvRemoteView = findViewById(R.id.rvRemoteEdit);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         addAccount = findViewById(R.id.tvAddObserver);
         addAccount.setOnClickListener(new View.OnClickListener() {

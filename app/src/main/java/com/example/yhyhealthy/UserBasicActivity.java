@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.RENEW_TOKEN;
 import static com.example.yhyhealthy.module.ApiProxy.USER_INFO;
@@ -60,6 +61,9 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
 
     //
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +202,11 @@ public class UserBasicActivity extends AppCompatActivity implements View.OnClick
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         back = findViewById(R.id.ivBackSetting6);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+
         buttonSave = findViewById(R.id.btnSaveToApi);
         accountInfo = findViewById(R.id.textUserAccount);   //帳號不得變更
         accountName = findViewById(R.id.edtChangeName);     //變更名稱

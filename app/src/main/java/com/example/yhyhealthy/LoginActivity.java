@@ -23,6 +23,8 @@ import com.example.yhyhealthy.module.ApiProxy;
 import org.json.JSONException;
 import org.json.JSONObject;
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
+
 import static com.example.yhyhealthy.module.ApiProxy.COMP;
 import static com.example.yhyhealthy.module.ApiProxy.LOGIN;
 import static com.example.yhyhealthy.module.ApiProxy.accountInfo;
@@ -48,6 +50,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String regEx = "[^a-zA-Z0-9]";  //只能輸入字母或數字
 
     private ProgressDialog progressDialog;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         account = findViewById(R.id.et_account);
         password = findViewById(R.id.et_password);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
         
         //註冊
         register = findViewById(R.id.tv_register);

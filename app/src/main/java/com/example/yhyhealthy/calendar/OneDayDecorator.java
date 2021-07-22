@@ -35,8 +35,8 @@ public class OneDayDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         view.setSelectionDrawable(drawable);
-        view.addSpan(new StyleSpan(Typeface.BOLD));          //text font's size
-        view.addSpan(new RelativeSizeSpan(1.2f)); //text's size
+        view.addSpan(new StyleSpan(Typeface.BOLD));            //text font's size
+        view.addSpan(new RelativeSizeSpan(1.2f));   //text's size
         view.addSpan(new ForegroundColorSpan(Color.WHITE));   //text's color
     }
 

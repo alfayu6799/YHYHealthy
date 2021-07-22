@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.MONITOR_CODE;
 import static com.example.yhyhealthy.module.ApiProxy.MONITOR_CODE_RENEW;
@@ -47,6 +48,9 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
     //api
     private ApiProxy proxy;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,10 @@ public class SystemAccountActivity extends AppCompatActivity implements View.OnC
         authorizationCode = findViewById(R.id.ivUserAuthorizationCode);
         changeDeviceNo = findViewById(R.id.ivUserDeviceNo);
         compCodeStyle = findViewById(R.id.ivCompCodeChange);
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         back.setOnClickListener(this);
         changePW.setOnClickListener(this);

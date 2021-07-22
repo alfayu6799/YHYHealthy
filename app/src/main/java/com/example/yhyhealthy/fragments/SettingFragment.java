@@ -22,6 +22,7 @@ import com.example.yhyhealthy.SystemUserActivity;
 import com.example.yhyhealthy.SystemVideoActivity;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -39,6 +40,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     private View view;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +58,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         TextView  version = view.findViewById(R.id.tvVersion);
         TextView  logout = view.findViewById(R.id.tvLogout);
         version.setText(getString(R.string.version));
+
+        //動畫background
+        gifImageView = view.findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         setting.setOnClickListener(this);
         UserSetting.setOnClickListener(this);

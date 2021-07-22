@@ -45,6 +45,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.Manifest.permission.CAMERA;
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_ADD;
@@ -75,6 +76,9 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
     //api
     private ApiProxy proxy;
 
+    //背景動畫
+    private GifImageView gifImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +99,10 @@ public class TemperatureAddActivity extends DeviceBaseActivity implements View.O
         cancel = findViewById(R.id.imageCancel);  //取消
         btnSave = findViewById(R.id.btnAddUser);   //存檔
         userBirthday = findViewById(R.id.edtInputBirthday); //生日
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         rdGroup = findViewById(R.id.rdGroup);  //性別
         rdGroup.setOnCheckedChangeListener(this);

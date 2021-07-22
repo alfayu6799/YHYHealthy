@@ -88,6 +88,7 @@ import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -154,6 +155,8 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
     //進度
     private ProgressDialog progressDialog;
+    //背景動畫
+    private GifImageView gifImageView;
 
     //
     private static final int CAMERA_RECORD = 2;
@@ -203,6 +206,10 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
         textBleStatus = findViewById(R.id.tvBLEConnectStatus);  //顯示藍芽連線狀態
         textBodyTemp = findViewById(R.id.tvBodyTemp);           //顯示體溫
         textAnalysis = findViewById(R.id.tvAnalysis);           //顯示分析結果
+
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         linearLayout = findViewById(R.id.ly_progressBar);       //量測進度Layout
         measureProgress = findViewById(R.id.progressBar);       //量測進度條

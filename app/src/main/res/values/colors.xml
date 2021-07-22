@@ -15,14 +15,16 @@
     <color name="yellowLight">#ffffcf</color>
     <color name="greenDark">#00a400</color>
 
-    <color name="colorPrimary">#00bcd4</color>
-    <color name="colorPrimaryDark">#0097a7</color>
+    <color name="colorPrimary">#0C5EB6</color>
+    <color name="colorPrimaryDark">#67AEFC</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="color_period_5">#CF6194</color>
     <color name="color_period_6">#7793DD</color>
     <color name="color_period_7">#D5AD45</color>
     <color name="color_period_8">#834e91</color>
     <color name="color_period_9">#bf52e8</color>
+
+    <color name="color_font">#3A3736</color>
 
     <color name="translucent">#00000000</color>
     

@@ -2,20 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@mipmap/yhy_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MeasureFragment">
 
-<!--    <pl.droidsonroids.gif.GifImageView-->
-<!--        android:id="@+id/game_gif"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:background="@mipmap/game_morning"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/game_gif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@mipmap/yhy_new_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView36"
@@ -90,7 +89,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
-            android:src="@mipmap/ovul_green_icon"/>
+            android:src="@mipmap/new_ovul_green_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,7 +120,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
-            android:src="@mipmap/temper_green_icon"/>
+            android:src="@mipmap/new_temper_green_icon"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -222,7 +221,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:layout_gravity="center"
-            android:src="@mipmap/shopping"/>
+            android:src="@mipmap/new_shopping"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -249,7 +248,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:layout_gravity="center"
-            android:src="@mipmap/training"/>
+            android:src="@mipmap/new_training"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

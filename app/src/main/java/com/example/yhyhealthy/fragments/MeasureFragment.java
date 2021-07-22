@@ -35,7 +35,8 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "MeasureFragment";
 
-    //private GifImageView gifImageView;
+    //背景動畫
+    private GifImageView gifImageView;
 
     private View view;
 
@@ -50,8 +51,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
         view = inflater.inflate(R.layout.fragment_measure, container, false);
 
-//        gifImageView = view.findViewById(R.id.game_gif);
-//        gifImageView.setBackgroundResource(R.mipmap.game_morning);
+        //動畫background
+        gifImageView = view.findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         ovulationOnClick = view.findViewById(R.id.ivOvulation);
         temperatureOnClick = view.findViewById(R.id.ivTemperature);

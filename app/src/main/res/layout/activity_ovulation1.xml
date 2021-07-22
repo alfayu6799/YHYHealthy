@@ -1,58 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@mipmap/yhy_background"
-    tools:context=".OvulationActivity">
+    android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/game_gif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@mipmap/yhy_new_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView52"
+        android:id="@+id/textView85"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_gravity="center"
         android:text="@string/ovulation"
-        android:textSize="22dp" />
+        android:textSize="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/game_gif" />
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView85">
+
         <Button
             android:id="@+id/btnSwitchCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:textAllCaps="false"
-            android:background="@drawable/relative_shape"
             android:layout_weight="1"
-            android:text="@string/tab_cal"/>
+            android:background="@drawable/relative_shape"
+            android:text="@string/tab_cal"
+            android:textAllCaps="false"
+            android:textSize="18dp" />
+
         <Button
             android:id="@+id/btnSwitchChart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="false"
             android:layout_weight="1"
             android:background="@drawable/relative_shape"
             android:text="@string/tab_chart"
-            android:textSize="18dp"/>
+            android:textAllCaps="false"
+            android:textSize="18dp" />
     </LinearLayout>
 
-    <!-- 月曆 layout -->
     <ScrollView
         android:id="@+id/lyScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:fillViewport="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/game_gif"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,16 +87,18 @@
                     android:id="@+id/calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginRight="8dp"
-                    app:mcv_showOtherDates="all"
-                    app:mcv_selectionColor="#00F"/>
+                    app:mcv_selectionColor="#00F"
+                    app:mcv_showOtherDates="all" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/corners_bg"
@@ -82,12 +108,61 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline39"
+                    <Button
+                        android:id="@+id/btnPeriodSetting"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/shape_for_period_edit"
+                        android:text="@string/cycle_setting"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideline39"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnPeriodEdit"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/shape_for_period_edit"
+                        android:text="@string/add_cycle"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/btnPeriodSetting"
+                        app:layout_constraintStart_toStartOf="@+id/btnPeriodSetting"
+                        app:layout_constraintTop_toBottomOf="@+id/btnPeriodSetting" />
+
+                    <RatingBar
+                        android:id="@+id/rtSaliva"
+                        style="@style/FiveStarsStyle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="260dp" />
+                        android:layout_marginStart="8dp"
+                        android:numStars="5"
+                        android:rating="1"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_probability_1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/tv_ovul_probability_1" />
+
+                    <RatingBar
+                        android:id="@+id/rtBt"
+                        style="@style/FiveStarsStyle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:numStars="5"
+                        android:rating="1"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView62"
+                        app:layout_constraintStart_toStartOf="@+id/guideline40"
+                        app:layout_constraintTop_toTopOf="@+id/textView62" />
 
                     <TextView
                         android:id="@+id/tvShowPeriodDay"
@@ -105,18 +180,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="@dimen/font_ovulation_saliva"
                         android:text="@string/saliva_result"
+                        android:textSize="@dimen/font_ovulation_saliva"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvShowPeriodDay" />
-
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline40"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="118dp" />
 
                     <TextView
                         android:id="@+id/tv_ovul_probability_1"
@@ -124,8 +192,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="@dimen/font_ovulation_saliva"
                         android:text="@string/change_of_ovulation"
+                        android:textSize="@dimen/font_ovulation_saliva"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_result_1" />
@@ -136,8 +204,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="@dimen/font_basal_body_temp"
                         android:text="@string/basal_body_temp"
+                        android:textSize="@dimen/font_basal_body_temp"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_probability_1" />
@@ -148,67 +216,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:textSize="@dimen/font_ovulation_saliva"
                         android:text="@string/change_of_ovulation"
+                        android:textSize="@dimen/font_ovulation_saliva"
                         app:layout_constraintEnd_toStartOf="@+id/guideline40"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_ovul_temp_1" />
-
-                    <RatingBar
-                        android:id="@+id/rtSaliva"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:numStars="5"
-                        android:rating="1"
-                        style="@style/FiveStarsStyle1"
-                        app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_probability_1"
-                        app:layout_constraintStart_toStartOf="@+id/guideline40"
-                        app:layout_constraintTop_toTopOf="@+id/tv_ovul_probability_1" />
-
-                    <RatingBar
-                        android:id="@+id/rtBt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:numStars="5"
-                        android:rating="1"
-                        style="@style/FiveStarsStyle1"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView62"
-                        app:layout_constraintStart_toStartOf="@+id/guideline40"
-                        app:layout_constraintTop_toTopOf="@+id/textView62" />
-
-                    <Button
-                        android:id="@+id/btnPeriodSetting"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/shape_for_period_edit"
-                        android:textSize="16sp"
-                        android:textColor="@color/white"
-                        android:textAllCaps="false"
-                        android:text="@string/cycle_setting"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline39"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/btnPeriodEdit"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/shape_for_period_edit"
-                        android:textColor="@color/white"
-                        android:text="@string/add_cycle"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/btnPeriodSetting"
-                        app:layout_constraintStart_toStartOf="@+id/btnPeriodSetting"
-                        app:layout_constraintTop_toBottomOf="@+id/btnPeriodSetting" />
 
                     <TextView
                         android:id="@+id/tvIdResult"
@@ -229,161 +241,200 @@
                         app:layout_constraintBottom_toBottomOf="@+id/tv_ovul_temp_1"
                         app:layout_constraintStart_toStartOf="@+id/guideline40"
                         app:layout_constraintTop_toTopOf="@+id/tv_ovul_temp_1" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline39"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="260dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline40"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="118dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/corners_bg"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="8dp"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
                         android:layout_marginLeft="8dp"
-                        android:src="@drawable/ic_brightness_1_24dp"/>
+                        android:layout_weight="1"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/ic_brightness_1_24dp" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:scaleType="fitStart"
-                        android:src="@drawable/ic_brightness_2_24dp"/>
+                        android:src="@drawable/ic_brightness_2_24dp" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:scaleType="fitStart"
-                        android:src="@drawable/ic_brightness_3_24dp"/>
+                        android:src="@drawable/ic_brightness_3_24dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/menstrual_period"/>
+                        android:layout_weight="1"
+                        android:text="@string/menstrual_period" />
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:text="@string/ovulation_period"/>
+                        android:layout_weight="1"
+                        android:text="@string/ovulation_period" />
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:text="@string/no_ovulation_period"/>
+                        android:layout_weight="1"
+                        android:text="@string/no_ovulation_period" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/ic_baseline_brightness_8_24" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:scaleType="fitStart"
-                        android:layout_marginLeft="8dp"
-                        android:src="@drawable/ic_baseline_brightness_8_24"/>
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
-                        android:src="@drawable/ic_baseline_brightness_9_24"/>
+                        android:src="@drawable/ic_baseline_brightness_9_24" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/in_high_cell"/>
+                        android:layout_weight="1"
+                        android:text="@string/in_high_cell" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:text="@string/in_low_cell"/>
+                        android:layout_weight="1"
+                        android:text="@string/in_low_cell" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
                         android:layout_marginLeft="8dp"
-                        android:src="@drawable/shape_dash_5"/>
+                        android:layout_weight="1"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/shape_dash_5" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:scaleType="fitStart"
-                        android:src="@drawable/shape_dash_6"/>
+                        android:src="@drawable/shape_dash_6" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_weight="1"
                         android:scaleType="fitStart"
-                        android:src="@drawable/shape_dash_7"/>
+                        android:src="@drawable/shape_dash_7" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
                         android:layout_marginLeft="8dp"
-                        android:text="@string/exp_men_period"/>
+                        android:layout_weight="1"
+                        android:text="@string/exp_men_period" />
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:text="@string/exp_ovl_period"/>
+                        android:layout_weight="1"
+                        android:text="@string/exp_ovl_period" />
+
                     <TextView
                         android:layout_width="24dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_gravity="left"
-                        android:text="@string/exp_day_of_ovu"/>
+                        android:layout_weight="1"
+                        android:text="@string/exp_day_of_ovu" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
     <!-- 圖表區 -->
     <LinearLayout
         android:id="@+id/lyChart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/game_gif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -454,7 +505,5 @@
                 android:textSize="@dimen/font_chart_remind"
                 android:text="@string/chart_remind"/>
         </LinearLayout>
-
     </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

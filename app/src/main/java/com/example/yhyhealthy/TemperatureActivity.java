@@ -4,6 +4,7 @@
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
@@ -68,6 +69,7 @@ import java.util.List;
 import java.util.Set;
 
 import es.dmoral.toasty.Toasty;
+import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_ADD_VALUE;
 import static com.example.yhyhealthy.module.ApiProxy.BLE_USER_LIST;
@@ -113,6 +115,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     private AlertDialog alertDialog;
     //2021/07/06
     private Button searchPairBle;
+    private Button btnSearch;
 
      //藍芽連線
      private TempDataApi.SuccessBean statusMemberBean = new TempDataApi.SuccessBean();   //for ble連線狀態用
@@ -134,6 +137,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     //Other
     private boolean isBleList = true;
     private MediaPlayer mediaPlayer;
+
+    //背景動畫
+    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +164,10 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         selectedAccount = findViewById(R.id.btnChoseAccount);
         searchPairBle = findViewById(R.id.btn_pair_bluetooth);
 
+        //動畫background
+        gifImageView = findViewById(R.id.game_gif);
+        gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+
         //init RecyclerView's data
         recyclerView = findViewById(R.id.rvTempUser);
         remoteRecycle = findViewById(R.id.rvRemoteUser);  //遠端
@@ -173,6 +183,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         searchPairBle.setOnClickListener(this);
 
         supervise.setBackgroundResource(R.drawable.rectangle_button); //先顯示觀測Button
+        supervise.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
     }
 
     /**** 藍芽 2021/03/18 *****/
@@ -229,6 +240,15 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             }
         });
 
+        //重新搜尋
+        btnSearch = view.findViewById(R.id.btnBleSubmit);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchBleDevices();
+            }
+        });
+
         alertDialog.show();
     }
 
@@ -241,7 +261,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 public void run() {
                     isScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    //Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
+                    btnSearch.setVisibility(View.VISIBLE);
+                    Toasty.info(TemperatureActivity.this, getString(R.string.search_in_5_min), Toast.LENGTH_SHORT, true).show();
                 }
             }, 5000);
             isScanning = true;
@@ -408,6 +429,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             case R.id.bt_select_supervise:  //觀測Button
                 supervise.setBackgroundResource(R.drawable.rectangle_button);
                 remote.setBackgroundResource(R.drawable.relative_shape);
+                supervise.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
+                remote.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.color_font));
                 addTemperatureUser.setVisibility(View.VISIBLE);
                 addRemoteUser.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -419,6 +442,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             case R.id.bt_select_remote:    //遠端Button
                 remote.setBackgroundResource(R.drawable.rectangle_button);
                 supervise.setBackgroundResource(R.drawable.relative_shape);
+                remote.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
+                supervise.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.color_font));
                 addTemperatureUser.setVisibility(View.GONE);
                 addRemoteUser.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -874,7 +899,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     Toasty.info(TemperatureActivity.this, getString(R.string.ble_is_disconnected_and_release), Toast.LENGTH_SHORT, true).show();
                     mBluetoothLeService.closeGatt(macAddress);
                     updateDisconnectedStatus(deviceName, macAddress, getString(R.string.ble_unconnected));
-                    dialogDisconnected(deviceName);  //2021/07/09 斷線通知
+                    //2021/07/09 增加斷線通知
+                    dialogDisconnected(deviceName);
 
                     //移除所有的Handler
                     if(mHandler != null)
