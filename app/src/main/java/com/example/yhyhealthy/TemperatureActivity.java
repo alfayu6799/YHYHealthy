@@ -40,6 +40,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -201,12 +202,22 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
         /**開始掃描*/
         dialogBleConnect();
+
+        /** 開始掃描 新版 2021/07/23 ***/
+        showBleDialog();
+    }
+
+    private void showBleDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.dialog_ble_list, null);
+        RecyclerView bleList = view.findViewById(R.id.rv_ble_scan_view);       //搜尋ble
+        RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
     }
 
     /**BLE開始掃描*/
     @SuppressLint("NewApi")
     private void dialogBleConnect(){
-        Log.d(TAG, "dialogBleConnect: 開始搜尋藍芽設備");
         alertDialog = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.dialog_bleconnect, null);
@@ -644,6 +655,10 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if(deviceAddress != null){
             if(tAdapter.findNameByMac(deviceAddress) != null){
                 tAdapter.disconnectedDevice(deviceAddress, bleStatus, deviceName);
+                //2021/07/23
+                Log.d(TAG, "updateDisconnectedStatus: Name:" + tAdapter.findNameByMac(deviceAddress));
+
+//                tAdapter.clear();
 
                 //移除5秒鐘的佇列  2021/05/31
                 countDownTimerArrayMap.remove(deviceAddress);
@@ -707,9 +722,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if (degree != 0){
             //將溫度電量及mac傳到Adapter
             tAdapter.updateItemByMac(degree, batteryStr, macAddress);
-
-            //Log.d(TAG, "updateBleData: name:" + tAdapter.findNameByMac(macAddress)); //
-//            Log.d(TAG, "updateBleData,targetId: " + tAdapter.findTargetIdByMac(macAddress));
 
             //如果chart視窗存在就將使用者的資訊傳遞到ChartDialog
             if (chartDialog != null && chartDialog.isShowing())
@@ -927,7 +939,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     updateConnectedStatus(deviceName, macAddress, getString(R.string.ble_connect_status));
                     break;
                     
-                case yhyBleService.ACTION_DATA_AVAILABLE:
+                case yhyBleService.ACTION_DATA_AVAILABLE: //收到Ble回復的資料
                     Log.d(TAG, "onReceive: ACTION_DATA_AVAILABLE" + ByteUtils.byteArrayToString(data));
                     String receiveInfo = ByteUtils.byteArrayToString(data);
                     //2021/07/01
@@ -938,6 +950,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 //                        updateBleData(receiveInfo, macAddress);
 //                    }
                     updateBleData(receiveInfo, macAddress); //更新體溫跟電量
+                    //2021/07/23
+                    Log.d(TAG, "onReceive: target:" + tAdapter.findTargetIdByMac(macAddress));
                     break;
 
                 default:
@@ -1128,6 +1142,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 
     @Override  //啟動量測 interface 2021/03/30
     public void onBleMeasuring(TempDataApi.SuccessBean data) {
+
+
         //5sec@5mins
         secondTimerCreator(data.getMac());
 

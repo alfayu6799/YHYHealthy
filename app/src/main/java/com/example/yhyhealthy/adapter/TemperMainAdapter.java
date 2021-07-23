@@ -57,9 +57,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         }
     }
 
-//    public void clear(TempDataApi.SuccessBean data) {
-//        Log.d(TAG, "adapter clear: " + data.getTargetId());
-//    }
+    public void clear() {
+
+    }
 
     //斷線刷新 2021/04/28
     public void disconnectedDevice(String devMac, String devStatus, String devName){
@@ -160,10 +160,9 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
                if(!TextUtils.isEmpty(data.getMac())){
                     if (data.getMac().equals(mac)) {
                         data.setBattery(battery + "%");
-                        data.setDegree(degree, currentDateTime); //溫度與日期
+                        data.setDegree(degree, currentDateTime); //溫度與日期(for Dialog用)
                         notifyItemChanged(i); //刷新
                         //updateBefore(mac);
-                        Log.d(TAG, "updateItemByMac: " + data.getTargetId());
                     }
                }
             }

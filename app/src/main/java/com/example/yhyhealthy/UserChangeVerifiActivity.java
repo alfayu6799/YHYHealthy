@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yhyhealthy.module.ApiProxy;
@@ -38,19 +39,18 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
 
     private static final String TAG = "UserChangeVerifiActivit";
 
-    private TextInputLayout mailStyleLayout, phoneStyleLayout, mobileStyleLayout, passwordLayout;
+    private TextInputLayout mailStyleLayout,mobileStyleLayout, passwordLayout;
     private RadioGroup StyleGroup;
-    private EditText   editMail, editTelCode, editMobile, editPassword;
+    private EditText   editMail, editMobile, editPassword;
     private Button     btnSave;
     private ImageView  imgExit;
+    private TextView   areaCode;
     private String Style = "mail";
     private ProgressDialog progressDialog;
+    private String InterCode = "";
 
     //api
     ApiProxy proxy;
-
-    //背景動畫
-    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +65,12 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
 
     private void initView() {
         editMail = findViewById(R.id.edtEmailStyle);    //信箱
-        editTelCode = findViewById(R.id.edtTelCode);    //國際編碼
-        editTelCode.setText("CN");                      //只有大陸才會用到
-        editTelCode.setFocusable(false);                //不可編輯
-        editTelCode.setFocusableInTouchMode(false);     //不可編輯
-
-        //動畫background
-        //gifImageView = findViewById(R.id.game_gif);
-        //gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
+        areaCode = findViewById(R.id.tv_phone_code);    //國際編碼
+        areaCode.setOnClickListener(this);
+        //editTelCode = findViewById(R.id.edtTelCode);    //國際編碼
+        //editTelCode.setText("CN");                      //只有大陸才會用到
+//        editTelCode.setFocusable(false);                //不可編輯
+//        editTelCode.setFocusableInTouchMode(false);     //不可編輯
         
         editMobile = findViewById(R.id.edtMobile);      //手機號碼
         editPassword = findViewById(R.id.edtPassword);  //密瑪
@@ -84,7 +82,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
         passwordLayout = findViewById(R.id.passwordLayout);
 
         //簡訊Layout
-        phoneStyleLayout = findViewById(R.id.phoneStyleLayout);
+        //phoneStyleLayout = findViewById(R.id.phoneStyleLayout);
         mobileStyleLayout = findViewById(R.id.mobileStyleLayout);
 
         btnSave = findViewById(R.id.btnSaveStyleToApi);
@@ -100,13 +98,15 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                 if(checkedId == R.id.rtoBtnMailStyle){
                     mailStyleLayout.setVisibility(View.VISIBLE);
                     passwordLayout.setVisibility(View.VISIBLE);
-                    phoneStyleLayout.setVisibility(View.GONE);
+//                    phoneStyleLayout.setVisibility(View.GONE);
+                    areaCode.setVisibility(View.GONE);
                     mobileStyleLayout.setVisibility(View.GONE);
                     Style = "mail";
                 }else {
                     mailStyleLayout.setVisibility(View.GONE);
                     passwordLayout.setVisibility(View.VISIBLE);
-                    phoneStyleLayout.setVisibility(View.VISIBLE);
+//                    phoneStyleLayout.setVisibility(View.VISIBLE);
+                    areaCode.setVisibility(View.VISIBLE);
                     mobileStyleLayout.setVisibility(View.VISIBLE);
                     Style = "mobile";
                 }
@@ -123,7 +123,38 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
             case R.id.btnSaveStyleToApi:
                 checkBeforeUpdate();  //檢查資料的完整性
                 break;
+            case R.id.tv_phone_code:
+                showCodeDialog();   //國際編碼彈跳視窗
+                break;
         }
+    }
+
+    //國際編碼彈跳視窗
+    private void showCodeDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getString(R.string.chose_phone_code));
+        String[] areaCodeItems = { getString(R.string.china) , getString(R.string.taiwan)};
+        int itemChecked = -1; //default:都不選
+        alertDialog.setSingleChoiceItems(areaCodeItems, itemChecked, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:  //中國
+                        areaCode.setText(R.string.china);
+                        InterCode = "CN";
+                        dialog.dismiss();
+                        break;
+                    case 1:  //台灣
+                        areaCode.setText(R.string.taiwan);
+                        InterCode = "TW";
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        AlertDialog dialog = alertDialog.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     //送資料到後台前先檢查密碼是否有輸入
@@ -159,15 +190,15 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
         try {
             json.put("password", editPassword.getText().toString());
             json.put("email", editMail.getText().toString());
-            json.put("telCode", editTelCode.getText().toString());
+            json.put("telCode", InterCode);
             json.put("mobile",editMobile.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         //執行
         proxy.buildVerification(CHANGE_VERIFICATION_STYLE, json.toString(), defaultLan, verificationChangeListener);
-        //上傳成功提示
-        Toasty.success(UserChangeVerifiActivity.this, getString(R.string.update_succeed_next), Toast.LENGTH_SHORT, true).show();
+        //Toasty.success(UserChangeVerifiActivity.this, getString(R.string.update_succeed_next), Toast.LENGTH_SHORT, true).show();
     }
 
     private ApiProxy.OnApiListener verificationChangeListener = new ApiProxy.OnApiListener() {
@@ -200,7 +231,7 @@ public class UserChangeVerifiActivity extends AppCompatActivity implements View.
                             Toasty.error(UserChangeVerifiActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class)); //重新登入
                             finish();
-                        }else if(errorCode == 31){
+                        }else if(errorCode == 31){ //帳號重複登入
                             Toasty.error(UserChangeVerifiActivity.this, getString(R.string.login_duplicate), Toast.LENGTH_SHORT, true).show();
                             startActivity(new Intent(UserChangeVerifiActivity.this, LoginActivity.class));
                             finish();

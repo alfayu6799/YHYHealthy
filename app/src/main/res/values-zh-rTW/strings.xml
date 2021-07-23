@@ -439,7 +439,7 @@
     <string name="edit_temp_list">編輯觀測者資料</string>
     <string name="wifi_setting">無線設定</string>
     <string name="you_do_nothing">未做任何拍攝</string>
-    <string name="version">1.06</string>
+    <string name="version">1.09</string>
     <string name="service_time_out">目前系統開小差請稍後</string>
     <string name="history_select_observer">選擇觀測者</string>
     <string name="you_cant_chose_future">起始日不得大於今天日期</string>
@@ -486,4 +486,5 @@
     <string name="please_chose_one">請選擇是否填寫以下資料</string>
     <string name="need_some_info_for_period">排卵紀錄需要填寫經期設定與婚姻狀況,是否現在填寫?</string>
     <string name="bluetooth_is_disconnected">藍芽斷線通知</string>
+    <string name="chose_phone_code">國際編碼</string>
 </resources>

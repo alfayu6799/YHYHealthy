@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.yhyhealthy.module.ApiProxy;
 import com.google.android.material.textfield.TextInputLayout;
@@ -41,12 +42,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Button btnRegister;
     private EditText account, password, email;
-    private EditText edtTelCode, edtMobile;
-    private TextInputLayout emailLayout, telCodeLayout, mobileLayout;
+    private TextView txtAreaCode;
+    private EditText edtMobile;
+    private TextInputLayout emailLayout, mobileLayout;
 
     private RadioGroup registerGroup;
     private String verificationStyle = "email";
-    String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    private String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    private String InterCode = "";
 
     //api
     ApiProxy proxy;
@@ -75,27 +78,33 @@ public class RegisterActivity extends AppCompatActivity {
         gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
 
         emailLayout = findViewById(R.id.EmailLayout);
-        telCodeLayout = findViewById(R.id.TelCodeLayout);
         mobileLayout = findViewById(R.id.MobileLayout);
         email = findViewById(R.id.edtEmailInput);
-        edtTelCode = findViewById(R.id.edTelCode);
-        edtTelCode.setText("CN"); //暫時
         edtMobile = findViewById(R.id.edMobile);
+
+        txtAreaCode = findViewById(R.id.tvTelCode);
+        txtAreaCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //國際編碼採用彈跳視窗
+                showCodeDialog();
+            }
+        });
 
         //使用信箱或簡訊的方法註冊(RadioButton)
         registerGroup = findViewById(R.id.rdGroupRegister);
         registerGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rdoBtnEmail){  //信箱是default(在xml設定// )
+                if (checkedId == R.id.rdoBtnEmail){          //信箱是default(在xml設定// )
                     emailLayout.setVisibility(View.VISIBLE);
-                    telCodeLayout.setVisibility(View.GONE);
+                    txtAreaCode.setVisibility(View.GONE);
                     mobileLayout.setVisibility(View.GONE);
                     verificationStyle = "email";
                 }else{
                     verificationStyle = "phone";
                     emailLayout.setVisibility(View.GONE);
-                    telCodeLayout.setVisibility(View.VISIBLE);
+                    txtAreaCode.setVisibility(View.VISIBLE);
                     mobileLayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -106,7 +115,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: ????");
                 //帳號與密碼不得為空
                 if (TextUtils.isEmpty(account.getText().toString()) || TextUtils.isEmpty(password.getText().toString())){
                     Toasty.error(RegisterActivity.this, getString(R.string.account_is_not_allow_empty), Toast.LENGTH_SHORT, true).show();
@@ -136,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //採用簡訊驗證方式
                 if(verificationStyle.equals("phone")){
-                    if(TextUtils.isEmpty(edtTelCode.getText().toString()) || TextUtils.isEmpty(edtMobile.getText().toString())){
+                    if(TextUtils.isEmpty(InterCode) || TextUtils.isEmpty(edtMobile.getText().toString())){
                         Toasty.error(RegisterActivity.this, getString(R.string.please_input_phone), Toast.LENGTH_SHORT, true).show();
                         return;
                     }else {
@@ -146,6 +154,34 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //國際編碼彈跳視窗 2021/07/23變更
+    private void showCodeDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getString(R.string.chose_phone_code));
+        String[] areaCodeItems = { getString(R.string.china) , getString(R.string.taiwan)};
+        int itemChecked = -1; //default:都不選
+        alertDialog.setSingleChoiceItems(areaCodeItems, itemChecked, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:  //中國
+                        txtAreaCode.setText(R.string.china);
+                        InterCode = "CN";
+                        dialog.dismiss();
+                        break;
+                    case 1:  //台灣
+                        txtAreaCode.setText(R.string.taiwan);
+                        InterCode = "TW";
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        AlertDialog dialog = alertDialog.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     //將資料寫回後台
@@ -158,7 +194,6 @@ public class RegisterActivity extends AppCompatActivity {
         String accountNo = account.getText().toString().trim();
         String passWD = password.getText().toString().trim();
         String mailAddress = email.getText().toString().trim();
-        String telCodeNo = edtTelCode.getText().toString().trim();
         String phoneNo = edtMobile.getText().toString().trim();
 
         JSONObject json = new JSONObject();
@@ -166,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
             json.put("account", accountNo);
             json.put("password", passWD);
             json.put("email", mailAddress);
-            json.put("telCode", telCodeNo);
+            json.put("telCode", InterCode);
             json.put("mobile", phoneNo);
         } catch (JSONException e) {
             e.printStackTrace();

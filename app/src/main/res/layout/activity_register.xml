@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:maxLength="12"
+            android:background="@null"
             android:lines="1"
             android:hint="@string/please_input_password" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -132,32 +133,46 @@
             android:padding="10dp"
             android:inputType="textEmailAddress"
             android:lines="1"
+            android:background="@null"
             android:hint="@string/email_account" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TelCodeLayout"
+    <TextView
+        android:id="@+id/tvTelCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColorHint="@color/colorPrimaryDark"
-        app:hintTextColor="@color/red"
-        android:background="@drawable/shape_edit_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:padding="16dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/rdGroupRegister">
+        android:background="@drawable/shape_edit_background"
+        android:text="@string/please_input_area_code"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rdGroupRegister"/>
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/TelCodeLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:textColorHint="@color/colorPrimaryDark"-->
+<!--        app:hintTextColor="@color/red"-->
+<!--        android:background="@drawable/shape_edit_background"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:visibility="visible"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/rdGroupRegister">-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edTelCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="3"
-            android:hint="@string/tel_code"
-            android:inputType="number"
-            android:padding="10dp"/>
-    </com.google.android.material.textfield.TextInputLayout>
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/edTelCode"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="@string/tel_code"-->
+<!--            android:inputType="text"-->
+<!--            android:padding="10dp"/>-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/MobileLayout"
@@ -172,13 +187,14 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TelCodeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/tvTelCode">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edMobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="3"
+            android:background="@null"
             android:hint="@string/please_input_phone"
             android:inputType="number"
             android:padding="10dp" />
@@ -189,7 +205,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.52" />
+        app:layout_constraintGuide_percent="0.59" />
 
     <Button
         android:id="@+id/btnRegisterSend"
