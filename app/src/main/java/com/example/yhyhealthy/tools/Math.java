@@ -75,8 +75,8 @@ public class Math {
                     return context.getDrawable(R.mipmap.ic_1);
                 if (statusCode.get(FILLED)==1)  // [1,4] : 月經&預計經期
                     return context.getDrawable(R.mipmap.ic_yhy_1_4);
-                if (statusCode.get(FILLED)==2)  // [2,4] : 不可能有
-                    return null;
+                if (statusCode.get(FILLED)==2)  // [2,4] : 排卵期&預計經期(不可能有)
+                    return context.getDrawable(R.mipmap.ic_1);
                 if (statusCode.get(FILLED)==3)  // [3,4] : 非排卵期&黃體期
                     return context.getDrawable(R.mipmap.ic_yhy_3_4);
                 if (statusCode.get(FILLED)==7)   //[7,4] : 高黃體期&黃體期
@@ -106,7 +106,7 @@ public class Math {
                 if (statusCode.get(FILLED)==0)    // [0,6] : 預計排卵日
                     return context.getDrawable(R.mipmap.ic_3);
                 if (statusCode.get(FILLED)==1)    // [1,6] : 月經&預計排卵日
-                    return null;
+                    return context.getDrawable(R.mipmap.ic_yhy_1_6);
                 if (statusCode.get(FILLED)==2)    // [2,6] : 排卵期&預計排卵日
                     return context.getDrawable(R.mipmap.ic_yhy_2_6);
                 if (statusCode.get(FILLED)==3)    // [3,6] : 非排卵期&預計排卵日

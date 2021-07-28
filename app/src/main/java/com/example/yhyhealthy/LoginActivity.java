@@ -156,10 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onFailure(String message) {
-            Log.d(TAG, "onFailure: " + message);
-            if (message.contains("respond")){
-                Toasty.error(LoginActivity.this, getString(R.string.service_is_not_respond), Toast.LENGTH_SHORT, true).show();
-            }
+            Toasty.error(LoginActivity.this, message, Toast.LENGTH_SHORT, true).show();
         }
 
         @Override

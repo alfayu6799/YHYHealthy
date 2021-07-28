@@ -41,6 +41,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -142,6 +143,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     //背景動畫
     private GifImageView gifImageView;
 
+    //new ble
+    private Set<BluetoothDevice>pairedDevices;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +167,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         addRemoteUser = (Button) findViewById(R.id.bt_add_remote);
         txtUserInfoEdit = findViewById(R.id.tvEdit);
         selectedAccount = findViewById(R.id.btnChoseAccount);
+
         searchPairBle = findViewById(R.id.btn_pair_bluetooth);
 
         //動畫background
@@ -212,7 +217,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.dialog_ble_list, null);
         RecyclerView bleList = view.findViewById(R.id.rv_ble_scan_view);       //搜尋ble
-        RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
+        //RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
     }
 
     /**BLE開始掃描*/
@@ -483,10 +488,19 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 showAccountDialog();
                 break;
             case R.id.btn_pair_bluetooth:
-                Log.d(TAG, "onClick: pair blueTooth" );
-//                initBle();
+                initNewBle();
                 break;
         }
+    }
+
+    //2021/07/26
+    private void initNewBle() {
+        AlertDialog mAlertDialog = new AlertDialog.Builder(this).create();
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.dialog_ble_list, null);
+
+
+
     }
 
     //查詢遠端帳號-選擇帳號api

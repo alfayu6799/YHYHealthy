@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -90,6 +91,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private List<CycleRecord.SuccessBean> dataList;
     private Math math;
+    private int firstDayOfPeriod;
+    private String firstDayOfPeriodStr;
 
     //圖表
     private CombinedChart combinedChart;     //折線圖+長條圖
@@ -108,6 +111,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private static final int PERIOD_RECORD = 1;
     private String beginPeriodDay;   //經期第一天
     private int periodLength;  //經期長度
+    private List<firstDayOfPeriod> firstDayOfPeriodList = new ArrayList<>(); //經期第一天陣列
 
     //背景動畫
     private GifImageView gifImageView;
@@ -135,7 +139,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         cycleRecord = new CycleRecord();
         proxy = ApiProxy.getInstance();
 
-        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-5)); //這個月的第一天往前推算前5天
+        firstDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusDays(-15)); //這個月的第一天往前推算前5天
         lastDayOfThisMonth = String.valueOf(LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).plusDays(5));    //結束日+5天
 
         oneDayDecorator = new OneDayDecorator(this);
@@ -185,12 +189,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     //初始化日曆
     private void initCalendar() {
 
-        //Log.d(TAG, "初始化日曆fxn: initCalendar");
-//        widget.addDecorators(
-//                new MySelectorDecorator(OvulationActivity.this), //點擊日期後的背景
-//                oneDayDecorator
-//        );
-
         widget.addDecorator(oneDayDecorator); //當天Text背景是白色
 
         //經期月曆 (起始日&結束日)
@@ -198,9 +196,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
         //自動檢查今天是否有資料 2021/02/25
         checkTodayInfo(String.valueOf(LocalDate.now()));
-
-//        //顯示今天是周期的第幾天
-//        checkPeriodDayOfThisMonth(LocalDate.now());
 
         //監聽月曆滑動
         monthListener();
@@ -450,10 +445,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: " + beginPeriodDay);
                 //使用者點擊的日期須與sharePref內的日期符合才可以砍掉經期  2021/05/26 重構
-                if(!toDate.getText().toString().equals(beginPeriodDay)){
-                    Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day), Toast.LENGTH_SHORT,true).show();
-                }else {
+//                if(!toDate.getText().toString().equals(beginPeriodDay)){
+//                    Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day), Toast.LENGTH_SHORT,true).show();
+//                }else {
                     JSONObject json = new JSONObject();
                     try {
                         json.put("startDate", toDate.getText().toString());
@@ -461,8 +457,9 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    Log.d(TAG, "Delete: " + json.toString());
                     proxy.buildPOST(PERIOD_DELETE, json.toString(), deletePeriodListener);
-                }
+//                }
             }
         });
 
@@ -526,7 +523,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
             try {
                 JSONObject object = new JSONObject(result.toString());
                 int errorCode = object.getInt("errorCode");
-                if(errorCode ==0){
+                if(errorCode == 0){
                     Toasty.success(OvulationActivity.this,getString(R.string.delete_success), Toast.LENGTH_SHORT, true).show();
 
                     //重刷資料前先清除之前的mark
@@ -546,7 +543,13 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     startActivity(new Intent(OvulationActivity.this, LoginActivity.class)); //重新登入
                     finish();
                 }else {
-                    Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                    runOnUiThread(new Runnable() {  //避免crash
+                        @Override
+                        public void run() {
+                            Toasty.error(OvulationActivity.this, getString(R.string.json_error_code) + errorCode, Toast.LENGTH_SHORT, true).show();
+                            dialog.dismiss();
+                        }
+                    });
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -657,7 +660,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                         JSONObject jsonObject = new JSONObject(result.toString());
                         int errorCode = jsonObject.getInt("errorCode");
                         if (errorCode == 0) {
-                            Log.d(TAG, "run: " + result.toString());
                             parserCycleData(result); //解析週期資料
                         }else if (errorCode == 23) {  //token失效
                             Toasty.error(OvulationActivity.this, getString(R.string.request_failure), Toast.LENGTH_SHORT, true).show();
@@ -694,10 +696,11 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         private void parserCycleData(JSONObject result) {
             cycleRecord = CycleRecord.newInstance(result.toString());
-
-            List<String> list = new ArrayList<>(); //經期第一天陣列用
+            Log.d(TAG, "parserCycleData: " + result.toString());
 
             dataList = cycleRecord.getSuccess(); //獲取數據
+
+            DateTime dt = new DateTime(); //今天
 
             for (int i = 0; i < dataList.size(); i++) {
 
@@ -707,26 +710,49 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 if (math.getCalenderDrawable() != null)
                     widget.addDecorator(new MyEventDecorator(math.getCalenderDrawable(), Collections.singletonList(math.getDateData())));
 
-                //經期第一天
-                boolean isFirstDay = dataList.get(i).isFirstDay();
-                if (isFirstDay) {
-                    String day = dataList.get(i).getTestDate();
-                    list.add(day);
+                //今天日期與後台日期比對,找出相等的日期查出FirstDay的數值(要後端給的日期資料內有今天日期才會觸發)
+                if (dataList.get(i).getTestDate().equals(dt.toString("yyyy-MM-dd"))){
+//                    firstDayOfPeriod = dataList.get(i).getFirstDay() + 1;
+                    //顯示今天是周期的第幾天 2021/07/28
+                    showCyclePeriodDay(dataList.get(i).getTestDate(), dataList.get(i).getFirstDay());
                 }
 
+                //取得經期的第一天日期
+                if (dataList.get(i).getFirstDay() == 1 ){
+                    beginPeriodDay = dataList.get(i).getTestDate();
+                    LocalDate myDay = LocalDate.parse(beginPeriodDay).minusDays(1); //往前一天
+                    beginPeriodDay = myDay.toString();
+                    Log.d(TAG, "透過Api得到第1天的經期日:" + beginPeriodDay);
+                }
+
+                //2021/07/27
+                firstDayOfPeriodList.add(new firstDayOfPeriod(dataList.get(i).getTestDate(), dataList.get(i).getFirstDay()));
             }
-//
-            //經期第一天給予全域變數
-            if(null != list && !list.isEmpty())
-                beginPeriodDay = list.get(0);
-//
+
             //圖表初始化
             MPAChartManager chartManager = new MPAChartManager(this, combinedChart);
             chartManager.showCombinedChart(dataList);
-
-            //顯示今天是周期的第幾天 2021/05/25 需要等到月曆完全顯示完後再做周期的第一天查詢
-            checkPeriodDayOfThisMonth(LocalDate.now());
         }
+
+    //2021/07/28 今天是週期第幾天的顯示
+    @SuppressLint("SetTextI18n")
+    private void showCyclePeriodDay(String testDate, int firstDay) {
+
+        int numsOfDay = 0;
+        int numOfDay = firstDay + 1;
+
+        if (!TextUtils.isEmpty(onClickDay)) {
+            for (int i = 0; i < firstDayOfPeriodList.size(); i++) {
+                if (firstDayOfPeriodList.get(i).testDate.contains(onClickDay)) {
+                    int nums = firstDayOfPeriodList.get(i).firstDay;
+                    numsOfDay = nums + 1;
+                }
+            }
+            menstruationPeriodDay.setText(getString(R.string.this_period_day) + " " + numsOfDay + " " + getString(R.string.day));
+        }else {
+            menstruationPeriodDay.setText(getString(R.string.period_day) + " " + numOfDay + " " + getString(R.string.day));
+        }
+    }
 
     //日期被選到時的動作 2021/02/25
     @Override
@@ -753,21 +779,17 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         checkPeriodDayOfThisMonth(choseDay);
     }
 
-    //週期第幾天Fxn 2021/03/02
+    //根據使用者點擊的日期去計算週期是第?天 2021/07/26
     @SuppressLint("SetTextI18n")
     private void checkPeriodDayOfThisMonth(LocalDate choseDay) {
-        if (TextUtils.isEmpty(beginPeriodDay)){
-            menstruationPeriodDay.setText(getString(R.string.period_day_is_empty)); //週期沒有資料
-        }else {
-            LocalDate begin = LocalDate.parse(beginPeriodDay);
-            long numOfDays = ChronoUnit.DAYS.between(begin, choseDay);
-            if(numOfDays >= 0){
-               numOfDays = numOfDays + 1;
-               menstruationPeriodDay.setText(getString(R.string.period_day) + " " + numOfDays + " " + getString(R.string.day));
-            }else {
-               menstruationPeriodDay.setText(getString(R.string.period_day_out_order)); //超出本月份周期
-           }
+        int numOfDays = 0;
+
+        for (int i = 0; i < firstDayOfPeriodList.size(); i++){
+            if (firstDayOfPeriodList.get(i).testDate.equals(choseDay.toString())){
+                numOfDays = firstDayOfPeriodList.get(i).firstDay + 1;  //實際天數+1天
+            }
         }
+        menstruationPeriodDay.setText(getString(R.string.this_period_day) + " " + numOfDays + " " + getString(R.string.day));
     }
 
     //經期設定是否禁止
@@ -856,5 +878,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
+    }
+
+    //經期第一天model
+    public class firstDayOfPeriod {
+            String testDate;
+            int    firstDay;
+
+        public firstDayOfPeriod(String testDate, int firstDay) {
+            this.testDate = testDate;
+            this.firstDay = firstDay;
+        }
     }
 }

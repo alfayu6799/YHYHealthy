@@ -290,6 +290,7 @@
     <string name="unknow">Unrecognizable</string>
     <string name="non_period">General</string>
     <string name="period_day">Today is the</string>
+    <string name="this_period_day">This day is the </string>
     <string name="period_day_out_order">Out of range</string>
     <string name="day">th Day of Menstrual Period</string>
     <string name="please_chose_really_day">please chose a correct period first day</string>
@@ -498,4 +499,5 @@
     <string name="need_some_info_for_period">Ovulation Testing need fill in period info, now or later?</string>
     <string name="bluetooth_is_disconnected">Alert Notice</string>
     <string name="chose_phone_code">International Code</string>
+    <string name="edit_fail">Fail To Edit</string>
 </resources>

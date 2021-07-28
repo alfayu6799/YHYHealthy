@@ -7,7 +7,7 @@ import java.util.List;
 public class CycleRecord {
 
     /**
-     * success : [{"testDate":"2021-02-05","temperature":0,"firstDay":true,"cycleStatus":[1,4]},{"testDate":"2021-02-06","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-07","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-08","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-09","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-14","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-15","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-16","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-17","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-18","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-19","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-20","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-21","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-22","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-23","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-03-05","temperature":0,"firstDay":true,"cycleStatus":[4]},{"testDate":"2021-03-06","temperature":0,"firstDay":false,"cycleStatus":[4]}]
+     * success : [{"testDate":"2021-02-05","temperature":0,"firstDay":0,"cycleStatus":[1,4]},{"testDate":"2021-02-06","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-07","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-08","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-09","temperature":0,"firstDay":false,"cycleStatus":[1,4]},{"testDate":"2021-02-14","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-15","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-16","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-17","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-18","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-19","temperature":0,"firstDay":false,"cycleStatus":[6]},{"testDate":"2021-02-20","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-21","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-22","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-02-23","temperature":0,"firstDay":false,"cycleStatus":[5]},{"testDate":"2021-03-05","temperature":0,"firstDay":true,"cycleStatus":[4]},{"testDate":"2021-03-06","temperature":0,"firstDay":false,"cycleStatus":[4]}]
      * errorCode : 0
      */
 
@@ -26,13 +26,13 @@ public class CycleRecord {
         /**
          * testDate : 2021-02-05
          * temperature : 0.0
-         * firstDay : true
+         * firstDay : 0
          * cycleStatus : [1,4]
          */
 
         private String testDate;
         private double temperature;
-        private boolean firstDay;
+        private int firstDay;
         private List<Integer> cycleStatus;
 
         public String getTestDate() {
@@ -43,7 +43,7 @@ public class CycleRecord {
             return temperature;
         }
 
-        public boolean isFirstDay() {
+        public int getFirstDay() {
             return firstDay;
         }
 

@@ -385,7 +385,7 @@ public class ApiProxy {
                     e.printStackTrace();
                 }
 
-                String message = app.getString(R.string.api_no_respond);
+                String message = app.getString(R.string.service_is_not_respond);
                 final JSONObject finalJsonObject = jsonObject;
                 final String finalMessage = message;
                 handler.post(new Runnable() {
