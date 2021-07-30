@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -16,6 +17,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -239,7 +257,16 @@ public class ApiProxy {
 
     private OkHttpClient buildClient(){
         if (client == null)
+//            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+//                try {
+//                    X509TrustManager trustManager = systemDefaultTrustManager();
+//                    SSLSocketFactory sslSocketFactory = sslSocketFactory(trustManager);
             client = new OkHttpClient.Builder().build();
+//                    client = new OkHttpClient.Builder().sslSocketFactory(sslSocketFactory, trustManager).build();
+//                }catch (Exception exc){
+//                    Log.d(TAG, "buildClient: error:" + exc);
+//                }
+//            }
         return client;
     }
 
@@ -334,6 +361,88 @@ public class ApiProxy {
         buildRequest(request.build(), listener);
     }
 
+
+
+    //自定义SS验证相关类
+    private X509TrustManager systemDefaultTrustManager() {
+        try {
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init((KeyStore) null);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+                throw new IllegalStateException("Unexpected default trust managers:"
+                        + Arrays.toString(trustManagers));
+            }
+            return (X509TrustManager) trustManagers[0];
+        } catch (GeneralSecurityException e) {
+            throw new AssertionError(); // The system has no TLS. Just give up.
+        }
+    }
+
+    private SSLSocketFactory sslSocketFactory(X509TrustManager trustManager) {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[] { trustManager }, null);
+            return new TLSSocketFactory(sslContext.getSocketFactory());
+        } catch (GeneralSecurityException e) {
+            throw new AssertionError(); // The system has no TLS. Just give up.
+        }
+    }
+
+    public class TLSSocketFactory extends SSLSocketFactory {
+        private final String[] TLS_V1_V2 = {"TLSv1.1", "TLSv1.2"};
+
+        final SSLSocketFactory delegate;
+
+        public TLSSocketFactory(SSLSocketFactory base) {
+            this.delegate = base;
+        }
+
+        @Override
+        public String[] getDefaultCipherSuites() {
+            return delegate.getDefaultCipherSuites();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return delegate.getSupportedCipherSuites();
+        }
+
+        @Override
+        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
+            return patch(delegate.createSocket(s, host, port, autoClose));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException {
+            return patch(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
+            return patch(delegate.createSocket(host, port, localHost, localPort));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return patch(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return patch(delegate.createSocket(address, port, localAddress, localPort));
+        }
+
+        private Socket patch(Socket s) {
+            if (s != null && s instanceof SSLSocket) {
+                ((SSLSocket) s).setEnabledProtocols(TLS_V1_V2);
+            }
+            return s;
+        }
+    }
+
+
     private void buildRequest(Request req, OnApiListener listener) {
 
         final Call call = buildClient().newCall(req);
@@ -408,7 +517,6 @@ public class ApiProxy {
             }
         });
     }
-
 
     public interface OnApiListener{
         void onPreExecute();

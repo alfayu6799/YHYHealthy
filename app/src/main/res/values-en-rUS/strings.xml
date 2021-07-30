@@ -449,7 +449,7 @@
     <string name="wifi_setting">WiFi Setting</string>
     <string name="edit_temp_list">Edit Observation info</string>
     <string name="you_do_nothing">You do Nothing</string>
-    <string name="version">1.09</string>
+    <string name="version">1.12</string>
     <string name="service_time_out">The Service is time out , please wait a moment</string>
     <string name="history_select_observer">Select Observer</string>
     <string name="you_are_chose_observer_is">You selected observer is :</string>
@@ -500,4 +500,12 @@
     <string name="bluetooth_is_disconnected">Alert Notice</string>
     <string name="chose_phone_code">International Code</string>
     <string name="edit_fail">Fail To Edit</string>
+    <string name="ble_devide">Bluetooth</string>
+    <string name="wifi_device">WIFI</string>
+    <string name="please_chose_wifiless_type">Please chose wireless type</string>
+    <string name="please_bind_wifi_ncf">Please bind wifi Serical Number First</string>
+    <string name="alertMessages">Error Messages</string>
+    <string name="txt_alart_dialog">Notice</string>
+    <string name="txt_alert_messages">It\'s going to Wifi Bind</string>
+    <string name="you_are_do_nothing">You do nothing</string>
 </resources>

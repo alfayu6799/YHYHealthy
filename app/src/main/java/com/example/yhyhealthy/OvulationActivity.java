@@ -91,8 +91,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     private List<CycleRecord.SuccessBean> dataList;
     private Math math;
-    private int firstDayOfPeriod;
-    private String firstDayOfPeriodStr;
 
     //圖表
     private CombinedChart combinedChart;     //折線圖+長條圖
@@ -112,9 +110,6 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
     private String beginPeriodDay;   //經期第一天
     private int periodLength;  //經期長度
     private List<firstDayOfPeriod> firstDayOfPeriodList = new ArrayList<>(); //經期第一天陣列
-
-    //背景動畫
-    private GifImageView gifImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -343,7 +338,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //經期設定對話框
     private void showPeriod(String clickDay) {
-//        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
+        //如果使用者沒有選擇任何一天就點擊經期設定按鈕,其開始日期則以今天為主
         if (clickDay == null){
             clickDay = String.valueOf(LocalDate.now()); //今天
         }
@@ -445,8 +440,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: " + beginPeriodDay);
-                //使用者點擊的日期須與sharePref內的日期符合才可以砍掉經期  2021/05/26 重構
+                //使用者點擊的日期須與api後端給經期第一天的日期符合才可以砍掉經期  2021/05/26 重構
 //                if(!toDate.getText().toString().equals(beginPeriodDay)){
 //                    Toasty.error(OvulationActivity.this, getString(R.string.please_chose_really_day), Toast.LENGTH_SHORT,true).show();
 //                }else {
@@ -636,7 +630,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "後台接受到的日期範圍: " + json.toString());
+        //Log.d(TAG, "後台接受到的日期範圍: " + json.toString());
         proxy.buildPOST(CYCLE_RECORD, json.toString(), cycleRecordListener);
     }
 
@@ -696,7 +690,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         private void parserCycleData(JSONObject result) {
             cycleRecord = CycleRecord.newInstance(result.toString());
-            Log.d(TAG, "parserCycleData: " + result.toString());
+            //Log.d(TAG, "parserCycleData: " + result.toString());
 
             dataList = cycleRecord.getSuccess(); //獲取數據
 
@@ -712,9 +706,8 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
                 //今天日期與後台日期比對,找出相等的日期查出FirstDay的數值(要後端給的日期資料內有今天日期才會觸發)
                 if (dataList.get(i).getTestDate().equals(dt.toString("yyyy-MM-dd"))){
-//                    firstDayOfPeriod = dataList.get(i).getFirstDay() + 1;
                     //顯示今天是周期的第幾天 2021/07/28
-                    showCyclePeriodDay(dataList.get(i).getTestDate(), dataList.get(i).getFirstDay());
+                    showCyclePeriodDay(dataList.get(i).getFirstDay());
                 }
 
                 //取得經期的第一天日期
@@ -722,7 +715,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                     beginPeriodDay = dataList.get(i).getTestDate();
                     LocalDate myDay = LocalDate.parse(beginPeriodDay).minusDays(1); //往前一天
                     beginPeriodDay = myDay.toString();
-                    Log.d(TAG, "透過Api得到第1天的經期日:" + beginPeriodDay);
+                    //Log.d(TAG, "透過Api得到第1天的經期日:" + beginPeriodDay);
                 }
 
                 //2021/07/27
@@ -736,7 +729,7 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
 
     //2021/07/28 今天是週期第幾天的顯示
     @SuppressLint("SetTextI18n")
-    private void showCyclePeriodDay(String testDate, int firstDay) {
+    private void showCyclePeriodDay(int firstDay) {
 
         int numsOfDay = 0;
         int numOfDay = firstDay + 1;

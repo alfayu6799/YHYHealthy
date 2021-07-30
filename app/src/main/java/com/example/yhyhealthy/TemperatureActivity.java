@@ -45,6 +45,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.example.yhyhealthy.adapter.BluetoothLeAdapter;
 import com.example.yhyhealthy.adapter.RemoteViewAdapter;
 import com.example.yhyhealthy.adapter.TemperMainAdapter;
@@ -56,6 +57,10 @@ import com.example.yhyhealthy.module.ApiProxy;
 import com.example.yhyhealthy.module.yhyBleService;
 import com.example.yhyhealthy.tools.ByteUtils;
 import com.example.yhyhealthy.tools.SpacesItemDecoration;
+import com.rahman.dialog.Activity.SmartDialog;
+import com.rahman.dialog.ListenerCallBack.SmartDialogClickListener;
+import com.rahman.dialog.Utilities.SmartDialogBuilder;
+
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -143,9 +148,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
     //背景動畫
     private GifImageView gifImageView;
 
-    //new ble
-    private Set<BluetoothDevice>pairedDevices;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,20 +207,58 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         if (!mBluetoothAdapter.isEnabled())
             mBluetoothAdapter.enable();   //自動啟動藍芽
 
-        /**開始掃描*/
-        dialogBleConnect();
+        /** 開始掃描 ***/
+//        dialogBleConnect();
 
-        /** 開始掃描 新版 2021/07/23 ***/
-        showBleDialog();
+        /** 開始掃描 新版 2021/07/30 ***/
+        showConnectDialog();
     }
 
-    private void showBleDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View view = layoutInflater.inflate(R.layout.dialog_ble_list, null);
-        RecyclerView bleList = view.findViewById(R.id.rv_ble_scan_view);       //搜尋ble
-        //RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
+    //2021/07/30
+    private void showConnectDialog() {
+          AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+          //標題背景
+          TextView textView = new TextView(this);
+          textView.setText(getString(R.string.please_chose_wifiless_type));
+          textView.setPadding(20, 30, 20, 30);
+          textView.setTextSize(20F);
+          textView.setBackgroundResource(R.color.colorPrimaryDark);
+          textView.setTextColor(Color.WHITE);
+          builder.setCustomTitle(textView);
+
+          //資料源
+          String[] wirelessType = {getString(R.string.ble_devide), getString(R.string.wifi_device)};
+          int itemChecked = -1;
+          builder.setSingleChoiceItems(wirelessType, itemChecked, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case 0: /** 開始掃描BLE:本機 ***/
+                            dialogBleConnect();
+                            dialog.dismiss();
+                            break;
+                        case 1: /** 直接取得後台wifi貼片 **/
+                            boolean isExists = getWifiSerialNumber();
+                            if (isExists){
+                                dialog.dismiss();
+                            }else {
+                                wifiDialog();
+                                dialog.dismiss();
+                            }
+                            break;
+                    }
+              }
+          });
+
+
+          AlertDialog dialog = builder.create();
+          dialog.show();
+
+//        RecyclerView bleList = view.findViewById(R.id.rv_ble_scan_view);       //搜尋ble
+//        RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
     }
+
 
     /**BLE開始掃描*/
     @SuppressLint("NewApi")
@@ -363,6 +403,35 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 alertDialog.dismiss();
         }
     };
+
+    //檢查是否有綁定wifi貼片編號  2021/07/30
+    private boolean getWifiSerialNumber(){
+
+        return false;
+    }
+
+    //2021/07/30
+    private void wifiDialog(){
+        new SmartDialogBuilder(TemperatureActivity.this)
+                .setTitle(getString(R.string.txt_alart_dialog))
+                .setSubTitle(getString(R.string.txt_alert_messages))
+                .setCancalable(false)
+                .setNegativeButtonHide(false)
+                .setPositiveButton(getString(R.string.dialog_ok), new SmartDialogClickListener() {
+                    @Override
+                    public void onClick(SmartDialog smartDialog) {
+                        smartDialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_cancel), new SmartDialogClickListener() {
+                    @Override
+                    public void onClick(SmartDialog smartDialog) {
+                        Toasty.info(TemperatureActivity.this, getString(R.string.you_are_do_nothing), Toast.LENGTH_SHORT,true).show();
+                        smartDialog.dismiss();
+                    }
+                })
+                .build().show();
+    }
 
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,8 +8,8 @@ android {
         applicationId "com.yhihc.group.yhyhealthy"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 10
-        versionName "1.10"
+        versionCode 12
+        versionName "1.12"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         //2021/05/26 for aab檔案使用
@@ -97,4 +97,7 @@ dependencies {
 
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+
+    //Dialog
+    implementation 'com.github.TecOrb-Developers:SmartAlertDialog:v1.0'
 }

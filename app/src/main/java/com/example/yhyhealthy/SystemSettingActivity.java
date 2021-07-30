@@ -55,6 +55,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
  * 系統設定 - 系統設定
  * 溫度單位 dialog
  * 藍芽更名 dialog
+ * 無線設定
  */
 
 public class SystemSettingActivity extends DeviceBaseActivity implements View.OnClickListener {
@@ -87,6 +88,9 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
     //背景動畫
     private GifImageView gifImageView;
 
+    //wifi設定
+    private ImageView wifiSetting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +110,7 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
         BleSetting = findViewById(R.id.ivToBleSetting);
         unitSetting = findViewById(R.id.ivToUnitSetting);
         edtNewName = findViewById(R.id.editBleName);
+        wifiSetting = findViewById(R.id.ivToWiFiSetting);
 
         //動畫background
         gifImageView = findViewById(R.id.game_gif);
@@ -114,6 +119,7 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
         back.setOnClickListener(this);
         BleSetting.setOnClickListener(this);
         unitSetting.setOnClickListener(this);
+        wifiSetting.setOnClickListener(this);
 
         edtNewName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -170,8 +176,11 @@ public class SystemSettingActivity extends DeviceBaseActivity implements View.On
                     requestPermission();
                 }
                 break;
-            case R.id.ivToUnitSetting:
-                showUnitDialog();  //溫度單位彈跳視窗
+            case R.id.ivToUnitSetting: //溫度單位彈跳視窗
+                showUnitDialog();
+                break;
+            case R.id.ivToWiFiSetting: //wifi設定
+                startActivity(new Intent(this, UserWifiSettingActivity.class));  //wifi設定主頁
                 break;
         }
     }

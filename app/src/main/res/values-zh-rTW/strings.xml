@@ -440,7 +440,7 @@
     <string name="edit_temp_list">編輯觀測者資料</string>
     <string name="wifi_setting">無線設定</string>
     <string name="you_do_nothing">未做任何拍攝</string>
-    <string name="version">1.09</string>
+    <string name="version">1.12</string>
     <string name="service_time_out">目前系統開小差請稍後</string>
     <string name="history_select_observer">選擇觀測者</string>
     <string name="you_cant_chose_future">起始日不得大於今天日期</string>
@@ -489,4 +489,12 @@
     <string name="bluetooth_is_disconnected">藍芽斷線通知</string>
     <string name="chose_phone_code">國際編碼</string>
     <string name="edit_fail">修改失敗</string>
+    <string name="ble_devide">藍芽</string>
+    <string name="wifi_device">無線</string>
+    <string name="please_chose_wifiless_type">請選擇貼片連線方式</string>
+    <string name="please_bind_wifi_ncf">請先綁定wifi貼片序號</string>
+    <string name="alertMessages">錯誤訊息</string>
+    <string name="txt_alart_dialog">設備綁定通知</string>
+    <string name="txt_alert_messages">將至使用者頁面進行設備綁定</string>
+    <string name="you_are_do_nothing">你沒有做任何變動</string>
 </resources>

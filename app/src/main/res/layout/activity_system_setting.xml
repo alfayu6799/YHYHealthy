@@ -138,6 +138,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toTopOf="@+id/textView76"
-        app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_32dp" />
+        android:src="@drawable/ic_baseline_arrow_forward_ios_32dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
