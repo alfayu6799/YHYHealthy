@@ -508,4 +508,19 @@
     <string name="txt_alart_dialog">Notice</string>
     <string name="txt_alert_messages">It\'s going to Wifi bind</string>
     <string name="you_are_do_nothing">You do nothing</string>
+    <string name="please_select_cjm410_wifi">Please Search cjm410 Wifi</string>
+    <string name="please_input_cjm410_password">Please input YHY wifi password</string>
+    <string name="wifi_connect">Connect</string>
+    <string name="scan_is_empty">Scan is Empty</string>
+    <string name="select_wifi_devices">Select wifi to connect</string>
+    <string name="cancel">Cancel</string>
+    <string name="permiss_info">Access Location must be allowed for Wifi Search</string>
+    <string name="connect_fail">Connect fail</string>
+    <string name="cjm410_cant_find">Can not find YHY WIFI</string>
+    <string name="connect_succeed">YHY WIFI device Connected Succeed</string>
+    <string name="please_search_home_wifi">Please Search home wifi</string>
+    <string name="step_1">Step 1</string>
+    <string name="step_2">Step 2</string>
+    <string name="please_input_wifi_password">Please input wifi password</string>
+    <string name="Unknown">Unknown</string>
 </resources>

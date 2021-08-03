@@ -76,6 +76,10 @@ public class ObserverAdapter extends RecyclerView.Adapter<ObserverAdapter.ViewHo
                 .asBitmap()
                 .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
                 .into(holder.observerPhoto);
+//        Glide.with(context)
+//                .asBitmap()
+//                .load(data.getImgId())
+//                .into(holder.observerPhoto);
         
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

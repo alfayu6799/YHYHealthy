@@ -86,6 +86,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
     private void initView() {
         rv = findViewById(R.id.rvDegreeEdit);
         back = findViewById(R.id.ivDegreeBack);
+
         //動畫background
         gifImageView = findViewById(R.id.game_gif);
         gifImageView.setBackgroundResource(R.mipmap.yhy_new_background);
@@ -195,9 +196,8 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
 
-//        //大頭貼轉成bitmap格式
+        //大頭貼轉成bitmap格式
         if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
-            Log.d(TAG, "onEditClick: " + data.getHeadShot());
             Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
             saveBitmap(bitmap); //存到本機端記憶卡內
             bundle.putString("HeadShot", tmpPhoto.toString());
@@ -213,6 +213,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         bundle.putString("birthday", data.getTempBirthday());
         bundle.putString("height", String.valueOf(data.getTempHeight()));
         bundle.putString("weight", String.valueOf(data.getTempWeight()));
+
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_CODE);
     }

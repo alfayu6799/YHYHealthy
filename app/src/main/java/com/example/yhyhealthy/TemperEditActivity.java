@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -105,13 +106,15 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             String degreeWeight = bundle.getString("weight");
             String degreeHeight = bundle.getString("height");
             String degreeHeadShot = bundle.getString("HeadShot");
+//            String degreeImageUrl = bundle.getString("imgId");
+            boolean wifi = bundle.getBoolean("wifi");
 
-            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot);
+            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot, wifi);
         }
 
     }
 
-    private void initData(String name, String gender, String birthday, String weight, String height, String headShot) {
+    private void initData(String name, String gender, String birthday, String weight, String height, String headShot, boolean iSWifi) {
         userName.setText(name);
         userBirthday.setText(birthday);
         userHeight.setText(height);
@@ -121,17 +124,26 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
         }else {
             rdGroup.check(R.id.rdMale1);
         }
+
             //2021/06/02
         if(headShot != null){
-            //照片顯示
-            file = new File(headShot);
-            Uri imageUri = Uri.fromFile(file);
-            Glide.with(this)
-                    .load(imageUri)
-                    .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
-                    .into(photoShow);
-        }
+//            Glide.with(this)
+//                    .asBitmap()
+//                    .load(headShot)
+//                    .into(photoShow);
 
+            if (iSWifi){   //來自wifi綁定 2021/08/02增加
+                byte[] imageByteArray = Base64.decode(headShot, Base64.DEFAULT);
+                Glide.with(this).load(imageByteArray).into(photoShow);
+            }else {
+                file = new File(headShot);
+                Uri imageUri = Uri.fromFile(file);
+                Glide.with(this)
+                        .load(imageUri)
+                        .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
+                        .into(photoShow);
+            }
+        }
     }
 
     private void initView() {

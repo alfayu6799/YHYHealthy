@@ -2,6 +2,7 @@ package com.example.yhyhealthy.adapter;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +31,13 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
     private List<TempDataApi.SuccessBean> dataList;
     private TemperatureEditAdapter.TemperatureEditListener listener;
 
+    private static final String TAG = "TemperatureEditAdapter";
+
     //建構子
     public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList, TemperatureEditListener listener) {
         this.context = context;
         this.dataList = dataList;
         this.listener = listener;
-    }
-
-    public TemperatureEditAdapter(Context context, List<TempDataApi.SuccessBean> dataList) {
-        this.context = context;
-        this.dataList = dataList;
     }
 
     @NonNull
@@ -54,19 +52,29 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         TempDataApi.SuccessBean data = dataList.get(position);
         holder.name.setText(data.getUserName());
 
-        if (data.getGender().equals("F")) {
-            holder.gender.setText(R.string.female);
-        }else{
-            holder.gender.setText(R.string.male);
+        //2021/08/03 空值判斷
+        if (data.getGender() == null || data.getGender() == ""){
+            holder.gender.setText(R.string.Unknown);
+        }else {
+            if (data.getGender().equals("F")){
+                holder.gender.setText(R.string.female);
+            }else {
+                holder.gender.setText(R.string.male);
+            }
         }
 
         holder.birthday.setText(data.getTempBirthday());
 
-        //base64解碼並顯示在imageView
+        //大頭照
         Glide.with(context)
-                .asBitmap()
-                .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
-                .into(holder.editPhoto);
+        .asBitmap()
+        .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
+        .into(holder.editPhoto);
+
+//        Glide.with(context)
+//                .asBitmap()
+//                .load(data.getImgId())
+//                .into(holder.editPhoto);
 
         //依據使用者點擊的position刪除單一個體
         holder.remove.setOnClickListener(new View.OnClickListener() {

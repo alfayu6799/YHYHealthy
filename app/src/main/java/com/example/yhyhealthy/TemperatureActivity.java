@@ -60,6 +60,7 @@ import com.example.yhyhealthy.tools.SpacesItemDecoration;
 import com.rahman.dialog.Activity.SmartDialog;
 import com.rahman.dialog.ListenerCallBack.SmartDialogClickListener;
 import com.rahman.dialog.Utilities.SmartDialogBuilder;
+import com.thanosfisherman.wifiutils.WifiUtils;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -194,9 +195,10 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         supervise.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.white));
     }
 
-    /**** 藍芽 2021/03/18 *****/
+    /**** 藍芽 or wifi 2021/08/02 *****/
     @SuppressLint("NewApi")
-    private void initBle() {
+    private void initWireless() {
+
         /**啟用藍牙適配器*/
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -236,6 +238,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     switch (which){
                         case 0: /** 開始掃描BLE:本機 ***/
                             dialogBleConnect();
+                            //關閉彈跳視窗
                             dialog.dismiss();
                             break;
                         case 1: /** 直接取得後台wifi貼片 **/
@@ -243,7 +246,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                             if (isExists){
                                 dialog.dismiss();
                             }else {
-                                wifiDialog();
+                                wifiDialog();  //提示使用者進行wifi綁定設定
                                 dialog.dismiss();
                             }
                             break;
@@ -259,6 +262,11 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
 //        RecyclerView pairedList = view.findViewById(R.id.rv_ble_paired_view);  //配對ble
     }
 
+    //檢查是否有綁定wifi貼片編號  2021/07/30
+    private boolean getWifiSerialNumber(){
+
+        return false;
+    }
 
     /**BLE開始掃描*/
     @SuppressLint("NewApi")
@@ -278,7 +286,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         bleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         alertDialog.setView(view);
-        //alertDialog.setCancelable(false);
+        alertDialog.setCancelable(false);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tempAdapter.OnItemClick(itemClick);
@@ -291,7 +299,6 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             @Override
             public void onClick(View view) {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                //Toasty.info(TemperatureActivity.this, getString(R.string.user_cancel_search), Toast.LENGTH_SHORT, true).show();
                 alertDialog.dismiss(); //關閉視窗
             }
         });
@@ -392,10 +399,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         public void onItemClick(ScannedData selectedDevice) {
 
             mBluetoothAdapter.stopLeScan(mLeScanCallback); //停止搜尋
-//            mBluetoothLeScanner.stopScan(mScanCallback);  //停止搜尋
 
             //啟動ble server連線
-//            Log.d(TAG, "onItemClick: " + selectedDevice.getAddress());
             mBluetoothLeService.connect(selectedDevice.getAddress());  //2021/03/30
 
             //關閉視窗
@@ -404,13 +409,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         }
     };
 
-    //檢查是否有綁定wifi貼片編號  2021/07/30
-    private boolean getWifiSerialNumber(){
-
-        return false;
-    }
-
-    //2021/07/30
+    //2021/07/30  提示使用者進行wifi設備綁定的動作
     private void wifiDialog(){
         new SmartDialogBuilder(TemperatureActivity.this)
                 .setTitle(getString(R.string.txt_alart_dialog))
@@ -420,6 +419,9 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                 .setPositiveButton(getString(R.string.dialog_ok), new SmartDialogClickListener() {
                     @Override
                     public void onClick(SmartDialog smartDialog) {
+                        //導引至修改的頁面進行設備綁定的動作 2021/08/02
+                        bindWifiDevice();
+                        //關閉彈跳視窗
                         smartDialog.dismiss();
                     }
                 })
@@ -427,14 +429,35 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
                     @Override
                     public void onClick(SmartDialog smartDialog) {
                         Toasty.info(TemperatureActivity.this, getString(R.string.you_are_do_nothing), Toast.LENGTH_SHORT,true).show();
+                        //關閉彈跳視窗
                         smartDialog.dismiss();
                     }
                 })
                 .build().show();
     }
 
+    //導引至修改的頁面進行設備綁定的動作 2021/08/02
+    private void bindWifiDevice() {
+        Intent intent = new Intent();
+        intent.setClass(TemperatureActivity.this, TemperEditActivity.class);
+        Bundle bundle = new Bundle();
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        bundle.putInt("targetId", statusMemberBean.getTargetId());
+        bundle.putString("name", statusMemberBean.getUserName());
+        bundle.putString("gender", statusMemberBean.getGender());
+        bundle.putString("birthday", statusMemberBean.getTempBirthday());
+        bundle.putString("height", String.valueOf(statusMemberBean.getTempHeight()));
+        bundle.putString("weight", String.valueOf(statusMemberBean.getTempWeight()));
+//        bundle.putString("imgId", statusMemberBean.getImgId());  //大頭貼
+        bundle.putString("HeadShot", statusMemberBean.getHeadShot()); //大頭貼
+        bundle.putBoolean("wifi", true);  //是否來自wifi綁定設定
+
+        intent.putExtras(bundle);
+        startActivityForResult(intent, 1);
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //觀測者 Item 填入Data
     private void setInfo() {
         proxy.buildPOST(BLE_USER_LIST, "", bleUserListListener);
@@ -1219,8 +1242,8 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         statusPosition = position;          //RecyclerView's position給予全域變數
         statusMemberBean = data;           //在把data內的資料丟給全域變數statusMemberBean;
 
-        //初始化藍芽
-        initBle();
+        //初始化藍芽或是wifi設備
+        initWireless();
     }
 
     @Override  //啟動量測 interface 2021/03/30

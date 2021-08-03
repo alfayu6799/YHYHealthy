@@ -95,9 +95,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
-    //gif
+    //gif Lib
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
 
-    //Dialog
+    //SmartAlertDialog Lib (for wifi)
     implementation 'com.github.TecOrb-Developers:SmartAlertDialog:v1.0'
+
+    //wifi github
+    implementation 'com.thanosfisherman.wifiutils:wifiutils:1.6.5'
 }

@@ -40,7 +40,10 @@ public class TempDataApi {
         @SerializedName("weight")
         private double TempWeight;
 
-        private String headShot;  //使用者大頭貼
+        //private String imgId;  //使用者大頭貼
+        private String headShot;
+
+        //private String wifiId;
 
         public int getTargetId() {
             return targetId;
@@ -97,6 +100,22 @@ public class TempDataApi {
         public void setHeadShot(String headShot) {
             this.headShot = headShot;
         }
+
+        //        public String getImgId() {
+//            return imgId;
+//        }
+//
+//        public void setImgId(String imgId) {
+//            this.imgId = imgId;
+//        }
+//
+//        public String getWifiId() {
+//            return wifiId;
+//        }
+
+//        public void setWifiId(String wifiId) {
+//            this.wifiId = wifiId;
+//        }
 
         //以下是本地端的
         private double degree;       //ble 體溫

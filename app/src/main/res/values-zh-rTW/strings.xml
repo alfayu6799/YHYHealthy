@@ -497,4 +497,19 @@
     <string name="txt_alart_dialog">設備綁定通知</string>
     <string name="txt_alert_messages">將至使用者頁面進行設備綁定</string>
     <string name="you_are_do_nothing">你沒有做任何變動</string>
+    <string name="please_select_cjm410_wifi">請選擇YHY體溫貼片專用\n無線網路裝置</string>
+    <string name="please_input_cjm410_password">請輸入YHY WIFI密碼</string>
+    <string name="wifi_connect">連線</string>
+    <string name="scan_is_empty">無搜尋到裝置</string>
+    <string name="select_wifi_devices">請點選欲連線的無線裝置</string>
+    <string name="cancel">取消</string>
+    <string name="permiss_info">無線的搜尋需要GPS功能啟動</string>
+    <string name="connect_fail">連接失敗</string>
+    <string name="cjm410_cant_find">找不到YHY WIFI裝置</string>
+    <string name="connect_succeed">YHY WIFI連接成功</string>
+    <string name="please_search_home_wifi">請搜尋家用無線基地台</string>
+    <string name="step_1">步驟1</string>
+    <string name="step_2">步驟2</string>
+    <string name="please_input_wifi_password">請輸入無線基地台密碼</string>
+    <string name="Unknown">性別不明</string>
 </resources>

@@ -214,9 +214,10 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         holder.textBleBattery.setText(data.getBattery());            //電量
         holder.textDegree.setText(String.valueOf(data.getDegree())); //體溫
 
-        //base64解碼並顯示在imageView
+        //大頭貼 2021/08/03
         Glide.with(context)
                 .asBitmap()
+//                .load(data.getImgId())
                 .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
                 .into(holder.imagePhoto);
 

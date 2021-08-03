@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.Glide;
 import com.example.yhyhealthy.R;
 import com.example.yhyhealthy.datebase.TempDataApi;
 import com.example.yhyhealthy.tools.DateUtil;
@@ -98,6 +100,13 @@ public class ChartDialog extends Dialog {
 
         //塞入相對的資料
         bleUserName.setText(data.getUserName());
+
+        //大頭貼 2021/08/03
+//        Glide.with(getContext())
+//                .asBitmap()
+//                .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
+//   //             .load(data.getImgId())
+//                .into(bleUserImage);
 
         //base64解碼大頭貼
         byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
