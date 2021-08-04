@@ -71,14 +71,14 @@ public class ObserverAdapter extends RecyclerView.Adapter<ObserverAdapter.ViewHo
         //生日
         holder.observerBirthday.setText(data.getTempBirthday());
 
-        //圖像
+        //圖像 2021/08/04
         Glide.with(context)
                 .asBitmap()
                 .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
                 .into(holder.observerPhoto);
 //        Glide.with(context)
 //                .asBitmap()
-//                .load(data.getImgId())
+//                .load(data.getImgUrl())
 //                .into(holder.observerPhoto);
         
         holder.itemView.setOnClickListener(new View.OnClickListener() {

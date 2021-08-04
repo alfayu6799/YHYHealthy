@@ -14,8 +14,11 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,10 +32,29 @@ import android.widget.Toast;
 import com.thanosfisherman.wifiutils.WifiUtils;
 import com.thanosfisherman.wifiutils.wifiConnect.ConnectionErrorCode;
 import com.thanosfisherman.wifiutils.wifiConnect.ConnectionSuccessListener;
+import com.thanosfisherman.wifiutils.wifiRemove.RemoveErrorCode;
+import com.thanosfisherman.wifiutils.wifiRemove.RemoveSuccessListener;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+
+/**** ***********
+ * 無線基地台配置設計
+ * create 2021/08/04
+ * remoteServ 要隨上架地點進行手動變動
+ * 中國主機: "39.108.85.178"
+ * 國際主機: "47.74.247.30"
+ * ***********/
 
 public class UserWifiSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,7 +64,7 @@ public class UserWifiSettingActivity extends AppCompatActivity implements View.O
     private ImageView searchCJM410, searchWifi;
     private TextView  txtCJM410, txtWifi;
     private EditText  cjm410Password, wifiPassword;
-    private Button    CJM410Connect, wifiConnect;
+    private Button    CJM410Connect, wifiConnect, wifiCancel,clearConfig;
 
     private ProgressDialog progressDialog; //搜尋wifi進度
 
@@ -73,18 +95,28 @@ public class UserWifiSettingActivity extends AppCompatActivity implements View.O
         txtWifi = findViewById(R.id.tvHomeWifi);
 
         CJM410Connect =  findViewById(R.id.btnConnectCMJ410);
+        wifiConnect = findViewById(R.id.btnSaveWifiConfig);
 
         searchWifi = findViewById(R.id.ivSearchWifi);           //wifi搜尋
-        wifiPassword = findViewById(R.id.edtWifiPassword);
+        wifiPassword = findViewById(R.id.edtWifiPassword);      ///wifi密碼
+        //密碼先隱藏
+        wifiPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
         searchCJM410 = findViewById(R.id.ivSearchCJM410);       //cjm410搜尋
         cjm410Password= findViewById(R.id.edtCJM410Password);  //cjm410的密碼
         //密碼先隱藏
         cjm410Password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        
+        wifiCancel = findViewById(R.id.btnCancelWifiConfig);
+        clearConfig = findViewById(R.id.btnClearConfig);
+        clearConfig.setVisibility(View.INVISIBLE);  //清除定按鈕隱藏 2021/08/04
 
         searchCJM410.setOnClickListener(this);
         searchWifi.setOnClickListener(this);
         CJM410Connect.setOnClickListener(this);
+        wifiConnect.setOnClickListener(this);
+        wifiCancel.setOnClickListener(this);
+        clearConfig.setOnClickListener(this);
         back.setOnClickListener(this);
     }
 
@@ -102,7 +134,55 @@ public class UserWifiSettingActivity extends AppCompatActivity implements View.O
             case R.id.btnConnectCMJ410: //連接CJM410
                 connectCJM410();
                 break;
+            case R.id.btnSaveWifiConfig: //設定寫入CJM410
+                saveConfig();
+                break;
+            case R.id.btnCancelWifiConfig:  //取消寫入配置
+                cancelWifiConfig();
+                break;
+            case R.id.btnClearConfig:      //清除所有的設定
+                break;
         }
+    }
+
+    //取消寫入配置 2021/08/04
+    private void cancelWifiConfig() {
+        //清除cjm410 password
+        cjm410Password.setText("");
+
+        //清除cjm410 ssid
+        txtCJM410.setText("");
+
+        //清除客戶wifi password
+        wifiPassword.setText("");
+
+        //清除客戶wifi ssid
+        txtWifi.setText("");
+
+        //解除與cjm410之間的連線
+        WifiUtils.withContext(getApplicationContext()).remove(txtCJM410.getText().toString(), new RemoveSuccessListener() {
+            @Override
+            public void success() {
+                toasty(getString(R.string.remove_succeed));
+            }
+
+            @Override
+            public void failed(@NonNull RemoveErrorCode errorCode) {
+                errorToast(getString(R.string.remove_failed) + errorCode.toString());
+            }
+        });
+    }
+
+    //將設定寫入到CJM410
+    private void saveConfig() {
+        if (TextUtils.isEmpty(txtWifi.getText().toString()) || TextUtils.isEmpty(txtWifi.getText().toString())){
+            toasty(getString(R.string.ssid_is_empty));
+            return;
+        }
+
+        //將config寫入cjm410  2021/08/03
+        UPD_Client upd_client = new UPD_Client();
+        upd_client.execute();
     }
 
     //搜尋wifi裝置
@@ -158,7 +238,7 @@ public class UserWifiSettingActivity extends AppCompatActivity implements View.O
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
                 String strName = arrayAdapter.getItem(which);
-                if (strName.contains("410")){
+                if (strName.contains("H")){
                     txtCJM410.setText(strName);
                 }else {
                     txtWifi.setText(strName);
@@ -239,6 +319,134 @@ public class UserWifiSettingActivity extends AppCompatActivity implements View.O
                 } else {
                     errorToast(getString(R.string.permiss_info));
                 }
+        }
+    }
+
+    //
+    public class UPD_Client extends AsyncTask<String, String, String>{
+
+        InetAddress servIpAddr = null;
+        String netProto = "TCP";
+        String remoteServ = "47.74.247.30"; //國際
+        //String remoteServ = "39.108.85.178"; //中國
+        String port = "10007";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                servIpAddr = InetAddress.getByName("192.168.1.10");
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+            DatagramSocket clientSocket = null;
+            byte[] rxData = new byte[512];
+            DatagramPacket dp = new DatagramPacket(rxData, rxData.length);
+
+            boolean setOK = false;
+
+            ArrayList<byte[]> wmcpDataArray = new ArrayList<>();
+
+            if (servIpAddr == null)
+                return "CJM410 IP ERROR";
+
+            wmcpDataArray.add(wmcpDataSetReq(0x11, "0"));      //Client mode
+            wmcpDataArray.add(wmcpDataSetReq(0x14, txtWifi.getText().toString()));
+            if (TextUtils.isEmpty(wifiPassword.getText().toString())) { //沒有密碼
+                wmcpDataArray.add(wmcpDataSetReq(0x15, "NONE"));  //WSTASEC
+            } else {
+                wmcpDataArray.add(wmcpDataSetReq(0x15, "WPA2"));  //password加密型態
+                String cypher = "AES";
+                String psk = cypher + "," + wifiPassword.getText().toString();
+                wmcpDataArray.add(wmcpDataSetReq(0x16, psk));            //password
+            }
+            wmcpDataArray.add(wmcpDataSetReq(0x23, netProto));       //TCP
+
+            if (TextUtils.isEmpty(remoteServ))
+                return "server is empty";
+
+            String client = remoteServ + "," + port;
+            wmcpDataArray.add(wmcpDataSetReq(0x24, client));         //將遠端server寫入
+            wmcpDataArray.add(wmcpDataSetReq(0x32, ""));     //Apply(執行)
+
+            try {
+                clientSocket = new DatagramSocket();
+                for (int i = 0; i < wmcpDataArray.size(); i++) {
+                    byte[] wmcpDataPayload = wmcpDataArray.get(i);
+                    byte cmdcode = wmcpDataPayload[1];
+
+                    DatagramPacket packet = new DatagramPacket(wmcpDataPayload, wmcpDataPayload.length, servIpAddr, 60002);
+                    clientSocket.send(packet);
+                    int retry = 0;
+                    while (retry < 3) {
+                        try {
+                            clientSocket.setSoTimeout(2000);
+                            clientSocket.receive(dp);
+
+                            byte[] data = dp.getData();
+                            if (data[0] == 0x02 &&
+                                    data[1] == cmdcode &&
+                                    data[2] == 0x02) {
+                                // handle rx data
+                                byte[] resp = Arrays.copyOfRange(data, 3, dp.getLength());
+                                String strResp = new String(resp);
+                                String msg = String.format("Set cmdcode %x response=", cmdcode);
+                                Log.i("CJM", msg + strResp);
+
+                                if (strResp.equals("ok")) {
+                                    setOK = true;
+                                    break;
+                                } else {
+                                    setOK = false;
+                                    break;
+                                }
+                            }
+                        } catch (SocketTimeoutException e) {
+                            retry += 1;
+                            clientSocket.send(packet);
+                            String str = String.format("Retry device configuration request : %d", retry);
+                            Log.i("CJM", str);
+                        }
+                    }
+                    if (!setOK)
+                        break;
+                }
+
+            } catch (SocketException e) {
+                if (clientSocket != null) {
+                    clientSocket.close();
+                }
+                return "Socket Exception";
+            } catch (IOException e) {
+                if (clientSocket != null) {
+                    clientSocket.close();
+                }
+                return "IO Exception";
+            }
+
+            if (clientSocket != null) {
+                clientSocket.close();
+            }
+            return "OK";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (result.equals("OK")) {
+                toasty(getString(R.string.set_succeed));
+                //設定成功後顯示清除config的按紐
+                //clearConfig.setVisibility(View.VISIBLE);
+            }else if (result.equals("server is empty")){
+                errorToast(getString(R.string.server_empty));
+            } else {
+                errorToast(getString(R.string.set_failed));
+            }
         }
     }
 }

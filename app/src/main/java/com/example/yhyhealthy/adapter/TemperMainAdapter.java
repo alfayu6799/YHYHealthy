@@ -217,7 +217,7 @@ public class TemperMainAdapter extends RecyclerView.Adapter<TemperMainAdapter.Vi
         //大頭貼 2021/08/03
         Glide.with(context)
                 .asBitmap()
-//                .load(data.getImgId())
+//                .load(data.getImgUrl())
                 .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
                 .into(holder.imagePhoto);
 

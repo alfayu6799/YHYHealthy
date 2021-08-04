@@ -151,6 +151,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
 
     //解析後台回來的觀測者資料
     private void parserJsonData(JSONObject result) {
+        Log.d(TAG, "parserJsonData: " + result.toString());
         TempDataApi tempDataApi = TempDataApi.newInstance(result.toString());
         list = tempDataApi.getSuccess();
 
@@ -196,7 +197,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         intent.setClass(this, TemperEditActivity.class);
         Bundle bundle = new Bundle();
 
-        //大頭貼轉成bitmap格式
+        //大頭貼轉成bitmap格式 2021/08/04
         if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
             Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
             saveBitmap(bitmap); //存到本機端記憶卡內
@@ -213,6 +214,8 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         bundle.putString("birthday", data.getTempBirthday());
         bundle.putString("height", String.valueOf(data.getTempHeight()));
         bundle.putString("weight", String.valueOf(data.getTempWeight()));
+        //2021/08/04
+//        bundle.putString("imgId", data.getImgUrl());
 
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_CODE);

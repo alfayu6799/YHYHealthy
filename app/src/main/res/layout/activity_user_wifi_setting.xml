@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.18" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <TextView
         android:id="@+id/tvCJM410"
@@ -101,7 +101,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:cursorVisible="true"
+            android:cursorVisible="false"
             android:inputType="text|textMultiLine"
             android:textCursorDrawable="@null"
             android:background="@android:color/transparent"
@@ -127,7 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58" />
+        app:layout_constraintGuide_percent="0.42" />
 
     <TextView
         android:id="@+id/tvHomeWifi"
@@ -148,45 +148,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline79"
         android:src="@drawable/ic_baseline_search_24" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline80"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <TextView
-        android:id="@+id/textView89"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:padding="8dp"
-        android:textColor="@color/white"
-        android:textSize="22dp"
-        android:text="@string/step_1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline80" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline81"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <TextView
-        android:id="@+id/textView91"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:padding="8dp"
-        android:textColor="@color/white"
-        android:textSize="22dp"
-        android:text="@string/step_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline81" />
-
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -195,10 +158,10 @@
         android:background="@drawable/shape_edit_background"
         android:textColorHint="@color/colorPrimaryDark"
         app:hintTextColor="@color/red"
-        app:passwordToggleEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHomeWifi">
+        app:layout_constraintTop_toBottomOf="@+id/tvHomeWifi"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtWifiPassword"
@@ -207,11 +170,61 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:cursorVisible="true"
-            android:inputType="text|textMultiLine"
-            android:textCursorDrawable="@null"
             android:background="@android:color/transparent"
-            android:hint="@string/please_input_wifi_password" />
+            android:cursorVisible="true"
+            android:hint="@string/please_input_wifi_password"
+            android:inputType="text|textMultiLine"
+            android:textCursorDrawable="@null" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSaveWifiConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_btn_temp_pressed"
+        android:text="@string/wifi_setting_save"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_agree"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline82"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.78" />
+
+    <Button
+        android:id="@+id/btnClearConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/shape_btn_clear_config"
+        android:text="@string/clear"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_agree"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline82" />
+
+    <Button
+        android:id="@+id/btnCancelWifiConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_btn__not_agree"
+        android:text="@string/wifi_setting_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_agree"
+        app:layout_constraintEnd_toEndOf="@+id/btnSaveWifiConfig"
+        app:layout_constraintStart_toStartOf="@+id/btnSaveWifiConfig"
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveWifiConfig" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

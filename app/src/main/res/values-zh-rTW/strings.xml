@@ -512,4 +512,13 @@
     <string name="step_2">步驟2</string>
     <string name="please_input_wifi_password">請輸入無線基地台密碼</string>
     <string name="Unknown">性別不明</string>
+    <string name="wifi_setting_save">儲存配置</string>
+    <string name="ssid_is_empty">無線基地台不得為空白</string>
+    <string name="set_succeed">設置成功</string>
+    <string name="server_empty">伺服器不得空白</string>
+    <string name="set_failed">設定失敗</string>
+    <string name="wifi_setting_cancel">取消配置</string>
+    <string name="clear">清除所有設定</string>
+    <string name="remove_succeed">移除配置成功</string>
+    <string name="remove_failed">移除配置失敗</string>
 </resources>

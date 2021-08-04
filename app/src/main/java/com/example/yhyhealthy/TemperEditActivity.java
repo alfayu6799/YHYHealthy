@@ -110,6 +110,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             boolean wifi = bundle.getBoolean("wifi");
 
             initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot, wifi);
+//            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeImageUrl, wifi);
         }
 
     }

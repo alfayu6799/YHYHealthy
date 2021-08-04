@@ -101,11 +101,10 @@ public class ChartDialog extends Dialog {
         //塞入相對的資料
         bleUserName.setText(data.getUserName());
 
-        //大頭貼 2021/08/03
+        //大頭貼 2021/08/04
 //        Glide.with(getContext())
 //                .asBitmap()
-//                .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
-//   //             .load(data.getImgId())
+//                .load(data.getImgUrl())
 //                .into(bleUserImage);
 
         //base64解碼大頭貼

@@ -448,7 +448,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
         bundle.putString("birthday", statusMemberBean.getTempBirthday());
         bundle.putString("height", String.valueOf(statusMemberBean.getTempHeight()));
         bundle.putString("weight", String.valueOf(statusMemberBean.getTempWeight()));
-//        bundle.putString("imgId", statusMemberBean.getImgId());  //大頭貼
+//        bundle.putString("imgId", statusMemberBean.getImgUrl());  //大頭貼
         bundle.putString("HeadShot", statusMemberBean.getHeadShot()); //大頭貼
         bundle.putBoolean("wifi", true);  //是否來自wifi綁定設定
 
@@ -762,9 +762,7 @@ import static com.example.yhyhealthy.module.ApiProxy.REMOTE_USER_UNDER_LIST;
             if(tAdapter.findNameByMac(deviceAddress) != null){
                 tAdapter.disconnectedDevice(deviceAddress, bleStatus, deviceName);
                 //2021/07/23
-                Log.d(TAG, "updateDisconnectedStatus: Name:" + tAdapter.findNameByMac(deviceAddress));
-
-//                tAdapter.clear();
+                //Log.d(TAG, "updateDisconnectedStatus: Name:" + tAdapter.findNameByMac(deviceAddress));
 
                 //移除5秒鐘的佇列  2021/05/31
                 countDownTimerArrayMap.remove(deviceAddress);

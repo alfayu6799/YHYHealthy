@@ -523,4 +523,13 @@
     <string name="step_2">Step 2</string>
     <string name="please_input_wifi_password">Please input wifi password</string>
     <string name="Unknown">Unknown</string>
+    <string name="wifi_setting_save">Save Config</string>
+    <string name="ssid_is_empty">SSID is not allow Empty</string>
+    <string name="set_succeed">Save Succeed</string>
+    <string name="server_empty">Server is Empty</string>
+    <string name="set_failed">Save Failed</string>
+    <string name="wifi_setting_cancel">Cancel</string>
+    <string name="clear">Clear Config</string>
+    <string name="remove_succeed">Clear Config Succeed</string>
+    <string name="remove_failed">Clear Config Failed</string>
 </resources>
