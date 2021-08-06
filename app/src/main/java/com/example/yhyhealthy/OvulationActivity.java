@@ -301,6 +301,16 @@ public class OvulationActivity extends AppCompatActivity implements View.OnClick
                 textMenstruationResult.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_HighFollicularORLutealPhase));
             }else if(paramName.equals("Unrecognizable")){
                 textMenstruationResult.setText(getString(R.string.unknow));
+            }else if (paramName.equals("SalivaTooThick")){ //唾液太厚 2021/08/05
+                textMenstruationResult.setText(R.string.saliva_too_thick);
+            }else if (paramName.equals("SalivaWet")){       //唾液未乾 2021/08/06
+                textMenstruationResult.setText(R.string.saliva_wet);
+            }else if (paramName.equals("BubblesExcessive")){   //氣泡過多 2021/08/06
+                textMenstruationResult.setText(R.string.bubbles_excessive);
+            }else if (paramName.equals("Insufficient")){  //對焦異常
+                textMenstruationResult.setText(R.string.insufficient);
+            }else if (paramName.equals("Brightness")){  //亮度不足
+                textMenstruationResult.setText(R.string.brightness);
             }
         }else {
             btnEdit.setText(R.string.add_cycle);

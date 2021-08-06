@@ -521,4 +521,13 @@
     <string name="clear">清除所有設定</string>
     <string name="remove_succeed">移除配置成功</string>
     <string name="remove_failed">移除配置失敗</string>
+    <string name="download_excel">下載紀錄</string>
+    <string name="download_excel_messages">請輸入信箱後取得紀錄(Excel)</string>
+    <string name="email_address_error">信箱錯誤</string>
+    <string name="saliva_too_thick">唾液太厚</string>
+    <string name="saliva_wet">唾液未乾</string>
+    <string name="brightness">亮度不足</string>
+    <string name="insufficient">對焦異常</string>
+    <string name="bubbles_excessive">氣泡過多</string>
+    <string name="password_notice">※請注意:密碼的輸入有大小寫之分</string>
 </resources>

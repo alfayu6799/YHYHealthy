@@ -198,15 +198,15 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         Bundle bundle = new Bundle();
 
         //大頭貼轉成bitmap格式 2021/08/04
-        if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
-            Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
-            saveBitmap(bitmap); //存到本機端記憶卡內
-            bundle.putString("HeadShot", tmpPhoto.toString());
-        }
-
-        if(tmpPhoto != null && !tmpPhoto.exists()){ //檔案有存在
-            bundle.putString("HeadShot", tmpPhoto.toString());
-        }
+//        if (!data.getHeadShot().isEmpty()) { //大頭貼有資料
+//            Bitmap bitmap = ImageUtils.bast64toBitmap(data.getHeadShot());
+//            saveBitmap(bitmap); //存到本機端記憶卡內
+//            bundle.putString("HeadShot", tmpPhoto.toString());
+//        }
+//
+//        if(tmpPhoto != null && !tmpPhoto.exists()){ //檔案有存在
+//            bundle.putString("HeadShot", tmpPhoto.toString());
+//        }
 
         bundle.putInt("targetId", data.getTargetId());
         bundle.putString("name", data.getUserName());
@@ -215,7 +215,7 @@ public class TemperEditListActivity extends AppCompatActivity implements View.On
         bundle.putString("height", String.valueOf(data.getTempHeight()));
         bundle.putString("weight", String.valueOf(data.getTempWeight()));
         //2021/08/04
-//        bundle.putString("imgId", data.getImgUrl());
+        bundle.putString("imgId", data.getImgUrl());
 
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_CODE);

@@ -375,6 +375,16 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
                 textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.font_record_HighFollicularORLutealPhase));
             } else if (paramName.equals("Ovulation")) {
                 textAnalysis.setText(R.string.in_period);    //排卵期
+            }else if (paramName.equals("SalivaTooThick")){ //唾液太厚 2021/08/05
+                textAnalysis.setText(R.string.saliva_too_thick);
+            }else if (paramName.equals("SalivaWet")){       //唾液未乾 2021/08/06
+                textAnalysis.setText(R.string.saliva_wet);
+            }else if (paramName.equals("BubblesExcessive")){   //氣泡過多 2021/08/06
+                textAnalysis.setText(R.string.bubbles_excessive);
+            }else if (paramName.equals("Insufficient")){  //對焦異常
+                textAnalysis.setText(R.string.insufficient);
+            }else if (paramName.equals("Brightness")){  //亮度不足
+                textAnalysis.setText(R.string.brightness);
             }
         }
     }
@@ -605,20 +615,30 @@ public class PeriodRecordActivity extends DeviceBaseActivity implements View.OnC
 
         //辨識結果
         String paramName = record.getSuccess().getMeasure().getParamName();
-        if (paramName.equals("FollicularORLutealPhase")){
-            textAnalysis.setText(R.string.in_low_cell);  //低濾泡
+        if (paramName.equals("FollicularORLutealPhase")){   //低濾泡
+            textAnalysis.setText(R.string.in_low_cell);
             //字形大小需要中文與英文不同
             textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_record_FollicularORLutealPhase));
-        }else if (paramName.equals("Unrecognizable")){
-            textAnalysis.setText(R.string.unknow);      //無法辨識
+        }else if (paramName.equals("Unrecognizable")){     //無法辨識
+            textAnalysis.setText(R.string.unknow);
             textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_unknow));
-        }else if (paramName.equals("General")){
-            textAnalysis.setText(R.string.non_period);  //非排卵期
-        }else if (paramName.equals("HighFollicularORLutealPhase")){
-            textAnalysis.setText(R.string.in_high_cell); //高濾泡
+        }else if (paramName.equals("General")){   //一般期
+            textAnalysis.setText(R.string.non_period);
+        }else if (paramName.equals("HighFollicularORLutealPhase")){  //高濾泡
+            textAnalysis.setText(R.string.in_high_cell);
             textAnalysis.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.font_record_HighFollicularORLutealPhase));
-        }else if (paramName.equals("Ovulation")){
-            textAnalysis.setText(R.string.in_period);    //排卵期
+        }else if (paramName.equals("Ovulation")){  //排卵期
+            textAnalysis.setText(R.string.in_period);
+        }else if (paramName.equals("SalivaTooThick")){ //唾液太厚 2021/08/05
+            textAnalysis.setText(R.string.saliva_too_thick);
+        }else if (paramName.equals("SalivaWet")){       //唾液未乾 2021/08/06
+            textAnalysis.setText(R.string.saliva_wet);
+        }else if (paramName.equals("BubblesExcessive")){   //氣泡過多 2021/08/06
+            textAnalysis.setText(R.string.bubbles_excessive);
+        }else if (paramName.equals("Insufficient")){  //對焦異常 2021/08/06
+            textAnalysis.setText(R.string.insufficient);
+        }else if (paramName.equals("Brightness")){  //亮度不足 2021/08/06
+            textAnalysis.setText(R.string.brightness);
         }
 
         //2021/04/21

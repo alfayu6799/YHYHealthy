@@ -105,21 +105,21 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
             String degreeBirthday = bundle.getString("birthday");
             String degreeWeight = bundle.getString("weight");
             String degreeHeight = bundle.getString("height");
-            String degreeHeadShot = bundle.getString("HeadShot");
-//            String degreeImageUrl = bundle.getString("imgId");
-            boolean wifi = bundle.getBoolean("wifi");
+//            String degreeHeadShot = bundle.getString("HeadShot");
+            String degreeImageUrl = bundle.getString("imgId");
 
-            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot, wifi);
-//            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeImageUrl, wifi);
+//            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeHeadShot, wifi);
+            initData(degreeName,degreeGender,degreeBirthday,degreeWeight,degreeHeight,degreeImageUrl);
         }
 
     }
 
-    private void initData(String name, String gender, String birthday, String weight, String height, String headShot, boolean iSWifi) {
+    private void initData(String name, String gender, String birthday, String weight, String height, String headShot) {
         userName.setText(name);
         userBirthday.setText(birthday);
         userHeight.setText(height);
         userWeight.setText(weight);
+
         if(gender.equals("F")){
             rdGroup.check(R.id.rdFemale1);
         }else {
@@ -128,22 +128,22 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 
             //2021/06/02
         if(headShot != null){
-//            Glide.with(this)
-//                    .asBitmap()
-//                    .load(headShot)
-//                    .into(photoShow);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(headShot)
+                    .into(photoShow);
 
-            if (iSWifi){   //來自wifi綁定 2021/08/02增加
-                byte[] imageByteArray = Base64.decode(headShot, Base64.DEFAULT);
-                Glide.with(this).load(imageByteArray).into(photoShow);
-            }else {
-                file = new File(headShot);
-                Uri imageUri = Uri.fromFile(file);
-                Glide.with(this)
-                        .load(imageUri)
-                        .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
-                        .into(photoShow);
-            }
+//            if (iSWifi){   //來自wifi綁定 2021/08/02增加
+//                byte[] imageByteArray = Base64.decode(headShot, Base64.DEFAULT);
+//                Glide.with(this).load(imageByteArray).into(photoShow);
+//            }else {
+//                file = new File(headShot);
+//                Uri imageUri = Uri.fromFile(file);
+//                Glide.with(this)
+//                        .load(imageUri)
+//                        .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
+//                        .into(photoShow);
+//            }
         }
     }
 
@@ -224,7 +224,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
 //        if(tmpPhoto != null )
 //           base64Str = ImageUtils.imageToBase64(tmpPhoto.toString());
 
-//        //2021/05/31變更
+        //2021/05/31變更
         if (tmpPhoto != null) {   //可能存在空指针須使用null判断
             String filePath = tmpPhoto.getPath(); //取得照片位置
             Bitmap bitmap = BitmapFactory.decodeFile(filePath); //將照片轉成bitmap
@@ -305,7 +305,7 @@ public class TemperEditActivity extends AppCompatActivity implements View.OnClic
     private void showDatePickerDialog() {
         //設定初始日期
         final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR) - 12;
+        int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         // 跳出日期選擇器

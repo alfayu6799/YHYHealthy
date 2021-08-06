@@ -102,15 +102,15 @@ public class ChartDialog extends Dialog {
         bleUserName.setText(data.getUserName());
 
         //大頭貼 2021/08/04
-//        Glide.with(getContext())
-//                .asBitmap()
-//                .load(data.getImgUrl())
-//                .into(bleUserImage);
+        Glide.with(getContext())
+                .asBitmap()
+                .load(data.getImgUrl())
+                .into(bleUserImage);
 
         //base64解碼大頭貼
-        byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
-        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
-        bleUserImage.setImageBitmap(decodedImage);
+//        byte[] imageByteArray = Base64.decode(data.getHeadShot(), Base64.DEFAULT);
+//        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageByteArray,0, imageByteArray.length);
+//        bleUserImage.setImageBitmap(decodedImage);
 
         bleUserDegree.setText(String.valueOf(data.getDegree())); //使用者目前體溫
 

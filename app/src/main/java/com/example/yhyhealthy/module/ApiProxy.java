@@ -257,16 +257,7 @@ public class ApiProxy {
 
     private OkHttpClient buildClient(){
         if (client == null)
-//            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-//                try {
-//                    X509TrustManager trustManager = systemDefaultTrustManager();
-//                    SSLSocketFactory sslSocketFactory = sslSocketFactory(trustManager);
             client = new OkHttpClient.Builder().build();
-//                    client = new OkHttpClient.Builder().sslSocketFactory(sslSocketFactory, trustManager).build();
-//                }catch (Exception exc){
-//                    Log.d(TAG, "buildClient: error:" + exc);
-//                }
-//            }
         return client;
     }
 
@@ -362,87 +353,6 @@ public class ApiProxy {
     }
 
 
-
-    //自定义SS验证相关类
-    private X509TrustManager systemDefaultTrustManager() {
-        try {
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init((KeyStore) null);
-            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-                throw new IllegalStateException("Unexpected default trust managers:"
-                        + Arrays.toString(trustManagers));
-            }
-            return (X509TrustManager) trustManagers[0];
-        } catch (GeneralSecurityException e) {
-            throw new AssertionError(); // The system has no TLS. Just give up.
-        }
-    }
-
-    private SSLSocketFactory sslSocketFactory(X509TrustManager trustManager) {
-        try {
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, new TrustManager[] { trustManager }, null);
-            return new TLSSocketFactory(sslContext.getSocketFactory());
-        } catch (GeneralSecurityException e) {
-            throw new AssertionError(); // The system has no TLS. Just give up.
-        }
-    }
-
-    public class TLSSocketFactory extends SSLSocketFactory {
-        private final String[] TLS_V1_V2 = {"TLSv1.1", "TLSv1.2"};
-
-        final SSLSocketFactory delegate;
-
-        public TLSSocketFactory(SSLSocketFactory base) {
-            this.delegate = base;
-        }
-
-        @Override
-        public String[] getDefaultCipherSuites() {
-            return delegate.getDefaultCipherSuites();
-        }
-
-        @Override
-        public String[] getSupportedCipherSuites() {
-            return delegate.getSupportedCipherSuites();
-        }
-
-        @Override
-        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
-            return patch(delegate.createSocket(s, host, port, autoClose));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port) throws IOException {
-            return patch(delegate.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
-            return patch(delegate.createSocket(host, port, localHost, localPort));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress host, int port) throws IOException {
-            return patch(delegate.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
-            return patch(delegate.createSocket(address, port, localAddress, localPort));
-        }
-
-        private Socket patch(Socket s) {
-            if (s != null && s instanceof SSLSocket) {
-                ((SSLSocket) s).setEnabledProtocols(TLS_V1_V2);
-            }
-            return s;
-        }
-    }
-
-
     private void buildRequest(Request req, OnApiListener listener) {
 
         final Call call = buildClient().newCall(req);
@@ -472,6 +382,11 @@ public class ApiProxy {
                 int code = response.code();
                 assert response.body() != null;
 
+                //2021/08/06 解決資源洩漏的問題
+//                if (!response.isSuccessful()){
+//                    response.close();
+//                }
+
                 if(response.header("Authorization") != null){  //如果回覆是空值的話則不要複寫
                     authToken = response.header("Authorization");
                 }
@@ -492,6 +407,8 @@ public class ApiProxy {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }finally {  //2021/08/06 解決資源洩漏的問題
+                    response.close();
                 }
 
                 String message = app.getString(R.string.service_is_not_respond);

@@ -10,12 +10,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.PatternMatcher;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +62,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
     private View view;
 
-    private Button btnFunction;
-    private Button btnDate;
+    private Button    btnFunction;
+    private Button    btnDate;
+    private ImageView download;
 
     //private List<String> fxnList;
 
@@ -91,6 +98,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
         btnFunction = view.findViewById(R.id.btSelectFuns);
         btnDate = view.findViewById(R.id.btSelectDate);
+        download = view.findViewById(R.id.ivDownload);
 
         //動畫background
         gifImageView = view.findViewById(R.id.game_gif);
@@ -98,6 +106,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
 
         btnFunction.setOnClickListener(this);
         btnDate.setOnClickListener(this);
+        download.setOnClickListener(this);
 
         recordResult = view.findViewById(R.id.rvRecordResult);
 
@@ -204,7 +213,54 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
                 checkObserverOK();        //檢查是否已先擇觀測者在進行日期選擇
                 //selectDateRange();     //彈跳視窗for日期範圍
                 break;
+            case R.id.ivDownload:  //下載歷史紀錄 2021/08/04
+                showDownloadDialog();
+                break;
         }
+    }
+
+    //下載歷史紀錄 輸入email
+    private void showDownloadDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater  = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.dialog_download, null);
+        alertDialog.setView(view);
+        alertDialog.show();
+
+        EditText emailAddress = view.findViewById(R.id.edtMailDownload);
+        Button   cancel = view.findViewById(R.id.btnCancelDownload);
+        Button   download = view.findViewById(R.id.btnSureDownload);
+
+        //取消
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        //確定
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String emailToText = emailAddress.getText().toString();
+                if (TextUtils.isEmpty(emailToText) || !emailToText.contains("@")){
+                    Toasty.error(getContext(), getString(R.string.email_address_error), Toast.LENGTH_SHORT, true).show();
+                    return;
+                }
+
+                //將mail address上傳到後台
+                sendToApi();
+                //關閉視窗
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    //將mail address上傳到後台 2021/08/05
+    private void sendToApi() {
+        //需要後台api串接
+        Toasty.success(getContext(), getString(R.string.update_success), Toast.LENGTH_SHORT,true).show();
     }
 
     //檢查是否已先擇觀測者在進行日期選擇
@@ -317,6 +373,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
     private void updateToApi() {
         if (!TextUtils.isEmpty(startDay) && (!TextUtils.isEmpty(endDay))) {
             //將參數傳給後台並取資料回來
+//            Log.d(TAG, "updateToApi: startDay:" + startDay + ",endDay" + endDay + ",targetId:" + selectObserverId);
             getObserverInfoFromApi(startDay, endDay, selectObserverId, selectObserverName);
         }else {
             Toasty.info(getActivity(), getString(R.string.please_select_observer_date), Toast.LENGTH_SHORT, true).show();
@@ -396,5 +453,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener, Ob
         selectObserverId = data.getTargetId();   //使用者targetId
         selectObserverName = data.getUserName(); //使用者名稱
     }
+
 
 }

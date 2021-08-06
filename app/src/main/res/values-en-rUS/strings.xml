@@ -532,4 +532,13 @@
     <string name="clear">Clear Config</string>
     <string name="remove_succeed">Clear Config Succeed</string>
     <string name="remove_failed">Clear Config Failed</string>
+    <string name="download_excel">DownLoad Excel</string>
+    <string name="download_excel_messages">Please input email address\n to get excel file</string>
+    <string name="email_address_error">email address Error</string>
+    <string name="saliva_too_thick">Saliva Too Thick</string>
+    <string name="saliva_wet">Saliva Wet</string>
+    <string name="brightness">Brightness</string>
+    <string name="insufficient">Insufficient</string>
+    <string name="bubbles_excessive">Bubbles Excessive</string>
+    <string name="password_notice">※Notice:Case is different</string>
 </resources>

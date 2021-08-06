@@ -40,8 +40,8 @@ public class TempDataApi {
         @SerializedName("weight")
         private double TempWeight;
 
-//        private String imgUrl;  //使用者大頭貼
-        private String headShot;
+        private String imgUrl;  //使用者大頭貼
+//        private String headShot;
 
         //private String wifiId;
 
@@ -93,22 +93,22 @@ public class TempDataApi {
             TempWeight = tempWeight;
         }
 
-        //2021/08/04
-        public String getHeadShot() {
-            return headShot;
-        }
-
-        public void setHeadShot(String headShot) {
-            this.headShot = headShot;
-        }
-
-//        public String getImgUrl() {
-//            return imgUrl;
+//        //2021/08/04
+//        public String getHeadShot() {
+//            return headShot;
 //        }
 //
-//        public void setImgUrl(String imgUrl) {
-//            this.imgUrl = imgUrl;
+//        public void setHeadShot(String headShot) {
+//            this.headShot = headShot;
 //        }
+
+        public String getImgUrl() {
+            return imgUrl;
+        }
+
+        public void setImgUrl(String imgUrl) {
+            this.imgUrl = imgUrl;
+        }
 
 //        public String getWifiId() {
 //            return wifiId;

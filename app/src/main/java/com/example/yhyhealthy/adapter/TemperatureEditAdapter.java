@@ -66,15 +66,15 @@ public class TemperatureEditAdapter extends RecyclerView.Adapter<TemperatureEdit
         holder.birthday.setText(data.getTempBirthday());
 
         //大頭照 2021/08/04
-        Glide.with(context)
-        .asBitmap()
-        .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
-        .into(holder.editPhoto);
-
 //        Glide.with(context)
-//                .asBitmap()
-//                .load(data.getImgUrl())
-//                .into(holder.editPhoto);
+//        .asBitmap()
+//        .load(Base64.decode(data.getHeadShot(), Base64.DEFAULT))
+//        .into(holder.editPhoto);
+
+        Glide.with(context)
+                .asBitmap()
+                .load(data.getImgUrl())
+                .into(holder.editPhoto);
 
         //依據使用者點擊的position刪除單一個體
         holder.remove.setOnClickListener(new View.OnClickListener() {
